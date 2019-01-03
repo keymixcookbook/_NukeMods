@@ -1,0 +1,333 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+inputs 0
+name BackdropNode23
+tile_color 0x394a7fff
+label PLATE
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 5290
+ypos -3381
+bdwidth 277
+bdheight 230
+}
+BackdropNode {
+inputs 0
+name BackdropNode24
+tile_color 0x1f3f1fff
+label "MATTE\nEDGE"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 8189
+ypos -2633
+bdwidth 915
+bdheight 1907
+}
+BackdropNode {
+inputs 0
+name BackdropNode25
+tile_color 0x2f2f3fff
+label "DESPILL\nCORE"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 5063
+ypos -2636
+bdwidth 936
+bdheight 1904
+}
+BackdropNode {
+inputs 0
+name BackdropNode26
+tile_color 0x394a7fff
+label IDN
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 7435
+ypos -3099
+bdwidth 277
+bdheight 230
+}
+BackdropNode {
+inputs 0
+name BackdropNode27
+tile_color 0x1f3f1fff
+label "MATTE\nCORE"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 7157
+ypos -2632
+bdwidth 915
+bdheight 1907
+}
+BackdropNode {
+inputs 0
+name BackdropNode28
+tile_color 0x2f2f3fff
+label "DESPILL\nEDGE"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 6051
+ypos -2631
+bdwidth 936
+bdheight 1904
+}
+BackdropNode {
+inputs 0
+name BackdropNode29
+tile_color 0x2f2f3fff
+label "DESPILL\nMASTER"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos 5075
+ypos -3080
+bdwidth 909
+bdheight 364
+}
+push $cut_paste_input
+NoOp {
+name IDN1
+selected true
+xpos 7541
+ypos -2914
+}
+Dot {
+name Dot3
+selected true
+xpos 7572
+ypos -2711
+}
+set Ndaa2640 [stack 0]
+Dot {
+name Dot20
+selected true
+xpos 8110
+ypos -2711
+}
+set Ndaa4260 [stack 0]
+Dot {
+name Dot31
+selected true
+xpos 8110
+ypos -1043
+}
+push $Ndaa4260
+Dot {
+name Dot2
+selected true
+xpos 8548
+ypos -2711
+}
+set N7ef78a0 [stack 0]
+Dot {
+name Dot5
+selected true
+xpos 9123
+ypos -2711
+}
+Dot {
+name Dot22
+selected true
+xpos 9123
+ypos -1030
+}
+push $Ndaa2640
+Dot {
+name Dot16
+selected true
+xpos 7572
+ypos -704
+}
+set N24405ee0 [stack 0]
+push $N7ef78a0
+Dot {
+name Dot13
+selected true
+xpos 8548
+ypos -632
+}
+Group {
+inputs 2
+name MatteMerge
+tile_color 0x590000
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 14
+note_font_color 0xffffffff
+selected true
+xpos 7541
+ypos -632
+}
+Input {
+inputs 0
+name EDGE
+xpos 825
+ypos -714
+}
+Dot {
+name Dot21
+xpos 856
+ypos -674
+}
+set Nf8dd150 [stack 0]
+Input {
+inputs 0
+name CORE
+xpos 634
+ypos -717
+number 1
+}
+Dot {
+name Dot20
+xpos 665
+ypos -677
+}
+set Nf8bb6f0 [stack 0]
+Merge2 {
+inputs 2
+operation screen
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+name Merge14
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 634
+ypos -480
+}
+push $Nf8dd150
+push $Nf8bb6f0
+ShuffleCopy {
+inputs 2
+red alpha
+green alpha
+blue alpha2
+name ShuffleCopy1
+xpos 825
+ypos -403
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 634
+ypos -407
+}
+Output {
+name Output1
+xpos 634
+ypos -307
+}
+end_group
+push $N24405ee0
+NoOp {
+inputs 0
+name PLATE1
+selected true
+xpos 5393
+ypos -3194
+}
+set Ne1744a0 [stack 0]
+Dot {
+name Dot15
+selected true
+xpos 5669
+ypos -1121
+hide_input true
+}
+push $Ne1744a0
+Dot {
+name Dot17
+selected true
+xpos 5424
+ypos -2699
+}
+set Ne194c90 [stack 0]
+Dot {
+name Dot23
+selected true
+xpos 5428
+ypos -1084
+}
+set Ne198fb0 [stack 0]
+Merge2 {
+inputs 2
+operation minus
+name Merge8
+selected true
+xpos 5638
+ypos -1084
+}
+Saturation {
+saturation 0
+mode Maximum
+name Saturation1
+selected true
+xpos 5638
+ypos -995
+}
+Grade {
+black_clamp false
+name Grade3
+selected true
+xpos 5638
+ypos -914
+}
+push $Ne198fb0
+Merge2 {
+inputs 2
+operation plus
+name Merge9
+selected true
+xpos 5397
+ypos -914
+}
+Dot {
+name Dot24
+selected true
+xpos 5428
+ypos -704
+}
+push $Ne194c90
+Dot {
+name Dot28
+selected true
+xpos 6492
+ypos -2699
+}
+Keymix {
+inputs 3
+name Keymix4
+selected true
+xpos 6461
+ypos -708
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+selected true
+xpos 6461
+ypos -636
+}
+Premult {
+name Premult1
+selected true
+xpos 6461
+ypos -211
+}

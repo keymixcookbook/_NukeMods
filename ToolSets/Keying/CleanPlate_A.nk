@@ -1,0 +1,148 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Dot {
+ name Dot10
+ label "Plate\nInput"
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1794
+ ypos -2406
+}
+set N5ed0bde0 [stack 0]
+Dot {
+ name Dot12
+ selected true
+ xpos 1594
+ ypos -2406
+}
+set Nefd17ac0 [stack 0]
+OFXuk.co.thefoundry.keylight.keylight_v201 {
+ show "Final Result"
+ unPreMultiply false
+ screenColour {0 0 0}
+ screenGain 1
+ screenBalance 0.5
+ alphaBias {0.5 0.5 0.5}
+ despillBias {0.5 0.5 0.5}
+ gangBiases true
+ preBlur 0
+ "Screen Matte" 0
+ screenClipMin 0
+ screenClipMax 1
+ screenClipRollback 0
+ screenGrowShrink 0
+ screenSoftness 0
+ screenDespotBlack 0
+ screenDespotWhite 0
+ screenReplaceMethod "Soft Colour"
+ screenReplaceColour {0.5 0.5 0.5}
+ Tuning 0
+ midPoint 0.5
+ lowGain 1
+ midGain 1
+ highGain 1
+ "Inside Mask" 0
+ sourceAlphaHandling Ignore
+ insideReplaceMethod "Soft Colour"
+ insideReplaceColour {0.5 0.5 0.5}
+ Crops 0
+ SourceXMethod Colour
+ SourceYMethod Colour
+ SourceEdgeColour 0
+ SourceCropL 0
+ SourceCropR 1
+ SourceCropB 0
+ SourceCropT 1
+ balanceSet false
+ insideComponent None
+ outsideComponent None
+ cacheBreaker true
+ name Keylight7
+ selected true
+ xpos 1560
+ ypos -2309
+}
+Invert {
+ channels alpha
+ name Invert2
+ selected true
+ xpos 1560
+ ypos -2263
+}
+Erode {
+ size 48
+ name Erode4
+ selected true
+ xpos 1560
+ ypos -2213
+}
+Blur {
+ size 18
+ name Blur8
+ selected true
+ xpos 1560
+ ypos -2163
+}
+Dot {
+ name Dot13
+ selected true
+ xpos 1594
+ ypos -2006
+}
+set Nefd2ccf0 [stack 0]
+Dot {
+ name Dot4
+ selected true
+ xpos 1594
+ ypos -1879
+}
+push $Nefd17ac0
+Dot {
+ name Dot9
+ selected true
+ xpos 1494
+ ypos -2406
+}
+Dot {
+ name Dot11
+ selected true
+ xpos 1494
+ ypos -1740
+}
+push $Nefd2ccf0
+push $N5ed0bde0
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy1
+ selected true
+ xpos 1760
+ ypos -2009
+}
+Premult {
+ name Premult11
+ selected true
+ xpos 1760
+ ypos -1959
+}
+Blur {
+ size 300
+ name Blur10
+ selected true
+ xpos 1760
+ ypos -1923
+}
+Unpremult {
+ name Unpremult7
+ selected true
+ xpos 1760
+ ypos -1859
+}
+Keymix {
+ inputs 3
+ name Keymix2
+ selected true
+ xpos 1760
+ ypos -1747
+}

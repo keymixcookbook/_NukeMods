@@ -1,0 +1,378 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+Group {
+inputs 0
+name KuContactSheet
+label "\[value mu_display]"
+note_font "Verdana Bold Bold Bold Bold"
+selected true
+xpos 8733
+ypos -2832
+addUserKnob {20 tb_user l KuContactSheet}
+addUserKnob {4 mu_display l Display M {Grid Shot}}
+addUserKnob {4 mu_shot l Shot -STARTLINE M {A B C D E F G}}
+addUserKnob {26 ""}
+addUserKnob {22 bt_reload l "Reload Reads" T "g=nuke.thisNode()\n\ng.begin()\n\nfor n in nuke.allNodes('Read'):\n\t\n\top = os.path\n\t\n\tshot = op.splitext(op.basename(nuke.filename(n)))\[0].split('_v')\[0]\n\tn\['file'].setValue(latestVersion(n,shot))\n\ng.end()" +STARTLINE}
+}
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_035_v004.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 56
+origlast 56
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read21
+xpos -905
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 51 53 95 118 48 48 52 46 109 111 118 10 71}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name G
+xpos -905
+ypos -618
+}
+FrameHold {
+name FrameHold9
+xpos -905
+ypos -594
+disable true
+}
+set N595b2200 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_030_v003.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read20
+xpos -1015
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 51 48 95 118 48 48 51 46 109 111 118 10 70}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name F
+xpos -1015
+ypos -618
+}
+FrameHold {
+name FrameHold8
+xpos -1015
+ypos -594
+disable true
+}
+set Nafabe600 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_025_v010.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 83
+origlast 83
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read19
+selected true
+xpos -1125
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 50 53 95 118 48 49 48 46 109 111 118 10 69}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name E
+xpos -1125
+ypos -618
+}
+FrameHold {
+name FrameHold7
+xpos -1125
+ypos -594
+disable true
+}
+set Nafa6de00 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_020_v011.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 58
+origlast 58
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read18
+xpos -1235
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 50 48 95 118 48 49 49 46 109 111 118 10 68}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name D
+xpos -1235
+ypos -618
+}
+FrameHold {
+name FrameHold6
+xpos -1235
+ypos -594
+disable true
+}
+set N18aa3a00 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_015_v013.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 79
+origlast 79
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read17
+xpos -1345
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 49 53 95 118 48 49 51 46 109 111 118 10 67}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name C
+xpos -1345
+ypos -618
+}
+FrameHold {
+name FrameHold5
+xpos -1345
+ypos -594
+disable true
+}
+set Nbf424600 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_010_v005.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 52
+origlast 52
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read16
+xpos -1455
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 49 48 95 118 48 48 53 46 109 111 118 10 66}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 43
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name B
+xpos -1455
+ypos -618
+}
+FrameHold {
+name FrameHold4
+xpos -1455
+ypos -594
+disable true
+}
+set Nb3348600 [stack 0]
+Read {
+inputs 0
+file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/EXPORT/-DAILIES/TCC_002_005_v007.mov
+format "1920 1080 0 0 1920 1080 1 HD_1080"
+last 97
+origlast 97
+origset true
+mov32_codec {{0} "AVID DNxHD Codec (AVID - AVdn)"}
+mov32_pixel_format {{0} "default (YCbCr  8-bit 422 (2vuy))" "RGBA  8-bit" "RGBA  16-bit (b64a)" "YCbCrA 8-bit 444 (v408)" "YCbCrA 8-bit 444 Biased (r408)" "YCbCr  8-bit 422 (2vuy)"}
+name Read15
+xpos -1565
+ypos -698
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[file tail \[value input.file]]\n\[value name]"
+old_message {{84 67 67 95 48 48 50 95 48 48 53 95 118 48 48 55 46 109 111 118 10 65}
+  }
+old_expression_markers {{0 19 21 21}
+  }
+box {0 979 554 1080}
+transforms {{0 2}
+  }
+cursor_position 31
+global_font_scale 0.5
+scale {1 1}
+cursor_initialised true
+initial_cursor_position {{0 1080}
+  }
+group_animations {{0} imported: 0 selected: items: "root transform/"}
+animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+  }
+name A
+xpos -1565
+ypos -618
+}
+FrameHold {
+name FrameHold3
+xpos -1565
+ypos -594
+disable true
+}
+set Nb367ca00 [stack 0]
+Switch {
+inputs 7
+which {{mu_shot}}
+name shots
+label "\[value which]"
+xpos -1094
+ypos -445
+hide_input true
+}
+push $N595b2200
+push $Nafabe600
+push $Nafa6de00
+push $N18aa3a00
+push $Nbf424600
+push $Nb3348600
+push $Nb367ca00
+ContactSheet {
+inputs 7
+width {{root.width/2*columns}}
+height {{root.height/2*rows}}
+columns 3
+roworder TopBottom
+name ContactSheet1
+xpos -1235
+ypos -454
+}
+FrameRange {
+first_frame 1
+last_frame 100
+time ""
+name FrameRange3
+xpos -1235
+ypos -430
+}
+Switch {
+inputs 2
+which {{mu_display}}
+name grid
+label "\[value which]"
+xpos -1235
+ypos -362
+}
+Output {
+name Output1
+xpos -1235
+ypos -262
+}
+end_group

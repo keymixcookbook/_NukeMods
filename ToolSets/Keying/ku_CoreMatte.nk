@@ -1,0 +1,66 @@
+set cut_paste_input [stack 0]
+version 11.1 v4
+push $cut_paste_input
+Group {
+ name ku_CoreMatte
+ tile_color 0xff5f00ff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos -750
+ ypos -201
+ addUserKnob {20 tb_user l ku_CoreMatte}
+ addUserKnob {41 whitepoint T _HARD_MATTE_.whitepoint}
+ addUserKnob {41 ctl_offset l "blackpoint offset" t "Default @ -0.001\ndon't touch until necessary" T _HARD_MATTE_.ctl_offset}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 size l "Fill Holes" t "Blur Erode size" T _FILL_HOLE_.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 erode l Erode T _ERODE_OUT_.size}
+ addUserKnob {41 size_2 l Blur T _BLUR_.size}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -477
+  ypos -445
+ }
+ Grade {
+  channels alpha
+  blackpoint {{whitepoint+ctl_offset}}
+  whitepoint 0.26
+  white_clamp true
+  name _HARD_MATTE_
+  note_font "Verdana Bold Bold Bold"
+  note_font_color 0xffffffff
+  xpos -477
+  ypos -317
+  addUserKnob {20 User}
+  addUserKnob {7 ctl_offset l offset}
+  ctl_offset -0.001
+ }
+ Erode {
+  channels rgba
+  name _FILL_HOLE_
+  xpos -477
+  ypos -281
+ }
+ Dilate {
+  channels alpha
+  size -12
+  name _ERODE_OUT_
+  xpos -477
+  ypos -257
+ }
+ Blur {
+  channels alpha
+  size 12
+  name _BLUR_
+  xpos -477
+  ypos -221
+ }
+ Output {
+  name Output1
+  xpos -477
+  ypos -111
+ }
+end_group

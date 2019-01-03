@@ -1,0 +1,23 @@
+Preferences {
+ inputs 0
+ name Preferences
+ viewer_texture_vram 512
+ selectedGPUDeviceName "ATI Radeon R9 M370X Compute Engine"
+ platformPathRemaps ""
+ maxPanels 2
+ colorPickerDefaultMode "floating color picker"
+ UISequenceDisplayMode "Printf Notation (%d)"
+ ShadeDAGNodes false
+ postage_stamp_mode "Static frame"
+ ArrowColorUp 0xff0000ff
+ expression_arrows false
+ clone_arrows false
+ ArrowheadWidth 12
+ dot_node_scale 1.5
+ DfltBezAutokey false
+ viewer_handle_size_3d 10
+ UIRotoLineWidth 0.75
+ UIRotoCurveColor 0x2bffffff
+ echoAllCommands true
+ scopesForceFullFrame true
+}

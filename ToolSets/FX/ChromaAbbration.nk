@@ -1,0 +1,104 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Group {
+name ChromaAbbration
+tile_color 0xffd455ff
+note_font "Verdana Bold"
+note_font_color 0xff
+selected true
+xpos 8035
+ypos -5767
+addUserKnob {20 tb_user l "Chroma Abbration"}
+addUserKnob {41 scale l Amount T GodRays1.scale}
+}
+Input {
+inputs 0
+name Input1
+xpos 825
+ypos -714
+}
+Remove {
+operation keep
+channels rgba
+name Remove1
+label "\[value channels]"
+xpos 825
+ypos -674
+}
+Dot {
+name Dot8
+xpos 856
+ypos -621
+}
+set N35deb750 [stack 0]
+Dot {
+name Dot10
+xpos 1205
+ypos -621
+}
+Keyer {
+operation "luminance key"
+name Keyer3
+xpos 1174
+ypos -404
+}
+push $N35deb750
+Shuffle {
+red green
+blue green
+alpha green
+name GREEN
+tile_color 0xff0000
+xpos 993
+ypos -531
+}
+GodRays {
+inputs 1+1
+scale 1.02
+name GodRays1
+xpos 993
+ypos -404
+}
+set N35dccde0 [stack 0]
+Dot {
+name Dot9
+xpos 1024
+ypos -323
+}
+push $N35dccde0
+push $N35deb750
+Shuffle {
+green black
+name RED_BLUE
+tile_color 0xff000000
+xpos 825
+ypos -532
+}
+ShuffleCopy {
+inputs 2
+green green
+alpha alpha2
+name RB_G
+xpos 825
+ypos -400
+}
+Merge2 {
+inputs 2
+operation screen
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+name Merge8
+note_font "Verdana Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 825
+ypos -327
+}
+Output {
+name Output1
+selected true
+xpos 825
+ypos -227
+}
+end_group

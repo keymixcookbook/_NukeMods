@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="4" y="23" w="2556" h="1417" screen="0">
+        <splitter orientation="2">
+            <split size="1016"/>
+            <splitter orientation="1">
+                <split size="1306"/>
+                <dock id="" activePageId="uk.co.thefoundry.project.2" focus="true">
+                    <page id="uk.co.thefoundry.project.2" layout="splitter(224,1056)"/>
+                    <page id="uk.co.thefoundry.project.1" layout="splitter(160,1120)"/>
+                </dock>
+                <split size="1246"/>
+                <splitter orientation="2">
+                    <split size="695"/>
+                    <dock id="" activePageId="uk.co.thefoundry.viewer.1">
+                        <page id="uk.co.thefoundry.viewer.1"/>
+                        <page id="uk.co.thefoundry.sequenceviewer.2"/>
+                    </dock>
+                    <split size="317"/>
+                    <splitter orientation="1">
+                        <split size="621"/>
+                        <dock id="" hideTitles="1" activePageId="uk.co.thefoundry.waveformscope.1">
+                            <page id="uk.co.thefoundry.waveformscope.1"/>
+                        </dock>
+                        <split size="621"/>
+                        <dock id="" hideTitles="1" activePageId="uk.co.thefoundry.vectorscope.1">
+                            <page id="uk.co.thefoundry.vectorscope.1"/>
+                        </dock>
+                    </splitter>
+                </splitter>
+            </splitter>
+            <split size="375"/>
+            <dock id="" activePageId="uk.co.thefoundry.timeline.1">
+                <page id="uk.co.thefoundry.timeline.1" layout="splitter(751,1801)"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>

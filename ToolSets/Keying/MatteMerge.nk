@@ -1,0 +1,77 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push 0
+push $cut_paste_input
+Group {
+ inputs 2
+ name MatteMerge
+ tile_color 0x590000
+ note_font "Verdana Bold"
+ note_font_size 14
+ note_font_color 0xffffffff
+ selected true
+ xpos 2300
+ ypos -2503
+}
+ Input {
+  inputs 0
+  name EDGE
+  xpos 825
+  ypos -714
+ }
+ Dot {
+  name Dot21
+  xpos 856
+  ypos -674
+ }
+set N886c480 [stack 0]
+ Input {
+  inputs 0
+  name CORE
+  xpos 634
+  ypos -717
+  number 1
+ }
+ Dot {
+  name Dot20
+  xpos 665
+  ypos -677
+ }
+set N886a870 [stack 0]
+ Merge2 {
+  inputs 2
+  operation screen
+  Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name Merge14
+  note_font "Verdana Bold Bold Bold Bold"
+  note_font_color 0xffffffff
+  xpos 634
+  ypos -480
+ }
+push $N886c480
+push $N886a870
+ ShuffleCopy {
+  inputs 2
+  red alpha
+  green alpha
+  blue alpha2
+  name ShuffleCopy1
+  xpos 825
+  ypos -403
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 634
+  ypos -407
+ }
+ Output {
+  name Output1
+  xpos 634
+  ypos -307
+ }
+end_group

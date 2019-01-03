@@ -1,0 +1,340 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+name ku_ExpoGlow
+tile_color 0xcc804eff
+note_font "Verdana Bold Bold"
+note_font_color 0xffffffff
+selected true
+xpos 4856
+ypos 149
+addUserKnob {20 tb_user l ku_ExpoGlow}
+addUserKnob {6 bol_source l "Add Source" +STARTLINE}
+addUserKnob {6 bol_bbox l "Copy Bounding Box" -STARTLINE}
+addUserKnob {20 gp l Lumanance n 1}
+gp 0
+addUserKnob {41 blackpoint T GradeA16.blackpoint}
+addUserKnob {41 whitepoint T GradeA16.whitepoint}
+addUserKnob {41 gamma T GradeA16.gamma}
+addUserKnob {41 add l offset T GradeA16.add}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {41 size l "Blur Size" T Blur_Lv1.size}
+addUserKnob {4 mu_blend l Mode M {Plus Screen}}
+}
+Input {
+inputs 0
+name Input
+xpos 839
+ypos 333
+}
+Dot {
+name Dot51
+xpos 870
+ypos 373
+}
+set N38474470 [stack 0]
+Dot {
+name Dot50
+xpos 743
+ypos 373
+}
+Dot {
+name Dot49
+xpos 743
+ypos 1000
+}
+set N1822dd50 [stack 0]
+Dot {
+name Dot1
+xpos 743
+ypos 1024
+}
+push $N1822dd50
+push $N38474470
+Keyer {
+operation "luminance key"
+name Keyer2
+xpos 839
+ypos 447
+}
+Grade {
+channels alpha
+white_clamp true
+name GradeA16
+note_font "Verdana Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 839
+ypos 479
+}
+Premult {
+name Premult16
+xpos 839
+ypos 511
+}
+Dot {
+name Dot40
+xpos 870
+ypos 595
+}
+set N10985230 [stack 0]
+Dot {
+name Dot41
+xpos 1055
+ypos 595
+}
+set N142840 [stack 0]
+Dot {
+name Dot42
+xpos 1192
+ypos 595
+}
+set N195b00 [stack 0]
+Dot {
+name Dot43
+xpos 1338
+ypos 595
+}
+set N7256f690 [stack 0]
+Dot {
+name Dot44
+xpos 1487
+ypos 595
+}
+set N109b4440 [stack 0]
+Dot {
+name Dot45
+xpos 1630
+ypos 595
+}
+set N725473c0 [stack 0]
+Dot {
+name Dot46
+xpos 1758
+ypos 595
+}
+set N1cfa80 [stack 0]
+Dot {
+name Dot47
+xpos 1890
+ypos 595
+}
+set N12b4a780 [stack 0]
+Dot {
+name Dot48
+xpos 2029
+ypos 595
+}
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*256}}
+name Blur_Lv9
+label "\[value size]"
+xpos 1998
+ypos 674
+}
+Multiply {
+value 0.5
+name falloff8
+label "\[value value]"
+xpos 1998
+ypos 706
+}
+set N1c7d60 [stack 0]
+push $N12b4a780
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*128}}
+name Blur_Lv8
+label "\[value size]"
+xpos 1859
+ypos 674
+}
+Multiply {
+value 0.5
+name falloff7
+label "\[value value]"
+xpos 1859
+ypos 706
+}
+set N1093e0f0 [stack 0]
+push $N1cfa80
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*64}}
+name Blur_Lv7
+label "\[value size]"
+xpos 1727
+ypos 674
+}
+Multiply {
+value 0.5
+name falloff6
+label "\[value value]"
+xpos 1727
+ypos 706
+}
+set N109142d0 [stack 0]
+push $N725473c0
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*32}}
+name Blur_Lv6
+label "\[value size]"
+xpos 1599
+ypos 675
+}
+Multiply {
+value 0.5
+name falloff5
+label "\[value value]"
+xpos 1599
+ypos 707
+}
+set N725cbe70 [stack 0]
+push $N109b4440
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*16}}
+name Blur_Lv5
+label "\[value size]"
+xpos 1456
+ypos 675
+}
+Multiply {
+value 0.5
+name falloff4
+label "\[value value]"
+xpos 1456
+ypos 707
+}
+set N1093fa40 [stack 0]
+push $N7256f690
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*8}}
+name Blur_Lv4
+label "\[value size]"
+xpos 1307
+ypos 675
+}
+Multiply {
+value 0.5
+name falloff3
+label "\[value value]"
+xpos 1307
+ypos 707
+}
+set N109749a0 [stack 0]
+push $N195b00
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*4}}
+name Blur_Lv3
+label "\[value size]"
+xpos 1161
+ypos 674
+}
+Multiply {
+value 0.5
+name falloff2
+label "\[value value]"
+xpos 1161
+ypos 706
+}
+set N10940f90 [stack 0]
+push 0
+push $N142840
+Blur {
+channels rgba
+size {{parent.Blur_Lv1.size*2}}
+name Blur_Lv2
+label "\[value size]"
+xpos 1024
+ypos 675
+}
+Multiply {
+value 0.5
+name falloff1
+label "\[value value]"
+xpos 1024
+ypos 707
+}
+set N10976690 [stack 0]
+push $N10985230
+Blur {
+channels rgba
+size 1
+name Blur_Lv1
+label "\[value size]"
+xpos 839
+ypos 675
+}
+Multiply {
+value 0.5
+name falloff
+label "\[value value]"
+xpos 839
+ypos 707
+}
+set N72546700 [stack 0]
+Merge2 {
+inputs 9+1
+operation screen
+name Scrn
+xpos 1024
+ypos 851
+}
+push $N1c7d60
+push $N1093e0f0
+push $N109142d0
+push $N725cbe70
+push $N1093fa40
+push $N109749a0
+push $N10940f90
+push 0
+push $N10976690
+push $N72546700
+Merge2 {
+inputs 9+1
+operation plus
+name Merge79
+xpos 839
+ypos 800
+}
+Switch {
+inputs 2
+which {{mu_blend}}
+name Switch2
+label "\[value which]"
+xpos 839
+ypos 847
+}
+Merge2 {
+inputs 2
+operation plus
+name Plus
+xpos 839
+ypos 1000
+disable {{!parent.bol_source}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 839
+ypos 1024
+disable {{!parent.bol_bbox}}
+}
+Clamp {
+channels alpha
+name Clamp3
+xpos 839
+ypos 1048
+}
+Output {
+name Output1
+xpos 839
+ypos 1106
+}
+end_group

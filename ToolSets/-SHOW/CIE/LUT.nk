@@ -1,0 +1,12 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Vectorfield {
+ vfield_file "/Volumes/Ku/Projects/Clients/Fun2Pro/XmasEvergreen/PROJECT DOCUMENTS/RLF2RG4CUBE3D.cube"
+ version 1
+ file_type cube
+ name XGN_LUT
+ selected true
+ xpos 304
+ ypos -219
+}

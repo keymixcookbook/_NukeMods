@@ -1,0 +1,98 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+Group {
+ inputs 0
+ name MonitorCheck
+ label "\[value item]"
+ note_font "Verdana Bold"
+ selected true
+ xpos -135
+ ypos -181
+ addUserKnob {20 tb_user l "Monitor Check"}
+ addUserKnob {4 item l "Check with" M {"Linear Gradient" "Color Bar" "Color Bar (Blue Only)" "18% Gray" "50% Gray" "Color Wheel" CheckerBoard}}
+ item "Color Bar"
+}
+ CheckerBoard2 {
+  inputs 0
+  format {{{root.format}}}
+  name CheckerBoard1
+  xpos -492
+  ypos -398
+ }
+ ColorWheel {
+  inputs 0
+  format {{{root.format}}}
+  gamma 0.45
+  name ColorWheel
+  xpos -586
+  ypos -398
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 0.5
+  format {{{root.format}}}
+  name half
+  xpos -676
+  ypos -397
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 0.18
+  format {{{root.format}}}
+  name nutural_gray
+  xpos -772
+  ypos -398
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0 0 1 0}
+  format {{{root.format}}}
+  name Constant1
+  xpos -872
+  ypos -419
+  postage_stamp false
+ }
+ ColorBars {
+  inputs 0
+  format {{{root.format}}}
+  name ColorBars
+  xpos -982
+  ypos -395
+ }
+set N26d61a10 [stack 0]
+ Merge2 {
+  inputs 2
+  operation min
+  name Merge1
+  xpos -872
+  ypos -395
+  postage_stamp true
+ }
+push $N26d61a10
+ Ramp {
+  inputs 0
+  p0 {0 0}
+  p1 {{root.width} 0}
+  name Linear_Gradient
+  xpos -1072
+  ypos -395
+  hide_input true
+  postage_stamp true
+ }
+ Switch {
+  inputs 7
+  which {{item}}
+  name Switch1
+  label "\[value which]"
+  xpos -772
+  ypos -178
+ }
+ Output {
+  name Output1
+  xpos -772
+  ypos -78
+ }
+end_group

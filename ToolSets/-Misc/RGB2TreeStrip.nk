@@ -1,0 +1,162 @@
+set cut_paste_input [stack 0]
+version 10.5 v5
+push 0
+Dot {
+ name Dot1
+ selected true
+ xpos -40
+ ypos 504
+}
+Colorspace {
+ colorspace_out CIE-Yxy
+ name Colorspace2
+ label "\[value colorspace_in] -> \[value colorspace_out]"
+ selected true
+ xpos -208
+ ypos 497
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {1.5 1.5 0 0}
+ name Constant2
+ selected true
+ xpos -386
+ ypos 198
+}
+push $cut_paste_input
+Shuffle {
+ blue black
+ name Shuffle35
+ label "\[value in]"
+ selected true
+ xpos -248
+ ypos 94
+}
+Saturation {
+ saturation 0
+ mode Maximum
+ name Saturation2
+ selected true
+ xpos -248
+ ypos 132
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge58
+ selected true
+ xpos -248
+ ypos 221
+}
+push 0
+Constant {
+ inputs 0
+ channels rgb
+ color {1.5 0 1.5 0}
+ name Constant3
+ selected true
+ xpos -664
+ ypos 198
+}
+push $cut_paste_input
+Shuffle {
+ green black
+ name Shuffle34
+ label "\[value in]"
+ selected true
+ xpos -545
+ ypos 79
+}
+Saturation {
+ saturation 0
+ mode Maximum
+ name Saturation3
+ selected true
+ xpos -545
+ ypos 117
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge59
+ selected true
+ xpos -545
+ ypos 221
+}
+Constant {
+ inputs 0
+ channels rgb
+ color {0 1.5 1.5 0}
+ name Constant1
+ selected true
+ xpos -922
+ ypos 201
+}
+push $cut_paste_input
+Shuffle {
+ red black
+ name Shuffle33
+ label "\[value in]"
+ selected true
+ xpos -799
+ ypos 91
+}
+Saturation {
+ saturation 0
+ mode Maximum
+ name Saturation1
+ selected true
+ xpos -799
+ ypos 135
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge57
+ selected true
+ xpos -799
+ ypos 224
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ name Merge56
+ selected true
+ xpos -545
+ ypos 372
+}
+Saturation {
+ saturation 3
+ mode Average
+ name Saturation4
+ selected true
+ xpos -545
+ ypos 398
+}
+Colorspace {
+ colorspace_out CIE-Yxy
+ name Colorspace1
+ label "\[value colorspace_in] -> \[value colorspace_out]"
+ selected true
+ xpos -545
+ ypos 459
+}
+Copy {
+ inputs 2
+ from0 rgba.red
+ to0 rgba.red
+ bbox B
+ name Copy37
+ selected true
+ xpos -545
+ ypos 497
+}
+Colorspace {
+ colorspace_in CIE-Yxy
+ name Colorspace3
+ label "\[value colorspace_in] -> \[value colorspace_out]"
+ selected true
+ xpos -545
+ ypos 535
+}

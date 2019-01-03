@@ -1,0 +1,180 @@
+set cut_paste_input [stack 0]
+version 9.0 v7
+push $cut_paste_input
+Group {
+ name despillToColor
+ selected true
+ xpos 12
+ ypos 462
+ addUserKnob {20 User l main}
+ addUserKnob {4 bluegreen l "screen type" M {blue green ""}}
+ bluegreen green
+ addUserKnob {6 spillmatte l "spillmatte output" t "spillmatte output to alpha channel" -STARTLINE}
+ addUserKnob {18 screenColor l "screen color"}
+ screenColor {0.11 0.1 0.1}
+ addUserKnob {6 screenColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 targetColor l "target color"}
+ targetColor {0.11 0.1 0.1}
+ addUserKnob {6 targetColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 balance t "- determines which colors get more affected by the despill operation. Lower values work better for red tones. Higher values stronger affect blue and green tones." R 0 2}
+ balance 1
+ addUserKnob {7 gain t "Increasing gain will affect a wider range of colors." R 0.5 3.5}
+ gain 1
+ addUserKnob {26 ""}
+ addUserKnob {6 enableErode l enable +STARTLINE}
+ addUserKnob {7 erode t "For blurry edges, eroding the despill matte is an alternative to increasing the gain." R 0.1 50}
+ erode 1
+ addUserKnob {7 erodeMix l mix}
+ erodeMix 1
+ addUserKnob {26 ""}
+ addUserKnob {7 falloff t "- controlls the gamma on the despill matte." R 0.5 1.5}
+ falloff 1
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T Merge1.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 unpremult l "(un)premult by" T despillGrade.unpremult}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {20 info n 1}
+ info 0
+ addUserKnob {26 jm l "" +STARTLINE T "Despill to Color by Johannes Masanz\nVersion: 3.6"}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name source
+  xpos -84
+  ypos 82
+ }
+set N76f07000 [stack 0]
+ NoOp {
+  name NoOp1
+  xpos 69
+  ypos 114
+  addUserKnob {20 User}
+  addUserKnob {7 alphavalueGreen}
+  alphavalueGreen {{(parent.screenColor.g*parent.gain)-((parent.screenColor.b*(1-(parent.balance-1))+parent.screenColor.r*parent.balance)/2)}}
+  addUserKnob {7 alphavalue l alphavalueBlue}
+  alphavalue {{(parent.screenColor.b*parent.gain)-((parent.screenColor.g*(1-(parent.balance-1))+parent.screenColor.r*parent.balance)/2)}}
+ }
+push $N76f07000
+ Expression {
+  expr0 r
+  expr1 g
+  expr2 b
+  channel3 alpha
+  expr3 parent.bluegreen==0?(b*parent.gain-(r*parent.balance+g*(1-(parent.balance-1)))/2):(g*parent.gain-(r*parent.balance+b*(1-(parent.balance-1)))/2)
+  name Expression1
+  xpos 456
+  ypos 82
+ }
+ Grade {
+  channels alpha
+  whitepoint {{(parent.NoOp1.alphavalue*1.1)*(1-parent.bluegreen)+(parent.NoOp1.alphavalueGreen*1.1)*(parent.bluegreen)}}
+  name despillWhite
+  xpos 456
+  ypos 108
+ }
+ FilterErode {
+  size {{-parent.erode}}
+  filter gaussian
+  mix {{parent.erodeMix}}
+  name despillGaussian
+  xpos 456
+  ypos 146
+  disable {{1-parent.enableErode}}
+ }
+set N7346dc00 [stack 0]
+ Grade {
+  channels alpha
+  gamma {{parent.falloff}}
+  black_clamp false
+  name falloff
+  xpos 346
+  ypos 191
+ }
+set N7346d400 [stack 0]
+push $N7346dc00
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge1
+  xpos 456
+  ypos 184
+ }
+push $N7346d400
+push $N7346dc00
+ ChannelMerge {
+  inputs 2
+  operation min
+  name ChannelMerge2
+  xpos 563
+  ypos 184
+  disable {{parent.falloff==1?1:0}}
+ }
+ Switch {
+  inputs 2
+  which {{parent.falloff>1?1:0}}
+  name Switch1
+  xpos 456
+  ypos 236
+ }
+set N7346c800 [stack 0]
+ Input {
+  inputs 0
+  name mask
+  xpos -234
+  ypos 268
+  number 1
+ }
+push $N7346c800
+ Grade {
+  channels alpha
+  whitepoint {{parent.despillWhite.whitepoint}}
+  reverse true
+  name Grade4
+  xpos 456
+  ypos 262
+ }
+push $N76f07000
+ Grade {
+  inputs 1+1
+  channels rgba
+  add {{parent.bluegreen==0?(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))):(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000)))} {parent.bluegreen==0?(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))):(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000)))} {parent.bluegreen==0?(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalue),0,1000000))):(parent.targetColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000))-parent.screenColor*(clamp(1/clamp(parent.NoOp1.alphavalueGreen),0,1000000)))} {curve}}
+  black_clamp false
+  unpremult -rgba.alpha
+  name despillGrade
+  xpos 69
+  ypos 268
+ }
+push $N76f07000
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  maskChannelInput -rgba.alpha
+  mix {{parent.mix}}
+  name Merge1
+  xpos -84
+  ypos 268
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name Copy1
+  selected true
+  xpos -84
+  ypos 315
+  disable {{1-spillmatte}}
+ }
+ Output {
+  name Output1
+  xpos -84
+  ypos 366
+ }
+end_group

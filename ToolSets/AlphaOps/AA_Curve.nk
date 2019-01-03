@@ -1,0 +1,17 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+ColorLookup {
+ channels alpha
+ lut {master {}
+   red {}
+   green {}
+   blue {}
+   alpha {curve C k 0 s0 1 s0}}
+ name CurveA1
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 543
+ ypos -490
+}

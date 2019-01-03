@@ -1,0 +1,17 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+push 0
+Merge2 {
+ inputs 2
+ operation stencil
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name Merge3
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 833
+ ypos -282
+}

@@ -1,0 +1,183 @@
+set cut_paste_input [stack 0]
+version 11.1 v4
+push $cut_paste_input
+push 0
+Group {
+ inputs 2
+ name ku_IBK
+ tile_color 0x2d5b00ff
+ note_font_color 0xffffffff
+ selected true
+ xpos -920
+ ypos -398
+ addUserKnob {20 tb_user l ku_IBK}
+ addUserKnob {4 mu_screen l "Screen Type" M {Green Blue}}
+ mu_screen Blue
+ addUserKnob {41 redWeight l "Red Weight" T _PLATE_.redWeight}
+ addUserKnob {41 blueWeight l "Blue/Green Weight" T _PLATE_.blueWeight}
+ addUserKnob {26 ""}
+ addUserKnob {41 whitepoint T _ALPHA_ADJ_.whitepoint}
+ addUserKnob {41 blackpoint T _ALPHA_ADJ_.blackpoint}
+ addUserKnob {41 gamma T _ALPHA_ADJ_.gamma}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 tx_dis l "" +STARTLINE T "IBK without despill"}
+}
+ Input {
+  inputs 0
+  name B
+  label "\[value number]"
+  xpos 886
+  ypos -698
+ }
+set N56c904b0 [stack 0]
+ Expression {
+  temp_name0 rw
+  temp_expr0 redWeight
+  temp_name1 bw
+  temp_expr1 blueWeight
+  expr3 b-(r*rw+g*bw)
+  name _PLATE_
+  tile_color 0x7f00
+  label "a. \[value expr3]"
+  xpos 968
+  ypos -599
+  addUserKnob {20 User}
+  addUserKnob {7 redWeight l "Red Weight"}
+  redWeight 0.5
+  addUserKnob {7 blueWeight l "Blue/Green Weight"}
+  blueWeight 0.5
+ }
+set N3bdfb140 [stack 0]
+push $N56c904b0
+ Expression {
+  temp_name0 rw
+  temp_expr0 redWeight
+  temp_name1 bw
+  temp_expr1 blueWeight
+  expr3 g-(r*rw+b*bw)
+  name _CLEANPLATE_2
+  tile_color 0x7f00ff
+  label "a. \[value expr3]"
+  xpos 803
+  ypos -597
+  addUserKnob {20 User}
+  addUserKnob {7 redWeight l "Red Weight"}
+  redWeight {{parent._PLATE_.redWeight}}
+  addUserKnob {7 blueWeight l "Blur Weight"}
+  blueWeight {{parent._PLATE_.blueWeight}}
+ }
+ Switch {
+  inputs 2
+  which {{mu_screen}}
+  name _ScreenType_B
+  label "\[value which]"
+  xpos 884
+  ypos -509
+ }
+set Nbbf1ae0 [stack 0]
+ Input {
+  inputs 0
+  name cleanplate
+  label "\[value number]"
+  xpos 596
+  ypos -693
+  number 1
+ }
+set N7f99fe80 [stack 0]
+ Expression {
+  temp_name0 rw
+  temp_expr0 redWeight
+  temp_name1 bw
+  temp_expr1 blueWeight
+  expr3 b-(r*rw+g*bw)
+  name _CLEANPLATE_1
+  tile_color 0x7f00
+  label "a. \[value expr3]"
+  xpos 677
+  ypos -597
+  addUserKnob {20 User}
+  addUserKnob {7 redWeight l "Red Weight"}
+  redWeight {{parent._PLATE_.redWeight}}
+  addUserKnob {7 blueWeight l "Blur Weight"}
+  blueWeight {{parent._PLATE_.blueWeight}}
+ }
+push $N7f99fe80
+ Expression {
+  temp_name0 rw
+  temp_expr0 redWeight
+  temp_name1 bw
+  temp_expr1 blueWeight
+  expr3 g-(r*rw+b*bw)
+  name _CLEANPLATE_
+  tile_color 0x7f00ff
+  label "a. \[value expr3]"
+  xpos 513
+  ypos -597
+  addUserKnob {20 User}
+  addUserKnob {7 redWeight l "Red Weight"}
+  redWeight {{parent._PLATE_.redWeight}}
+  addUserKnob {7 blueWeight l "Blur Weight"}
+  blueWeight {{parent._PLATE_.blueWeight}}
+ }
+ Switch {
+  inputs 2
+  which {{mu_screen}}
+  name _SCREENTYPE_CP_
+  label "\[value which]"
+  xpos 599
+  ypos -509
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name _DIV_
+  xpos 599
+  ypos -352
+ }
+ Invert {
+  channels alpha
+  name _INVERT_
+  xpos 599
+  ypos -268
+ }
+ Grade {
+  channels alpha
+  white_clamp true
+  name _ALPHA_ADJ_
+  note_font "Verdana Bold Bold"
+  note_font_color 0xffffffff
+  xpos 741
+  ypos -268
+ }
+set N2c3e9cd0 [stack 0]
+push $Nbbf1ae0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name _COPYALPHA_
+  xpos 884
+  ypos -141
+ }
+set N52b8dd80 [stack 0]
+ Output {
+  name Output1
+  xpos 884
+  ypos -41
+ }
+push $N52b8dd80
+push $N3bdfb140
+push $N2c3e9cd0
+ Viewer {
+  inputs 3
+  frame 1001
+  frame_range 1001-1124
+  frame_increment 8
+  fps 23.97602463
+  name Viewer1
+  xpos 1170
+  ypos -9
+  hide_input true
+ }
+end_group

@@ -1,0 +1,111 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+inputs 0
+name BackdropNode17
+tile_color 0x394a7fff
+label PLATE
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos -9347
+ypos -4082
+bdwidth 277
+bdheight 230
+}
+BackdropNode {
+inputs 0
+name BackdropNode18
+tile_color 0x1f3f1fff
+label MATTE
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos -8654
+ypos -3714
+bdwidth 747
+bdheight 940
+}
+BackdropNode {
+inputs 0
+name BackdropNode19
+tile_color 0x2f2f3fff
+label DESPILL
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos -9573
+ypos -3716
+bdwidth 747
+bdheight 940
+}
+BackdropNode {
+inputs 0
+name BackdropNode20
+tile_color 0x394a7fff
+label IDN
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+note_font_color 0xffffffff
+selected true
+xpos -9017
+ypos -4084
+bdwidth 277
+bdheight 230
+}
+NoOp {
+inputs 0
+name IDN
+selected true
+xpos -8911
+ypos -3899
+}
+Dot {
+name Dot12
+selected true
+xpos -8880
+ypos -3792
+}
+Dot {
+name Dot10
+selected true
+xpos -8295
+ypos -3792
+}
+Dot {
+name Dot9
+selected true
+xpos -8295
+ypos -2365
+}
+push $cut_paste_input
+NoOp {
+name PLATE
+selected true
+xpos -9244
+ypos -3895
+}
+Dot {
+name Dot11
+selected true
+xpos -9213
+ypos -3782
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+selected true
+xpos -9244
+ypos -2369
+}
+Premult {
+name Premult2
+selected true
+xpos -9244
+ypos -2249
+}

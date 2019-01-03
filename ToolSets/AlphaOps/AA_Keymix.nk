@@ -1,0 +1,14 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+push 0
+Keymix {
+ inputs 2
+ channels alpha
+ name Keymix1
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1014
+ ypos -491
+}

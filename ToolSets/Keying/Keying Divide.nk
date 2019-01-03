@@ -1,0 +1,88 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Dot {
+ name Dot1
+ selected true
+ xpos 294
+ ypos -544
+}
+set Nfc668910 [stack 0]
+Dot {
+ name Dot3
+ selected true
+ xpos 194
+ ypos -544
+}
+set Nfc644c50 [stack 0]
+Dot {
+ name Dot2
+ selected true
+ xpos 94
+ ypos -544
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name R
+ tile_color 0x902000ff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 60
+ ypos -459
+}
+Dot {
+ name Dot4
+ selected true
+ xpos 94
+ ypos -262
+}
+push $Nfc644c50
+Shuffle {
+ red green
+ blue green
+ alpha green
+ name G
+ tile_color 0x7400ff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 160
+ ypos -460
+}
+Dot {
+ name Dot5
+ selected true
+ xpos 194
+ ypos -334
+}
+push $Nfc668910
+Shuffle {
+ red blue
+ green blue
+ alpha blue
+ name B
+ tile_color 0x75ffff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 260
+ ypos -460
+}
+Dissolve {
+ inputs 2
+ name Dissolve1
+ selected true
+ xpos 260
+ ypos -341
+}
+Merge2 {
+ inputs 2
+ operation divide
+ name Divide
+ selected true
+ xpos 260
+ ypos -265
+}

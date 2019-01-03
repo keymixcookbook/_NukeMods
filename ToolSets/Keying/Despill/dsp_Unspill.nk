@@ -1,0 +1,137 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Group {
+ name Unspill1
+ selected true
+ xpos 4246
+ ypos 315
+ addUserKnob {20 User l Adjustments}
+ addUserKnob {4 bkg l "Screen Color" t "Select the color of the backing region." M {green blue "" ""}}
+ addUserKnob {26 text2 l "" -STARTLINE T "      View spillmap in the alpha channel"}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix l "Color Mix" t "Adjust to move spill suppression closer or further from target edges. View the alpha channel to see areas that will get spill removed." R -1 1}
+ addUserKnob {41 amtBlur l Soften T SoftenSpillMap.amtBlur}
+ addUserKnob {26 ""}
+ addUserKnob {41 Rspill l "Scale Red" T Unspill_Opertation.Rspill}
+ addUserKnob {41 Gspill l "Scale Green" T Unspill_Opertation.Gspill}
+ addUserKnob {41 Bspill l "Scale Blue" T Unspill_Opertation.Bspill}
+ addUserKnob {26 ""}
+ addUserKnob {26 text l "" +STARTLINE T "Unspill v1.7 (c) 2016     Steve Wright     www.vfxio.com"}
+}
+ Input {
+  inputs 0
+  name Src
+  xpos 509
+  ypos -253
+ }
+ Dot {
+  name Dot1
+  xpos 543
+  ypos -213
+ }
+set Nf5781280 [stack 0]
+ Expression {
+  temp_name0 RGmix
+  temp_expr0 (r*(1-(mixRG+1)/2))+(g*(mixRG+1)/2)
+  temp_name1 SpillMap
+  temp_expr1 clamp(b-RGmix)
+  expr3 SpillMap
+  name Blue_SpillMap
+  xpos 555
+  ypos -163
+  addUserKnob {20 User l "Unspill Adjust"}
+  addUserKnob {7 mixRG l "Red Green mix" R -1 1}
+  mixRG {{parent.mix*2}}
+ }
+push $Nf5781280
+ Expression {
+  temp_name0 RBmix
+  temp_expr0 (r*(1-(mixRB+1)/2))+(b*(mixRB+1)/2)
+  temp_name1 SpillMap
+  temp_expr1 clamp(g-RBmix)
+  expr3 SpillMap
+  name Green_SpillMap
+  xpos 450
+  ypos -162
+  addUserKnob {20 User l "Unspill Adjust"}
+  addUserKnob {7 mixRB l "Red Blue mix" R -1 1}
+  mixRB {{parent.mix*2}}
+ }
+ Switch {
+  inputs 2
+  which {{bkg}}
+  name Switch1
+  xpos 501
+  ypos -107
+ }
+ Blur {
+  channels alpha
+  size {{amtBlur}}
+  name SoftenSpillMap
+  xpos 501
+  ypos -53
+  addUserKnob {20 User l Soften}
+  addUserKnob {7 amtBlur l Soften t "increase this knob to reduce grain in despilled regions when working with grainy clips" R 0 10}
+ }
+ Dot {
+  name Dot2
+  xpos 535
+  ypos 3
+ }
+set Nf57cace0 [stack 0]
+ Input {
+  inputs 0
+  name Mask
+  xpos 755
+  ypos -5
+  number 1
+ }
+push $Nf57cace0
+ Multiply {
+  channels alpha
+  value 0
+  name Multiply1
+  xpos 635
+  ypos -4
+ }
+ ChannelMerge {
+  inputs 2
+  operation plus
+  name ChannelMerge2
+  xpos 676
+  ypos 53
+ }
+ ChannelMerge {
+  inputs 2
+  operation out
+  name ChannelMerge1
+  xpos 501
+  ypos 53
+ }
+ Expression {
+  expr0 r+(a*Rspill)
+  expr1 g+(a*(Gspill))
+  expr2 b+(a*(Bspill))
+  name Unspill_Opertation
+  xpos 501
+  ypos 125
+  addUserKnob {20 User l "Scale Channels"}
+  addUserKnob {7 Rspill l "Scale Red" t "to increase or decreas RED in the backing region" R -1 1}
+  addUserKnob {7 Gspill l "Scale Green" t "to increase or decreas GREEN in the backing region" R -1 1}
+  addUserKnob {7 Bspill l "Scale Blue" t "to increase or decreas BLUE in the backing region" R -1 1}
+ }
+set Nf57f2f00 [stack 0]
+ Output {
+  name Output1
+  xpos 501
+  ypos 313
+ }
+push $Nf57f2f00
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos 692
+  ypos 216
+ }
+end_group

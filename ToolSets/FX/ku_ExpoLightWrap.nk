@@ -1,0 +1,945 @@
+set cut_paste_input [stack 0]
+version 11.1 v4
+push $cut_paste_input
+push 0
+push $cut_paste_input
+Group {
+ inputs 3
+ name ku_ExpoLightWrap
+ tile_color 0xff5f00ff
+ selected true
+ xpos 2475
+ ypos 92
+ addUserKnob {20 tb_user l "Exponencial Lightwrap"}
+ addUserKnob {6 ck_input l "Input Premulted" +STARTLINE}
+ ck_input true
+ addUserKnob {41 falloff T ExponentialGlow1.falloff}
+ addUserKnob {41 intensity l "Glow Intensity" T ExponentialGlow1.intensity}
+ addUserKnob {41 blur_size l size T ExponentialGlow1.blur_size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 value l "Output Intensity" T _OUT_INTENSITY_.value}
+}
+ Input {
+  inputs 0
+  name FG
+  xpos 522
+  ypos -24
+ }
+ Unpremult {
+  name Unpremult
+  xpos 702
+  ypos -24
+  disable {{!parent.ck_input}}
+ }
+set N9e5985b0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 733
+  ypos -320
+ }
+ Dot {
+  name Dot23
+  label FG
+  note_font "Bitstream Vera Sans Bold Bold"
+  note_font_size 48
+  xpos 858
+  ypos -320
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 992
+  ypos -311
+  number 1
+ }
+ Dot {
+  name Dot24
+  label BG
+  note_font "Bitstream Vera Sans Bold Bold Bold"
+  note_font_size 48
+  xpos 1023
+  ypos -213
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  name _STENCIL_
+  label "\[value value]"
+  xpos 827
+  ypos -219
+ }
+ Group {
+  name ExponentialGlow1
+  tile_color 0xcc804eff
+  xpos 827
+  ypos -156
+  mapsize {0.15 0.15}
+  addUserKnob {20 User l "Exponential Glow"}
+  addUserKnob {41 add_source l "add source" -STARTLINE T ExpoGlow.add_source}
+  addUserKnob {41 falloff T ExpoGlow.falloff}
+  addUserKnob {7 intensity R 0 10}
+  intensity 1
+  addUserKnob {7 blur_size l size R 0.1 10}
+  blur_size 0.1
+  addUserKnob {3 blur_quality l qualiity -STARTLINE}
+  blur_quality 15
+  addUserKnob {18 from_color R 0 4}
+  from_color 1
+  addUserKnob {6 from_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 from_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 from_color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 from_color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 to_color R 0 4}
+  to_color 1
+  addUserKnob {6 to_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 to_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 to_color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 to_color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 glow_steps l "glow steps" t "Number of glow steps to process. \n0 = no glow, 10 = max blur of 512" R 0 10}
+  glow_steps 10
+  addUserKnob {26 ""}
+  addUserKnob {41 scale l pre-overscan T Overscan.scale}
+  addUserKnob {7 aspect_ratio l "aspect ratio" R 0.1 2}
+  aspect_ratio 1
+  addUserKnob {6 FadeAroundFormat l "fade around format" +STARTLINE}
+  FadeAroundFormat true
+  addUserKnob {7 FadeSize l "fade size" R 0 3}
+  FadeSize 0.5
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos -442
+   ypos -850
+  }
+  Reformat {
+   type scale
+   scale 1.15
+   resize none
+   name Overscan
+   xpos -442
+   ypos -770
+  }
+  NoOp {
+   name ExpoGlow
+   xpos -442
+   ypos -730
+   addUserKnob {20 User}
+   addUserKnob {7 falloff l Falloff R 1 3}
+   falloff 1
+   addUserKnob {7 intensity l Intensity R 0 4}
+   intensity {{parent.intensity*10}}
+   addUserKnob {6 add_source l "Add Source" +STARTLINE}
+   addUserKnob {6 add_bbox l "Add original bbox" +STARTLINE}
+  }
+set N1afec390 [stack 0]
+  Dot {
+   name Dot3
+   label " "
+   note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold"
+   note_font_size 24
+   note_font_color 0xa5a5a501
+   xpos -140
+   ypos -726
+  }
+  Remove {
+   operation keep
+   channels rgb
+   name Remove1
+   xpos -174
+   ypos -690
+  }
+  Rectangle {
+   invert true
+   area {{width} {height} 0 0}
+   softness {{parent.FadeSize*100}}
+   color 0
+   name RectangleFade
+   xpos -174
+   ypos -650
+   disable {{1-parent.FadeAroundFormat}}
+  }
+  Grade {
+   white {{ExpoGlow.intensity/100}}
+   name Grade1
+   xpos -174
+   ypos -530
+  }
+set N48d05d10 [stack 0]
+  Dot {
+   name Dot2
+   xpos 1066
+   ypos -526
+  }
+  Multiply {
+   channels rgb
+   value {{parent.to_color} {parent.to_color} {parent.to_color} {parent.to_color}}
+   name Multiply12
+   label end
+   xpos 1032
+   ypos -456
+  }
+  Dot {
+   name Dot5
+   xpos 1066
+   ypos -366
+  }
+set Na0be2e60 [stack 0]
+  Group {
+   name BlurPercent9
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 1032
+   ypos 264
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 512
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply9.value/ExpoGlow.falloff}}
+   name Multiply10
+   xpos -308
+   ypos 270
+  }
+push $Na0be2e60
+push $N48d05d10
+  Multiply {
+   channels rgb
+   value {{parent.from_color} {parent.from_color} {parent.from_color} {parent.from_color}}
+   name Multiply11
+   label start
+   xpos -174
+   ypos -456
+  }
+  Dot {
+   name Dot4
+   xpos -140
+   ypos -366
+  }
+set N99cd29a0 [stack 0]
+  Dissolve {
+   inputs 2
+   which 0.95
+   name Dissolve8
+   xpos 898
+   ypos -376
+  }
+  Group {
+   name BlurPercent8
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 898
+   ypos 224
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 256
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply8.value/ExpoGlow.falloff}}
+   name Multiply9
+   xpos -308
+   ypos 230
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.9
+   name Dissolve7
+   xpos 764
+   ypos -376
+  }
+  Group {
+   name BlurPercent7
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 764
+   ypos 184
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 128
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply7.value/ExpoGlow.falloff}}
+   name Multiply8
+   xpos -308
+   ypos 190
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.7
+   name Dissolve6
+   xpos 630
+   ypos -376
+  }
+  Group {
+   name BlurPercent6
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 630
+   ypos 144
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 64
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply6.value/ExpoGlow.falloff}}
+   name Multiply7
+   xpos -308
+   ypos 150
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.6
+   name Dissolve5
+   xpos 496
+   ypos -376
+  }
+  Group {
+   name BlurPercent5
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 496
+   ypos 104
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 32
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply5.value/ExpoGlow.falloff}}
+   name Multiply6
+   xpos -308
+   ypos 110
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.5
+   name Dissolve4
+   xpos 362
+   ypos -376
+  }
+  Group {
+   name BlurPercent4
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 362
+   ypos 64
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 16
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply4.value/ExpoGlow.falloff}}
+   name Multiply5
+   xpos -308
+   ypos 70
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.4
+   name Dissolve3
+   xpos 228
+   ypos -376
+  }
+  Group {
+   name BlurPercent3
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 228
+   ypos 24
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 8
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply3.value/ExpoGlow.falloff}}
+   name Multiply4
+   xpos -308
+   ypos 30
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.3
+   name Dissolve2
+   xpos 94
+   ypos -376
+  }
+  Group {
+   name BlurPercent2
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos 94
+   ypos -16
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 4
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply2.value/ExpoGlow.falloff}}
+   name Multiply3
+   xpos -308
+   ypos -10
+  }
+push $Na0be2e60
+push $N99cd29a0
+  Dissolve {
+   inputs 2
+   which 0.1
+   name Dissolve1
+   xpos -40
+   ypos -376
+  }
+  Group {
+   name BlurPercent1
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos -40
+   ypos -56
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 2
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   value {{Multiply1.value/ExpoGlow.falloff}}
+   name Multiply2
+   xpos -308
+   ypos -48
+  }
+push $N99cd29a0
+  Group {
+   name BlurPercent
+   tile_color 0xc4814dff
+   label "\[value blurmult]"
+   xpos -174
+   ypos -96
+   addUserKnob {20 percentBlur l "Percent Blur"}
+   addUserKnob {41 channels T _BLUR_.channels}
+   addUserKnob {14 percent R 0 100}
+   percent {{parent.blur_size*blurmult} {parent.blur_size*blurmult*pixel_aspect/parent.aspect_ratio}}
+   addUserKnob {41 filter T _BLUR_.filter}
+   addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+   addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+   addUserKnob {41 mix T _BLUR_.mix}
+   addUserKnob {7 blurmult R 0 500}
+   blurmult 1
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 514
+    ypos -229
+   }
+   Blur {
+    channels rgba
+    size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+    quality {{parent.parent.blur_quality}}
+    crop false
+    name _BLUR_
+    xpos 514
+    ypos -154
+    addUserKnob {20 User}
+    addUserKnob {7 xpercent l xPercent R 0 100}
+    xpercent 25.5
+    addUserKnob {7 ypercent l yPercent R 0 100}
+    ypercent {{xpercent}}
+   }
+   Output {
+    name Output1
+    xpos 514
+    ypos -89
+   }
+  end_group
+  Multiply {
+   channels rgb
+   name Multiply1
+   xpos -308
+   ypos -90
+  }
+push $N1afec390
+  Multiply {
+   channels rgb
+   value {{parent.add_source}}
+   name ADD_SOURCE
+   xpos -442
+   ypos -290
+  }
+  Dot {
+   name Dot1
+   label " "
+   note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold"
+   note_font_size 24
+   note_font_color 0xa5a5a501
+   xpos -408
+   ypos -206
+  }
+set N3eca5140 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge1
+   xpos -442
+   ypos -90
+  }
+set N3eca9d00 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge2
+   xpos -442
+   ypos -48
+  }
+set N244f9810 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge3
+   xpos -442
+   ypos -10
+  }
+set N24509500 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge4
+   xpos -442
+   ypos 30
+  }
+set N24519490 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge5
+   xpos -442
+   ypos 70
+  }
+set N500c8b10 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge6
+   xpos -442
+   ypos 112
+  }
+set N500d87e0 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge7
+   xpos -442
+   ypos 150
+  }
+set N500e84b0 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge8
+   xpos -442
+   ypos 190
+  }
+set N500f8460 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge9
+   xpos -442
+   ypos 230
+  }
+set N99e87e90 [stack 0]
+  Merge2 {
+   inputs 2
+   operation plus
+   output rgb
+   name Merge10
+   xpos -442
+   ypos 270
+  }
+push $N99e87e90
+push $N500f8460
+push $N500e84b0
+push $N500d87e0
+push $N500c8b10
+push $N24519490
+push $N24509500
+push $N244f9810
+push 0
+push $N3eca9d00
+push $N3eca5140
+  Dissolve {
+   inputs 11+1
+   channels rgba
+   which {{parent.glow_steps}}
+   name Dissolve9
+   xpos -710
+   ypos 270
+  }
+  Reformat {
+   type "to box"
+   box_width {{parent.input.width}}
+   box_height {{parent.input.height}}
+   box_pixel_aspect {{parent.input.pixel_aspect}}
+   resize none
+   name Reformat1
+   xpos -710
+   ypos 387
+  }
+  Output {
+   name Output
+   xpos -710
+   ypos 470
+  }
+ end_group
+ Multiply {
+  channels rgba
+  value 0.72
+  name _OUT_INTENSITY_
+  label "\[value value]"
+  xpos 827
+  ypos -104
+ }
+push $N9e5985b0
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name _PLUS_
+  xpos 827
+  ypos -24
+ }
+ Premult {
+  name Premult
+  xpos 827
+  ypos 18
+  disable {{!parent.ck_input}}
+ }
+ Output {
+  name Output1
+  xpos 827
+  ypos 181
+ }
+end_group

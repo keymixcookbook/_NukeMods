@@ -1,0 +1,107 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+ inputs 0
+ name BackdropNode4
+ tile_color 0xaaaaaa00
+ label "<center>Match Grain"
+ note_font_size 42
+ selected true
+ xpos 592
+ ypos 4428
+ bdwidth 392
+ bdheight 546
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode5
+ tile_color 0x7171c600
+ label Plate
+ note_font_size 42
+ selected true
+ xpos 632
+ ypos 4508
+ bdheight 164
+ z_order 1
+}
+Rectangle {
+ inputs 0
+ output alpha
+ area {699 374 1271 828}
+ name Rectangle1
+ selected true
+ xpos 738
+ ypos 4827
+}
+push $cut_paste_input
+AddChannels {
+ channels alpha
+ color 1
+ name AddChannels1
+ selected true
+ xpos 642
+ ypos 4733
+}
+set Nfbfbd350 [stack 0]
+Denoise2 {
+ amount 0.5
+ rolloff 1
+ analysisRegion {575.5 292.5 822.5 527.5}
+ analysisFrame 110
+ "Tune Channels" 1
+ lumaAmount 4.5
+ needsAnalyzing false
+ profileCurve {profile {curve x0.1000000015 0 x0.1333521456 0 x0.1778279245 0 x0.2371373624 0 x0.3162277937 0 x0.4216964841 0 x0.5623412728 0 x0.7498942614 0 x1 0}}
+ serializeKnob "1.16347 0.261378 0.624115
+0.00346034 0.00197296 0.00434906
+0.00346034 0.00197296 0.00434906
+0.00282144 0.00149082 0.00313096
+0 0 0
+0.00149873 0.000933482 0.0022207
+0.00149873 0.000933482 0.0022207
+0.00105264 0.000630253 0.00150366
+0 0 0
+0.00081794 0.0004794 0.00117787
+0.00081794 0.0004794 0.00117787
+0.000455385 0.0002895 0.00075455
+0 0 0
+0.000368028 0.000224368 0.000515896
+0.000368028 0.000224368 0.000515896
+0.000210081 0.000135044 0.000372479
+0 0 0 0 0 0 0 0 0 
+4054359556959382587"
+ name Denoise2
+ selected true
+ xpos 864
+ ypos 4733
+}
+Grain2 {
+ name Grain2_1
+ label "Kodak 5248"
+ selected true
+ xpos 864
+ ypos 4843
+ seed {{random(frame)*1000}}
+ red_size 2
+ green_size 2
+ blue_size 2
+ red_m 0
+ green_m 0
+ blue_m 0
+ black {0 0 0}
+ minimum {0 0 0}
+}
+Dot {
+ name Dot63
+ selected true
+ xpos 895
+ ypos 4903
+}
+push $Nfbfbd350
+Keymix {
+ inputs 3
+ name Keymix2
+ selected true
+ xpos 642
+ ypos 4899
+}

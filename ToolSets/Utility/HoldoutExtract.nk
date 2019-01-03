@@ -1,0 +1,58 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+ name HoldoutExtract
+ tile_color 0x3f7f00ff
+ note_font_color 0xffffffff
+ selected true
+ xpos -231
+ ypos -230
+}
+ Input {
+  inputs 0
+  name img
+  label "\[value number]"
+  xpos -357
+  ypos -355
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos -326
+  ypos -272
+ }
+set N2fa5c970 [stack 0]
+ Input {
+  inputs 0
+  name wHoldout
+  label "\[value number]"
+  xpos -484
+  ypos -355
+ }
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge1
+  xpos -484
+  ypos -272
+ }
+push $N2fa5c970
+ Dot {
+  name Dot2
+  xpos -326
+  ypos -207
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge2
+  xpos -484
+  ypos -207
+ }
+ Output {
+  name Output1
+  xpos -484
+  ypos -107
+ }
+end_group

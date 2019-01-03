@@ -1,0 +1,72 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+ name ImagePlane
+ tile_color 0x7f0000ff
+ label "ref: \[value first_frame]"
+ note_font_color 0xffffffff
+ selected true
+ xpos -205
+ ypos -301
+ addUserKnob {20 tb_user l ImagePlane}
+ addUserKnob {41 refFrame l "Reference Frame" T FrameHold1.first_frame}
+ addUserKnob {26 ""}
+ addUserKnob {41 distance l "Plane Distance" T Card3D1.uniform_scale}
+ addUserKnob {41 format l "output format" T Card3D1.format}
+ addUserKnob {3 overscan}
+ addUserKnob {6 bo_cropFormat l "Crop to Format" -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 filter T Card3D1.filter}
+ addUserKnob {41 clamp -STARTLINE T Card3D1.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Card3D1.black_outside}
+ addUserKnob {26 ""}
+ addUserKnob {26 tx_cap l "" +STARTLINE T "Based on MPC's ImagePlane Node"}
+}
+ Input {
+  inputs 0
+  name cam
+  label "\[value number]"
+  xpos -67
+  ypos -417
+  number 1
+ }
+set N2cc066f0 [stack 0]
+ FrameHold {
+  first_frame 1
+  name FrameHold1
+  xpos -67
+  ypos -321
+ }
+push $N2cc066f0
+ Input {
+  inputs 0
+  name img
+  label "\[value number]"
+  xpos 74
+  ypos -418
+ }
+ Card3D {
+  inputs 3
+  translate {0 0 {-uniform_scale}}
+  uniform_scale 100
+  lens_in_focal {{"\[exists parent.input\[value cam.number]]?parent.input\[value cam.number].focal:50"}}
+  lens_in_haperture {{"\[exists parent.input\[value cam.number]]?parent.input\[value cam.number].haperture:24.576"}}
+  black_outside false
+  name Card3D1
+  xpos 74
+  ypos -317
+ }
+ Crop {
+  box {{x+overscan} {y+overscan} {root.width+overscan} {root.height+overscan}}
+  name Crop1
+  xpos 74
+  ypos -252
+  disable {{!parent.bo_cropFormat}}
+ }
+ Output {
+  name Output1
+  xpos 74
+  ypos -178
+ }
+end_group

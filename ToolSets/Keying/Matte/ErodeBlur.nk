@@ -1,0 +1,58 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Group {
+name DilateBlur
+tile_color 0xff5f00ff
+note_font "Verdana Bold Bold"
+note_font_color 0xffffffff
+selected true
+xpos -1240
+ypos -788
+addUserKnob {20 DilateBlur}
+addUserKnob {41 channels T Dilate.channels}
+addUserKnob {41 dialate l Dialate T Dilate.size}
+addUserKnob {41 blur l Blur T Blur8.size}
+}
+Input {
+inputs 0
+name mask
+xpos -288
+ypos -643
+number 1
+}
+set Nbf8573b0 [stack 0]
+Dot {
+name Dot1
+xpos -254
+ypos -585
+}
+push $Nbf8573b0
+Input {
+inputs 0
+name B
+xpos -439
+ypos -713
+}
+Dilate {
+inputs 1+1
+channels alpha
+size -3
+name Dilate
+xpos -439
+ypos -647
+}
+Blur {
+inputs 1+1
+channels {{{parent.Dilate.channels}}}
+size 3
+name Blur8
+xpos -439
+ypos -592
+}
+Output {
+name Output1
+xpos -439
+ypos -524
+}
+end_group

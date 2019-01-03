@@ -1,0 +1,134 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+name ku_Diffuser
+tile_color 0xcc804eff
+note_font "Verdana Bold"
+note_font_color 0xffffffff
+selected true
+xpos 17339
+ypos -1084
+addUserKnob {20 User}
+addUserKnob {41 size l Size T Blur_Dif1.size}
+addUserKnob {41 numpixels l overscan T AdjBBox1.numpixels}
+}
+Input {
+inputs 0
+name Input
+selected true
+xpos 839
+ypos -714
+}
+Dot {
+name Dot42
+xpos 870
+ypos -674
+}
+set N7f1ef0 [stack 0]
+Dot {
+name Dot47
+xpos 761
+ypos -674
+}
+AdjBBox {
+numpixels 0
+name AdjBBox1
+xpos 730
+ypos -418
+}
+push $N7f1ef0
+Dot {
+name Dot43
+xpos 1033
+ypos -674
+}
+set N5dc95510 [stack 0]
+Dot {
+name Dot44
+xpos 1174
+ypos -674
+}
+set N132ea7f0 [stack 0]
+Dot {
+name Dot45
+xpos 1322
+ypos -674
+}
+Blur {
+channels rgba
+size {{parent.Blur_Dif1.size*8}}
+name Blur_Dif4
+label "\[value size]"
+xpos 1291
+ypos -600
+}
+push $N132ea7f0
+Blur {
+channels rgba
+size {{parent.Blur_Dif1.size*4}}
+name Blur_Dif3
+label "\[value size]"
+xpos 1143
+ypos -600
+}
+push $N5dc95510
+Blur {
+channels rgba
+size {{parent.Blur_Dif1.size*2}}
+name Blur_Dif2
+label "\[value size]"
+xpos 1002
+ypos -600
+}
+set N22752880 [stack 0]
+push $N22752880
+push $N7f1ef0
+Blur {
+channels rgba
+size 12
+name Blur_Dif1
+label "\[value size]"
+xpos 839
+ypos -600
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve2
+xpos 839
+ypos -495
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve3
+xpos 1002
+ypos -495
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve4
+xpos 1143
+ypos -495
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve5
+xpos 1291
+ypos -495
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 1291
+ypos -418
+}
+Output {
+name Output1
+xpos 1291
+ypos -318
+}
+end_group

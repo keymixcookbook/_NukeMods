@@ -1,0 +1,16 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Vectorfield {
+ vfield_file /Volumes/Ku/Projects/Clients/Fun2Pro/ChristmasCottage/DOCUMENTS/FCottageVFXSetup/REDGAMMA4_mac.cube
+ version 18
+ file_type cube
+ interpolation "linear staggered vector field"
+ colorspaceIn sRGB
+ colorspaceOut sRGB
+ name DAILY_LUT
+ tile_color 0x1fff00ff
+ selected true
+ xpos -678
+ ypos 17
+}

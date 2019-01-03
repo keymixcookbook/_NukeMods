@@ -1,0 +1,998 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x423d2fff
+note_font_size 42
+selected true
+xpos -764
+ypos -1777
+bdwidth 3405
+bdheight 2679
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x7f755aff
+label "ID + Xtra Passes"
+note_font "Verdana Bold Bold Bold Bold"
+note_font_size 42
+selected true
+xpos -17
+ypos 237
+bdwidth 2346
+bdheight 476
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x7f755aff
+label PositionToPoints
+note_font "Verdana Bold Bold Bold Bold Bold"
+note_font_size 42
+selected true
+xpos -720
+ypos -1696
+bdwidth 337
+bdheight 381
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x7f755aff
+label PositionToPoints
+note_font "Verdana Bold Bold Bold Bold Bold Bold"
+note_font_size 42
+selected true
+xpos -720
+ypos -1288
+bdwidth 337
+bdheight 381
+}
+NoOp {
+inputs 0
+name Position
+label P
+selected true
+xpos 904
+ypos -1589
+}
+set N826e3a70 [stack 0]
+NoOp {
+inputs 0
+name Beauty
+label beauty
+selected true
+xpos -272
+ypos -1589
+}
+set N246d1ba0 [stack 0]
+PositionToPoints2 {
+inputs 2
+display textured
+render_mode textured
+name PositionToPoints1
+selected true
+xpos -561
+ypos -1491
+hide_input true
+}
+push $cut_paste_input
+Camera2 {
+read_from_file true
+name AOV_CAM
+selected true
+xpos -653
+ypos -1511
+disable true
+}
+Scene {
+inputs 2
+name AOV_SCENE
+selected true
+xpos -597
+ypos -1432
+}
+NoOp {
+inputs 0
+name IM
+label IM
+selected true
+xpos -1681
+ypos -796
+}
+NoOp {
+inputs 0
+name MoVector
+label motionvector
+selected true
+xpos -519
+ypos 686
+}
+push $N246d1ba0
+Unpremult {
+name Unpremult5
+selected true
+xpos -272
+ypos -1557
+}
+set N8203b270 [stack 0]
+Dot {
+name Dot11
+selected true
+xpos -343
+ypos -1557
+}
+Dot {
+name Dot10
+selected true
+xpos -343
+ypos 292
+}
+set N8204f010 [stack 0]
+Dot {
+name Dot7
+selected true
+xpos -343
+ypos 387
+}
+push $N8204f010
+push $N8203b270
+NoOp {
+inputs 0
+name DirDiff
+label direct_diffuse
+selected true
+xpos 293
+ypos -1589
+}
+set N82040e00 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy1
+selected true
+xpos 293
+ypos -1557
+}
+set N24496060 [stack 0]
+NoOp {
+inputs 0
+name IndirDiff
+label indirect_diffuse
+selected true
+xpos 570
+ypos -1589
+}
+set N24472560 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy2
+selected true
+xpos 570
+ypos -1557
+}
+set N24476900 [stack 0]
+push $N826e3a70
+ShuffleCopy {
+inputs 2
+name ShuffleCopy6
+selected true
+xpos 904
+ypos -1557
+}
+NoOp {
+inputs 0
+name Normal
+label N
+selected true
+xpos 1190
+ypos -1589
+}
+set N8203e810 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy7
+selected true
+xpos 1190
+ypos -1557
+}
+NoOp {
+inputs 0
+name DirSpec
+label direct_specular
+selected true
+xpos 1473
+ypos -1589
+}
+set N8201c400 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy3
+selected true
+xpos 1473
+ypos -1557
+}
+set N82028680 [stack 0]
+NoOp {
+inputs 0
+name IndirSpec
+label indirect_specular
+selected true
+xpos 1739
+ypos -1589
+}
+set N8200a210 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+selected true
+xpos 1739
+ypos -1557
+}
+set N82044b00 [stack 0]
+NoOp {
+inputs 0
+name emission
+label emission
+selected true
+xpos 2023
+ypos -1589
+}
+set N820866f0 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy8
+selected true
+xpos 2023
+ypos -1557
+}
+set N8208a940 [stack 0]
+NoOp {
+inputs 0
+name SSS
+label SSS
+selected true
+xpos 2289
+ypos -1589
+}
+set N82072610 [stack 0]
+ShuffleCopy {
+inputs 2
+name ShuffleCopy9
+selected true
+xpos 2289
+ypos -1557
+}
+Unpremult {
+name Unpremult8
+selected true
+xpos 2289
+ypos -1533
+}
+Dot {
+name Dot14
+selected true
+xpos 2320
+ypos -1339
+}
+set N8209a170 [stack 0]
+Grade {
+name Grade7
+selected true
+xpos 2289
+ypos -1086
+disable true
+}
+Dot {
+name Dot16
+selected true
+xpos 2320
+ypos 113
+}
+push 0
+push $N8208a940
+Unpremult {
+name Unpremult7
+selected true
+xpos 2023
+ypos -1533
+}
+Dot {
+name Dot8
+selected true
+xpos 2054
+ypos -1339
+}
+set N820b6e50 [stack 0]
+Grade {
+name Grade6
+selected true
+xpos 2023
+ypos -1086
+disable true
+}
+Dot {
+name Dot15
+selected true
+xpos 2054
+ypos 113
+}
+set N820c7fa0 [stack 0]
+push $N820c7fa0
+Merge2 {
+inputs 3+1
+operation plus
+name Merge12
+label Xtra
+selected true
+xpos -162
+ypos 109
+}
+push $N82028680
+Unpremult {
+name Unpremult3
+selected true
+xpos 1473
+ypos -1533
+}
+Dot {
+name Dot4
+selected true
+xpos 1504
+ypos -1403
+}
+set N820ebd40 [stack 0]
+Grade {
+name Grade4
+selected true
+xpos 1473
+ypos -1086
+disable true
+}
+Dot {
+name Dot9
+selected true
+xpos 1504
+ypos 46
+}
+push $N82044b00
+Unpremult {
+name Unpremult4
+selected true
+xpos 1739
+ypos -1533
+}
+Dot {
+name Dot5
+selected true
+xpos 1770
+ypos -1403
+}
+set Nffe31bd0 [stack 0]
+Grade {
+name Grade5
+selected true
+xpos 1739
+ypos -1086
+disable true
+}
+Dot {
+name Dot6
+selected true
+xpos 1770
+ypos 46
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge5
+label Specular
+selected true
+xpos -162
+ypos 42
+}
+NoOp {
+inputs 0
+name Color
+label color
+selected true
+xpos -498
+ypos -323
+}
+Unpremult {
+name Unpremult6
+selected true
+xpos -498
+ypos -286
+}
+set Nffe84510 [stack 0]
+Grade {
+name Grade1
+selected true
+xpos -498
+ypos -164
+}
+Dot {
+name Dot1
+selected true
+xpos -467
+ypos -55
+}
+push $N24476900
+Unpremult {
+name Unpremult2
+selected true
+xpos 570
+ypos -1533
+}
+Dot {
+name Dot3
+selected true
+xpos 601
+ypos -1464
+}
+set Nffe40840 [stack 0]
+Grade {
+name Grade3
+selected true
+xpos 570
+ypos -1086
+disable true
+}
+Dot {
+name Dot13
+selected true
+xpos 601
+ypos -798
+}
+push $N24496060
+Unpremult {
+name Unpremult1
+selected true
+xpos 293
+ypos -1533
+}
+Dot {
+name Dot2
+selected true
+xpos 324
+ypos -1464
+}
+set Nff7f4b60 [stack 0]
+Grade {
+name Grade2
+selected true
+xpos 293
+ypos -1086
+disable true
+}
+Dot {
+name Dot12
+selected true
+xpos 324
+ypos -798
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge10
+label Diffuse
+selected true
+xpos -162
+ypos -802
+}
+push $N820b6e50
+push $N8209a170
+Merge2 {
+inputs 2
+operation plus
+name Plus
+label Additionals
+selected true
+xpos -162
+ypos -1343
+}
+push $Nffe31bd0
+push $N820ebd40
+Merge2 {
+inputs 2
+operation plus
+name Merge7
+label Specular
+selected true
+xpos -162
+ypos -1407
+}
+push $Nffe40840
+push $Nff7f4b60
+Merge2 {
+inputs 2
+operation plus
+name Merge3
+label Diffuse
+selected true
+xpos -162
+ypos -1468
+}
+push $N8203b270
+Merge2 {
+inputs 2
+operation from
+name Merge4
+label Diffuse
+selected true
+xpos -272
+ypos -1468
+}
+Merge2 {
+inputs 2
+operation from
+name Merge8
+label Specular
+selected true
+xpos -272
+ypos -1407
+}
+Merge2 {
+inputs 2
+operation from
+name Merge11
+label Additionals
+selected true
+xpos -272
+ypos -1343
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge9
+label Diffuse
+selected true
+xpos -272
+ypos -802
+}
+push $Nffe84510
+Merge2 {
+inputs 2
+operation divide
+metainput A
+rangeinput A
+name Merge1
+label "Raw Color"
+selected true
+xpos -272
+ypos -290
+}
+Merge2 {
+inputs 2
+operation multiply
+name Merge2
+label "Raw Color"
+selected true
+xpos -272
+ypos -59
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge6
+label Specular
+selected true
+xpos -272
+ypos 42
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge13
+label Xtra
+selected true
+xpos -272
+ypos 109
+}
+ShuffleCopy {
+inputs 2
+name AlphaCopy
+label "Primary Alpha"
+selected true
+xpos -272
+ypos 288
+}
+ShuffleCopy {
+inputs 2
+red red
+green green
+blue blue
+name overwrite
+label PRIMARY
+selected true
+xpos -272
+ypos 383
+disable true
+}
+ColorLookup {
+name ColorLookup1
+selected true
+xpos -272
+ypos 507
+}
+Premult {
+name Premult1
+selected true
+xpos -272
+ypos 718
+}
+ShuffleCopy {
+inputs 2
+out motion
+name shuff_motionVector
+selected true
+xpos -519
+ypos 718
+}
+NoOp {
+name AOV_OUT
+selected true
+xpos -732
+ypos 718
+}
+Merge2 {
+inputs 2
+name Merge14
+selected true
+xpos -1681
+ypos 718
+}
+push $N82072610
+push $N820866f0
+push $N8200a210
+push $N8201c400
+push $N8203e810
+push $N826e3a70
+push $N24472560
+push $N82040e00
+push $N246d1ba0
+Group {
+inputs 9
+name KU_CONTACTSHEET
+note_font "Verdana Bold"
+selected true
+xpos -601
+ypos -1066
+hide_input true
+}
+Input {
+inputs 0
+name Input9
+label "\[value number]"
+xpos 290
+ypos -733
+number 8
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input9.number].name]"
+old_message {{83 83 83}
+  }
+old_expression_markers {{0 2}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text9
+label "\[value parent.input\[value Input2.number].name]"
+xpos 290
+ypos -555
+}
+Input {
+inputs 0
+name Input8
+label "\[value number]"
+xpos 180
+ypos -733
+number 7
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input8.number].name]"
+old_message {{101 109 105 115 115 105 111 110}
+  }
+old_expression_markers {{0 7}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text8
+label "\[value parent.input\[value Input2.number].name]"
+xpos 180
+ypos -555
+}
+Input {
+inputs 0
+name Input7
+label "\[value number]"
+xpos 70
+ypos -733
+number 6
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input7.number].name]"
+old_message {{73 110 100 105 114 83 112 101 99}
+  }
+old_expression_markers {{0 8}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text7
+label "\[value parent.input\[value Input2.number].name]"
+xpos 70
+ypos -555
+}
+Input {
+inputs 0
+name Input6
+label "\[value number]"
+xpos -40
+ypos -733
+number 5
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input6.number].name]"
+old_message {{68 105 114 83 112 101 99}
+  }
+old_expression_markers {{0 6}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text6
+label "\[value parent.input\[value Input2.number].name]"
+xpos -40
+ypos -555
+}
+Input {
+inputs 0
+name Input5
+label "\[value number]"
+xpos -150
+ypos -733
+number 4
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input5.number].name]"
+old_message {{78 111 114 109 97 108}
+  }
+old_expression_markers {{0 5}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text5
+label "\[value parent.input\[value Input2.number].name]"
+xpos -150
+ypos -555
+}
+Input {
+inputs 0
+name Input4
+label "\[value number]"
+xpos -260
+ypos -733
+number 3
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input4.number].name]"
+old_message {{80 111 115 105 116 105 111 110}
+  }
+old_expression_markers {{0 7}
+  }
+box {0 1455 1239 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text4
+label "\[value parent.input\[value Input2.number].name]"
+xpos -260
+ypos -555
+}
+Input {
+inputs 0
+name Input3
+label "\[value number]"
+xpos -370
+ypos -733
+number 2
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input3.number].name]"
+old_message {{73 110 100 105 114 68 105 102 102}
+  }
+old_expression_markers {{0 8}
+  }
+box {0 1455 394 1556}
+transforms {{0 2}
+  }
+cursor_position 32
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text3
+label "\[value parent.input\[value Input2.number].name]"
+xpos -370
+ypos -555
+}
+Input {
+inputs 0
+name Input2
+label "\[value number]"
+xpos -480
+ypos -733
+number 1
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input2.number].name]"
+old_message {{68 105 114 68 105 102 102}
+  }
+old_expression_markers {{0 6}
+  }
+box {0 1455 316 1556}
+transforms {{0 2}
+  }
+cursor_position 46
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text2
+label "\[value parent.input\[value Input2.number].name]"
+xpos -480
+ypos -555
+}
+Input {
+inputs 0
+name Input1
+label "\[value number]"
+xpos -590
+ypos -733
+}
+Text2 {
+font_size_toolbar 100
+font_width_toolbar 100
+font_height_toolbar 100
+message "\[value parent.input\[value Input1.number].name]"
+old_message {{66 101 97 117 116 121}
+  }
+old_expression_markers {{0 5}
+  }
+box {0 1455 314 1556}
+transforms {{0 2}
+  }
+cursor_position 46
+scale {1 1}
+center {1024 778}
+cursor_initialised true
+initial_cursor_position {{0 1556}
+  }
+group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
+name Text1
+label "\[value parent.input\[value Input1.number].name]"
+xpos -590
+ypos -553
+}
+set N15872e10 [stack 0]
+push $N15872e10
+ContactSheet {
+inputs 10
+width {{root.width/2*rows}}
+height {{root.width/2*columns}}
+rows 4
+columns 3
+roworder TopBottom
+name ContactSheet1
+xpos -590
+ypos 223
+}
+set Nfdb9c4c0 [stack 0]
+Output {
+name Output1
+xpos -590
+ypos 306
+}
+push $Nfdb9c4c0
+Viewer {
+frame_range 1-100
+frame_increment 8
+name Viewer1
+xpos 620
+ypos -9
+hide_input true
+}
+end_group

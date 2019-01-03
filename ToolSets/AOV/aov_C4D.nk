@@ -1,0 +1,318 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+inputs 0
+name BackdropNode19
+tile_color 0x6f7f7eff
+label "ID + Xtra Passes"
+note_font "bold Bold"
+note_font_size 48
+selected true
+xpos -6030
+ypos -8997
+bdwidth 1389
+bdheight 410
+}
+push 0
+NoOp {
+name primary
+selected true
+xpos -6215
+ypos -9814
+}
+Unpremult {
+name Unpremult1
+selected true
+xpos -6215
+ypos -9790
+}
+set N4df9d10 [stack 0]
+Dot {
+name Dot38
+selected true
+xpos -6273
+ypos -9790
+}
+Dot {
+name Dot39
+selected true
+xpos -6273
+ypos -8665
+}
+set N328420 [stack 0]
+Dot {
+name Dot40
+selected true
+xpos -6273
+ypos -8558
+}
+push $N328420
+push $cut_paste_input
+NoOp {
+name color
+selected true
+xpos -6445
+ypos -8989
+}
+set Nfdb7ac40 [stack 0]
+Grade {
+name Grade22
+selected true
+xpos -6445
+ypos -8881
+}
+Dot {
+name Dot26
+selected true
+xpos -6414
+ypos -8780
+}
+push 0
+Unpremult {
+name Unpremult7
+selected true
+xpos -4656
+ypos -9787
+}
+Dot {
+name Dot32
+selected true
+xpos -4625
+ypos -9656
+}
+set N476f370 [stack 0]
+Grade {
+name Grade30
+selected true
+xpos -4656
+ypos -9390
+disable true
+}
+Dot {
+name Dot37
+selected true
+xpos -4625
+ypos -9119
+}
+push 0
+Unpremult {
+name Unpremult6
+selected true
+xpos -4893
+ypos -9788
+}
+Dot {
+name Dot31
+selected true
+xpos -4862
+ypos -9658
+}
+set Nfea8940 [stack 0]
+Grade {
+name Grade29
+selected true
+xpos -4893
+ypos -9390
+disable true
+}
+Dot {
+name Dot36
+selected true
+xpos -4862
+ypos -9120
+}
+push 0
+Unpremult {
+name Unpremult5
+selected true
+xpos -5127
+ypos -9786
+}
+Dot {
+name Dot30
+selected true
+xpos -5096
+ypos -9656
+}
+set Nfdc2ad80 [stack 0]
+Grade {
+name Grade28
+selected true
+xpos -5127
+ypos -9390
+disable true
+}
+Dot {
+name Dot35
+selected true
+xpos -5096
+ypos -9118
+}
+push 0
+Unpremult {
+name Unpremult4
+selected true
+xpos -5365
+ypos -9788
+}
+Dot {
+name Dot29
+selected true
+xpos -5334
+ypos -9656
+}
+set Nfe9d710 [stack 0]
+Grade {
+name Grade27
+selected true
+xpos -5365
+ypos -9390
+disable true
+}
+Dot {
+name Dot34
+selected true
+xpos -5334
+ypos -9120
+}
+push 0
+push 0
+Unpremult {
+name Unpremult2
+selected true
+xpos -5871
+ypos -9788
+}
+Dot {
+name Dot27
+selected true
+xpos -5840
+ypos -9656
+}
+set Nfdb61c60 [stack 0]
+Grade {
+name Grade25
+selected true
+xpos -5871
+ypos -9390
+disable true
+}
+Dot {
+name Dot25
+selected true
+xpos -5840
+ypos -9120
+}
+push 0
+Unpremult {
+name Unpremult3
+selected true
+xpos -5604
+ypos -9788
+}
+Dot {
+name Dot28
+selected true
+xpos -5573
+ypos -9656
+}
+set Nfea3bc0 [stack 0]
+Grade {
+name Grade26
+selected true
+xpos -5604
+ypos -9390
+disable true
+}
+Dot {
+name Dot33
+selected true
+xpos -5573
+ypos -9120
+}
+Merge2 {
+inputs 6+1
+operation plus
+name Merge41
+selected true
+xpos -6007
+ypos -9120
+}
+push $N476f370
+push $Nfea8940
+push $Nfdb61c60
+push $Nfea3bc0
+push 0
+push $Nfe9d710
+push $Nfdc2ad80
+Merge2 {
+inputs 6+1
+operation plus
+name Merge40
+selected true
+xpos -6013
+ypos -9656
+}
+push $N4df9d10
+Merge2 {
+inputs 2
+operation from
+name Merge38
+selected true
+xpos -6215
+ypos -9656
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge39
+selected true
+xpos -6215
+ypos -9120
+}
+push $Nfdb7ac40
+Merge2 {
+inputs 2
+operation divide
+name Merge42
+selected true
+xpos -6215
+ypos -8989
+}
+Merge2 {
+inputs 2
+operation multiply
+name Multiply
+selected true
+xpos -6215
+ypos -8780
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name CopyAlpha
+selected true
+xpos -6215
+ypos -8669
+}
+ShuffleCopy {
+inputs 2
+name Primary_RGB
+selected true
+xpos -6215
+ypos -8558
+disable true
+}
+Grade {
+name Grade23
+selected true
+xpos -6215
+ypos -8323
+}
+Premult {
+name Premult14
+selected true
+xpos -6215
+ypos -8221
+}

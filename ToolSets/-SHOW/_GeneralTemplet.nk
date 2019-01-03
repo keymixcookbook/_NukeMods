@@ -1,0 +1,419 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x285100ff
+ label IP
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -737
+ ypos -1351
+ bdwidth 174
+ bdheight 154
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode10
+ tile_color 0x222233ff
+ label <center>DAILY
+ note_font "Verdana Bold Bold"
+ note_font_size 48
+ selected true
+ xpos -739
+ ypos -927
+ bdwidth 386
+ bdheight 516
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode12
+ tile_color 0x434343ff
+ label OUTPUT
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -333
+ ypos -927
+ bdwidth 582
+ bdheight 776
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode13
+ tile_color 0x878787ff
+ label <center>LATEST
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -266
+ ypos -844
+ bdwidth 204
+ bdheight 211
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode14
+ tile_color 0x878787ff
+ label <center>DAILIED
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -41
+ ypos -844
+ bdwidth 204
+ bdheight 211
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode15
+ tile_color 0xedededff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -1187
+ ypos -932
+ bdwidth 303
+ bdheight 231
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode16
+ tile_color 0x7f6f3fff
+ label <center>ASSETS
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 48
+ note_font_color 0xffffffff
+ selected true
+ xpos -3038
+ ypos -276
+ bdwidth 1230
+ bdheight 613
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x394a7fff
+ label "Main Spline"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -1187
+ ypos -6668
+ bdwidth 277
+ bdheight 230
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x394a7fff
+ label <center>PLATES
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 48
+ note_font_color 0xffffffff
+ selected true
+ xpos -3035
+ ypos -927
+ bdwidth 1230
+ bdheight 613
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode4
+ tile_color 0x434343ff
+ label REFERENCE
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -413
+ ypos -1447
+ bdwidth 658
+ bdheight 495
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode5
+ tile_color 0x434343ff
+ label "KU VIEWER"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xffffffff
+ selected true
+ xpos -737
+ ypos -1175
+ bdwidth 293
+ bdheight 230
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode6
+ tile_color 0xaaaaaa00
+ label "<center>Match Grain"
+ note_font_size 42
+ selected true
+ xpos -1692
+ ypos -2459
+ bdwidth 392
+ bdheight 546
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode7
+ tile_color 0x222233ff
+ label <center>FINAL
+ note_font "Verdana Bold Bold"
+ note_font_size 48
+ selected true
+ xpos -1723
+ ypos -933
+ bdwidth 381
+ bdheight 522
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode9
+ tile_color 0x8e388e00
+ label "END COMP"
+ note_font "Verdana Bold Bold Bold"
+ note_font_size 42
+ selected true
+ xpos -1274
+ ypos -2459
+ bdwidth 481
+ bdheight 469
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode11
+ tile_color 0x3b3b59ff
+ label LUT
+ note_font "Verdana Bold Bold"
+ note_font_size 48
+ note_font_color 0xffffffff
+ selected true
+ xpos -705
+ ypos -776
+ bdwidth 313
+ bdheight 112
+ z_order 1
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode8
+ tile_color 0x7171c600
+ label Plate
+ note_font_size 42
+ selected true
+ xpos -1652
+ ypos -2379
+ bdheight 164
+ z_order 1
+}
+ChannelMerge {
+ inputs 0
+ name ALPHA_MERGE
+ selected true
+ xpos -1234
+ ypos -2248
+ hide_input true
+}
+push $cut_paste_input
+NoOp {
+ name NoOp1
+ selected true
+ xpos -1086
+ ypos -6508
+}
+Remove {
+ operation keep
+ channels rgba
+ name OUTPUT_Keep
+ selected true
+ xpos -1086
+ ypos -2343
+}
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ name GRAIN_ALPHA
+ selected true
+ xpos -1086
+ ypos -2243
+}
+Crop {
+ box {{curve} {curve} {root.width} {root.height}}
+ name OUTPUT_Crop
+ selected true
+ xpos -1086
+ ypos -2178
+}
+Grain2 {
+ name OUT_GRAIN
+ label "Kodak 5248"
+ selected true
+ xpos -1086
+ ypos -2119
+ seed {{random(frame)*1000}}
+ red_size 2
+ green_size 2
+ blue_size 2
+ red_m 0
+ green_m 0
+ blue_m 0
+ black {0 0 0}
+ minimum {0 0 0}
+}
+ModifyMetaData {
+ name ModifyMetaData1
+ selected true
+ xpos -1086
+ ypos -1511
+}
+NoOp {
+ name OUTPUT
+ tile_color 0xedededff
+ note_font "Verdana Bold Bold Bold Bold"
+ note_font_size 48
+ selected true
+ xpos -1086
+ ypos -823
+}
+set Nfef84910 [stack 0]
+Viewer {
+ frame_range 1-69
+ fps 23.97602463
+ name KU_VIEWER
+ selected true
+ xpos -640
+ ypos -1051
+ hide_input true
+}
+push $Nfef84910
+Dot {
+ name Dot7
+ selected true
+ xpos -1552
+ ypos -807
+}
+NoOp {
+ name FOR_FINAL
+ note_font "Verdana Bold Bold Bold"
+ selected true
+ xpos -1583
+ ypos -645
+}
+Rectangle {
+ inputs 0
+ output alpha
+ area {699 374 1271 828}
+ name Rectangle1
+ selected true
+ xpos -1546
+ ypos -2060
+}
+AddChannels {
+ inputs 0
+ channels alpha
+ color 1
+ name AddChannels1
+ selected true
+ xpos -1642
+ ypos -2154
+}
+set Nb843e5e0 [stack 0]
+Denoise2 {
+ amount 0.5
+ rolloff 1
+ analysisRegion {575.5 292.5 822.5 527.5}
+ analysisFrame 110
+ "Tune Channels" 1
+ lumaAmount 4.5
+ needsAnalyzing false
+ profileCurve {profile {curve x0.1000000015 0 x0.1333521456 0 x0.1778279245 0 x0.2371373624 0 x0.3162277937 0 x0.4216964841 0 x0.5623412728 0 x0.7498942614 0 x1 0}}
+ serializeKnob "1.16347 0.261378 0.624115
+0.00346034 0.00197296 0.00434906
+0.00346034 0.00197296 0.00434906
+0.00282144 0.00149082 0.00313096
+0 0 0
+0.00149873 0.000933482 0.0022207
+0.00149873 0.000933482 0.0022207
+0.00105264 0.000630253 0.00150366
+0 0 0
+0.00081794 0.0004794 0.00117787
+0.00081794 0.0004794 0.00117787
+0.000455385 0.0002895 0.00075455
+0 0 0
+0.000368028 0.000224368 0.000515896
+0.000368028 0.000224368 0.000515896
+0.000210081 0.000135044 0.000372479
+0 0 0 0 0 0 0 0 0 
+4054359556959382587"
+ name Denoise2
+ selected true
+ xpos -1420
+ ypos -2154
+}
+Grain2 {
+ name Grain2_1
+ label "Kodak 5248"
+ selected true
+ xpos -1420
+ ypos -2044
+ seed {{random(frame)*1000}}
+ red_size 2
+ green_size 2
+ blue_size 2
+ red_m 0
+ green_m 0
+ blue_m 0
+ black {0 0 0}
+ minimum {0 0 0}
+}
+Dot {
+ name Dot63
+ selected true
+ xpos -1389
+ ypos -1984
+}
+push $Nb843e5e0
+Keymix {
+ inputs 3
+ name Keymix2
+ selected true
+ xpos -1642
+ ypos -1988
+}
+push $Nfef84910
+Dot {
+ name Dot6
+ selected true
+ xpos -563
+ ypos -807
+}
+Vectorfield {
+ version 12
+ file_type cube
+ colorspaceOut sRGB
+ name DAILY_LUT
+ tile_color 0x1fff00ff
+ selected true
+ xpos -594
+ ypos -706
+ disable true
+}
+NoOp {
+ name FOR_DAILY
+ note_font "Verdana Bold Bold Bold"
+ selected true
+ xpos -594
+ ypos -645
+}

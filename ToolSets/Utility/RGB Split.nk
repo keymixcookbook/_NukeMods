@@ -1,0 +1,55 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+Dot {
+ name Dot1
+ selected true
+ xpos -304
+ ypos -484
+}
+set Nf84500 [stack 0]
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name R
+ tile_color 0xff000000
+ selected true
+ xpos -338
+ ypos -428
+}
+push $Nf84500
+Dot {
+ name Dot2
+ selected true
+ xpos -192
+ ypos -484
+}
+set Nff13eb40 [stack 0]
+Shuffle {
+ red green
+ blue green
+ alpha green
+ name G
+ tile_color 0xff0000
+ selected true
+ xpos -226
+ ypos -428
+}
+push $Nff13eb40
+Dot {
+ name Dot3
+ selected true
+ xpos -82
+ ypos -484
+}
+Shuffle {
+ red blue
+ green blue
+ alpha blue
+ name B
+ tile_color 0xff00
+ selected true
+ xpos -116
+ ypos -427
+}

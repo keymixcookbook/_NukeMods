@@ -1,0 +1,626 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x423d2fff
+ note_font_size 42
+ selected true
+ xpos 1528
+ ypos -4000
+ bdwidth 3258
+ bdheight 2223
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x7f755aff
+ label "ID + Xtra Passes"
+ note_font "Verdana Bold Bold Bold"
+ note_font_size 42
+ selected true
+ xpos 2275
+ ypos -2380
+ bdwidth 2346
+ bdheight 476
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x7f755aff
+ label PositionToPoints
+ note_font "Verdana Bold Bold Bold Bold"
+ note_font_size 42
+ selected true
+ xpos 1571
+ ypos -3917
+ bdwidth 337
+ bdheight 381
+}
+NoOp {
+ inputs 0
+ name Position
+ label P
+ selected true
+ xpos 3306
+ ypos -3812
+}
+set Nf7385bd0 [stack 0]
+NoOp {
+ inputs 0
+ name Beauty
+ label beauty
+ selected true
+ xpos 2020
+ ypos -3812
+}
+set N2462d1d0 [stack 0]
+PositionToPoints2 {
+ inputs 2
+ display textured
+ render_mode textured
+ name PositionToPoints1
+ selected true
+ xpos 1731
+ ypos -3714
+ hide_input true
+}
+push $cut_paste_input
+Camera2 {
+ read_from_file true
+ name AOV_CAM
+ selected true
+ xpos 1639
+ ypos -3734
+ disable true
+}
+Scene {
+ inputs 2
+ name AOV_SCENE
+ selected true
+ xpos 1695
+ ypos -3655
+}
+NoOp {
+ inputs 0
+ name MoVector
+ label motionvector
+ selected true
+ xpos 1773
+ ypos -1931
+}
+push $N2462d1d0
+Unpremult {
+ name Unpremult5
+ selected true
+ xpos 2020
+ ypos -3780
+}
+set N2449a270 [stack 0]
+Dot {
+ name Dot11
+ selected true
+ xpos 1949
+ ypos -3780
+}
+Dot {
+ name Dot10
+ selected true
+ xpos 1949
+ ypos -2325
+}
+set N244b0840 [stack 0]
+Dot {
+ name Dot7
+ selected true
+ xpos 1949
+ ypos -2230
+}
+push $N244b0840
+push $N2449a270
+NoOp {
+ inputs 0
+ name DirDiff
+ label direct_diffuse
+ selected true
+ xpos 2585
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy1
+ selected true
+ xpos 2585
+ ypos -3780
+}
+set N2448b1e0 [stack 0]
+NoOp {
+ inputs 0
+ name IndirDiff
+ label indirect_diffuse
+ selected true
+ xpos 2862
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy2
+ selected true
+ xpos 2862
+ ypos -3780
+}
+set N2449c140 [stack 0]
+NoOp {
+ inputs 0
+ name PosRef
+ label Pref
+ selected true
+ xpos 3127
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy5
+ selected true
+ xpos 3127
+ ypos -3780
+}
+push $Nf7385bd0
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy6
+ selected true
+ xpos 3306
+ ypos -3780
+}
+NoOp {
+ inputs 0
+ name Normal
+ label N
+ selected true
+ xpos 3497
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy7
+ selected true
+ xpos 3497
+ ypos -3780
+}
+NoOp {
+ inputs 0
+ name DirSpec
+ label direct_specular
+ selected true
+ xpos 3765
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy3
+ selected true
+ xpos 3765
+ ypos -3780
+}
+set Nf73ca010 [stack 0]
+NoOp {
+ inputs 0
+ name IndirSpec
+ label indirect_specular
+ selected true
+ xpos 4031
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy4
+ selected true
+ xpos 4031
+ ypos -3780
+}
+set Nf73e9fd0 [stack 0]
+NoOp {
+ inputs 0
+ name emission
+ label emission
+ selected true
+ xpos 4315
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy8
+ selected true
+ xpos 4315
+ ypos -3780
+}
+set N22a0df40 [stack 0]
+NoOp {
+ inputs 0
+ name SSS
+ label SSS
+ selected true
+ xpos 4581
+ ypos -3812
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy9
+ selected true
+ xpos 4581
+ ypos -3780
+}
+Unpremult {
+ name Unpremult8
+ selected true
+ xpos 4581
+ ypos -3756
+}
+Dot {
+ name Dot14
+ selected true
+ xpos 4612
+ ypos -3562
+}
+set N22a423c0 [stack 0]
+Grade {
+ name Grade7
+ selected true
+ xpos 4581
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot16
+ selected true
+ xpos 4612
+ ypos -2504
+}
+push 0
+push $N22a0df40
+Unpremult {
+ name Unpremult7
+ selected true
+ xpos 4315
+ ypos -3756
+}
+Dot {
+ name Dot8
+ selected true
+ xpos 4346
+ ypos -3562
+}
+set Nf4f87ba0 [stack 0]
+Grade {
+ name Grade6
+ selected true
+ xpos 4315
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot15
+ selected true
+ xpos 4346
+ ypos -2504
+}
+set Nf9a43e00 [stack 0]
+push $Nf9a43e00
+Merge2 {
+ inputs 3+1
+ operation plus
+ name Merge12
+ label Xtra
+ selected true
+ xpos 2130
+ ypos -2508
+}
+push $Nf73ca010
+Unpremult {
+ name Unpremult3
+ selected true
+ xpos 3765
+ ypos -3756
+}
+Dot {
+ name Dot4
+ selected true
+ xpos 3796
+ ypos -3626
+}
+set N22a5b100 [stack 0]
+Grade {
+ name Grade4
+ selected true
+ xpos 3765
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot9
+ selected true
+ xpos 3796
+ ypos -2571
+}
+push $Nf73e9fd0
+Unpremult {
+ name Unpremult4
+ selected true
+ xpos 4031
+ ypos -3756
+}
+Dot {
+ name Dot5
+ selected true
+ xpos 4062
+ ypos -3626
+}
+set N22a779d0 [stack 0]
+Grade {
+ name Grade5
+ selected true
+ xpos 4031
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot6
+ selected true
+ xpos 4062
+ ypos -2571
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge5
+ label Specular
+ selected true
+ xpos 2130
+ ypos -2575
+}
+NoOp {
+ inputs 0
+ name Color
+ label color
+ selected true
+ xpos 1794
+ ypos -2940
+}
+Unpremult {
+ name Unpremult6
+ selected true
+ xpos 1794
+ ypos -2903
+}
+set N22a9e130 [stack 0]
+Grade {
+ name Grade1
+ selected true
+ xpos 1794
+ ypos -2781
+}
+Dot {
+ name Dot1
+ selected true
+ xpos 1825
+ ypos -2672
+}
+push $N2449c140
+Unpremult {
+ name Unpremult2
+ selected true
+ xpos 2862
+ ypos -3756
+}
+Dot {
+ name Dot3
+ selected true
+ xpos 2893
+ ypos -3687
+}
+set N22abd940 [stack 0]
+Grade {
+ name Grade3
+ selected true
+ xpos 2862
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot13
+ selected true
+ xpos 2893
+ ypos -3021
+}
+push $N2448b1e0
+Unpremult {
+ name Unpremult1
+ selected true
+ xpos 2585
+ ypos -3756
+}
+Dot {
+ name Dot2
+ selected true
+ xpos 2616
+ ypos -3687
+}
+set N22ada1f0 [stack 0]
+Grade {
+ name Grade2
+ selected true
+ xpos 2585
+ ypos -3309
+ disable true
+}
+Dot {
+ name Dot12
+ selected true
+ xpos 2616
+ ypos -3021
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge10
+ label Diffuse
+ selected true
+ xpos 2130
+ ypos -3025
+}
+push $Nf4f87ba0
+push $N22a423c0
+Merge2 {
+ inputs 2
+ operation plus
+ name Plus
+ label Additionals
+ selected true
+ xpos 2130
+ ypos -3566
+}
+push $N22a779d0
+push $N22a5b100
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge7
+ label Specular
+ selected true
+ xpos 2130
+ ypos -3630
+}
+push $N22abd940
+push $N22ada1f0
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge3
+ label Diffuse
+ selected true
+ xpos 2130
+ ypos -3691
+}
+push $N2449a270
+Merge2 {
+ inputs 2
+ operation from
+ name Merge4
+ label Diffuse
+ selected true
+ xpos 2020
+ ypos -3691
+}
+Merge2 {
+ inputs 2
+ operation from
+ name Merge8
+ label Specular
+ selected true
+ xpos 2020
+ ypos -3630
+}
+Merge2 {
+ inputs 2
+ operation from
+ name Merge11
+ label Additionals
+ selected true
+ xpos 2020
+ ypos -3566
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge9
+ label Diffuse
+ selected true
+ xpos 2020
+ ypos -3025
+}
+push $N22a9e130
+Merge2 {
+ inputs 2
+ operation divide
+ metainput A
+ rangeinput A
+ name Merge1
+ label "Raw Color"
+ selected true
+ xpos 2020
+ ypos -2907
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge2
+ label "Raw Color"
+ selected true
+ xpos 2020
+ ypos -2676
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge6
+ label Specular
+ selected true
+ xpos 2020
+ ypos -2575
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge13
+ label Xtra
+ selected true
+ xpos 2020
+ ypos -2508
+}
+ShuffleCopy {
+ inputs 2
+ name AlphaCopy
+ label "Primary Alpha"
+ selected true
+ xpos 2020
+ ypos -2329
+}
+ShuffleCopy {
+ inputs 2
+ red red
+ green green
+ blue blue
+ name overwrite
+ label PRIMARY
+ selected true
+ xpos 2020
+ ypos -2234
+ disable true
+}
+ColorLookup {
+ name ColorLookup1
+ selected true
+ xpos 2020
+ ypos -2110
+}
+Premult {
+ name Premult1
+ selected true
+ xpos 2020
+ ypos -1899
+}
+ShuffleCopy {
+ inputs 2
+ out motion
+ name shuff_motionVector
+ selected true
+ xpos 1773
+ ypos -1899
+}
+NoOp {
+ name AOV_OUT
+ selected true
+ xpos 1560
+ ypos -1899
+}

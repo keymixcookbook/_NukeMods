@@ -1,0 +1,37 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+push $cut_paste_input
+NoOp {
+name PLATE
+selected true
+xpos -200
+ypos -4172
+}
+Dot {
+name Dot3
+selected true
+xpos 82
+ypos -4172
+}
+set N845aa460 [stack 0]
+Tracker4 {
+center {1270.5 670}
+name Tracker1
+selected true
+xpos 51
+ypos -4233
+}
+push $N845aa460
+Dot {
+name Dot4
+selected true
+xpos 241
+ypos -4172
+}
+Tracker4 {
+center {1270.5 670}
+name Tracker2
+selected true
+xpos 210
+ypos -4235
+}

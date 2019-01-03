@@ -1,0 +1,49 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+inputs 0
+name BackdropNode23
+tile_color 0x222233ff
+label "<font size=10><font color=gray>DI MATTE\n"
+note_font_size 20
+selected true
+xpos -2260
+ypos -925
+bdwidth 381
+bdheight 522
+}
+push $cut_paste_input
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle1
+selected true
+xpos -2118
+ypos -604
+}
+Write {
+file /Volumes/Ku/Projects/Clients/Fun2Pro/XmasEvergreen/EXPORT/CIE_080_002_DIMatte_v9/CIE_080_002_DIMatte_v9.%04d.exr
+file_type exr
+last 123
+use_limit true
+version 1
+beforeRender writeOUT(nuke.thisNode())
+name KuWrite6
+selected true
+xpos -2118
+ypos -507
+addUserKnob {20 KuWrite}
+addUserKnob {26 tx_root l "SHOT: <b>CIE_080_002"}
+addUserKnob {2 proj l "Proj Dir"}
+proj /Volumes/Ku/Projects/Clients/Fun2Pro/XmasEvergreen/
+addUserKnob {26 tx_shot l "<b>File Name</b>"}
+addUserKnob {4 flt l Filter M {O E IM IDN NP PROXY DAILY}}
+addUserKnob {1 shot l Shot}
+shot CIE_080_002_DIMatte
+addUserKnob {3 ver l Version -STARTLINE}
+ver 9
+addUserKnob {4 cdx l Codex -STARTLINE M {exr mov tiff}}
+addUserKnob {26 div_cc l "" +STARTLINE}
+addUserKnob {26 tx_cc l " " T "(C)Tianlun Jiang @ Ku Module for CIE"}
+}

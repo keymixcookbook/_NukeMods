@@ -1,0 +1,207 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+push 0
+Group {
+inputs 2
+name MergeAtoms
+tile_color 0x4b5ec6ff
+note_font "Verdana Bold Bold"
+note_font_color 0xffffffff
+selected true
+xpos 17014
+ypos -1044
+addUserKnob {20 tb_user l MergeAtoms t "based on MPC's MergeAtoms"}
+addUserKnob {26 div_fgAlpha l "<b>FG Alpha"}
+addUserKnob {41 alphaGain l whitepoint T GradeA1.whitepoint}
+addUserKnob {41 alphaLift l blackpoint T GradeA1.blackpoint}
+addUserKnob {41 alphaY l gamma T GradeA1.gamma}
+addUserKnob {26 div_BG l <b>BG}
+addUserKnob {41 bg_blur l "BG Blur" T BG_Blur.size}
+addUserKnob {41 bg_gain l "BG Exposure" T BG_Grade.multiply}
+addUserKnob {26 div_FG l <b>FG}
+addUserKnob {41 fg_blur l "FG Blur" T FG_Blur.size}
+addUserKnob {41 fg_gain l "FG Exposure" T FG_Grade.multiply}
+addUserKnob {26 ""}
+addUserKnob {41 mix_regular l mix t "Mix with regular over" T Dissolve1.which}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x388e8e00
+label "BG CC"
+note_font_size 42
+xpos 668
+ypos -697
+bdwidth 456
+bdheight 205
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x8e388e00
+label "1st over w/CC"
+note_font_size 42
+xpos 617
+ypos -467
+bdwidth 337
+bdheight 404
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x71c67100
+label "Regular Over"
+note_font_size 42
+xpos 356
+ypos -31
+bdwidth 597
+bdheight 217
+}
+Input {
+inputs 0
+name A
+xpos 432
+ypos -811
+number 1
+}
+Dot {
+name Dot2
+xpos 463
+ypos -523
+}
+set N37ec2160 [stack 0]
+Dot {
+name Dot6
+xpos 463
+ypos -276
+}
+set N37ebb760 [stack 0]
+Input {
+inputs 0
+name B
+xpos 839
+ypos -812
+}
+Dot {
+name Dot1
+xpos 870
+ypos -616
+}
+set N37eb7550 [stack 0]
+Dot {
+name Dot5
+xpos 366
+ypos -616
+}
+Dot {
+name Dot4
+xpos 366
+ypos 49
+}
+Merge2 {
+inputs 2
+name Merge1
+xpos 432
+ypos 131
+}
+push $N37ec2160
+push $N37ec2160
+Grade {
+channels alpha
+white_clamp true
+name GradeA1
+note_font "Verdana Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 678
+ypos -527
+}
+push $N37eb7550
+Blur {
+channels rgba
+size 3
+name BG_Blur
+xpos 1034
+ypos -616
+}
+Grade {
+name BG_Grade
+xpos 1034
+ypos -523
+}
+push $N37eb7550
+Keymix {
+inputs 3
+name Keymix8
+xpos 839
+ypos -527
+}
+Dot {
+name Dot3
+xpos 870
+ypos -387
+}
+set N37e6cc40 [stack 0]
+Merge2 {
+inputs 2
+name Merge2
+xpos 627
+ypos -387
+}
+set N37e65460 [stack 0]
+Dot {
+name Dot9
+xpos 543
+ypos -341
+}
+Dot {
+name Dot8
+xpos 543
+ypos -106
+}
+push $N37ebb760
+Dot {
+name Dot7
+xpos 788
+ypos -276
+}
+push $N37e65460
+Blur {
+channels rgba
+size 1
+name FG_Blur
+xpos 627
+ypos -223
+}
+Grade {
+name FG_Grade
+xpos 627
+ypos -199
+}
+push $N37e6cc40
+Keymix {
+inputs 3
+name Keymix1
+xpos 839
+ypos -203
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve2
+xpos 839
+ypos -110
+}
+Dissolve {
+inputs 2
+which 0.5
+name Dissolve1
+xpos 839
+ypos 127
+}
+Output {
+name Output1
+xpos 839
+ypos 299
+}
+end_group

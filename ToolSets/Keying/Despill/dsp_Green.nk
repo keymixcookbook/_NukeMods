@@ -1,0 +1,76 @@
+set cut_paste_input [stack 0]
+version 9.0 v8
+BackdropNode {
+ inputs 0
+ name DespillAddLuma
+ tile_color 0x388e8e00
+ label Despill
+ note_font_size 24
+ selected true
+ xpos -747
+ ypos -876
+ bdwidth 274
+ bdheight 352
+}
+push $cut_paste_input
+Dot {
+ name Dot5
+ selected true
+ xpos -649
+ ypos -800
+}
+set Nfb7f8a20 [stack 0]
+Dot {
+ name Dot10
+ selected true
+ xpos -536
+ ypos -800
+}
+push $Nfb7f8a20
+Expression {
+ temp_name0 S
+ temp_expr0 1.5
+ expr1 g>(r+b)/S?(r+b)/S:g
+ name TJ_Despill_G
+ selected true
+ xpos -683
+ ypos -737
+}
+set Nf9bc90a0 [stack 0]
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge2
+ selected true
+ xpos -570
+ ypos -737
+}
+Expression {
+ expr0 max(r,g,b)
+ expr1 max(r,g,b)
+ expr2 max(r,g,b)
+ expr3 max(r,g,b)
+ name Expression1
+ selected true
+ xpos -570
+ ypos -663
+}
+push $Nf9bc90a0
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge3
+ selected true
+ xpos -683
+ ypos -663
+}
+push 0
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ name Copy1
+ selected true
+ xpos -683
+ ypos -587
+}

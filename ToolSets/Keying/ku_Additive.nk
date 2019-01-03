@@ -1,0 +1,342 @@
+set cut_paste_input [stack 0]
+version 11.1 v4
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x6f7f7eff
+ label "Additive Keying"
+ note_font "bold Bold"
+ note_font_size 96
+ selected true
+ xpos 2180
+ ypos -2220
+ bdwidth 1332
+ bdheight 2169
+}
+push $cut_paste_input
+Dot {
+ name Dot16
+ label BG
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_size 48
+ selected true
+ xpos 2956
+ ypos -2012
+}
+set Neb6335b0 [stack 0]
+push 0
+Dot {
+ name Dot15
+ label Plt
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_size 48
+ selected true
+ xpos 2430
+ ypos -2002
+}
+Dot {
+ name Dot21
+ selected true
+ xpos 2430
+ ypos -1779
+}
+set N3a4700c0 [stack 0]
+Group {
+ inputs 2
+ name _PLATE_BG_DIFF_
+ selected true
+ xpos 3341
+ ypos -1779
+ addUserKnob {20 tb_user l "Difference Matte between PLT and BG"}
+ addUserKnob {41 whitepoint_1 l "BG Middle Gray" T _MID_GRAY_.whitepoint}
+ addUserKnob {41 disable_1 l "Erode Edge" T _EDGE_ERODE_.disable}
+ addUserKnob {41 size l "Erode Size" T _EDGE_ERODE_.size}
+ addUserKnob {26 tx_outalpha l "Output Matte"}
+ addUserKnob {41 whitepoint T _ADJ_ALPHA_.whitepoint}
+ addUserKnob {41 blackpoint T _ADJ_ALPHA_.blackpoint}
+ addUserKnob {41 gamma T _ADJ_ALPHA_.gamma}
+}
+ Input {
+  inputs 0
+  name FG
+  selected true
+  xpos 827
+  ypos -773
+ }
+ Saturation {
+  saturation 0
+  name _PLATE_Y_
+  xpos 827
+  ypos -749
+ }
+ FilterErode {
+  channels rgba
+  size -3
+  filter gaussian
+  name _EDGE_ERODE_
+  xpos 827
+  ypos -644
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 937
+  ypos -774
+  number 1
+ }
+ Saturation {
+  saturation 0
+  name _BG_Y_
+  xpos 937
+  ypos -750
+ }
+ Grade {
+  whitepoint 0.5
+  name _MID_GRAY_
+  label "\[value whitepoint]"
+  xpos 937
+  ypos -680
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name _DIFF_
+  xpos 937
+  ypos -644
+ }
+ Expression {
+  expr3 r
+  name _TO_ALPHA
+  xpos 937
+  ypos -620
+ }
+ Grade {
+  channels alpha
+  white_clamp true
+  name _ADJ_ALPHA_
+  note_font "Verdana Bold Bold Bold"
+  note_font_color 0xffffffff
+  xpos 937
+  ypos -596
+ }
+ Output {
+  name Output1
+  xpos 937
+  ypos -496
+ }
+end_group
+Dot {
+ name Dot14
+ selected true
+ xpos 3372
+ ypos -1107
+}
+set N6c540540 [stack 0]
+Invert {
+ channels alpha
+ name _INV_
+ selected true
+ xpos 3341
+ ypos -441
+}
+Merge2 {
+ operation stencil
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name _PLUS_STEN_
+ note_font "Verdana Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 3196
+ ypos -441
+ disable true
+}
+Merge2 {
+ operation screen
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name _PLUS_ADD_
+ note_font "Verdana Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 3070
+ ypos -441
+ disable true
+}
+push $N3a4700c0
+Dot {
+ name Dot17
+ selected true
+ xpos 2430
+ ypos -1137
+}
+set N184b4a70 [stack 0]
+Dot {
+ name Dot22
+ selected true
+ xpos 2430
+ ypos -528
+}
+push 0
+Dot {
+ name Dot13
+ label CP
+ note_font "Bitstream Vera Sans Bold"
+ note_font_size 48
+ selected true
+ xpos 2240
+ ypos -2001
+}
+Dot {
+ name Dot19
+ selected true
+ xpos 2240
+ ypos -1188
+}
+set N3c1d49d0 [stack 0]
+Dot {
+ name Dot18
+ selected true
+ xpos 2240
+ ypos -459
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name _MIN_
+ selected true
+ xpos 2509
+ ypos -459
+}
+Clamp {
+ channels rgba
+ maximum_enable false
+ name _CLIP_NEG_
+ selected true
+ xpos 2509
+ ypos -435
+}
+push $N6c540540
+Merge2 {
+ operation stencil
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name _MUL_STEN_
+ note_font "Verdana Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 3182
+ ypos -1113
+ disable true
+}
+Merge2 {
+ operation screen
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name _MUL_ADD_
+ note_font "Verdana Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 3062
+ ypos -1113
+ disable true
+}
+push $N184b4a70
+push $N3c1d49d0
+Dot {
+ name Dot20
+ selected true
+ xpos 2489
+ ypos -1188
+}
+Merge2 {
+ inputs 2
+ operation divide
+ name _DIV_
+ selected true
+ xpos 2517
+ ypos -1137
+}
+Group {
+ name _DIV_DIFF_
+ selected true
+ xpos 2517
+ ypos -1107
+ addUserKnob {20 tb_user l "Dividing Medium"}
+ addUserKnob {41 conversion l "Highlight Rolloff mode" T _SOFTCLIP_.conversion}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 black l lift T _ADJ_.black}
+ addUserKnob {41 gamma T _ADJ_.gamma}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 1029
+  ypos -812
+ }
+ SoftClip {
+  conversion "preserve hue and saturation"
+  softclip_min 1
+  name _SOFTCLIP_
+  label "\[value conversion]"
+  xpos 1029
+  ypos -723
+ }
+ Saturation {
+  saturation 0.5
+  name _SATURATION_
+  xpos 1029
+  ypos -689
+ }
+ Grade {
+  name _ADJ_
+  xpos 1029
+  ypos -668
+ }
+ Output {
+  name Output1
+  xpos 1029
+  ypos -565
+ }
+end_group
+push $Neb6335b0
+add_layer {_ORIGINAL_BG_ _ORIGINAL_BG_.red _ORIGINAL_BG_.green _ORIGINAL_BG_.blue _ORIGINAL_BG_.alpha}
+Shuffle {
+ out _ORIGINAL_BG_
+ name _NEW_LAYER_
+ tile_color 0x222222ff
+ label "\[value out\n]"
+ selected true
+ xpos 2925
+ ypos -1874
+}
+Merge2 {
+ inputs 2+1
+ operation multiply
+ name _MUL_
+ selected true
+ xpos 2925
+ ypos -1107
+}
+Merge2 {
+ inputs 2+1
+ operation plus
+ name _PLUS_
+ selected true
+ xpos 2925
+ ypos -435
+}
+Shuffle {
+ in _ORIGINAL_BG_
+ name _ADDITIVE_BYPASS_
+ tile_color 0x222222ff
+ label "\[value in]"
+ selected true
+ xpos 2925
+ ypos -219
+ disable true
+}
