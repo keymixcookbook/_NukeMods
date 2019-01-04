@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><script>for n in nuke.selectedNodes('Write'):
-    n['flt'].setValue('BDL')</script><script></script>
