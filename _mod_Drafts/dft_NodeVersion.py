@@ -24,7 +24,7 @@ def NodeVersion():
     StudioENV(studio="MPC")
 
     # NodeVersion Directory
-    dir_nv = os.path.join(os.getenv('HOME'), ".nuke", "kuNodeVersion", SHOW, SCENE, SHOT)
+    dir_nv = os.path.join(os.getenv('HOME'), ".nuke", "kuNodeVersion", SHOW, SHOT)
 
     if os.path.exists(dir_nv):
         pass
