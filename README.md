@@ -1,4 +1,7 @@
-# Python modles to use in a VFX Studio enviroment
+# Python modules to use in a VFX Studio environment
+A General scripting format and structure guide
+
+>~/$HOME/.nuke
 
 # Main Components
   - ~/_mod_KuFunc
@@ -10,6 +13,14 @@
   - KuStudio.py
 
 # Formatting Guide for python
+Formatting following briefly with syntax from **Bash Shell** and **Python**
+
+- `$` for variable in comments, ALL_CAP
+- `_` for space in **filenames** and **variables**, or **Folders** (if as prefix)
+- `-` for **other Folders**
+
+For example:
+> $VARIABLE_ALL_CAP | filename_and_variables | _Folders | -Other_Folders
 
 ## Script General Format
 ```python
