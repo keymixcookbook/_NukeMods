@@ -7,5 +7,8 @@
 ###### TODO LIST
 |Status|Name|Discription|
 | :--- | :---- | :---- |
+| *WIP* | **NodeVersion** | Take a copy of a node and save in `/.nuke` directory
+| *WIP* | **ExpressionPreset** | preset for expr fields
+| *WIP* | **DeepCollector** | Deep collector for baking holdouts
 | *Not Started* | **ColorCode** | Backdrop color code with user tab and type selection
 
