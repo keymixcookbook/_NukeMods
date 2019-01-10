@@ -3,7 +3,7 @@ A General scripting format and structure guide
 
 >~/$HOME/.nuke
 
-# Main Components
+### Main Components
   - ~/_mod_KuFunc
   - ~/_mod_KuStudio
   - ~/_mod_Drafts
@@ -12,7 +12,7 @@ A General scripting format and structure guide
   - KuFunc.py
   - KuStudio.py
 
-# Formatting Guide for python
+### Formatting Guide for python
 Formatting following briefly with syntax from **Bash Shell** and **Python**
 
 - `$` for variable in comments, ALL_CAP
@@ -22,7 +22,7 @@ Formatting following briefly with syntax from **Bash Shell** and **Python**
 For example:
 > $VARIABLE_ALL_CAP | filename_and_variables | _Folders | -Other_Folders
 
-## Script General Format
+### Script General Format
 ```python
 '''
 
