@@ -21,7 +21,7 @@ from mod_StudioENV import *
 
 def NodeVersion():
 
-    StudioENV(studio="MPC")
+    SHOW, SCENE, SHOT = StudioENV(studio="MPC")
 
     # NodeVersion Directory
     dir_nv = os.path.join(os.getenv('HOME'), ".nuke", "kuNodeVersion", SHOW, SHOT)
