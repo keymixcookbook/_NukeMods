@@ -16,8 +16,12 @@
 '''
 
 # Section
-  - What does this script do
-  - 1 space up & down
+- What does this script do
+- 1 space up & down
+
+# With 1 Space In-between
+- $VARIABLES, $USED_IN, $COMMENTS
+- Temp Directory: /$TEMP/directory/_in_comments
 
 '''
 
