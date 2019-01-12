@@ -13,14 +13,23 @@ A General scripting format and structure guide
   - KuStudio.py
 
 ### Formatting Guide for python
-Formatting following briefly with syntax from **Bash Shell** and **Python**
+Following briefly with Python PEP 8 guidlines, except:
 
-- `$` for variable in comments, ALL_CAP
-- `_` for space in **filenames** and **variables**, or **Folders** (if as prefix)
-- `-` for **other Folders**
+- **UpperCamelCase** for **standalone** functions and modules:
+  - `ThisFuntion()`, `ThisModule.py`
 
-For example:
-> $VARIABLE_ALL_CAP | filename_and_variables | _Folders | -Other_Folders
+> Methods with in a Class is still the same: `ThisClass.itsMethod()`
+
+also includes:
+- `$` for variable in comments, ALL_CAP:
+  - `$VAR`
+- `_` for space in **filenames** and **variables**, or **Folders** (if as prefix):
+  - `this_file.ext`, `this_var`, `./this_folder`
+- `-` for **other Folders**:
+  - `./-misc`
+- `""` for strings, `''` for keywords or attributes:
+  - `string = "Text"`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
+
 
 ### Script General Format
 ```python
@@ -56,7 +65,7 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
 
   # What does the lines below do
   sec_subSec = "Variable"
-  GLOBAL = "Global Variable"
+  GLOBAL_CONSTANT = "Constant Variable"
 
   # have 1 space between group of lines
   if quotes: ## comment for one line
@@ -65,10 +74,11 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
     print 'properties' ## use single quote
 
 
+class ThisClass:
 
-def OtherFunction():
-  print "3 spaces between Functions"
-  print "from last line of the previous"
+  def itsMethod():
+    print "3 spaces between Functions"
+    print "from last line of the previous"
 
 
 
