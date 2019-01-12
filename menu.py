@@ -96,3 +96,4 @@ nuke.knobDefault('Viewer.hide_input', 'True')
 
 
 nuke.addOnUserCreate(lambda n=nuke.thisNode(): n['first_frame'].setValue(nuke.frame()), nodeClass='FrameHold')
+nuke.addOnUserCreate(lambda n=nuke.thisNode(): n['reference_frame'].setValue(nuke.root()['first_frame'].value()), nodeClass='Tracker4')
