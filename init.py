@@ -5,7 +5,17 @@ to used in a VFX Studio enviroment
 
 '''
 
+
+
+
 ########## PLUGIN DIRECTORIES ##########
 
-nuke.pluginAddPath('./_mod_KuFunc')
-nuke.pluginAddPath('./_mod_KuStudio')
+
+
+
+import os
+
+print ">>>", "Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<"
+
+nuke.pluginAddPath('./_pkg_KuFunc')
+nuke.pluginAddPath('./_pkg_KuStudio')

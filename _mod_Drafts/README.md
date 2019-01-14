@@ -12,5 +12,5 @@
 | *WIP* | **DeepCollector** | Deep collector for baking holdouts
 | *Not Started* | **ColorCode** | Backdrop color code with user tab and type selection
 | *Not Started* | **RestoreHiddenInputs** | Save Hidden inputs and restore them
-
-
+| *WIP* | **DeepCollector** | Collects all Deep Read/Recolor nodes
+| *WIP* | **LinkClone** | Link knobs between nodes of the same Class

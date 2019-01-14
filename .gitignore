@@ -1,6 +1,22 @@
 # Created by https://www.gitignore.io/api/osx,pycharm
 # Edit at https://www.gitignore.io/?templates=osx,pycharm
 
+
+### Custom File ###
+
+__local_test.py
+
+preferences9.0.nk
+preferences10.5.nk
+recent_files
+ScriptEditorHistory.xml
+timelog_viewer.py
+uistate.ini
+/MTTF
+FileChooser_Favorites.pref
+nukePyDummy.py
+
+
 ### OSX ###
 # General
 .DS_Store
@@ -109,14 +125,3 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/osx,pycharm
-
-# Nuke File Spesific
-preferences9.0.nk
-preferences10.5.nk
-recent_files
-ScriptEditorHistory.xml
-timelog_viewer.py
-uistate.ini
-/MTTF
-FileChooser_Favorites.pref
-nukePyDummy.py

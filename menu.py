@@ -12,7 +12,8 @@ to used in a VFX Studio enviroment
 
 
 from KuFunc import *
-from mod_DotCamConnect import *
+from _pkg_KuFunc import *
+from _pkg_KuStudio import *
 
 
 
@@ -47,6 +48,7 @@ tBar = nuke.toolbar("T_Bar")
 tBar.addCommand('Select Child Nodes', "selectChildNodes()", icon="Output.png")
 tBar.addCommand('Align Nodes', "alignNodes()", icon="Posterize.png")
 tBar.addCommand('Filter Selection', "filterSelection()", icon="NoOp.png")
+tBar.addCommand('Backdrop Resize', "backdropResize()", icon="Distort.png")
 tBar.addCommand('KuDrop', "kuDrop()", icon="Backdrop.png")
 tBar.addCommand('Dot Cam Connect', "dotCamConnect()", icon="Camera.png")
 
