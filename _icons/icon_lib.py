@@ -17,4 +17,4 @@ with open("_icons/README.md", 'w') as lib:
     lib.writelines("| IMG | Filename |\n")
     lib.writelines("| :---: | :--- |\n")
     for i in icons:
-        lib.writelines("|![{name}](/_src/{filename})|{name}|\n".format(name=os.path.splitext(i)[0], filename=i))
+        lib.writelines("|![{name}](./_src/{filename})|{name}|\n".format(name=os.path.splitext(i)[0], filename=i))
