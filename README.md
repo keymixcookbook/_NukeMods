@@ -4,20 +4,20 @@ A General scripting format and structure guide
 >~/$HOME/.nuke
 
 ### Main Components
-  - ./_pkg_KuFunc
-    - \__int__.py
-  - ./_pkg_KuStudio
-    - \__int__.py
-  - ./_mod_Drafts
-  - menu.py
-  - init.py
-  - KuFunc.py
-  - KuStudio.py
+  - `./_pkg_KuFunc`
+    - `__int__.py`
+  - `./_pkg_KuStudio`
+    - `__int__.py`
+  - `./_mod_Drafts`
+  - `menu.py`
+  - `init.py`
+  - `KuFunc.py`
+  - `KuStudio.py`
 
 ### Installation
-  1. Download this entire folder `/_NukeStudio`
-  2. Copy `init.edit.py` and `menu.edit.py` to `~/$HOME/.nuke`
-  2. in `init.edit.py`
+  - Download this entire folder `/_NukeStudio`
+  - Copy `init.edit.py` and `menu.edit.py` to `~/$HOME/.nuke`
+  - In `init.edit.py`
     - `os.environ['KU_PKG_PATH'] = "Where /_NukeStudio is in abs path"`
     - `os.environ['KU_STUDIO_ENV'] = "Studio Name"`
 
