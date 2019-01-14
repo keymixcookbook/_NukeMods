@@ -8,7 +8,7 @@ import os
 
 this_dir = os.path.join(os.path.dirname(__file__), "_src")
 
-icons = [i for i in os.listdir(this_dir) if ".png" in i]
+icons = [i for i in os.listdir(this_dir) if ".png" in i and "Nuke" not in i and "Hiero" not in i]
 
 print this_dir
 
