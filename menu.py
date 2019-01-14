@@ -12,6 +12,7 @@ to used in a VFX Studio enviroment
 
 
 from KuFunc import *
+from KuStudio import *
 from _pkg_KuFunc import *
 from _pkg_KuStudio import *
 

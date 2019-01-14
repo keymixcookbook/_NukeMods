@@ -15,7 +15,7 @@ to used in a VFX Studio enviroment
 
 import os
 
-print ">>>", "Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<"
+print ">>>", "Start Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<"
 
 nuke.pluginAddPath('./_pkg_KuFunc')
 nuke.pluginAddPath('./_pkg_KuStudio')

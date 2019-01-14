@@ -14,6 +14,14 @@ A General scripting format and structure guide
   - KuFunc.py
   - KuStudio.py
 
+### Installation
+  1. Download this entire folder `/_NukeStudio`
+  2. Copy `init.edit.py` and `menu.edit.py` to `~/$HOME/.nuke`
+  2. in `init.edit.py`
+    - `os.environ['KU_PKG_PATH'] = "Where /_NukeStudio is in abs path"`
+    - `os.environ['KU_STUDIO_ENV'] = "Studio Name"`
+
+
 ### Formatting Guide for python
 Following briefly with Python PEP 8 guidlines, except:
 
@@ -27,7 +35,7 @@ also includes:
   - `$VAR`
 - `_` for space in **filenames** and **variables**, or **Folders** (if as prefix):
   - `this_file.ext`, `this_var`, `./this_folder`
-- `-` for **other Folders**:
+- `__` for **other Folders** that is not part of the package:
   - `./-misc`
 - `""` for strings, `''` for keywords or attributes:
   - `string = "Text"`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
