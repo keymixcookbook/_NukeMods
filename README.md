@@ -4,9 +4,11 @@ A General scripting format and structure guide
 >~/$HOME/.nuke
 
 ### Main Components
-  - ~/_mod_KuFunc
-  - ~/_mod_KuStudio
-  - ~/_mod_Drafts
+  - ./_pkg_KuFunc
+    - \__int__.py
+  - ./_pkg_KuStudio
+    - \__int__.py
+  - ./_mod_Drafts
   - menu.py
   - init.py
   - KuFunc.py
