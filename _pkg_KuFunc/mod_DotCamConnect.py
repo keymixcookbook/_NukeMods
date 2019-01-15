@@ -1,3 +1,6 @@
+__all__=['dotCamConnect()']
+
+
 import nuke, nukescripts
 
 '''
@@ -10,7 +13,9 @@ import nuke, nukescripts
 '''
 
 
-def dotCamConnect():
+
+
+def DotCamConnect():
 
 	color_red = int('%02x%02x%02x%02x' % (1*255,0*255,0*255,0*255),16)
 	color_white = int('%02x%02x%02x%02x' % (1*255,1*255,1*255,1*255),16)
@@ -70,3 +75,4 @@ def dotCamConnect():
 
 				setDotNode(node_create_dot, node_sel_cam)
 
+dir()

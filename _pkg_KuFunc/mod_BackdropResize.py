@@ -1,4 +1,6 @@
-import nuke,nukescripts
+__all__=['backdropResize']
+
+import nuke, nukescripts
 
 '''
 - Select Backdrop
@@ -8,7 +10,7 @@ import nuke,nukescripts
 '''
 
 
-def backdropResize():
+def BackdropResize():
 
 	node_backdrop = nuke.selectedNodes('BackdropNode')
 

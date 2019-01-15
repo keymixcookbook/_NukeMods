@@ -6,13 +6,13 @@ A General scripting format and structure guide
 ### Main Components
   - `./_pkg_KuFunc`
     - `__int__.py`
+    - `mod_KuFunc.py`
   - `./_pkg_KuStudio`
     - `__int__.py`
+    - `mod_KuStudio.py`
   - `./_mod_Drafts`
   - `menu.py`
   - `init.py`
-  - `KuFunc.py`
-  - `KuStudio.py`
 
 ### Installation
   - Download this entire folder `/_NukeStudio`

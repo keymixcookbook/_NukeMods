@@ -1,14 +1,16 @@
-def linkedStamp():
+import nuke
+
+def LinkedStamp():
 
     '''
     version 2.1
-    
+
         - added Python_button, connect to a node listed in Label
-    
+
     version 2.0
 
         - added Callback, label changes when input changed
-    
+
     '''
 
     rNode = nuke.selectedNode()
@@ -40,7 +42,7 @@ def linkedStamp():
 
     k_setInput.setTooltip("Taking the node name from label and connect")
     k_text.setValue("<b>%s</b>" % (stp['label'].value()))
-    
+
     def inputUpdate():
 
         n = nuke.thisNode()

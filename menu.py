@@ -6,15 +6,39 @@ to used in a VFX Studio enviroment
 '''
 
 
+
+
 ########## MODULE IMPORT ##########
 
 
 
 
-from KuFunc import *
-from KuStudio import *
 from _pkg_KuFunc import *
 from _pkg_KuStudio import *
+
+from _pkg_KuFunc.mod_KuFunc import *
+from _pkg_KuStudio.mod_KuStudio import *
+
+
+########## AddMenuItem Func ##########
+
+
+
+
+def addMenuItem(type, mu, name, mod, hotkey="", icon=""):
+
+    '''
+    type: 'm'= modules, 'f' = functions
+    mu: menu variable
+    mod: module/function name
+    hotkey: ctl, alt, shift + letter
+    icon: image file name + ext
+    '''
+
+    if type == 'm':
+        mu.addCommand(name, "mod_{mod}.{mod}()".format(mod=mod), hotkey, icon=icon)
+    elif type == 'f':
+        mu.addCommand(name, "{func}()".format(func=mod), hotkey, icon=icon)
 
 
 
@@ -26,15 +50,12 @@ from _pkg_KuStudio import *
 
 kuMu = nuke.menu('Nuke').addMenu('KU')
 
-kuMu.addCommand('Connect Mask Input', "mask()", 'ctrl+Y')
-kuMu.addCommand('Change Label', "labelChange()", 'shift+N')
-kuMu.addCommand('Linked Postage Stamp', "linkedStamp()", 'F4')
-kuMu.addCommand('Group Connect A', "groupConnect()", 'alt+ctrl+Y')
-kuMu.addCommand('Set Operation', "mergeOp()", 'alt+o')
-kuMu.addCommand('Change Channels', "quickChannel()")
+addMenuItem('f', kuMu, 'Connect Mask Input', "mask", hotkey="ctrl+Y")
+addMenuItem('f', kuMu, 'Change label', "labelChange", hotkey="shift+N")
+addMenuItem('m', kuMu, 'Linked Postage Stamp', "LinkedStamp", hotkey="f4")
+addMenuItem('f', kuMu, 'Group Connect A', "groupConnect", hotkey="alt+ctrl+Y")
+addMenuItem('f', kuMu, 'Set Operation', "mergeOp", hotkey="alt+O")
 kuMu.addSeparator()
-kuMu.addCommand('Reload All Read Nodes', "reloadRead()")
-kuMu.addCommand('Reset Node Color', "resetNodeCol()")
 
 
 
@@ -46,12 +67,12 @@ kuMu.addCommand('Reset Node Color', "resetNodeCol()")
 
 tBar = nuke.toolbar("T_Bar")
 
-tBar.addCommand('Select Child Nodes', "selectChildNodes()", icon="Output.png")
-tBar.addCommand('Align Nodes', "alignNodes()", icon="Posterize.png")
-tBar.addCommand('Filter Selection', "filterSelection()", icon="NoOp.png")
-tBar.addCommand('Backdrop Resize', "backdropResize()", icon="Distort.png")
-tBar.addCommand('KuDrop', "kuDrop()", icon="Backdrop.png")
-tBar.addCommand('Dot Cam Connect', "dotCamConnect()", icon="Camera.png")
+addMenuItem('f', tBar, 'Select Child Nodes', "selectChildNodes", icon="Output.png")
+addMenuItem('f', tBar, 'Align Nodes', "alignNodes", icon="Posterize.png")
+addMenuItem('f', tBar, 'Filter Selection', "filterSelection", icon="NoOp.png")
+addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize", icon="LensDistort.png")
+addMenuItem('f', tBar, 'KuDrop', "kuDrop", icon="Backdrop.png")
+addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect", icon="Camera.png")
 
 
 

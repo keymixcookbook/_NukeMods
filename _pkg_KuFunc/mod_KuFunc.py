@@ -1,7 +1,11 @@
 '''
 
-KuFunc.py for _NukeStudio & _NukeFreelance
+mod_KuFunc.py for _NukeStudio & _NukeFreelance
 to used in both a VFX Studio and Freelance enviroment
+
+originally KuFunc.py
+
+Contain sets of 'Light Weight' Functions, shouldn't be longer than 50 lines
 
 '''
 
@@ -94,57 +98,6 @@ def labelChange():
     for n in nuke.selectedNodes():
         n['name'].getValue()
         n['label'].setValue(newLabel)
-
-
-def linkedStamp():
-
-    rNode = nuke.selectedNode()
-    rNode_nam = rNode.name()
-
-    rNode['selected'].setValue(False)
-
-    stp = nuke.createNode('PostageStamp')
-    stp.setInput(0, rNode)
-    stp['hide_input'].setValue(1)
-    stp['label'].setValue(rNode_nam)
-
-    # Reset Selections
-    stp['selected'].setValue(False)
-    rNode['selected'].setValue(True)
-
-    # Add User knobs
-
-    py_cmd = "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['label'].value()))"
-
-
-    k_tab = nuke.Tab_Knob("LinkedStamp")
-    k_setInput = nuke.PyScript_Knob('link', "Restore Input", py_cmd)
-    k_text = nuke.Text_Knob('tx_nodename', "Set Input to: ")
-
-    stp.addKnob(k_tab)
-    stp.addKnob(k_text)
-    stp.addKnob(k_setInput)
-
-    k_setInput.setTooltip("Taking the node name from label and connect")
-    k_text.setValue("<b>%s</b>" % (stp['label'].value()))
-    
-    def inputUpdate():
-
-        n = nuke.thisNode()
-        k = nuke.thisKnob()
-
-        try:
-            if k.name() == "inputChange":
-                n['label'].setValue(n.dependencies()[0].name())
-                n['tx_nodename'].setValue("<b>%s</b>" % (stp['label'].value()))
-        except:
-            pass
-
-        if k.name() == "label": # Manually Change Label
-            n['tx_nodename'].setValue("<b>%s</b>" % (stp['label'].value()))
-
-
-    nuke.addKnobChanged(inputUpdate, nodeClass='PostageStamp')
 
 
 def reloadRead():
@@ -248,7 +201,7 @@ def filterSelection():
     nodes = nuke.selectedNodes()
 
     if len(nodes)>0:
-        
+
         import collections
         node_class = collections.Counter([n.Class() for n in nodes]).keys()
 
@@ -395,5 +348,3 @@ def kuDrop():
 
 	else:
 		nuke.message("Plese selecte Nodes")
-
-
