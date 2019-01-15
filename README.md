@@ -11,6 +11,7 @@ A General scripting format and structure guide
     - `__int__.py`
     - `mod_KuStudio.py`
   - `./_mod_Drafts`
+  - `./_mod_Download`
   - `menu.py`
   - `init.py`
 
