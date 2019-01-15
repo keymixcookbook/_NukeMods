@@ -7,6 +7,7 @@
 ###### TODO LIST
 |Status|Name|Discription|
 | :--- | :---- | :---- |
+| *Not Started* | **SelLayerContact** | Show only selected channels
 | *WIP* | **NodeVersion** | Take a copy of a node and save in `/.nuke` directory
 | *Not Started* | **ExpressionPreset** | preset for expr fields
 | *WIP* | **DeepCollector** | Deep collector for baking holdouts
