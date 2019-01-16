@@ -73,6 +73,7 @@ addMenuItem('f', tBar, 'Filter Selection', "filterSelection", icon="NoOp.png")
 addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize", icon="LensDistort.png")
 addMenuItem('f', tBar, 'KuDrop', "kuDrop", icon="Backdrop.png")
 addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect", icon="Camera.png")
+addMenuItem('m', tBar, 'Set Expressions', "ExprPrompt", icon="Expression.png")
 
 
 
