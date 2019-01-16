@@ -36,9 +36,9 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon=""):
     '''
 
     if type == 'm':
-        mu.addCommand(name, "mod_{mod}.{mod}()".format(mod=mod), hotkey, icon=icon)
+        mu.addCommand(name, "mod_{mod}.{func}".format(mod=mod.split('(')[0],func=mod), hotkey, icon=icon)
     elif type == 'f':
-        mu.addCommand(name, "{func}()".format(func=mod), hotkey, icon=icon)
+        mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon)
 
 
 
@@ -50,12 +50,14 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon=""):
 
 kuMu = nuke.menu('Nuke').addMenu('KU')
 
-addMenuItem('f', kuMu, 'Connect Mask Input', "mask", hotkey="ctrl+Y")
-addMenuItem('f', kuMu, 'Change label', "labelChange", hotkey="shift+N")
-addMenuItem('m', kuMu, 'Linked Postage Stamp', "LinkedStamp", hotkey="f4")
-addMenuItem('f', kuMu, 'Group Connect A', "groupConnect", hotkey="alt+ctrl+Y")
-addMenuItem('f', kuMu, 'Set Operation', "mergeOp", hotkey="alt+O")
+addMenuItem('f', kuMu, 'Connect Mask Input', "mask()", hotkey="ctrl+Y")
+addMenuItem('f', kuMu, 'Change label', "labelChange()", hotkey="shift+N")
+addMenuItem('m', kuMu, 'Linked Postage Stamp', "LinkedStamp()", hotkey="f4")
+addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
+addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
 kuMu.addSeparator()
+addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='switch')", hotkey="shift+D")
+addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 
 
 
@@ -67,13 +69,13 @@ kuMu.addSeparator()
 
 tBar = nuke.toolbar("T_Bar")
 
-addMenuItem('f', tBar, 'Select Child Nodes', "selectChildNodes", icon="Output.png")
-addMenuItem('f', tBar, 'Align Nodes', "alignNodes", icon="Posterize.png")
-addMenuItem('f', tBar, 'Filter Selection', "filterSelection", icon="NoOp.png")
-addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize", icon="LensDistort.png")
-addMenuItem('f', tBar, 'KuDrop', "kuDrop", icon="Backdrop.png")
-addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect", icon="Camera.png")
-addMenuItem('m', tBar, 'Set Expressions', "ExprPrompt", icon="Expression.png")
+addMenuItem('f', tBar, 'Select Child Nodes', "selectChildNodes()", icon="Output.png")
+addMenuItem('f', tBar, 'Align Nodes', "alignNodes()", icon="Posterize.png")
+addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
+addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="LensDistort.png")
+addMenuItem('f', tBar, 'KuDrop', "kuDrop()", icon="Backdrop.png")
+addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
+addMenuItem('m', tBar, 'Set Expressions', "ExprPrompt()", icon="Expression.png")
 
 
 
