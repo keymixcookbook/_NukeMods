@@ -4,14 +4,19 @@
 - all scripts must prefixed with `dft_`
 
 
-###### TODO LIST
+###### Todo List
 |Status|Name|Discription|
 | :--- | :---- | :---- |
-| *Not Started* | **SelLayerContact** | Show only selected channels
 | *WIP* | **NodeVersion** | Take a copy of a node and save in `/.nuke` directory
-| *Not Started* | **ExpressionPreset** | preset for expr fields
 | *WIP* | **DeepCollector** | Deep collector for baking holdouts
-| *Not Started* | **ColorCode** | Backdrop color code with user tab and type selection
-| *Not Started* | **RestoreHiddenInputs** | Save Hidden inputs and restore them
 | *WIP* | **DeepCollector** | Collects all Deep Read/Recolor nodes
 | *WIP* | **LinkClone** | Link knobs between nodes of the same Class
+| *Pending* | **SelLayerContact** | Show only selected channels
+| *Pending* | **RestoreHiddenInputs** | Save Hidden inputs and restore them
+| *Pending* | **ColorCode** | Backdrop color code with user tab and type selection
+
+
+###### Finished
+|Status|Name|Discription|
+| :--- | :---- | :---- |
+| *Finished* | **ExprPrompt** | preset for expr fields
