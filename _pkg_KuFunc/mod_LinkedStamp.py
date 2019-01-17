@@ -24,7 +24,12 @@ def LinkedStamp():
     # Rename PostageStamp Node
     def stpRename(base_name):
         
-        stp_max = max([n.name() for n in nuke.allNodes('PostageStamp') if base_name in n])
+        all_stp = [n.name() for n in nuke.allNodes('PostageStamp') if base_name in n.name()]
+        
+        if len(all_stp) > 0:
+            stp_max = max(all_stp)
+        else:
+            stp_max = base_name + "1"
         
         new_index = int(stp_max.strip(base_name))+1
         new_name = base_name+str(new_index)
