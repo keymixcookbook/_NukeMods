@@ -5,6 +5,7 @@ def LinkedStamp():
     '''
     version 3.0
         - added Button, Show Parent Node in DAG
+        - Change name to "LinkedStamp"
     
     version 2.1
         - added Python_button, connect to a node listed in Label
@@ -16,13 +17,25 @@ def LinkedStamp():
 
     rNode = nuke.selectedNode()
     rNode_nam = rNode.name()
+    base_name = "LinkStamp"
 
     rNode['selected'].setValue(False)
+    
+    # Rename PostageStamp Node
+    def stpRename(base_name):
+        
+        stp_max = max([n.name() for n in nuke.allNodes('PostageStamp') if base_name in n])
+        
+        new_index = int(stp_max.strip(base_name))+1
+        new_name = base_name+str(new_index)
+        
+        return new_name
 
     stp = nuke.createNode('PostageStamp')
     stp.setInput(0, rNode)
     stp['hide_input'].setValue(1)
     stp['label'].setValue(rNode_nam)
+    stp.setName(stpRename(base_name))
 
     # Reset Selections
     stp['selected'].setValue(False)
