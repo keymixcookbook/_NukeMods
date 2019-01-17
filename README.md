@@ -1,8 +1,6 @@
 # Python modules to use in a VFX Studio environment
 A General scripting format and structure guide
 
->~/$HOME/.nuke
-
 ### Main Components
   - `./_pkg_KuFunc`
     - `__int__.py`
@@ -21,6 +19,29 @@ A General scripting format and structure guide
   - In `init.edit.py`
     - `os.environ['KU_PKG_PATH'] = "Where /_NukeStudio is in abs path"`
     - `os.environ['KU_STUDIO_ENV'] = "Studio Name"`
+    
+### Version Control
+  - **Newly Started** File goes to `/_mod_Draft` with prefix `dft_`
+  - **New Versions** of exsisting modules, goes to `update_mod_name` branch
+    - nust indicate version number, and what's new
+    - Once finished, merge to master Branch
+    
+###### Version Indication Example
+``` python
+
+def UpdateFunction():
+
+  '''
+  
+  version 3.0
+  - something new
+  
+  version 2.0
+  - something old
+  
+  '''
+
+```
 
 
 ### Formatting Guide for python
