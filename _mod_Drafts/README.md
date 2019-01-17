@@ -1,5 +1,5 @@
 - for scripts in progress
-- once finished, move to `./_mod_KuFunc` or `./_mod_KuStudio`
+- once finished, move to `./_pkg_KuFunc` or `./_pkg_KuStudio`
 - all scripts must have to same name as finished scripts
 - all scripts must prefixed with `dft_`
 
