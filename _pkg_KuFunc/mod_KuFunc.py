@@ -202,8 +202,7 @@ def filterSelection():
 
     if len(nodes)>0:
 
-        import collections
-        node_class = collections.Counter([n.Class() for n in nodes]).keys()
+        node_class = list(set([n.Class() for n in nodes]))
 
         p = nuke.Panel('Filter Selection')
         p.addEnumerationPulldown('Class', ' '.join(node_class))
