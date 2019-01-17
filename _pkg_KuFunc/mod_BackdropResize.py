@@ -1,13 +1,17 @@
-__all__=['backdropResize']
-
-import nuke, nukescripts
-
 '''
+
+version 1.0
 - Select Backdrop
 - Enter Width and Height
 - Select if From center or Side
 
+version 2.0 (WIP)
+- add color palatte, with html special characters and pyScript buttom
+
 '''
+
+
+import nuke, nukescripts
 
 
 def BackdropResize():
