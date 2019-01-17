@@ -17,7 +17,8 @@ def ColorCode(mode='create'):
 
     # Symbols and Color
     blk = '&#9608;'
-    hex_group = {'CG': ['#CCC0C0','#5C3737','#7D5F5F'], 'Plate', 'Grade', 'Key', 'Despill', 'Output', 'Elem', 'Ref', 'EndComp', 'LensFX'}
+    #hex_group = {'CG': ['CCC0C0','5C3737','7D5F5F'], 'Plate', 'Grade', 'Key', 'Despill', 'Output', 'Elem', 'Ref', 'EndComp', 'LensFX'}
+    hex_group = {'CG': ['CCC0C0','5C3737','7D5F5F'], 'Plate': ['BFC5CC', '2E405C', '58667d'], 'Grade': ['C0CCCC' ,'2E5C5C' ,'587d7d']}
 
     # Main Functions
     if mode == 'create':
@@ -50,7 +51,7 @@ def ColorCode(mode='create'):
         # Font Size
         font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
         font_size_link.makeLink( bd.name(), 'note_font_size' )
-        # font_size_link.clearFlag( nuke.STARTLINE )
+        font_size_link.clearFlag( nuke.STARTLINE )
         
         # font Color
         font_color_link = nuke.Link_Knob( 'note_font_color_link', '' )
@@ -66,11 +67,14 @@ def ColorCode(mode='create'):
         # Color Code
         counter = 0
 
-        for t in hex_group:
+        for t in hex_group.keys():
 
             name = "bt_%s" % (t)
-            label = "<font size='+1' color='%s'>%s</font> <b>%s" % (hex[t][2], blk, t)
-            cmd = "n=nuke.thisNode(); n['tile_color'].setValue(int(%sFF,16))" % (hex[t][1])
+            label = "<font size='+1' color='#%s'>%s</font> <b>%s" % (hex_group[t][2], blk, t)
+            cmd = "n=nuke.thisNode();\
+                    n['tile_color'].setValue(int('%sFF',16));\
+                    n['note_font_color'].setValue(int('%sFF', 16));\
+                    n['note_font'].setValue('bold')" % (hex_group[t][1], hex_group[t][0])
 
 
             cc_knob = nuke.PyScript_Knob(name,label,cmd)
