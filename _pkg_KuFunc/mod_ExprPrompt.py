@@ -19,7 +19,7 @@ def ExprPrompt():
         p = nuke.Panel("Expression Value")
 
         p.addEnumerationPulldown('Set Channel', 'alpha rgb rgba')
-        p.addExpressionInput('expr')
+        p.addSingleLineInput('expr: ')
 
         p.addButton('Cancel')
         p.addButton('Set!')
@@ -27,16 +27,16 @@ def ExprPrompt():
         if p.show():
 
             sel_channel = p.value('Set Channel')
-            input_expr = p.value('expr')
+            input_expr = p.value('expr: ')
 
             channel_set = []
 
             if sel_channel == "alpha":
-                channel_set = ['expr4']
+                channel_set = ['expr3']
             elif sel_channel == "rgba":
-                channel_set = ['expr1', 'expr2', 'expr3', 'expr4']
+                channel_set = ['expr0', 'expr1', 'expr2', 'expr3']
             elif sel_channel == "rgb":
-                channel_set = ['expr1', 'expr2', 'expr3']
+                channel_set = ['expr0', 'expr1', 'expr2']
 
             # Set Expressions
 
