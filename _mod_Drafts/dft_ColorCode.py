@@ -50,7 +50,12 @@ def ColorCode(mode='create'):
         # Font Size
         font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
         font_size_link.makeLink( bd.name(), 'note_font_size' )
-        font_size_link.clearFlag( nuke.STARTLINE )
+        # font_size_link.clearFlag( nuke.STARTLINE )
+        
+        # font Color
+        font_color_link = nuke.Link_Knob( 'note_font_color_link', '' )
+        font_color_link.makeLink( bd.name(), 'note_font_color' )
+        font_color_link.clearFlag( nuke.STARTLINE )
 
         # Divider
         k_div = nuke.Text_Knob('')
