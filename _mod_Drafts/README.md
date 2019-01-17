@@ -7,13 +7,13 @@
 ###### Todo List
 |Status|Name|Discription|
 | :--- | :---- | :---- |
+| *WIP* | **ColorCode** | Backdrop color code with user tab and type selection
 | *WIP* | **NodeVersion** | Take a copy of a node and save in `/.nuke` directory
 | *WIP* | **DeepCollector** | Deep collector for baking holdouts
 | *WIP* | **DeepCollector** | Collects all Deep Read/Recolor nodes
 | *WIP* | **LinkClone** | Link knobs between nodes of the same Class
 | *Pending* | **SelLayerContact** | Show only selected channels
 | *Pending* | **RestoreHiddenInputs** | Save Hidden inputs and restore them
-| *Pending* | **ColorCode** | Backdrop color code with user tab and type selection
 
 
 ###### Finished

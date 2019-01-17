@@ -8,7 +8,9 @@
 
 import nuke
 
-def ExprPrompt(nodes=nuke.selectedNodes('Expression'))
+def ExprPrompt():
+
+    nodes = nuke.selectedNodes('Expression')
 
     if len(nodes)<=0:
         nuke.message("Please Select Expression nodes")
