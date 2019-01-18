@@ -22,9 +22,9 @@ A General scripting format and structure guide
     
 ### Version Control
   - **Newly Started** File goes to `/_mod_Draft` with prefix `dft_`
-  - **New Versions** of exsisting modules, goes to `update_mod_name` branch
+  - **New Versions** of exsisting modules, goes to `update_mod_name_v###` branch
     - nust indicate version number, and what's new
-    - Once finished, merge to master Branch
+    - Once finished, merge to `master` branch
     
 ###### Version Indication Example
 ``` python
