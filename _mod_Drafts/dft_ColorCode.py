@@ -17,7 +17,7 @@ def ColorCode(mode='create'):
 
     # Symbols and Color
     blk = '&#9608;'
-    #hex_group = {'CG': ['CCC0C0','5C3737','7D5F5F'], 'Plate', 'Grade', 'Key', 'Despill', 'Output', 'Elem', 'Ref', 'EndComp', 'LensFX'}
+    #hex_group = {'CG': ['CCC0C0','5C3737','7D5F5F'], 'Plate', 'Grade', 'Key', 'Despill', 'Output', 'Elem', 'Ref', 'EndComp', 'Precomp'}
     hex_group = {'CG': ['CCC0C0','5C3737','7D5F5F'], 'Plate': ['BFC5CC', '2E405C', '58667d'], 'Grade': ['C0CCCC' ,'2E5C5C' ,'587d7d']}
 
     # Main Functions
