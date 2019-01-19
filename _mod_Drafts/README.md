@@ -7,8 +7,7 @@
 ###### Todo List
 |Status|Name|Discription|
 | :--- | :---- | :---- |
-| *WIP* | **ColorCode** | Backdrop color code with user tab and type selection
-| *WIP* | **NodeVersion** | Take a copy of a node and save in `/.nuke` directory
+| *WIP* | **NodeVersion** | Save node preset and make a button
 | *WIP* | **DeepCollector** | Deep collector for baking holdouts
 | *WIP* | **DeepCollector** | Collects all Deep Read/Recolor nodes
 | *WIP* | **LinkClone** | Link knobs between nodes of the same Class
@@ -20,3 +19,4 @@
 |Status|Name|Discription|
 | :--- | :---- | :---- |
 | *Finished* | **ExprPrompt** | preset for expr fields
+| *Finished* | **ColorCode** | Backdrop color code with user tab and type selection
