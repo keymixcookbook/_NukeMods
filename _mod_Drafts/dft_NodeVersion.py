@@ -1,73 +1,101 @@
 '''
 
-- Find out env variabe: USER, HOME, SHOW, SCENE, SHOTNAME or SHOT
-- Create directory: $HOME/.nuke/kuNodeVersion/SHOW/SCENE/SHOT
+* Inspired by bi_nodePresets v1.0
 
-# Save Node Version
-- name version: $NODENAME_nv$VERSION.nk
-- save selected node to the corrisponding dir
+- Select a node
+- Promot asking for short description
+- creating user preset and default adding version 1
+    - save userPresetKnobValue in nv_rm_v1 tooltip
+    - PresetName : $NODECLASS.$NODENAME.v#
+- create a serious of knobs
 
-# Load Node Version
-- select a node for loading version
-- find its corrisponding saved node base on NODENAME
-- prompt with NODENAME as title and nv$VERSION as menu item
-- combine selected menu item with NODENAME: NODENAME + nk$VERSION + .nk
-- insert the node
+- Create a user tab "NodeVersion"
+- Show Current Node and Current Version used
+    - version KnobName convention:
+        <nv_rm_v#>      "-"
+        <nv_load_v#>    "load v##"
+        <nv_tip_v#>     ": ", "Short Description"
 
+- When a load version button is pushed
+    1. load user preset
+    2. update <cur_ver> knob with this <nv> version
+
+- Used Functions
+    - saveUserPreset(node, PresetName)
+    - getUserPresetKnobValues (NodeClass, PresetName)
+    - deleteUserPreset(NodeClass, PresetName)
+    - node.removeKnob(KnobName)
+
+- Abbrations
+    - NV/nv: NodeVersion
 '''
 
 import nuke,nukescripts,os
-from mod_StudioENV import *
+
 
 def NodeVersion():
 
-    SHOW, SCENE, SHOT = StudioENV(studio="MPC")
+    # Global Var
+    nv = 1
+    node_name = ''
+    nodes = nuke.selectedNodes()
 
-    # NodeVersion Directory
-    dir_nv = os.path.join(os.getenv('HOME'), ".nuke", "kuNodeVersion", SHOW, SHOT)
+    # Predefine Functions
+    def findNV(node):
 
-    if os.path.exists(dir_nv):
-        pass
-    else:
-        os.makedirs(dir_nv)
+        '''
+        Find NV version
+        return Highest Current Version as Int
+        '''
 
-    # Global Variables & Functions
-    node = nuke.selectedNode()
-    nodename = node.name()
+        nv_knobs = [k for k in node.knobs() if k.startswith("nv_load")]
+        nv_vers = [int(v.split('_v')[1]) for v in nv_knobs]
+        try:
+            cur_ver = max(nv_ver)
+        except:
+            cur_ver = 0 # No Version
+        new_ver = cur_ver+1
 
-    def findVersion(dir_nv, new=True):
+        return {'cur': cur_ver, 'new': new_ver}
 
-        list_ver = os.listdir(dir_nv)
 
-        if len(list_ver)<=0:
-            ver = '%03d' % 1
-        else:
-            all_ver = [int(os.path.splitext(v)[0].split('_nv')[1]) for v in os.listdir(dir_nv)]
-            if new == True:
-                ver = '%03d' % (max(all_versions) + 1)
-            elif new == False:
-                ver = '%03d' % max(all_versions)
+    def addBasicKnobs(node):
 
-        return ver
+        k_tab = nuke.Tab_Knob('NodeVersion')
 
-    # Save Node Version
-    if node:
-        nuke.nodeCopy(os.path.join(dir_nv, "%s_nv%s.nk" % (nodename,findVersion(dir_nv))))
-    else:
-        nuke.message('Gotta select a node')
+        k_name = nuke.Text_Knob('tx_nodeName', "Node: ", "<b>%s" % node.name())
+        k_curVer = nuke.Text_Knob('tx_curVer', "Current: ", "<b>v01")
+        k_div = nuke.Text_Knob('div', "", "")
 
-    # Load Node Version
-    if node:
-        all_ver = [os.path.splitext(v)[0].split('_nv')[1] for v in os.listdir(dir_nv)]
+    def removeKnob():
 
-        p = nuke.Panel('Load Node Version')
-        p.addEnumerationPulldown('%s_v' % nodename, ' '.join(all_ver))
+        n = nuke.thisNode()
+        nv_ver = int(nuke.thisKnob().name().split('_v')[1])
+        n.removeKnob('nv_rm_v%s' % nv_ver)
+        n.removeKnob('nv_load_v%s' % nv_ver)
+        n.removeKnob('nv_tip_v%s' % nv_ver)
 
-        if p.show():
-            sel_ver = p.value('%s_v' % nodename)
-            sel_filename = "%s_nv%s.nk" % (nodename, sel_ver)
 
-            nuke.nodePaste(os.path.join(dir_nv, sel_filename))
 
-    else:
-        nuke.message('Gotta select a node')
+    # Main Function
+    for n in nodes:
+
+        node_class = n.Class()
+        node_name = n.name()
+        nv_ver = findNV(n)
+
+        preset_name = "%s.%s.%s" % (node_class, node_name, nv_ver['new'])
+
+        # Back End - save preset
+        nuke.saveUserPreset(n, preset_name)
+
+        # Front End - Add knobs
+        cmd_add = ""
+        cmd_remove = "%s.removeKnob()" % __file__
+        cmd_load = "nuke.applyUserPreset(%s,%s)" % 
+
+        k_add = nuke.PyScript_Knob('bt_add', "<b>+", cmd_add)
+        k_add_descr = nuke.Text_Knob('tx_add', " Add to List", " ")
+
+        k_rm = nuke.PyScript_Knob('nv_rm_v1', "<b>&minus;", cmd_remove)
+        k_load = nuke.PyScript_Knob('nv_load_v1', "<b>&minus;", cmd_remove)
