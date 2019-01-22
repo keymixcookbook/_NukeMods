@@ -40,10 +40,14 @@ def ColorCode():
                 }
 
     # Main Function
-    sel_class = list(set([c.Class() for c in nuke.selectedNodes() if 'Dot' is not c.Class()]))
+    sel_class = []
+    exclude_class = ['Dot', 'Merge2']
+    for c in nuke.selectedNodes():
+        if c.Class() not in exclude_class:
+            sel_class.append(c.Class())
 
     try:
-        most_class = max(set(sel_class), key=a.count)
+        most_class = max(set(sel_class), key=sel_class.count)
     except:
         most_class = 'NewBackdrop'
 
