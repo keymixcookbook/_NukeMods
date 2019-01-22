@@ -16,6 +16,8 @@ uistate.ini
 FileChooser_Favorites.pref
 nukePyDummy.py
 
+*.ai
+
 
 ### OSX ###
 # General
