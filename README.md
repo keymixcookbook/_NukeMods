@@ -23,7 +23,7 @@ A General scripting format and structure guide
 ### Version Control
   - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
   - **New Versions** of exsisting modules:
-    - Raise an **Issue** - title with: `VerUpdate - mod_ThisMod - ver #.#`
+    - Raise an **Issue** - title with: `VerUpdate - mod_ThisMod - v#.#`
     - goes to `update_mod_name_v#.#` branch
     - must indicate version number, and what's new
     - Once finished, merge to `master` branch, and close Issue
