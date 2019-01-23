@@ -30,7 +30,56 @@
     - NV/nv: NodeVersion
 '''
 
+
+
 import nuke,nukescripts,os
+
+
+
+
+########## Supporting Function ##########
+
+
+
+
+def nv_addBasicKnobs(node):
+
+	# Create Knobs
+	k_tab = nuke.Tab_Knob('NodeVersion')
+
+	k_name = nuke.Text_Knob('tx_nodeName', "Node: ", "<b>%s" % node.name())
+	k_curVer = nuke.Text_Knob('tx_curVer', "Current: ", "<b>v01")
+	k_div = nuke.Text_Knob('div', "", "")
+	
+	# Add Knobs
+	nuke.addKnob(k_tab)
+	nuke.addKnob(k_name)
+	nuke.addKnob(k_curVer)
+	nuke.addKnob(k_div)
+	
+	
+
+def nv_addKnob(node):
+
+		
+	
+
+	
+	
+def nv_removeKnob():
+
+	n = nuke.thisNode()
+	nv_ver = int(nuke.thisKnob().name().split('_v')[1])
+	n.removeKnob('nv_rm_v%s' % nv_ver)
+	n.removeKnob('nv_load_v%s' % nv_ver)
+	n.removeKnob('nv_tip_v%s' % nv_ver)
+
+
+
+
+########## Main Function ##########
+
+
 
 
 def NodeVersion():
@@ -57,23 +106,6 @@ def NodeVersion():
         new_ver = cur_ver+1
 
         return {'cur': cur_ver, 'new': new_ver}
-
-
-    def addBasicKnobs(node):
-
-        k_tab = nuke.Tab_Knob('NodeVersion')
-
-        k_name = nuke.Text_Knob('tx_nodeName', "Node: ", "<b>%s" % node.name())
-        k_curVer = nuke.Text_Knob('tx_curVer', "Current: ", "<b>v01")
-        k_div = nuke.Text_Knob('div', "", "")
-
-    def removeKnob():
-
-        n = nuke.thisNode()
-        nv_ver = int(nuke.thisKnob().name().split('_v')[1])
-        n.removeKnob('nv_rm_v%s' % nv_ver)
-        n.removeKnob('nv_load_v%s' % nv_ver)
-        n.removeKnob('nv_tip_v%s' % nv_ver)
 
 
 
