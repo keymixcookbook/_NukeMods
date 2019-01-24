@@ -1,7 +1,8 @@
-- for scripts in progress
+- for scripts work in progress, not finished
 - once finished, move to `./_pkg_KuFunc` or `./_pkg_KuStudio`
 - all scripts must have to same name as finished scripts
 - all scripts must prefixed with `dft_`
+- Project Managing Board: [Trello](https://trello.com/b/4FR8ZOcZ)
 
 
 ###### Todo List

@@ -14,6 +14,15 @@ import nuke, nukescripts
 
 def ColorCode():
 
+    '''
+
+    version 1.1
+    - Fixing error when cancel nuke panel
+    - Fixing Default value of backdrop label
+    - Output -> Transform
+
+    '''
+
 
     # Symbols and Color
     blk = '&#9608;'
@@ -24,7 +33,7 @@ def ColorCode():
                 'Precomp': ['CAC0CC', '55375C', '775f7d'],
                 'EndComp': ['CCCCCC', '5C5C5C', '7D7D7D'],
                 'LensFX': ['C2C0CC', '3E375C', '655f7d'],
-                'Output': ['CCC7C0', '5C4625', '7D6B51'],
+                'Transform': ['CCC7C0', '5C4625', '7D6B51'],
                 'Despill': ['C0CCC5', '2E5C40', '587d66'],
                 'Grade': ['C0CCCC', '2E5C5C', '587d7d'],
                 'Elem2D': ['CACCC0', '535C2E', '757d58'],
@@ -32,86 +41,20 @@ def ColorCode():
                 }
 
     # Main Function
+    sel_class = []
+    exclude_class = ['Dot', 'Merge2']
+    for c in nuke.selectedNodes():
+        if c.Class() not in exclude_class:
+            sel_class.append(c.Class())
 
-    sel_class = list(set([c.Class() for c in nuke.selectedNodes() if 'Dot' is not c.Class()]))
     try:
-        most_class = max(sel_class)
+        most_class = max(set(sel_class), key=sel_class.count)
     except:
         most_class = 'NewBackdrop'
 
     bd = ku_autoBackdrop()
 
     if bd:
-
-        # bd_label = nuke.getInput('label', most_class)
-
-        ## Inherit from:
-        ## (https://github.com/mb0rt/Nuke-NodeHelpers/blob/master/mbort/backdrop_palette/backdrop.py)
-
-        # Create Knobs
-
-        # Tab
-        tab = nuke.Tab_Knob( 'Backdrop+ColorCode' )
-
-        # Label
-        label_link = nuke.Link_Knob( 'label_link', 'label' )
-        label_link.makeLink( bd.name(), 'label' )
-
-        # Font
-        font_link = nuke.Link_Knob( 'note_font_link', 'font' )
-        font_link.makeLink( bd.name(), 'note_font' )
-
-        # Font Size
-        font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
-        font_size_link.makeLink( bd.name(), 'note_font_size' )
-        font_size_link.clearFlag( nuke.STARTLINE )
-
-        # font Color
-        font_color_link = nuke.Link_Knob( 'note_font_color_link', 'font color' )
-        font_color_link.makeLink( bd.name(), 'note_font_color' )
-        font_color_link.clearFlag( nuke.STARTLINE )
-
-        # Divider
-        k_div = nuke.Text_Knob('')
-
-        # add Tab
-        bd.addKnob( tab )
-
-        # Color Code
-        counter = 0
-
-        for t in sorted(hex_group.keys()):
-
-            name = "bt_%s" % (t)
-            label = "<font color='#%s'>%s</font> <b>%s" % (hex_group[t][2], blk, t)
-            cmd = "n=nuke.thisNode();\
-                    n['tile_color'].setValue(int('%sFF',16));\
-                    n['note_font_color'].setValue(int('%sFF', 16));\
-                    n['note_font'].setValue('bold')" % (hex_group[t][1], hex_group[t][0])
-
-
-            cc_knob = nuke.PyScript_Knob(name,label,cmd)
-            cc_knob.setTooltip(t)
-
-            # If First Item
-            if counter == 5 or counter == 0:
-                cc_knob.setFlag(nuke.STARTLINE)
-            else:
-                cc_knob.clearFlag(nuke.STARTLINE)
-
-            bd.addKnob(cc_knob)
-
-            counter += 1
-
-
-        # Add Knobs
-        bd.addKnob( k_div )
-        bd.addKnob( label_link )
-        bd.addKnob( font_link )
-        bd.addKnob( font_size_link )
-        bd.addKnob( font_color_link )
-
-        # Set Default type
 
         p = nuke.Panel('ColorCode It')
 
@@ -122,11 +65,81 @@ def ColorCode():
             bd_type = p.value('Type: ')
             bd_label = p.value('Label: ')
 
-        # Execute a button on default
-        bd.knob('bt_%s' % bd_type).execute()
-        bd.knob('label').setValue(bd_label)
 
-        nuke.show(bd)
+            ## Inherit from:
+            ## (https://github.com/mb0rt/Nuke-NodeHelpers/blob/master/mbort/backdrop_palette/backdrop.py)
+
+            # Create Knobs
+
+            # Tab
+            tab = nuke.Tab_Knob( 'Backdrop+ColorCode' )
+
+            # Label
+            label_link = nuke.Link_Knob( 'label_link', 'label' )
+            label_link.makeLink( bd.name(), 'label' )
+
+            # Font
+            font_link = nuke.Link_Knob( 'note_font_link', 'font' )
+            font_link.makeLink( bd.name(), 'note_font' )
+
+            # Font Size
+            font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
+            font_size_link.makeLink( bd.name(), 'note_font_size' )
+            font_size_link.clearFlag( nuke.STARTLINE )
+
+            # font Color
+            font_color_link = nuke.Link_Knob( 'note_font_color_link', 'font color' )
+            font_color_link.makeLink( bd.name(), 'note_font_color' )
+            font_color_link.clearFlag( nuke.STARTLINE )
+
+            # Divider
+            k_div = nuke.Text_Knob('')
+
+            # add Tab
+            bd.addKnob( tab )
+
+            # Color Code
+            counter = 0
+
+            for t in sorted(hex_group.keys()):
+
+                name = "bt_%s" % (t)
+                label = "<font color='#%s'>%s</font> <b>%s" % (hex_group[t][2], blk, t)
+                cmd = "n=nuke.thisNode();\
+                        n['tile_color'].setValue(int('%sFF',16));\
+                        n['note_font_color'].setValue(int('%sFF', 16));\
+                        n['note_font'].setValue('bold')" % (hex_group[t][1], hex_group[t][0])
+
+
+                cc_knob = nuke.PyScript_Knob(name,label,cmd)
+                cc_knob.setTooltip(t)
+
+                # If First Item
+                if counter == 0 or counter == 5:
+                    cc_knob.setFlag(nuke.STARTLINE)
+                else:
+                    cc_knob.clearFlag(nuke.STARTLINE)
+
+                bd.addKnob(cc_knob)
+
+                counter += 1
+
+
+            # Add Knobs
+            bd.addKnob( k_div )
+            bd.addKnob( label_link )
+            bd.addKnob( font_link )
+            bd.addKnob( font_size_link )
+            bd.addKnob( font_color_link )
+
+            # Execute a button on default
+            bd.knob('bt_%s' % bd_type).execute()
+            bd.knob('label').setValue(bd_label)
+            nuke.show(bd)
+
+        else:
+            nuke.delete(bd)
+            print "Operation Cancelled"
 
 
 
