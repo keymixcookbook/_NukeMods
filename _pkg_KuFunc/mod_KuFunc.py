@@ -316,34 +316,12 @@ def mergeOp():
 			op_sel = p.value('operation')
 			for n in nuke.selectedNodes('Merge2'):
 				ku_knobCh(n,'operation',op_sel)
+			if op_sel == "Plus":
+				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue -rgba.alpha")
+			else:
+				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue rgba.alpha")
 	else:
 		nuke.message("Please select a Merge node")
 
 
-def kuDrop():
 
-	if nuke.selectedNodes():
-
-		sel = nuke.selectedNodes()
-
-		#Get Inputs
-		p = nuke.getInput('Label Backdrop')
-
-		ls_xpos = [n['xpos'].value() for n in sel]
-		ls_ypos = [n['ypos'].value() for n in sel]
-
-		dim_w = [min(ls_xpos), max(ls_xpos)]
-		dim_h = [min(ls_ypos), max(ls_ypos)]
-
-		margin_x = 80*1.5
-		margin_y = 84*2
-
-		bd = nuke.nodes.BackdropNode(note_font_size=96, note_font='bold', label=p, tile_color=1870626559)
-
-		ku_knobCh(bd, 'xpos', dim_w[0] - margin_x / 2)
-		ku_knobCh(bd, 'ypos', dim_h[0] - margin_y - 40)
-		ku_knobCh(bd, 'bdwidth', dim_w[1] - dim_w[0] + margin_x + 80)
-		ku_knobCh(bd, 'bdheight', max(dim_h[1] - dim_h[0]+84, 84) + margin_y)
-
-	else:
-		nuke.message("Plese selecte Nodes")
