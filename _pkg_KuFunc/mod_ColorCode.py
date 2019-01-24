@@ -19,6 +19,7 @@ def ColorCode():
     version 1.1
     - Fixing error when cancel nuke panel
     - Fixing Default value of backdrop label
+    - Output -> Transform
 
     '''
 
@@ -32,7 +33,7 @@ def ColorCode():
                 'Precomp': ['CAC0CC', '55375C', '775f7d'],
                 'EndComp': ['CCCCCC', '5C5C5C', '7D7D7D'],
                 'LensFX': ['C2C0CC', '3E375C', '655f7d'],
-                'Output': ['CCC7C0', '5C4625', '7D6B51'],
+                'Transform': ['CCC7C0', '5C4625', '7D6B51'],
                 'Despill': ['C0CCC5', '2E5C40', '587d66'],
                 'Grade': ['C0CCCC', '2E5C5C', '587d7d'],
                 'Elem2D': ['CACCC0', '535C2E', '757d58'],
@@ -137,6 +138,7 @@ def ColorCode():
             nuke.show(bd)
 
         else:
+            nuke.delete(bd)
             print "Operation Cancelled"
 
 
