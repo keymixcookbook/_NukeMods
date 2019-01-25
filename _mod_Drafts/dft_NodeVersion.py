@@ -42,6 +42,25 @@ import nuke,nukescripts,os
 
 
 
+def findNV(node):
+
+	'''
+	Find NV version
+	return Highest Current Version as Int
+	'''
+
+	nv_knobs = [k for k in node.knobs() if k.startswith("nv_load")]
+	nv_vers = [int(v.split('_v')[1]) for v in nv_knobs]
+	try:
+	    cur_ver = max(nv_ver)
+	except:
+	    cur_ver = 0 # No Version
+	new_ver = cur_ver+1
+
+	return {'cur': cur_ver, 'new': new_ver}
+
+
+
 def nv_addBasicKnobs(node):
 
 	# Create Knobs
@@ -59,20 +78,50 @@ def nv_addBasicKnobs(node):
 	
 	
 
-def nv_addKnob(node):
+# Button Commands
 
-		
+
+
+def nv_cmd_add():
+	
+	'''
+	command to call when Add button is pressed
+	
+	1. find new version
+	2. ask for descrition
+	3. create NodeVersion knobs
+	'''
+	
+	node = nuke.thisNode()
+	
+	new_ver = findNV(node)['']
+	
+	tip = nuke.ask('Give a Short Version Description', 'add new version, v%s' % new_ver)
+	
+	# Knobs
+	k_rm = nuke.PyScript_Knob'nv_rm_v%s' % new_ver, '<b>&minus;', "import nuke; import %s as NodeVersion; NodeVersion.nv_cmd_remove()" % __file__)
+	k_load = nuke.PyScript_Knob('nv_rm_v%s' % new_ver, 'load v%s' % new_ver, "import nuke; import %s as NodeVersion; NodeVersion.nv_load()" % __file__)
+	k_tip = nuke.Text_knob('nv_tip_v%s' % nv_ver, ': %s' % tip)
+
 	
 
 	
 	
-def nv_removeKnob():
+def nv_cmd_remove():
+	
+	'''
+	command to call when Remove button is pressed
+	'''
 
 	n = nuke.thisNode()
-	nv_ver = int(nuke.thisKnob().name().split('_v')[1])
-	n.removeKnob('nv_rm_v%s' % nv_ver)
-	n.removeKnob('nv_load_v%s' % nv_ver)
-	n.removeKnob('nv_tip_v%s' % nv_ver)
+	this_ver = int(nuke.thisKnob().name().split('_v')[1])
+	n.removeKnob('nv_rm_v%s' % this_ver)
+	n.removeKnob('nv_load_v%s' % this_ver)
+	n.removeKnob('nv_tip_v%s' % this_ver)
+	
+	
+	
+
 
 
 
@@ -88,24 +137,6 @@ def NodeVersion():
     nv = 1
     node_name = ''
     nodes = nuke.selectedNodes()
-
-    # Predefine Functions
-    def findNV(node):
-
-        '''
-        Find NV version
-        return Highest Current Version as Int
-        '''
-
-        nv_knobs = [k for k in node.knobs() if k.startswith("nv_load")]
-        nv_vers = [int(v.split('_v')[1]) for v in nv_knobs]
-        try:
-            cur_ver = max(nv_ver)
-        except:
-            cur_ver = 0 # No Version
-        new_ver = cur_ver+1
-
-        return {'cur': cur_ver, 'new': new_ver}
 
 
 
@@ -125,7 +156,8 @@ def NodeVersion():
         cmd_add = ""
         cmd_remove = "%s.removeKnob()" % __file__
         cmd_load = "nuke.applyUserPreset(%s,%s)" % 
-
+	
+	# Knobs
         k_add = nuke.PyScript_Knob('bt_add', "<b>+", cmd_add)
         k_add_descr = nuke.Text_Knob('tx_add', " Add to List", " ")
 
