@@ -4,6 +4,14 @@
 - Adding Color Scheme selection buttons for groups:
 - Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp
 
+version 1.1
+- Fixing error when cancel nuke panel
+- Fixing Default value of backdrop label
+- Output -> Transform
+
+version 2.0
+- Convert regular backdrop to ColorCode backdrop
+
 '''
 
 
@@ -13,16 +21,6 @@ import nuke, nukescripts
 
 
 def ColorCode():
-
-    '''
-
-    version 1.1
-    - Fixing error when cancel nuke panel
-    - Fixing Default value of backdrop label
-    - Output -> Transform
-
-    '''
-
 
     # Symbols and Color
     blk = '&#9608;'
