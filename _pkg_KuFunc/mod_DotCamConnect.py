@@ -100,12 +100,3 @@ def DotCamConnect():
 				node_create_dot = nuke.createNode('Dot', inpanel=False)
 
 				setDotNode(node_create_dot, node_sel_cam)
-
-
-
-
-def showProperty():
-
-	n =
-
-	n.
