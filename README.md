@@ -24,8 +24,8 @@ A General scripting format and structure guide
   - **Update Board** linked with [Trello](https://trello.com/b/4FR8ZOcZ)
   - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
   - **New Versions** of exsisting modules:
-    - Create a **Branch**: `VerUpdate.mod_ThisMod.v#.#`
-    - Create a **Trello Card**: `VerUpdate.mod_ThisMod.v#.#`
+    - Create a **Branch**: `Upd.mod_ThisMod.v#.#`
+    - Create a **Trello Card**: `Upd.mod_ThisMod.v#.#`
     - must indicate version number, and what's new
     - Once finished, merge to `master` branch, and close Issue
 
