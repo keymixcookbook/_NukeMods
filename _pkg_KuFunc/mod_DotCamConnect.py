@@ -87,7 +87,7 @@ def DotCamConnect():
 
 		if p.show():
 
-			node_sel_cam = p.value('Node to Connect')
+			node_sel_cam = p.value('Cam to Connect')
 
 			# Detect if it's a selection or just create a Dot
 			if len(nuke.selectedNodes('Dot'))>0:
