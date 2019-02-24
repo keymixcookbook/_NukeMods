@@ -2,7 +2,7 @@
 
 * Inspired by bi_nodePresets v1.0
 
-- PresetName : <node_class>.<node_name>.v#
+- preset_name : <node_class>.<node_name>.v#
 
 - Version Name
     <this_ver>      This Version
@@ -15,10 +15,11 @@
     <nv_tip_v#>     ": ", "Short Description"
 
 - Used Functions
-    - saveUserPreset(node, PresetName)
-    - getUserPresetKnobValues (NodeClass, PresetName)
-    - deleteUserPreset(NodeClass, PresetName)
+    - saveUserPreset(node, preset_name)
+    - getUserPresetKnobValues (NodeClass, preset_name)
+    - deleteUserPreset(NodeClass, preset_name)
     - node.removeKnob(KnobName)
+    - applyUserPreset(nodeName, preset_name)
 
 - Abbrations
     - NV/nv: NodeVersion
@@ -27,7 +28,7 @@
 
 
 
-import nuke,nukescripts,os
+import nuke,nukescripts
 
 
 
@@ -56,20 +57,21 @@ def findNV(node):
 
 
 
-def nv_BasicKnobs(node):
+def BasicKnobs(n):
 
-	# Create Knobs
-	k_tab = nuke.Tab_Knob('NodeVersion')
+    # Create Knobs
+    k_tab = nuke.Tab_Knob('NodeVersion')
 
-	k_name = nuke.Text_Knob('tx_nodeName', "Node: ", "<b>%s" % node.name())
-	k_curVer = nuke.Text_Knob('tx_curVer', "Current: ", "<b>v01")
-	k_div = nuke.Text_Knob('div', "", "")
+    # k_name = nuke.Text_Knob('tx_nodeName', "Node: <b>%s" % node.name(), " ")
+    # k_curVer = nuke.Text_Knob('tx_curVer', "Current: <b>v01", " ")
 
-	# Add Knobs
-	nuke.addKnob(k_tab)
-	nuke.addKnob(k_name)
-	nuke.addKnob(k_curVer)
-	nuke.addKnob(k_div)
+    k_preset = nuke.Text_Knob('tx_preset', "Version: ", "<b>%s.v%s" % (n.name(), '01'))
+    k_div = nuke.Text_Knob('div', " ", "")
+
+    # Add Knobs
+    n.addKnob(k_tab)
+    n.addKnob(k_preset)
+    n.addKnob(k_div)
 
 
 
@@ -77,45 +79,46 @@ def nv_BasicKnobs(node):
 
 
 
-def nv_cmd_add():
+def cmd_add(n):
 
-	'''
-	command to call when Add button is pressed
+    '''
+    command to call when Add button is pressed
 
-	1. find new version
+    1. find new version
     2. save nuke preset
-	2. ask for descrition
-	3. create NodeVersion knobs
+    2. ask for descrition
+    3. create NodeVersion knobs
     4. Change Cur Version knob
-	'''
+    '''
 
-	n = nuke.thisNode()
-	new_ver = findNV(n)['new']
+    # n = nuke.thisNode()
+    new_ver = findNV(n)['new']
 
     # Preseting
-    PresetName = "%s.%s.v%s" % (n.Class(), n.name(), new_ver)
-    nuke.saveUserPreset(n, PresetName)
+    preset_name = "%s.%s.v%s" % (n.Class(), n.name(), new_ver)
+    nuke.saveUserPreset(n, preset_name)
+    print preset_name
 
     # Short description
-	tip = nuke.ask('Give a Short Version Description', 'add new version, v%s' % new_ver)
+    tip = nuke.getInput('Give a Short Version Description', '%s' % preset_name)
 
-	# Knobs
-	k_rm = nuke.PyScript_Knob'nv_rm_v%s' % new_ver, '<b>&minus;', "import nuke; import %s as NodeVersion; NodeVersion.nv_cmd_remove()" % __file__)
-	k_load = nuke.PyScript_Knob('nv_rm_v%s' % new_ver, 'load v%s' % new_ver, "import nuke; import %s as NodeVersion; NodeVersion.nv_load()" % __file__)
-	k_tip = nuke.Text_knob('nv_tip_v%s' % nv_ver, ': %s' % tip)
+    # Knobs
+    k_rm = nuke.PyScript_Knob('nv_rm_v%s' % new_ver, '<b>&minus;', "import nuke;import dft_NodeVersion as nv;nv.cmd_remove(nuke.thisNode(), nuke.thisKnob())")
+    k_load = nuke.PyScript_Knob('nv_load_v%s' % new_ver, '<b>load v%s' % new_ver, "import nuke;import dft_NodeVersion as nv;nv.cmd_load(nuke.thisNode(), nuke.thisKnob())")
+    k_tip = nuke.Text_Knob('nv_tip_v%s' % new_ver, ': %s' % tip, "\s")
 
     #FLAG
-    k_load.clearFlag(Nuke.STARTLINE)
-    k_tip.clearFlag(Nuke.STARTLINE)
+    k_load.clearFlag(nuke.STARTLINE)
+    k_tip.clearFlag(nuke.STARTLINE)
 
     # Add knobs
-    nuke.addKnob(k_rm)
-    nuke.addKnob(k_load)
-    nuke.addKnob(k_tip)
+    n.addKnob(k_rm)
+    n.addKnob(k_load)
+    n.addKnob(k_tip)
 
     # Change current version
     try:
-        k_curVer.setValue('v%s' % new_ver)
+        n.knob('tx_preset').setValue('<b>%s.v%s' % (n.name(), new_ver.zfill(2)))
     except:
         pass
 
@@ -124,24 +127,25 @@ def nv_cmd_add():
 
 
 
-def nv_cmd_remove():
+def cmd_remove(n,k):
 
-	'''
-	Command to call when Remove button is pressed
+    '''
+    Command to call when Remove button is pressed
 
     1. find cur version
     2. remove user preset
     3. remove knobs
     *4. if cur version is removed, set cur version to None
-	'''
+    '''
 
-	n = nuke.thisNode()
-    k = nuke.thisKnob()
-	this_ver = int(k.name().split('_v')[1])
+    # n = nuke.thisNode()
+    # k = nuke.thisKnob()
+    this_ver = int(k.name().split('_v')[1])
 
     # Preset
-    this_PresetName = '%s.%s.v%s' % (n.Class(), n.name(), this_ver)
-    nuke.deleteUserPreset(n.Class(), this_PresetName)
+    this_preset_name = '%s.%s.v%s' % (n.Class(), n.name(), this_ver)
+    nuke.deleteUserPreset(n.Class(), this_preset_name)
+    print this_preset_name
 
     # Remove Knob
     try:
@@ -156,7 +160,8 @@ def nv_cmd_remove():
         print "No Such Knobs"
 
 
-def nv_cmd_load():
+
+def cmd_load(n,k):
 
     '''
     Command to call when Load button is pressed
@@ -166,7 +171,21 @@ def nv_cmd_load():
     3. update cur version knob
     '''
 
-    
+    # n = nuke.thisNode()
+    # k = nuke.thisKnob()
+    this_ver = int(k.name().split('_v')[1])
+    print this_ver
+
+    # Preset
+    this_preset_name = '%s.%s.v%s' % (n.Class(), n.name(), this_ver)
+    nuke.applyUserPreset(n.name(), this_preset_name)
+
+    # Update Current Version
+    try:
+        n.knob('tx_preset').setValue('<b>%s.v%s' % (n.name(), this_ver.zfill(2)))
+    except:
+        print "Fail to load preset: %s" % this_preset_name
+
 
 
 ########## Main Function ##########
@@ -176,33 +195,30 @@ def nv_cmd_load():
 
 def NodeVersion():
 
-    # Global Var
     nv = 1
     node_name = ''
     nodes = nuke.selectedNodes()
 
+    if len(nodes)<=0:
+        nuke.message("Please select a node")
+    else:
+        for n in nodes:
 
+            node_class = n.Class()
+            node_name = n.name()
+            nv_ver = findNV(n)
 
-    # Main Function
-    for n in nodes:
+            # Add Static Nodes
+            BasicKnobs(n)
 
-        node_class = n.Class()
-        node_name = n.name()
-        nv_ver = findNV(n)
+            # Add Add Button
+            k_add = nuke.PyScript_Knob('bt_add', "<b>+", "import nuke;import dft_NodeVersion as nv;nv.cmd_add(nuke.thisNode())")
+            k_add_tip = nuke.Text_Knob('tx_add', " Add to list", " ")
 
-        preset_name = "%s.%s.%s" % (node_class, node_name, nv_ver['new'])
+            k_add_tip.clearFlag(nuke.STARTLINE)
 
-        # Back End - save preset
-        nuke.saveUserPreset(n, preset_name)
+            n.addKnob(k_add)
+            n.addKnob(k_add_tip)
 
-        # Front End - Add knobs
-        cmd_add = ""
-        cmd_remove = "%s.removeKnob()" % __file__
-        cmd_load = "nuke.applyUserPreset(%s,%s)" %
-
-	# Knobs
-        k_add = nuke.PyScript_Knob('bt_add', "<b>+", cmd_add)
-        k_add_descr = nuke.Text_Knob('tx_add', " Add to List", " ")
-
-        k_rm = nuke.PyScript_Knob('nv_rm_v1', "<b>&minus;", cmd_remove)
-        k_load = nuke.PyScript_Knob('nv_load_v1', "<b>&minus;", cmd_remove)
+            # Excecute
+            cmd_add(n)
