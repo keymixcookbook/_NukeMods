@@ -1,16 +1,20 @@
-__all__=['dotCamConnect()']
-
-
-import nuke, nukescripts
-
 '''
 
+version 2.0
+- add button to open input node property panel
+
+version 1.0
 - Find A Camera nodes in nuke
 - List names of the ndoes in a menu
 - Select the node and Connect!
 - Hide the input, set the color to red and put the Camera Node name to Dot node's label
 
 '''
+
+
+
+
+import nuke, nukescripts
 
 
 
@@ -34,6 +38,28 @@ def DotCamConnect():
 		d['tile_color'].setValue(color_red)
 		d['hide_input'].setValue(True)
 		d.setInput(0, nuke.toNode(node_sel_cam))
+
+		# Add Show Panel Knob
+		cmd_ppanel = "n=nuke.thisNode()\ntry:\n\tn.input(0).showControlPanel(forceFloat=n.knob('isFloat').value())\nexcept:\n\tpass"
+		cmd_orig = "origNode = nuke.thisNode().input(0);\
+						origXpos = origNode.xpos();\
+						origYpos = origNode.ypos();\
+						nuke.zoom(2, [origXpos,origYpos]);\
+						nuke.thisNode()['selected'].setValue(False);\
+						origNode['selected'].setValue(True);\
+						nuke.show(origNode)"
+		t_tab = nuke.Tab_Knob('t_user', "DotCamConnect")
+		k_showPanel = nuke.PyScript_Knob('ppanel', "Show Input Property Panel", cmd_ppanel)
+		k_float = nuke.Boolean_Knob('isFloat', "Floating Panel", True)
+		k_showCam = nuke.PyScript_Knob('orig', "Show Camera Node", cmd_orig)
+
+		k_float.clearFlag(nuke.STARTLINE)
+		k_float.setFlag(nuke.STARTLINE)
+
+		d.addKnob(t_tab)
+		d.addKnob(k_showPanel)
+		d.addKnob(k_float)
+		d.addKnob(k_showCam)
 
 		print "%s -> %s" % (d.name(), node_sel_cam)
 
@@ -61,7 +87,7 @@ def DotCamConnect():
 
 		if p.show():
 
-			node_sel_cam = p.value('Node to Connect')
+			node_sel_cam = p.value('Cam to Connect')
 
 			# Detect if it's a selection or just create a Dot
 			if len(nuke.selectedNodes('Dot'))>0:
@@ -74,5 +100,3 @@ def DotCamConnect():
 				node_create_dot = nuke.createNode('Dot', inpanel=False)
 
 				setDotNode(node_create_dot, node_sel_cam)
-
-dir()
