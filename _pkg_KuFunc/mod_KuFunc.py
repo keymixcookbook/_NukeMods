@@ -305,7 +305,7 @@ def holdAtFrame():
 
 def mergeOp():
 
-	op = ['over', 'under', 'multiply', 'divide', 'plus', 'minus', 'from', 'stencil', 'mask']
+	op = ['over', 'under', 'multiply', 'divide', 'plus', 'minus', 'from', 'stencil', 'mask', 'screen']
 
 	if nuke.selectedNodes('Merge2'):
 
@@ -322,6 +322,3 @@ def mergeOp():
 				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue rgba.alpha")
 	else:
 		nuke.message("Please select a Merge node")
-
-
-
