@@ -15,6 +15,7 @@ to used in a VFX Studio enviroment
 
 from _pkg_KuFunc import *
 from _pkg_KuStudio import *
+from _mod_Download import *
 
 from _pkg_KuFunc.mod_KuFunc import *
 from _pkg_KuStudio.mod_KuStudio import *
@@ -56,8 +57,8 @@ addMenuItem('m', kuMu, 'Linked Postage Stamp', "LinkedStamp()", hotkey="f4")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
 kuMu.addSeparator()
-addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='switch')", hotkey="shift+D")
-addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
+addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey="shift+D")
+addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 
 
 
@@ -75,7 +76,7 @@ addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
 addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="LensDistort.png")
 addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
 addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
-addMenuItem('m', tBar, 'Set Expressions', "ExprPrompt()", icon="Expression.png")
+addMenuItem('m', tBar, 'Roto AutoLife', "autolife()", icon="Roto.png")
 
 
 
