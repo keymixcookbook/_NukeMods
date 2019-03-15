@@ -1,4 +1,4 @@
-# Naming Convension at different Studios
+# Naming Convension per Studio
 - [MPC](#MPC)
 
 ### MPC
