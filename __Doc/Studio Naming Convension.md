@@ -6,7 +6,7 @@ ENV Variables
 
 - `JOB`= show code (pok)
 - `SCENE` = seq code (DIT)
-- `SHOT` = <seq>/<shotname> (DIT/099_DIT0287)
+- `SHOT` = seq/shotname (DIT/099_DIT0287)
 - `SHOTNAME` = shot name (099_DIT0287)
 
 
