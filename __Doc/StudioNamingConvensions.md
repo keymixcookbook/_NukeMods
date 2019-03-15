@@ -2,7 +2,7 @@
 
 ### MPC
 
-ENV Variables
+###### ENV Variables
 
 - `JOB`= show code (pok)
 - `SCENE` = seq code (DIT)
@@ -11,11 +11,11 @@ ENV Variables
 - `DEFAULT_DISCIPLINE` = department (compositing)
 
 
-Dir Structure
+###### Dir Structure
 
 - Root
   - `/jobs/<show>/<seq>/<shotname>`
-  - `/jobs/pok/HTR/087_HTR0293/`
+  - `/jobs/pok/HTR/087_HTR0293`
 
 - Element/Render Files (`~` as Root)
   - `~/<type>/<filter>_<shotname>_v#/<resolution>/<filter>_<shotname>_v#.%04d.exr`
@@ -24,7 +24,7 @@ Dir Structure
   - `~/nuke/comp/scene/<user>`
   - `~/nuke/comp/scene/tianlun-j`
 
-Elements
+###### Elements
 
 - Comp
   - `<filter>_<shotname>_<label>_v#`
@@ -38,3 +38,14 @@ Elements
 - Plate
   - `<shotname>_<type>_v##`
   - `087_HTR0293_MP01_v01`
+
+###### Appendix
+
+- AOVs (Renderman)
+  - **Shading:** diffCol, diffDir, diffInd, emission, subsurface, specDir, specInd, leftovers
+  - **MultiLights:** diffMulti[0-9], specMulti[0-9], emissiondiff, emissionspec
+  - **Data:** depth2, norm, position2, refPosition2, uv2, id[0-]
+- Types
+  - **LGT:** fx, char, prop...
+  - **Elements:** I, IDN, IC, IG, E, O, EMATTE...
+  - **Plate(I/O):** MP, CP, 
