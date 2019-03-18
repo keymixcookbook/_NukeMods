@@ -21,7 +21,7 @@ if node_sel:
 	
 	# Collecting Data
 	aovs_all = [l for l in nuke.layers(node_sel)]
-	mu_sel = ['multi', 'diffMulti', 'specMulti', 'Shading', 'spec', 'diff', 'Data', 'all']
+	mu_sel = ['multi', 'diffMulti', 'specMulti', 'Shading', 'spec', 'diff', 'Data', 'id', 'all']
 	
 	# Select AOVs
 	p = nuke.Panel('SelLayerContact')
@@ -37,9 +37,14 @@ if node_sel:
 	aovs_sel = []
 	
 	for l in aovs_all:
-		if aovs_group in l:
+		if aovs_group in l: # diff, spec, multiLights, id
 			aovs_sel.append(l)
-		elif aovs_group == 'Shading' and l in ['']
+		elif aovs_group == 'Shading' and l in ['diffDir', 'diffInd', 'specDir', 'specInd', 'emission', 'emission', 'subsurface']:
+			aovs_sel.append(l)
+		elif aovs_group == 'Data' and l in ['depth', 'norm', 'postion', 'refPosition', 'uv']:
+			aovs_sel.append(l)
+		elif aovs_group == 'all':
+			aovs_sel = aovs_all
 			
 			
 		
