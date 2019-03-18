@@ -11,3 +11,35 @@
 - Output with LayerContactSheet
 
 '''
+
+import nuke
+import collections
+
+node_sel = nuke.selectedNode()
+
+if node_sel:
+	
+	# Collecting Data
+	aovs_all = [l for l in nuke.layers(node_sel)]
+	mu_sel = ['multi', 'diffMulti', 'specMulti', 'Shading', 'spec', 'diff', 'Data', 'all']
+	
+	# Select AOVs
+	p = nuke.Panel('SelLayerContact')
+	p.addEnumerationPulldown('AOV Group', ' '.join(aovs_all))
+	
+	if p.show():
+		aovs_group = p.value('AOV Group')
+	else:
+		print "Operation Cancelled"
+		break
+	
+	# Find Matching AOVs
+	aovs_sel = []
+	
+	for l in aovs_all:
+		if aovs_group in l:
+			aovs_sel.append(l)
+		elif aovs_group == 'Shading' and l in ['']
+			
+			
+		
