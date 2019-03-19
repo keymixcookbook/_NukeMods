@@ -48,33 +48,43 @@ def removeLayers(node, num_remove, aovs_remove):
 		r = nuke.createNode('Remove')
 		if n == 0: # first node
 			r.setInput(0, node)
-		remove_nodes.append(r)
-	
-	# Create Crop and LayerContactSheet node
-	nuke.createNode('Crop')
-	nuke.createNode('LayerContactSheet')
+		node_remove.append(r)
 	
 	# Removing Channels
-	'''
-	# nodes -> channels -> aovs
-	for n in remove_nodes: # cycle Remove nodes
-		for k in range(4): # cycle knobs
-			# find cur knob
-			if k = 0:
-				cur_k = 'channels'
+	node_counter = 1
+	node_knob_counter = 0
+	
+	for nr in node_remove:
+		print nr.name()
+		
+		for k in range(4):
+			if len(aovs_remove)<=0:
+				break
 			else:
-				cur_k = 'channels%s' % k
-			
-			# Set channel and remove
-			n[k].setValue(aovs_remove[0])
-			del aovs_remove[0]
-	'''	
+				if node_knob_counter == 0:
+					cur_k = 'channels'
+				else:
+					cur_k = 'channels%s' % node_knob_counter
+
+				nr[cur_k].setValue(aovs_remove[0])
+				print "%s <- %s" % (cur_k, aovs_remove[0])
+				del aovs_remove[0]
+
+				node_knob_counter += 1
+
+	# Create Crop and LayerContactSheet node
+	node_crop = nuke.createNode('Crop')
+	nuke.createNode('LayerContactSheet')
 	
-	# aovs -> remove nodes -> channels
+	node_crop['box'].setExpression('input.bbox.x', 0)
+	node_crop['box'].setExpression('input.bbox.y', 1)
+	node_crop['box'].setExpression('input.bbox.r', 2)
+	node_crop['box'].setExpression('input.bbox.t', 3)
+
+
 	
-
-
-
+	
+	
 ########## Main Function ###########
 
 
