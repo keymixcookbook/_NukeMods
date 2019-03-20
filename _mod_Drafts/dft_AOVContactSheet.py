@@ -35,7 +35,7 @@ def listRemove(ls_main, ls_remove):
 
 
 
-def removeLayers(node, num_remove, aovs_remove):
+def createNodes(node, num_remove, aovs_remove):
 	
 	'''
 	built for works in a group
@@ -46,18 +46,19 @@ def removeLayers(node, num_remove, aovs_remove):
 	# Create Remove node in a chain
 	for n in range(num_remove):
 		r = nuke.createNode('Remove')
+		r['operation'].setValue('remove')
 		if n == 0: # first node
 			r.setInput(0, node)
 		node_remove.append(r)
 	
-	# Removing Channels
+	# Set Remove node channels
 	node_counter = 1
 	node_knob_counter = 0
 	
-	for nr in node_remove:
+	for nr in node_remove: # cycle Remove nodes
 		print nr.name()
 		
-		for k in range(4):
+		for k in range(4): # cycle Knobs
 			if len(aovs_remove)<=0:
 				break
 			else:
