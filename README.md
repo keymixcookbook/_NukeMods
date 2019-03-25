@@ -56,12 +56,12 @@ Following briefly with Python PEP 8 guidlines, except:
 > Methods with in a Class is still the same: `ThisClass.itsMethod()`
 
 also includes:
-- `$` for variable in comments, ALL_CAP:
-  - `$VAR`
+- `<>` for variable in comments:
+  - `<var>`
 - `_` for space in **filenames** and **variables**, or **Folders** (if as prefix):
   - `this_file.ext`, `this_var`, `./this_folder`
 - `__` for **other Folders** that is not part of the package:
-  - `./-misc`
+  - `./__misc`
 - `""` for strings, `''` for keywords or attributes:
   - `string = "Text"`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
 
@@ -75,8 +75,8 @@ also includes:
 - 1 space up & down
 
 # With 1 Space In-between
-- $VARIABLES, $USED_IN, $COMMENTS
-- Temp Directory: /$TEMP/directory/_in_comments
+- <variable>, <used_in>, <comments>
+- Temp Directory: /<temp>/directory/_in_comments
 
 '''
 
