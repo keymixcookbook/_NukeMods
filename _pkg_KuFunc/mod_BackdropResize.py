@@ -1,12 +1,16 @@
 '''
 
+version 3.0
+- Fit to selection
+- Select which `Backdrop` node to resize
+
+version 2.0 (with mod_ColorCode)
+- add color palatte, with html special characters and pyScript buttom
+
 version 1.0
 - Select Backdrop
 - Enter Width and Height
 - Select if From center or Side
-
-version 2.0 (WIP)
-- add color palatte, with html special characters and pyScript buttom
 
 '''
 
@@ -14,6 +18,97 @@ version 2.0 (WIP)
 import nuke, nukescripts
 
 
+
+
+########## Supporting Functions ##########
+
+
+
+
+def bdFind(nodes):
+	'''
+	Finds the largest Backdrop node
+	'''
+	all_bd = nuke.selectedNodes('BackdropNode')
+	nodes_class = [c.Class() for c in nodes]
+
+	if len(all_bd)<=0:
+		nuke.message("Please include a Backdrop Node")
+	else:
+
+		all_bdSize = {}
+		for b in all_bd:
+			name = b.name()
+			area = b['bdwidth'].value()*b['bdheight'].value()
+		all_bdSize[area] = name
+
+		node_bd = nuke.toNode(all_bdSize[max(all_bdSize.keys())])
+
+		return node_bd
+
+
+
+def bdSize(nodes):
+	'''
+	Filter out Backdrop node and calculate new size
+	'''
+
+	new_x = min([n.xpos() for n in nodes])
+	new_y = min([n.ypos() for n in nodes])
+	new_w = max([n.xpos() + n.screenWidth() for n in nodes]) - new_x
+	new_h = max([n.ypos() + n.screenHeight() for n in nodes]) - new_y
+
+	# Margin
+	left, top, right, bottom = (-80, -148, 80, 74)
+	new_x += left
+	new_y += top
+	new_w += (right - left)
+	new_h += (bottom - top)
+
+	return [new_x, new_y, new_w, new_h]
+
+
+
+def resize(node, new_size):
+	'''
+	Resize the Backdropnode
+	'''
+	knobs = ['xpos', 'ypos', 'bdwidth', 'bdheight']
+	for k in knobs:
+		node[k].setValue(new_size[knobs.index(k)])
+
+
+
+
+########## Main Function ##########
+
+
+
+
+def BackdropResize():
+
+	nodes = nuke.selectedNodes()
+
+	if len(nodes)<=0:
+		nuke.message("Select some nodes goddamnit")
+		print "Operation Cancelled"
+	else:
+
+		node_bd = bdFind(nodes)
+		new_size = bdSize(nodes)
+
+		resize(node_bg, new_size)
+		print "%s Resized" % node_bd.name()
+
+
+
+
+########## Old Function ###########
+
+
+
+
+'''
 def BackdropResize():
 
 	node_backdrop = nuke.selectedNodes('BackdropNode')
@@ -65,3 +160,4 @@ def BackdropResize():
 					n['ypos'].setValue(new_c_y)
 	else:
 		nuke.message("Please Select a Backdrop Node")
+'''
