@@ -52,14 +52,13 @@ def bdSizeFit(nodes, node_bd):
 	Filter out Backdrop node and calculate new size
 	'''
 
-	filter_bd.remove(node_bd)
+	nodes.remove(node_bd)
 
-	new_x = min([n.xpos() for n in filter_bd])
-	new_y = min([n.ypos() for n in filter_bd])
-	new_w = max([n.xpos() + n.screenWidth() for n in filter_bd]) - new_x
-	new_h = max([n.ypos() + n.screenHeight() for n in filter_bd]) - new_y
+	new_x = min([n.xpos() for n in nodes])
+	new_y = min([n.ypos() for n in nodes])
+	new_w = max([n.xpos() + n.screenWidth() for n in nodes]) - new_x
+	new_h = max([n.ypos() + n.screenHeight() for n in nodes]) - new_y
 
-	print new_x, new_y, new_w, new_h
 
 	# Margin
 	left, top, right, bottom = (-80, -148, 80, 74)
@@ -69,7 +68,6 @@ def bdSizeFit(nodes, node_bd):
 	new_h += (bottom - top)
 
 	print "Fit"
-	print new_x, new_y, new_w, new_h
 	return [new_x, new_y, new_w, new_h]
 
 
@@ -78,22 +76,25 @@ def bdSizeScale(node_bd, input_w, input_h, center):
 	'''
 	Resize with manual input values
 	'''
+	cur_x = node_bd.xpos()
+	cur_y = node_bd.ypos()
+	cur_w = node_bd['bdwidth'].value()
+	cur_h = node_bd['bdheight'].value()
 
 	if center == False:
-		cur_w = node_bd['bdwidth'].value()
-		cur_h = node_bd['bdheight'].value()
 
-		new_x = node_bd.xpos()
-		new_y = node_bd.ypos()
+		new_x = cur_x
+		new_y = cur_y
 		new_w = cur_w + float(input_w)*80
 		new_h = cur_h + float(input_h)*74
 
 	elif center == True:
 
-		cur_x = node_bd.xpos()
-		cur_y = node_bd.ypos()
 		new_x = cur_x - float(input_w)*80/2
 		new_y = cur_y - float(input_h)*74/2
+		new_w = cur_w + float(input_w)*80
+		new_h = cur_h + float(input_h)*74
+
 
 	print "Scale"
 	return [new_x, new_y, new_w, new_h]
@@ -120,41 +121,60 @@ def BackdropResize():
 
 	nodes = nuke.selectedNodes()
 
-	if len(nodes)<=0:
+	if len(nodes) <= 0:
 		nuke.message("Select some nodes goddamnit")
+		print "Abort"
+	elif len([b for b in nodes if b.Class() == 'BackdropNode']) <= 0:
+		nuke.message("Gotta include a Backdrop Node, man")
 		print "Abort"
 	else:
 
 		# Prompt
-		p=nuke.Panel("Resize Backdrop")
-		p.addBooleanCheckBox('Fit to Selection', True)
-		p.addExpressionInput('Width by Node',0) # average node width: 80
-		p.addExpressionInput('Height by Node',0) #average node height: 74
-		p.addBooleanCheckBox('From Center', False)
+		p=nuke.Panel("Resize %s" % bdFind(nodes).name())
+		p.addEnumerationPulldown('Mode', '"Fit to Selection" "Manual Scaling"')
+		# p.addBooleanCheckBox('Fit to Selection', True)
 		p.addButton('Cancel')
 		p.addButton('Resize!')
 
+		p.setWidth(len(p.title())*12)
+
 		if p.show():
 
-			input_w = p.value('Width')
-			input_h = p.value('Height')
-			input_c = p.value('From Center')
-			f = p.value('Fit to Selection')
+			mode_sel = p.value('Mode')
 
-		# Find Biggest Backdrop node to resize
-		node_bd = bdFind(nodes)
+			# Find Biggest Backdrop node to resize
+			node_bd = bdFind(nodes)
 
-		# Fit to Selection
-		if f == True:
+			# Fit to Selection
+			if mode_sel == "Fit to Selection":
 
-			new_size = bdSizeFit(nodes, node_bd)
+				new_size = bdSizeFit(nodes, node_bd)
 
-			resize(node_bd, new_size)
-			print "%s Resized to Fit Selection" % node_bd.name()
+				resize(node_bd, new_size)
+				print "%s Resized to Fit Selection" % node_bd.name()
 
-		# Manual Scaling
-		elif f == False:
-			new_size = bdSizeScale(node_bd, input_w, input_h, input_c)
+			# Manual Scaling
+			elif mode_sel == "Manual Scaling":
 
-			resize(node_bd, new_size)
-			print "%s Resized with input values" % node_bd.name()
+				# Second Prompt
+				psub = nuke.Panel("Resize %s" % bdFind(nodes).name())
+				psub.addExpressionInput('Width',1) # average node width: 80
+				psub.addExpressionInput('Height',1) #average node height: 74
+				psub.addBooleanCheckBox('From Center', True)
+				psub.addButton('Cancel')
+				psub.addButton('Resize!')
+
+				psub.setWidth(len(p.title())*12)
+
+				if psub.show():
+
+					input_w = psub.value('Width')
+					input_h = psub.value('Height')
+					input_c = psub.value('From Center')
+
+					new_size = bdSizeScale(node_bd, input_w, input_h, input_c)
+
+					resize(node_bd, new_size)
+					print "%s Resized with input values" % node_bd.name()
+		else:
+			print "Operation Cancelled"
