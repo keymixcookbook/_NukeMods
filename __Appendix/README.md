@@ -1,3 +1,5 @@
+[Nuke Icons](#Nuke-Icons) | [Classes](#Classes)
+
 # Nuke Icons
 
 | IMG | Filename |
@@ -289,3 +291,74 @@
 |![ZBlur](./_src/ZBlur.png)|ZBlur|
 |![ZMerge](./_src/ZMerge.png)|ZMerge|
 |![ZSlice](./_src/ZSlice.png)|ZSlice|
+
+
+# Classes
+
+Node name | Class name
+------ | ------
+**Axis** | Axis2
+**Backdrop** | BackdropNode
+**Blur** | Blur
+**Camera** | Camera2
+**Card** | Card2
+**ColorCorrect** | ColorCorrect
+**ColorLookup** | ColorLookup
+**Colorspace** | Colorspace
+**Constant** | Constant
+**Copy** | Copy
+**CornerPin2D** | CornerPin2D
+**Crop** | Crop
+**Cube** | Cube
+**DeepCrop** | DeepCrop
+**DeepExpression** | DeepExpression
+**DeepHoldout** | DeepHoldout2
+**DeepMerge** | DeepMerge
+**DeepRecolor** | DeepRecolor
+**DeepReformat** | DeepReformat
+**Dilate** | Dilate
+**Dissolve** | Dissolve
+**Exposure** | EXPTool
+**FrameHold** | FrameHold
+**FrameRange** | FrameRange
+**Grade** | Grade
+**Group** | Group
+**IBKColour** | IBKColourV3
+**IBKGizmo** | IBKGizmoV3
+**IDistort** | IDistort
+**Input** | Input
+**Invert** | Invert
+**Keyer** | Keyer
+**Keylight** | OFXuk.co.thefoundry.keylight.keylight_v201
+**Keymix** | Keymix
+**Log2Lin** | Log2Lin
+**Merge** | Merge2
+**Mirror** | Mirror2
+**Multiply** | Multiply
+**NoOp** | NoOp
+**Noise** | Noise
+**OCIOColorSpace** | OCIOColorSpace
+**Output** | Output
+**Primatte** | Primatte3
+**Project3D** | Project3D2
+**Radial** | Radial
+**Ramp** | Ramp
+**Read** | Read
+**Reformat** | Reformat
+**Retime** | Retime
+**Roto** | Roto
+**RotoPaint** | RotoPaint
+**STMap** | STMap
+**Saturation** | Saturation
+**ScanlineRender** | ScanlineRender
+**Scene** | Scene
+**Shuffle** | Shuffle
+**ShuffleCopy** | ShuffleCopy
+**Sphere** | Sphere
+**StickyNote** | StickyNote
+**TimeWarp** | TimeWarp
+**Tracker** | Tracker4
+**Transform** | Transform
+**Viewer** | Viewer
+**Write** | Write
+**ZDefocus** | ZDefocus2
