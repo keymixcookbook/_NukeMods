@@ -1,10 +1,21 @@
-'''
+def versions():
+    return '''
 
-- Inherit nukescripts.autobackdrop()
-- Adding Color Scheme selection buttons for groups:
-- Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp
+    version 2.0
+    - more Color options (Random)
+    - Header Size options
 
-'''
+    version 1.0
+    - Fixing error when cancel nuke panel
+    - Fixing Default value of backdrop label
+    - Output -> Transform
+
+    version 0
+    - Inherit nukescripts.autobackdrop()
+    - Adding Color Scheme selection buttons for groups:
+    - Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp
+
+    '''
 
 
 
@@ -12,19 +23,120 @@ import nuke, nukescripts
 
 
 
+
+########## Supporting Function ##########
+
+
+
+
+def nukeColor(r,g,b):
+	return int('%02x%02x%02x%02x' % (r,g,b,0), 16)
+
+
+
+def hsv2rgb(h, s, v):
+    h = float(h)
+    s = float(s)
+    v = float(v)
+    h60 = h / 60.0
+    h60f = math.floor(h60)
+    hi = int(h60f) % 6
+    f = h60 - h60f
+    p = v * (1 - s)
+    q = v * (1 - f * s)
+    t = v * (1 - (1 - f) * s)
+    r, g, b = 0, 0, 0
+    if hi == 0: r, g, b = v, t, p
+    elif hi == 1: r, g, b = q, v, p
+    elif hi == 2: r, g, b = p, v, t
+    elif hi == 3: r, g, b = p, q, v
+    elif hi == 4: r, g, b = t, p, v
+    elif hi == 5: r, g, b = v, p, q
+    r, g, b = int(r * 255), int(g * 255), int(b * 255)
+    return r, g, b
+
+
+def colorButtons(bd, hex_group, blk):
+    ## Inherit from:
+    ## (https://github.com/mb0rt/Nuke-NodeHelpers/blob/master/mbort/backdrop_palette/backdrop.py)
+
+    # Create Knobs
+
+    # Tab
+    tab = nuke.Tab_Knob( 'Backdrop+ColorCode' )
+
+    # Label
+    label_link = nuke.Link_Knob( 'label_link', 'label' )
+    label_link.makeLink( bd.name(), 'label' )
+
+    # Font
+    font_link = nuke.Link_Knob( 'note_font_link', 'font' )
+    font_link.makeLink( bd.name(), 'note_font' )
+
+    # Font Size
+    font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
+    font_size_link.makeLink( bd.name(), 'note_font_size' )
+    font_size_link.clearFlag( nuke.STARTLINE )
+
+    # font Color
+    font_color_link = nuke.Link_Knob( 'note_font_color_link', 'font color' )
+    font_color_link.makeLink( bd.name(), 'note_font_color' )
+    font_color_link.clearFlag( nuke.STARTLINE )
+
+    # Divider
+    k_div = nuke.Text_Knob('')
+
+    # add Tab
+    bd.addKnob( tab )
+
+    # Color Code
+    counter = 0
+
+    hex_group_keys = hex_group.keys()
+    hex_group_keys.remove('*Random')
+
+    for t in sorted(hex_group_keys):
+
+        name = "bt_%s" % (t)
+        label = "<font color='#%s'>%s</font> <b>%s" % (hex_group[t][2], blk, t)
+
+        cmd = "n=nuke.thisNode();\
+                n['tile_color'].setValue(int('%sFF',16));\
+                n['note_font_color'].setValue(int('%sFF', 16));\
+                n['note_font'].setValue('bold')" % (hex_group[t][1], hex_group[t][0])
+
+
+        cc_knob = nuke.PyScript_Knob(name,label,cmd)
+        cc_knob.setTooltip(t)
+
+        # If First Item
+        if counter == 0 or counter == 5:
+            cc_knob.setFlag(nuke.STARTLINE)
+        else:
+            cc_knob.clearFlag(nuke.STARTLINE)
+
+        bd.addKnob(cc_knob)
+
+        counter += 1
+
+
+    # Add Knobs
+    bd.addKnob( k_div )
+    bd.addKnob( label_link )
+    bd.addKnob( font_link )
+    bd.addKnob( font_size_link )
+    bd.addKnob( font_color_link )
+
+
+
+
+########## Main Function ##########
+
+
+
+
+
 def ColorCode():
-
-    '''
-
-    version 1.1
-    - Fixing error when cancel nuke panel
-    - Fixing Default value of backdrop label
-    - Output -> Transform
-
-    version 2.0
-    - Convert regular backdrop to ColorCode backdrop
-
-    '''
 
 
     # Symbols and Color
@@ -40,7 +152,8 @@ def ColorCode():
                 'Despill': ['C0CCC5', '2E5C40', '587d66'],
                 'Grade': ['C0CCCC', '2E5C5C', '587d7d'],
                 'Elem2D': ['CACCC0', '535C2E', '757d58'],
-                'Plate': ['BFC5CC', '2E405C', '58667d']
+                'Plate': ['BFC5CC', '2E405C', '58667d'],
+                '*Random': []
                 }
 
     # Main Function
@@ -63,81 +176,28 @@ def ColorCode():
 
         p.addEnumerationPulldown('Type: ', ' '.join(sorted(hex_group.keys())))
         p.addSingleLineInput('Label: ', most_class)
+        p.addEnumerationPulldown('Font Size: ', 'h3 h2 h1')
 
         if p.show():
             bd_type = p.value('Type: ')
             bd_label = p.value('Label: ')
+            bd_font = p.value('Font Size: ')
 
-
-            ## Inherit from:
-            ## (https://github.com/mb0rt/Nuke-NodeHelpers/blob/master/mbort/backdrop_palette/backdrop.py)
-
-            # Create Knobs
-
-            # Tab
-            tab = nuke.Tab_Knob( 'Backdrop+ColorCode' )
-
-            # Label
-            label_link = nuke.Link_Knob( 'label_link', 'label' )
-            label_link.makeLink( bd.name(), 'label' )
-
-            # Font
-            font_link = nuke.Link_Knob( 'note_font_link', 'font' )
-            font_link.makeLink( bd.name(), 'note_font' )
-
-            # Font Size
-            font_size_link = nuke.Link_Knob( 'note_font_size_link', '' )
-            font_size_link.makeLink( bd.name(), 'note_font_size' )
-            font_size_link.clearFlag( nuke.STARTLINE )
-
-            # font Color
-            font_color_link = nuke.Link_Knob( 'note_font_color_link', 'font color' )
-            font_color_link.makeLink( bd.name(), 'note_font_color' )
-            font_color_link.clearFlag( nuke.STARTLINE )
-
-            # Divider
-            k_div = nuke.Text_Knob('')
-
-            # add Tab
-            bd.addKnob( tab )
-
-            # Color Code
-            counter = 0
-
-            for t in sorted(hex_group.keys()):
-
-                name = "bt_%s" % (t)
-                label = "<font color='#%s'>%s</font> <b>%s" % (hex_group[t][2], blk, t)
-                cmd = "n=nuke.thisNode();\
-                        n['tile_color'].setValue(int('%sFF',16));\
-                        n['note_font_color'].setValue(int('%sFF', 16));\
-                        n['note_font'].setValue('bold')" % (hex_group[t][1], hex_group[t][0])
-
-
-                cc_knob = nuke.PyScript_Knob(name,label,cmd)
-                cc_knob.setTooltip(t)
-
-                # If First Item
-                if counter == 0 or counter == 5:
-                    cc_knob.setFlag(nuke.STARTLINE)
-                else:
-                    cc_knob.clearFlag(nuke.STARTLINE)
-
-                bd.addKnob(cc_knob)
-
-                counter += 1
-
-
-            # Add Knobs
-            bd.addKnob( k_div )
-            bd.addKnob( label_link )
-            bd.addKnob( font_link )
-            bd.addKnob( font_size_link )
-            bd.addKnob( font_color_link )
+            colorButtons(bd, hex_group, blk)
 
             # Execute a button on default
-            bd.knob('bt_%s' % bd_type).execute()
-            bd.knob('label').setValue(bd_label)
+            if bd_type == '*Random':
+                import random, math
+
+                rand_h = random.randrange(0,360,10)
+                rand_r, rand_g, rand_b = hsv2rgb(rand_h,.25,.36)
+
+                bd.knob('tile_color').setValue(nukeColor(rand_r,rand_g,rand_b))
+                bd.knob('note_font_color').setValue(nukeColor(int(rand_r*2),int(rand_g*2),int(rand_b*2)))
+                bd.knob('label').setValue("<%s>%s" % (bd_font,bd_label))
+            else:
+                bd.knob('bt_%s' % bd_type).execute()
+                bd.knob('label').setValue("<%s>%s" % (bd_font,bd_label))
             nuke.show(bd)
 
         else:
@@ -211,7 +271,7 @@ def ku_autoBackdrop():
                               ypos = bdY,
                               bdheight = bdH,
                               # tile_color = int((random.random()*(16 - 10))) + 10,
-                              note_font_size=48,
+                              note_font_size=96,
                               z_order = zOrder,
                               tile_color = 808464639, # 19% gray, nuke DAG default color
                               )
