@@ -4,7 +4,7 @@ A General scripting format and structure guide
 ### Main Components
   - `./_pkg_KuFunc`
     - `__int__.py`
-    - `mod_KuFunc.py`
+    - `mod_KuUtility.py`
   - `./_pkg_KuStudio`
     - `__int__.py`
     - `mod_KuStudio.py`
@@ -24,8 +24,8 @@ A General scripting format and structure guide
   - **Update Board** linked with [Trello](https://trello.com/b/4FR8ZOcZ)
   - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
   - **New Versions** of exsisting modules:
-    - Create a **Branch**: `VerUpdate.mod_ThisMod.v#.#`
-    - Create a **Trello Card**: `VerUpdate.mod_ThisMod.v#.#`
+    - Create a **Branch**: `Upd.mod_ThisMod.v#.#`
+    - Create a **Trello Card**: `Upd.mod_ThisMod.v#.#`
     - must indicate version number, and what's new
     - Once finished, merge to `master` branch, and close Issue
 
@@ -56,12 +56,12 @@ Following briefly with Python PEP 8 guidlines, except:
 > Methods with in a Class is still the same: `ThisClass.itsMethod()`
 
 also includes:
-- `$` for variable in comments, ALL_CAP:
-  - `$VAR`
+- `<>` for variable in comments:
+  - `<var>`
 - `_` for space in **filenames** and **variables**, or **Folders** (if as prefix):
   - `this_file.ext`, `this_var`, `./this_folder`
 - `__` for **other Folders** that is not part of the package:
-  - `./-misc`
+  - `./__misc`
 - `""` for strings, `''` for keywords or attributes:
   - `string = "Text"`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
 
@@ -75,8 +75,8 @@ also includes:
 - 1 space up & down
 
 # With 1 Space In-between
-- $VARIABLES, $USED_IN, $COMMENTS
-- Temp Directory: /$TEMP/directory/_in_comments
+- <variable>, <used_in>, <comments>
+- Temp Directory: /<temp>/directory/_in_comments
 
 '''
 

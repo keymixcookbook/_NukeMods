@@ -17,7 +17,8 @@ def GUISwitch(mode='switch'):
 
   def setGUI():
       if knob.hasExpression() and "$gui" in knob.toScript():
-        knob.setExpression('')
+        knob.clearAnimated()
+        knob.setValue('False')
       else:
         knob.setExpression('$gui')
 

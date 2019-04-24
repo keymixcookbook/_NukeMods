@@ -15,9 +15,12 @@ to used in a VFX Studio enviroment
 
 from _pkg_KuFunc import *
 from _pkg_KuStudio import *
+from _mod_Download import *
 
-from _pkg_KuFunc.mod_KuFunc import *
+from _pkg_KuFunc.mod_KuUtility import *
 from _pkg_KuStudio.mod_KuStudio import *
+
+
 
 
 ########## AddMenuItem Func ##########
@@ -25,7 +28,7 @@ from _pkg_KuStudio.mod_KuStudio import *
 
 
 
-def addMenuItem(type, mu, name, mod, hotkey="", icon=""):
+def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 
     '''
     type: 'm'= modules, 'f' = functions
@@ -36,9 +39,9 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon=""):
     '''
 
     if type == 'm':
-        mu.addCommand(name, "mod_{mod}.{func}".format(mod=mod.split('(')[0],func=mod), hotkey, icon=icon)
+        mu.addCommand(name, "mod_{mod}.{func}".format(mod=mod.split('(')[0],func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
     elif type == 'f':
-        mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon)
+        mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
 
 
 
@@ -55,9 +58,13 @@ addMenuItem('f', kuMu, 'Change label', "labelChange()", hotkey="shift+N")
 addMenuItem('m', kuMu, 'Linked Postage Stamp', "LinkedStamp()", hotkey="f4")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
+addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()", hotkey="")
+addMenuItem('m', kuMu, 'Branching', "GrainChannel()", hotkey="j", shortcutContext=2)
+addMenuItem('m', kuMu, 'Link Clone', "LinkClone()", hotkey="")
+addMenuItem('m', kuMu, 'Find Hidden Inputs', "RestoreHiddenInputs()", hotkey="")
 kuMu.addSeparator()
-addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='switch')", hotkey="shift+D")
-addMenuItem('m', kuMu, '$GUI Switch', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
+addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey="shift+D")
+addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 
 
 
@@ -75,7 +82,7 @@ addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
 addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="LensDistort.png")
 addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
 addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
-addMenuItem('m', tBar, 'Set Expressions', "ExprPrompt()", icon="Expression.png")
+addMenuItem('m', tBar, 'Roto AutoLife', "autolife()", icon="Roto.png")
 
 
 

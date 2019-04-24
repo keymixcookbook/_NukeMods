@@ -5,6 +5,7 @@ def versions():
     - more Color options (Random)
     - Header Size options
 
+
     version 1.0
     - Fixing error when cancel nuke panel
     - Fixing Default value of backdrop label
@@ -16,6 +17,7 @@ def versions():
     - Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp
 
     '''
+
 
 
 
@@ -137,6 +139,7 @@ def colorButtons(bd, hex_group, blk):
 
 
 def ColorCode():
+
 
 
     # Symbols and Color
