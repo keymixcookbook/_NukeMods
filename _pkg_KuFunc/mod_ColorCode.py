@@ -37,6 +37,8 @@ def nukeColor(r,g,b):
 
 
 def hsv2rgb(h, s, v):
+    # Source: http://code.activestate.com/recipes/576919-python-rgb-and-hsv-conversion/
+
     h = float(h)
     s = float(s)
     v = float(v)
