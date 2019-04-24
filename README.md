@@ -4,7 +4,7 @@ A General scripting format and structure guide
 ### Main Components
   - `./_pkg_KuFunc`
     - `__int__.py`
-    - `mod_KuFunc.py`
+    - `mod_KuUtility.py`
   - `./_pkg_KuStudio`
     - `__int__.py`
     - `mod_KuStudio.py`
