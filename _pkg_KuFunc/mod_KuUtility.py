@@ -246,8 +246,8 @@ def alignNodes():
 def selConnected():
 
     for n in nuke.selectedNodes():
-        n_frist = n.dependent()[0]
-        n_second = n_first.dependent()[0]
+        n_frist = n.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
+        n_second = n_first.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
 
         n_first['selected'].setValue(True)
         n_sec['selected'].setValue(True)
