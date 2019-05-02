@@ -1,23 +1,23 @@
 set cut_paste_input [stack 0]
-version 9.0 v8
+version 10.5 v7
 push $cut_paste_input
 Dot {
  name Dot10
  label "Plate\nInput"
- note_font "Verdana Bold"
+ note_font "Verdana Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 1794
- ypos -2406
+ xpos -1170
+ ypos -1096
 }
-set N5ed0bde0 [stack 0]
+set N31ef30c0 [stack 0]
 Dot {
  name Dot12
  selected true
- xpos 1594
- ypos -2406
+ xpos -1373
+ ypos -1096
 }
-set Nefd17ac0 [stack 0]
+set N179296e0 [stack 0]
 OFXuk.co.thefoundry.keylight.keylight_v201 {
  show "Final Result"
  unPreMultiply false
@@ -59,90 +59,92 @@ OFXuk.co.thefoundry.keylight.keylight_v201 {
  insideComponent None
  outsideComponent None
  cacheBreaker true
- name Keylight7
+ name _TEMP_KEY_
  selected true
- xpos 1560
- ypos -2309
+ xpos -1404
+ ypos -999
 }
 Invert {
  channels alpha
- name Invert2
+ name _INVERT_
  selected true
- xpos 1560
- ypos -2263
+ xpos -1404
+ ypos -953
 }
 Erode {
  size 48
- name Erode4
+ name _ERODE_
  selected true
- xpos 1560
- ypos -2213
+ xpos -1404
+ ypos -903
 }
 Blur {
  size 18
- name Blur8
+ name _BLUR_
  selected true
- xpos 1560
- ypos -2163
+ xpos -1404
+ ypos -853
 }
 Dot {
  name Dot13
  selected true
- xpos 1594
- ypos -2006
+ xpos -1373
+ ypos -699
 }
-set Nefd2ccf0 [stack 0]
+set N1765cec0 [stack 0]
 Dot {
  name Dot4
  selected true
- xpos 1594
- ypos -1879
+ xpos -1373
+ ypos -572
 }
-push $Nefd17ac0
+push $N179296e0
 Dot {
  name Dot9
  selected true
- xpos 1494
- ypos -2406
+ xpos -1470
+ ypos -1096
 }
 Dot {
  name Dot11
  selected true
- xpos 1494
- ypos -1740
+ xpos -1470
+ ypos -433
 }
-push $Nefd2ccf0
-push $N5ed0bde0
-ShuffleCopy {
+push $N1765cec0
+push $N31ef30c0
+Copy {
  inputs 2
- name ShuffleCopy1
+ from0 rgba.alpha
+ to0 rgba.alpha
+ name _COPY_ALPHA_
  selected true
- xpos 1760
- ypos -2009
+ xpos -1204
+ ypos -703
 }
 Premult {
- name Premult11
+ name _PREMULT_
  selected true
- xpos 1760
- ypos -1959
+ xpos -1204
+ ypos -649
 }
 Blur {
  size 300
- name Blur10
+ name _EXTEND_
  selected true
- xpos 1760
- ypos -1923
+ xpos -1204
+ ypos -613
 }
 Unpremult {
- name Unpremult7
+ name _UNPREMULT_
  selected true
- xpos 1760
- ypos -1859
+ xpos -1204
+ ypos -549
 }
 Keymix {
  inputs 3
- name Keymix2
+ name _ORIG_ON_TOP_
  selected true
- xpos 1760
- ypos -1747
+ xpos -1204
+ ypos -437
 }

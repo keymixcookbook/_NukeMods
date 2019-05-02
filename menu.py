@@ -46,7 +46,7 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 
 
 
-########## KUFUNC Menubar ##########
+########## KuFunc Menubar ##########
 
 
 
@@ -69,7 +69,7 @@ addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotke
 
 
 
-########## KUFUNC Toolbar ##########
+########## KuFunc Toolbar ##########
 
 
 
@@ -128,6 +128,4 @@ nuke.knobDefault('Viewer.hide_input', 'True')
 
 
 
-
-nuke.addOnUserCreate(lambda n=nuke.thisNode(): n['first_frame'].setValue(nuke.frame()), nodeClass='FrameHold')
-nuke.addOnUserCreate(lambda n=nuke.thisNode(): n['reference_frame'].setValue(nuke.root()['first_frame'].value()), nodeClass='Tracker4')
+# nuke.addOnUserCreate(function, nodeClass='Class')
