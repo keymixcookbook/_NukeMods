@@ -14,6 +14,7 @@ to used in a VFX Studio enviroment
 
 
 import os
+from _pkg_KuStudio import mod_StudioENV
 
 print ">>>", "Start Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<"
 

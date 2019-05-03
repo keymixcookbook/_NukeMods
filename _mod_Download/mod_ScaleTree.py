@@ -511,6 +511,6 @@ def ScaleTree():
 #Docked Panel
 #----------------------------------------------------------------------------------------------------------
 
-panels.registerWidgetAsPanel('mod_scaleTree.scaleTreeWidget', 'W_scaleTree', 'W_scaleTree.widget')
+panels.registerWidgetAsPanel('mod_ScaleTree.scaleTreeWidget', 'W_scaleTree', 'W_scaleTree.widget')
 
 #----------------------------------------------------------------------------------------------------------
