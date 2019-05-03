@@ -62,8 +62,9 @@ also includes:
   - `this_file.ext`, `this_var`, `./this_folder`
 - `__` for **other Folders** that is not part of the package:
   - `./__misc`
-- `""` for strings, `''` for keywords or attributes:
-  - `string = "Text"`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
+- `""` for multiword strings, `''` for keywords or attributes:
+  - `string = 'word'`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
+  - `More than one word`
 
 
 ### Script General Format
@@ -99,7 +100,7 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
   '''
 
   # What does the lines below do
-  sec_subSec = "Variable"
+  sec_subSec = 'Variable'
   GLOBAL_CONSTANT = "Constant Variable"
 
   # have 1 space between group of lines
