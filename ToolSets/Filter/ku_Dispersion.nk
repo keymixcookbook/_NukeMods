@@ -1,0 +1,260 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+ name ku_Dispersion
+ tile_color 0xcc804eff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 291
+ ypos -120
+ addUserKnob {20 tb_user l ku_Dispersion}
+ addUserKnob {6 ck_log l lin2log +STARTLINE}
+ addUserKnob {7 size t "Overall Scale" R -0.25 0.25}
+ addUserKnob {7 halation t "Halation on edges masked by luminance" R -20 20}
+ halation 10
+ addUserKnob {6 ck_halation l "enable halation" -STARTLINE}
+ addUserKnob {7 spread t "Spread ratio between channels" R -2 2}
+ spread 1
+ addUserKnob {7 curvature t "Falloff from center to edge" R 1 2.2}
+ curvature 1
+ addUserKnob {26 tx_shuffle l "shuffle channel"}
+ addUserKnob {41 red T _SHUFFLE_.red}
+ addUserKnob {41 green -STARTLINE T _SHUFFLE_.green}
+ addUserKnob {41 blue -STARTLINE T _SHUFFLE_.blue}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 tx_desc l "" +STARTLINE T "Based on wavelength ratio between r, g, b\n"}
+}
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Red: 700nm (65nm) : 1.32\nGreen: 530nm (30nm) : 1\nBlue: 470nm (40nm) : -1.11"
+  note_font "bold Bold Bold Bold Bold"
+  note_font_size 24
+  xpos -352
+  ypos 45
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 629
+  ypos -352
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin1
+  xpos 629
+  ypos -275
+  disable {{!ck_log}}
+ }
+ Dot {
+  name Dot3
+  xpos 660
+  ypos -189
+ }
+set Ne9d41970 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1047
+  ypos -189
+ }
+ Dot {
+  name Dot5
+  xpos 1047
+  ypos -73
+ }
+set N479cbc30 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1300
+  ypos -73
+ }
+ Dot {
+  name Dot7
+  xpos 1300
+  ypos 307
+ }
+set N8dedcaf0 [stack 0]
+ Keyer {
+  operation "luminance key"
+  name _LUMA_
+  xpos 1269
+  ypos 446
+ }
+push $N8dedcaf0
+push $N479cbc30
+ FilterErode {
+  channels {-rgba.red -rgba.green rgba.blue}
+  size {{parent._HALA_G_.size+spread*(0.11)*halation/5}}
+  filter quadratic
+  name _HALA_B_
+  label "\[value size]"
+  xpos 1137
+  ypos 18
+ }
+push $N479cbc30
+ FilterErode {
+  channels {rgba.red -rgba.green -rgba.blue}
+  size {{parent._HALA_G_.size+spread*-0.32*halation/5}}
+  filter quadratic
+  name _HALA_R_
+  label "\[value size]"
+  xpos 876
+  ypos 13
+ }
+push $N479cbc30
+ FilterErode {
+  channels {-rgba.red rgba.green -rgba.blue}
+  size {{parent.size*halation/5}}
+  filter quadratic
+  name _HALA_G_
+  label "\[value size]"
+  xpos 1016
+  ypos 16
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy3
+  xpos 1016
+  ypos 114
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy4
+  xpos 1016
+  ypos 179
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name _HALA_DIFFERENCE_
+  xpos 1016
+  ypos 307
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name _LUMA_MASK_
+  xpos 1016
+  ypos 450
+ }
+ Dot {
+  name Dot9
+  xpos 1047
+  ypos 578
+ }
+push $Ne9d41970
+ Dot {
+  name Dot2
+  xpos 300
+  ypos -189
+ }
+ GodRays {
+  channels rgba
+  scale {{(_R_.scale-1)/2+1}}
+  center {{input.width/2} {input.height/2}}
+  gamma {{curvature}}
+  name _RGB_
+  xpos 269
+  ypos -87
+ }
+ Dot {
+  name Dot1
+  xpos 300
+  ypos -31
+ }
+set N377b8230 [stack 0]
+ GodRays {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  scale {{parent._G_.scale+spread*(-0.11)/100}}
+  center {{input.width/2} {input.height/2}}
+  gamma {{curvature}}
+  name _B_
+  label "\[value scale]"
+  xpos 431
+  ypos 60
+ }
+push $N377b8230
+ GodRays {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  scale {{parent._G_.scale+spread*0.32/100}}
+  center {{input.width/2} {input.height/2}}
+  gamma {{curvature}}
+  name _R_
+  label "\[value scale]"
+  xpos 136
+  ypos 57
+ }
+push $N377b8230
+ GodRays {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  scale {{1+size/100}}
+  center {{input.width/2} {input.height/2}}
+  gamma {{curvature}}
+  name _G_
+  label "\[value scale]"
+  xpos 269
+  ypos 58
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy1
+  xpos 269
+  ypos 147
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy2
+  xpos 269
+  ypos 211
+ }
+ Shuffle {
+  name _SHUFFLE_
+  xpos 269
+  ypos 275
+ }
+ Dot {
+  name Dot8
+  xpos 300
+  ypos 578
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name _ADD_HALA_
+  xpos 619
+  ypos 798
+  disable {{!ck_halation}}
+ }
+ Log2Lin {
+  name Log2Lin2
+  selected true
+  xpos 619
+  ypos 910
+  disable {{!ck_log}}
+ }
+set N56078560 [stack 0]
+ Output {
+  name Output1
+  xpos 619
+  ypos 1118
+ }
+push $N56078560
+ Viewer {
+  frame_range 1-4
+  frame_increment 8
+  name Viewer1
+  xpos 909
+  ypos 901
+  hide_input true
+ }
+end_group
