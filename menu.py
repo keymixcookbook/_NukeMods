@@ -77,7 +77,10 @@ addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotke
 tBar = nuke.toolbar("T_Bar")
 
 addMenuItem('f', tBar, 'Select Child Nodes', "selectChildNodes()", icon="Output.png")
-addMenuItem('f', tBar, 'Align Nodes', "alignNodes()", icon="Posterize.png")
+addMenuItem('m', tBar, 'Align Nodes/T', "AlignNodes('up')", icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/B', "AlignNodes('down')", icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/L', "AlignNodes('left')", icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/R', "AlignNodes('right')", icon="Tile.png")
 addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
 addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="LensDistort.png")
 addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
