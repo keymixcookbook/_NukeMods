@@ -77,16 +77,17 @@ addMenuItem('m', kuMu, '$GUI Switch/reverse',   "GUISwitch(mode='reverse')",    
 
 tBar = nuke.toolbar("T_Bar")
 
-addMenuItem('f', tBar, 'Select Child Nodes',    "selectChildNodes()",   icon="Output.png")
-addMenuItem('m', tBar, 'Align Nodes/T',         "AlignNodes('up')",     icon="Tile.png")
-addMenuItem('m', tBar, 'Align Nodes/B',         "AlignNodes('down')",   icon="Tile.png")
-addMenuItem('m', tBar, 'Align Nodes/L',         "AlignNodes('left')",   icon="Tile.png")
-addMenuItem('m', tBar, 'Align Nodes/R',         "AlignNodes('right')",  icon="Tile.png")
-addMenuItem('f', tBar, 'Filter Selection',      "filterSelection()",    icon="NoOp.png")
-addMenuItem('m', tBar, 'Backdrop Resize',       "BackdropResize()",     icon="LensDistort.png")
-addMenuItem('m', tBar, 'KuDrop',                "ColorCode()",          icon="Backdrop.png")
-addMenuItem('m', tBar, 'Dot Cam Connect',       "DotCamConnect()",      icon="Camera.png")
-addMenuItem('m', tBar, 'Roto AutoLife',         "autolife()",           icon="Roto.png")
+addMenuItem('f', tBar, 'Select Child Nodes',"selectChildNodes()",icon="Output.png")
+tBar.addMenu('AlignNodes', icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/top',"AlignNodes('up')",icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/bottom',"AlignNodes('down')",icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/left',"AlignNodes('left')",icon="Tile.png")
+addMenuItem('m', tBar, 'Align Nodes/right',"AlignNodes('right')",icon="Tile.png")
+addMenuItem('f', tBar, 'Filter Selection',"filterSelection()",icon="NoOp.png")
+addMenuItem('m', tBar, 'Backdrop Resize',"BackdropResize()",icon="LensDistort.png")
+addMenuItem('m', tBar, 'KuDrop',"ColorCode()",icon="Backdrop.png")
+addMenuItem('m', tBar, 'Dot Cam Connect',"DotCamConnect()",icon="Camera.png")
+addMenuItem('m', tBar, 'Roto AutoLife',"autolife()",icon="Roto.png")
 
 
 
