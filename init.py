@@ -21,3 +21,4 @@ print ">>>", "Start Install %s" % (os.path.basename(os.path.dirname(__file__))),
 nuke.pluginAddPath('./_pkg_KuFunc')
 nuke.pluginAddPath('./_pkg_KuStudio')
 nuke.pluginAddPath('./_mod_Download')
+nuke.pluginAddPath('./__icons')
