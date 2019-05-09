@@ -59,7 +59,7 @@ addMenuItem('m', kuMu, 'Linked Postage Stamp',  "LinkedStamp()",                
 addMenuItem('f', kuMu, 'Group Connect A',       "groupConnect()",               hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation',         "mergeOp()",                    hotkey="alt+O")
 addMenuItem('m', kuMu, 'Set Grain Channels',    "GrainChannel()")
-addMenuItem('m', kuMu, 'Branching',             "GrainChannel()",               hotkey="j", shortcutContext=2)
+addMenuItem('m', kuMu, 'Branching',             "Branching()",               hotkey="j", shortcutContext=2)
 addMenuItem('m', kuMu, 'Link Clone',            "LinkClone()")
 addMenuItem('m', kuMu, 'Find Hidden Inputs',    "RestoreHiddenInputs()")
 addMenuItem('m', kuMu, 'Scale DAG',    "ScaleTree()")
@@ -97,11 +97,13 @@ addMenuItem('m', tBar, 'Roto AutoLife',"autolife()",icon="Roto.png")
 
 
 
+
 nuke.knobDefault('Blur.size', '12')
 nuke.knobDefault('Blur.channels', 'alpha')
 
 nuke.knobDefault('FilterErode.channels', 'alpha')
 nuke.knobDefault('FilterErode.filter', 'gaussian')
+nuke.knobDefault('Dilate.channels', 'alpha')
 
 nuke.knobDefault('OFXuk.co.thefoundry.keylight.keylight_v201.show', 'Intermediate Result')
 
@@ -121,6 +123,7 @@ nuke.knobDefault('StickyNote.note_font', 'bold')
 nuke.knobDefault('StickyNote.note_font_size', '24')
 
 nuke.knobDefault('Multiply.label', '[value value]')
+nuke.knobDefault('Expression.label', 'a::[value expr3]')
 
 ### Viewer Node ###
 nuke.knobDefault('Viewer.frame_increment', '8')
