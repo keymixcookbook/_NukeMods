@@ -1,0 +1,55 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+Group {
+ inputs 0
+ name ku_Ramp
+ note_font "Verdana Bold Bold Bold"
+ selected true
+ xpos -66
+ ypos -13
+ addUserKnob {20 tb_user l ku_Ramp}
+ addUserKnob {41 p0 l "point 0" T _MAP_.p0}
+ addUserKnob {41 p1 l "point 1" -STARTLINE T _MAP_.p1}
+ addUserKnob {41 type T _MAP_.type}
+ addUserKnob {41 invert -STARTLINE T _MAP_.invert}
+ addUserKnob {41 numpixels l Overscan T _OVERSCAN_.numpixels}
+ addUserKnob {22 bt_expand_double l "<span>&#43;&#43;" T "import numpy\nn = nuke.thisNode()\nk0 = n\['p0']\nk1 = n\['p1']\ninterval = n\['num_interval'].value()*2\n\nnew_x0, new_y0, new_x1, new_y1 = k0.value()\[0],k0.value()\[1],k1.value()\[0],k1.value()\[1]\n\nside = numpy.subtract(k0.value(), k1.value())\nif side\[0] == 0:\n    new_x0 = k0.value()\[0]\n    new_y0 = k0.value()\[1] - interval\n    new_x1 = k1.value()\[0]\n    new_y1 = k1.value()\[1] + interval\nelif side\[1] == 0:\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] \n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1]\nelse:\n    ratio = side\[1]/side\[0]\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] - interval*ratio\n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1] + interval*ratio\n\n    print ratio\n\nk0.setValue(\[new_x0, new_y0])\nk1.setValue(\[new_x1, new_y1])" +STARTLINE}
+ addUserKnob {22 bt_expand l "<span>&#43;" -STARTLINE T "import numpy\nn = nuke.thisNode()\nk0 = n\['p0']\nk1 = n\['p1']\ninterval = n\['num_interval'].value()\n\nnew_x0, new_y0, new_x1, new_y1 = k0.value()\[0],k0.value()\[1],k1.value()\[0],k1.value()\[1]\n\nside = numpy.subtract(k0.value(), k1.value())\nif side\[0] == 0:\n    new_x0 = k0.value()\[0]\n    new_y0 = k0.value()\[1] - interval\n    new_x1 = k1.value()\[0]\n    new_y1 = k1.value()\[1] + interval\nelif side\[1] == 0:\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] \n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1]\nelse:\n    ratio = side\[1]/side\[0]\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] - interval*ratio\n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1] + interval*ratio\n\n    print ratio\n\nk0.setValue(\[new_x0, new_y0])\nk1.setValue(\[new_x1, new_y1])"}
+ addUserKnob {22 bt_shrink l "<span>&#8722;" -STARTLINE T "import numpy\nn = nuke.thisNode()\nk0 = n\['p0']\nk1 = n\['p1']\ninterval = n\['num_interval'].value()*-1\n\nnew_x0, new_y0, new_x1, new_y1 = k0.value()\[0],k0.value()\[1],k1.value()\[0],k1.value()\[1]\n\nside = numpy.subtract(k0.value(), k1.value())\nif side\[0] == 0:\n    new_x0 = k0.value()\[0]\n    new_y0 = k0.value()\[1] - interval\n    new_x1 = k1.value()\[0]\n    new_y1 = k1.value()\[1] + interval\nelif side\[1] == 0:\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] \n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1]\nelse:\n    ratio = side\[1]/side\[0]\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] - interval*ratio\n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1] + interval*ratio\n\n    print ratio\n\nk0.setValue(\[new_x0, new_y0])\nk1.setValue(\[new_x1, new_y1])"}
+ addUserKnob {22 bt_shrink_double l "<span>&#8722;&#8722;" -STARTLINE T "import numpy\nn = nuke.thisNode()\nk0 = n\['p0']\nk1 = n\['p1']\ninterval = n\['num_interval'].value()*-2\n\nnew_x0, new_y0, new_x1, new_y1 = k0.value()\[0],k0.value()\[1],k1.value()\[0],k1.value()\[1]\n\nside = numpy.subtract(k0.value(), k1.value())\nif side\[0] == 0:\n    new_x0 = k0.value()\[0]\n    new_y0 = k0.value()\[1] - interval\n    new_x1 = k1.value()\[0]\n    new_y1 = k1.value()\[1] + interval\nelif side\[1] == 0:\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] \n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1]\nelse:\n    ratio = side\[1]/side\[0]\n    new_x0 = k0.value()\[0] - interval\n    new_y0 = k0.value()\[1] - interval*ratio\n    new_x1 = k1.value()\[0] + interval\n    new_y1 = k1.value()\[1] + interval*ratio\n\n    print ratio\n\nk0.setValue(\[new_x0, new_y0])\nk1.setValue(\[new_x1, new_y1])"}
+ addUserKnob {3 num_interval l <b>@ -STARTLINE}
+ num_interval 200
+ addUserKnob {26 ""}
+ addUserKnob {32 tb_corner_lr l "<b>&#8599;" t "Ramp from Left to Right" T "knob p0 \{0 0\}\nknob p1.x \[value root.width]\nknob p1.y \[value root.height]" +STARTLINE}
+ addUserKnob {32 tb_corner_rl l "<b>&#8600;" t "Ramp from Right to Left" -STARTLINE T "knob p0.x 0\nknob p0.y \[value root.height]\n\nknob p1.x \[value root.width]\nknob p1.y 0"}
+ addUserKnob {32 bt_y l "<b>&#8593;" t "Ramp Bottom to Top" -STARTLINE T "knob p0.x \[value root.width]/2\nknob p0.y 0\n\nknob p1.x \[value root.width]/2\nknob p1.y \[value root.height]"}
+ addUserKnob {32 bt_x l "<b>&#8594;" t "Ramp Left to Right" -STARTLINE T "knob p0.x 0\nknob p0.y \[value root.height]/2\n\nknob p1.x \[value root.width]\nknob p1.y \[value root.height]/2"}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  name _FRAME_
+  selected true
+  xpos 134
+  ypos -178
+ }
+ AdjBBox {
+  numpixels 230
+  name _OVERSCAN_
+  xpos 134
+  ypos -85
+ }
+ Ramp {
+  cliptype none
+  p0 {0 0}
+  p1 {1920 1080}
+  name _MAP_
+  xpos 134
+  ypos -61
+ }
+ Output {
+  name Output
+  xpos 134
+  ypos 25
+ }
+end_group

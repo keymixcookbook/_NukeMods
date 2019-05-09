@@ -1,0 +1,128 @@
+set cut_paste_input [stack 0]
+version 10.5 v7
+push $cut_paste_input
+Group {
+ name EdgeDetect_Sobel
+ autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['mu_output'].value()"
+ tile_color 0xcc804eff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos -114
+ ypos 447
+ addUserKnob {20 tb_user l Sobel_EdgeDetect}
+ addUserKnob {4 mu_output l Output M {rgb rgba alpha "" "" ""}}
+ addUserKnob {41 in l Threshold T _THRESHOLD_.in}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 tx_src l "" +STARTLINE T "Base on Sobel Operator Matrix"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -290
+  ypos 101
+ }
+ Dot {
+  name Dot3
+  xpos -259
+  ypos 183
+ }
+set N38756fc0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 0 1}
+      {-2 0 2}
+      {-1 0 1}
+    }
+  name _X_
+  xpos -346
+  ypos 290
+ }
+push $N38756fc0
+ Matrix {
+  matrix {
+      {-1 -2 -1}
+      {0 0 0}
+      {1 2 1}
+    }
+  name _Y_
+  xpos -236
+  ypos 290
+ }
+ MergeExpression {
+  inputs 2
+  channel0 {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  expr0 sqrt(pow(Ar,2)+pow(Br,2))
+  expr1 sqrt(pow(Ag,2)+pow(Bg,2))
+  expr2 sqrt(pow(Ab,2)+pow(Bb,2))
+  name _MERGE_XY_
+  xpos -286
+  ypos 375
+ }
+ Histogram {
+  in {0.2745098039 1 2}
+  name _THRESHOLD_
+  label "\[value in.0]"
+  xpos -286
+  ypos 409
+ }
+set N377b1450 [stack 0]
+ Dot {
+  name Dot1
+  xpos -133
+  ypos 413
+ }
+ Expression {
+  expr3 r*0.2126+g*0.7152+b*0.0722
+  name _TOALPHA_
+  xpos -164
+  ypos 578
+ }
+set N46039720 [stack 0]
+push $N38756fc0
+ Dot {
+  name Dot5
+  xpos -6
+  ypos 183
+ }
+ Dot {
+  name Dot4
+  xpos -6
+  ypos 483
+ }
+set N377cc5f0 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -37
+  ypos 574
+ }
+ Dot {
+  name Dot2
+  xpos -6
+  ypos 657
+ }
+push $N46039720
+push $N377cc5f0
+push $N377b1450
+ ShuffleCopy {
+  inputs 2
+  name _COPY_ALPHA_
+  xpos -286
+  ypos 483
+ }
+ Switch {
+  inputs 3
+  which {{mu_output}}
+  name _MENU_
+  xpos -286
+  ypos 657
+ }
+ Output {
+  name Output1
+  xpos -286
+  ypos 761
+ }
+end_group
