@@ -30,6 +30,12 @@ def StudioENV():
         SHOT = os.getenv('SHOTNAME')
         print "Enviroment set to %s" % STUDIO
 
+    elif STUDIO == "Framestore": # Shotgun
+        SHOW = os.getenv('PL_SHOW')
+        SCENE = os.getenv('PL_SEQ')
+        SHOT = os.getenv('PL_SHOT')
+        print "Enviroment set to %s" % STUDIO
+
 
     try:
         return {'SHOW': SHOW, 'SCENE': SCENE, 'SHOT': SHOT}
