@@ -1,9 +1,15 @@
-'''
+def _version_():
+    '''
 
-version 0
-- Merge or detach a branch with multiple nodes on the B pipe
+    version 0
+    - Merge or detach a branch with multiple nodes on the B pipe
 
-'''
+    verion 0.1
+    - fix bottom node not connecting
+    - fix `Dot` node alignment
+    - fix bottom node connect with wrong pipe
+
+    '''
 
 
 import nuke, nukescripts
