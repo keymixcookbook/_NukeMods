@@ -35,9 +35,12 @@ def move(branches, trunks):
     '''
 
     trunk_x = (trunks[0].xpos()+trunks[1].xpos())/2
+    trunk_cX = trunk_x+int(trunks[0].screenWidth()/2)
 
     for b in branches:
-        b.setXpos(int(trunk_x))
+        b_cX = b.xpos()+int(b.screenWidth()/2)
+        cX_dif = b_cX-trunk_cX
+        b.setXpos(int(b.xpos()-cX_dif))
 
     return None
 
