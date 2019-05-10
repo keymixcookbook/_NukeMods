@@ -322,3 +322,25 @@ def mergeOp():
 				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue rgba.alpha")
 	else:
 		nuke.message("Please select a Merge node")
+
+
+
+def stackIBK():
+    '''build IBK stack with one IBK master node selected'''
+
+    if not nuke.selectedNodes('IBKColourV3'):
+        nuke.message('Select a IBKColour node')
+    else:
+        node_master = nuke.selectedNode()
+        ls_stack = [6,24,96,192]
+
+        for idx, s in enumerate(ls_stack,0):
+            node_slave = nuke.createNode('IBKColourV3', inpanel=False)
+
+			node_slave.setYpos(node_slave.ypos()+18) if idx == 0 else pass
+
+			knobs = ['screen_type','Size','off','mult']
+            for k in knobs:
+                print k
+                node_slave[k].setValue(node_master[k].value())
+            node_slave.knob('multi').setValue(int(s))
