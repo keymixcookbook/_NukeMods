@@ -1,18 +1,20 @@
-'''
+def _version_():
+	ver='''
 
-version 3.0
-- Fit to selection
-- Select which `Backdrop` node to resize
+	version 3.0
+	- Fit to selection
+	- Select which `Backdrop` node to resize
 
-version 2.0 (with mod_ColorCode)
-- add color palatte, with html special characters and pyScript buttom
+	version 2.0 (with mod_ColorCode)
+	- add color palatte, with html special characters and pyScript buttom
 
-version 1.0
-- Select Backdrop
-- Enter Width and Height
-- Select if From center or Side
+	version 1.0
+	- Select Backdrop
+	- Enter Width and Height
+	- Select if From center or Side
 
-'''
+	'''
+	return ver
 
 
 import nuke, nukescripts
