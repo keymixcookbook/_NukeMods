@@ -1,8 +1,7 @@
-import Qt
-from Qt import QtGui
-from Qt import QtCore
-from Qt.QtGui import *
-from Qt.QtCore import *
+from PySide import QtGui
+from PySide import QtCore
+from PySide.QtGui import *
+from PySide.QtCore import *
 import nuke
 
 
@@ -70,7 +69,7 @@ class TimeHotkeys(QDialog):
         super(TimeHotkeys, self).__init__()
         self.generalLayout = QHBoxLayout(self)
         self.generalLayout.setMargin(0)
-        self.generalLayout.setSpacing(0);
+        self.generalLayout.setSpacing(0)
         self.addShortcutButton = CustomButton("+",self)
         self.addShortcutButton.clicked.connect(self.addHotkey)
         self.addShortcutButton.setFixedWidth(30)
@@ -159,6 +158,11 @@ class TimeHotkeys(QDialog):
 
 
 
+########## Main Functions ##########         
+        
+        
+        
+        
 def find_viewer():
 
     for widget in QtGui.QApplication.allWidgets():
@@ -186,4 +190,6 @@ def find_framerange(qtObject): #thanks Erwan Leroy =)
         except:
             pass
 
-cam_menu = find_framerange(find_viewer())
+        
+def TimelineHotkeys:
+    find_framerange(find_viewer())
