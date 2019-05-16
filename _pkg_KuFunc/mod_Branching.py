@@ -1,5 +1,5 @@
 def _version_():
-    '''
+    ver='''
 
     version 0
     - Merge or detach a branch with multiple nodes on the B pipe
@@ -10,6 +10,7 @@ def _version_():
     - fix bottom node connect with wrong pipe
 
     '''
+    return ver
 
 
 import nuke, nukescripts

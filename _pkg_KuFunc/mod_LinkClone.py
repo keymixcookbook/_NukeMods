@@ -1,12 +1,13 @@
+def _version_():
 
-'''
-- Select a Node
-- Copy the Node and expression link knobs
+	ver='''
+	- Select a Node
+	- Copy the Node and expression link knobs
 
-- Two or More Nodes selected
-- Expression link knobs to the last selected Node
+	- Two or More Nodes selected
+	- Expression link knobs to the last selected Node
 
-'''
+	'''
 
 
 

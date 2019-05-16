@@ -1,16 +1,27 @@
-'''
+def _version_():
+    ver='''
 
-version 0
-- Finds all or selected Nodes with hidden inputs
-- unhide inputs, save node names
-- take saved node names and hide them back
+    version 0
+    - Finds all or selected Nodes with hidden inputs
+    - unhide inputs, save node names
+    - take saved node names and hide them back
 
-'''
+    '''
+    return ver
 
 
 
 
 import nuke, nukescripts
+
+
+
+
+
+
+
+########## Supporting Functions ##########
+
 
 
 
@@ -30,6 +41,14 @@ def upd(node):
     all_hidden = [n.name() for n in nuke.allNodes() if n['hide_input'].value() == True]
 
     node['tx_store'].setValue(','.join(all_hidden))
+
+
+
+
+
+########## Main Function ##########
+
+
 
 
 

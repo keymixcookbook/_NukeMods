@@ -1,5 +1,5 @@
-def versions():
-    return '''
+def _version_():
+    ver='''
 
     version 2.0
     - more Color options (Random)
@@ -17,6 +17,7 @@ def versions():
     - Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp
 
     '''
+    return ver
 
 
 

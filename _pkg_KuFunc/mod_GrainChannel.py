@@ -1,16 +1,12 @@
-'''
+def _version_():
+    ver='''
 
-version 0
-- create a grain channel shuffle setup for every merge node
+    version 0
+    - create a grain channel shuffle setup for every merge node
 
-'''
+    '''
+    return ver
 
-
-
-'''
-test
-grainBuild(cal(collect(nuke.selectedNodes('Merge2'))))
-'''
 
 
 

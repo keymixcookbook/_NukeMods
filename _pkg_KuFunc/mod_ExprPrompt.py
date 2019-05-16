@@ -1,12 +1,20 @@
-'''
+def _version_():
+    ver='''
 
-- Selected Expression Node
-- Give Presets, which channel to add
-- add
+    version 0
+    - Selected Expression Node
+    - Give Presets, which channel to add
+    - add
 
-'''
+    '''
+    return ver
+
+
 
 import nuke
+
+
+
 
 def ExprPrompt():
 

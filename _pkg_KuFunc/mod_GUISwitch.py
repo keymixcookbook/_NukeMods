@@ -1,9 +1,16 @@
+def _version_():
+    ver='''
+
+    version 0
+    - Toggle between $GUI and no $GUI
+    - Suggested shortkey: "shift+d", "shift+alt+d"
+    '''
+    
+
+
+
 import nuke
 
-'''
-- Toggle between $GUI and no $GUI
-- Suggested shortkey: "shift+d", "shift+alt+d"
-'''
 
 
 def GUISwitch(mode='switch'):

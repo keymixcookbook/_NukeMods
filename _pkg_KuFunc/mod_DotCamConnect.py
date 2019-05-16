@@ -1,16 +1,17 @@
-'''
+def _version_():
+	ver='''
 
-version 2.0
-- add button to open input node property panel
+	version 2.0
+	- add button to open input node property panel
 
-version 1.0
-- Find A Camera nodes in nuke
-- List names of the ndoes in a menu
-- Select the node and Connect!
-- Hide the input, set the color to red and put the Camera Node name to Dot node's label
+	version 1.0
+	- Find A Camera nodes in nuke
+	- List names of the ndoes in a menu
+	- Select the node and Connect!
+	- Hide the input, set the color to red and put the Camera Node name to Dot node's label
 
-'''
-
+	'''
+	return ver
 
 
 

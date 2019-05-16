@@ -1,5 +1,5 @@
 def _version_():
-    return '''
+    ver='''
 
     version 3.1
     - if topnode is a roto node, change tile_color to match
@@ -16,7 +16,10 @@ def _version_():
     version 2.0
     - added Callback, label changes when input changed
 
+    version 0
+    - Postage Stamp with hidden inputs
     '''
+    return ver
 
 
 
