@@ -8,6 +8,9 @@ def _version_():
     - fix bottom node not connecting
     - fix `Dot` node alignment
     - fix bottom node connect with wrong pipe
+    
+    version 1.0
+    - Only need to select branches and trunk_top, will detect trunk_bottom base on xpos
 
     '''
     return ver
@@ -28,9 +31,24 @@ def nodeSplit(nodes):
     '''
     Filter selection to parts
     '''
+    
+    def centerPoint(node):
+        return int((node.xpos()+node.screenWidth())/2)
 
-    trunks = (nodes[1], nodes[0])
-    branches = nodes[2:]
+    trunk_top = nodes[0]
+    trunk_bottom = None
+    trunk_top_cx = centerPoint(trunk_top)
+    threshold = 10
+
+    for n in trunk_top.dependent():
+        if centerPoint(n)>(centerPoint(trunk_top)-10) and centerPoint(n)<(centerPoint(trunk_top)+10):
+            trunk_bottom = n
+        else:
+            pass
+
+    trunks = (trunk_bottom, trunk_top)
+
+    branches = nodes[1:]
 
     return [trunks, branches]
 
