@@ -46,7 +46,7 @@ def nodeSplit(nodes):
         else:
             pass
 
-    trunks = (trunk_bottom, trunk_top)
+    trunks = (trunk_top, trunk_bottom)
 
     branches = nodes[1:]
 
