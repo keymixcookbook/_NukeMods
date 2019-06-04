@@ -344,3 +344,34 @@ def stackIBK():
                 print k
                 node_slave[k].setValue(node_master[k].value())
             node_slave.knob('multi').setValue(int(s))
+
+
+
+def cycleChannels(mode='rgba'):
+	'''cycle through channels nodes
+	@mode='rgba': 'rgb', 'rgba', 'alpha'
+	@mode='all': all channels in last selected node
+	'''
+
+	if not nuke.selectedNodes():
+		nuke.message('Select some nodes, Sil vous plait')
+	else:
+
+		if mode == 'rgba':
+			global ls_ch = ['rgb', 'rgba', 'alpha']
+		elif mode == 'all':
+			ls_ch = nuke.selectedNode().channels()
+
+		print "\n=====\n"
+
+		for n in nuke.selectedNodes():
+			try:
+				ch = n['channels']
+				ch_cur = ch.value()
+				ch_count = ls_ch.index(ch_cur)
+				ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
+				ch_new = ls_ch[int(ch_new_idx)]
+				ch.setValue(ch_new)
+				print "%s set to %s" % (n.name(), ch_new)
+			except:
+				print "knob 'channels' not in %s" % n.name()

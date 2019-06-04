@@ -53,19 +53,21 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 
 kuMu = nuke.menu('Nuke').addMenu('KU')
 
-addMenuItem('f', kuMu, 'Connect Mask Input',    "mask()",                       hotkey="ctrl+Y")
-addMenuItem('f', kuMu, 'Change label',          "labelChange()",                hotkey="shift+N")
-addMenuItem('m', kuMu, 'Linked Postage Stamp',  "LinkedStamp()",                hotkey="f4")
-addMenuItem('f', kuMu, 'Group Connect A',       "groupConnect()",               hotkey="alt+ctrl+Y")
-addMenuItem('f', kuMu, 'Set Operation',         "mergeOp()",                    hotkey="alt+O")
-addMenuItem('m', kuMu, 'Set Grain Channels',    "GrainChannel()")
-addMenuItem('m', kuMu, 'Branching',             "Branching()",               hotkey="j", shortcutContext=2)
-addMenuItem('m', kuMu, 'Link Clone',            "LinkClone()")
-addMenuItem('m', kuMu, 'Find Hidden Inputs',    "RestoreHiddenInputs()")
-addMenuItem('m', kuMu, 'Scale DAG',    "ScaleTree()")
+addMenuItem('f', kuMu, 'Connect Mask Input', "mask()", hotkey="ctrl+Y")
+addMenuItem('f', kuMu, 'Change label',"labelChange()", hotkey="shift+N")
+addMenuItem('m', kuMu, 'Linked Postage Stamp',"LinkedStamp()", hotkey="f4")
+addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
+addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
+addMenuItem('m', kuMu, 'Branching', "Branching()", hotkey="j", shortcutContext=2)
+addMenuItem('f', kuMu, 'Cycle through Channels', "cycleChannels()", hotkey="c", shortcutContext=2)
 kuMu.addSeparator()
-addMenuItem('m', kuMu, '$GUI Switch/switch',    "GUISwitch(mode='switch')",     hotkey="shift+D")
-addMenuItem('m', kuMu, '$GUI Switch/reverse',   "GUISwitch(mode='reverse')",    hotkey="ctrl+shift+D")
+addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()")
+addMenuItem('m', kuMu, 'Link Clone', "LinkClone()")
+addMenuItem('m', kuMu, 'Find Hidden Inputs', "RestoreHiddenInputs()")
+addMenuItem('m', kuMu, 'Scale DAG', "ScaleTree()")
+kuMu.addSeparator()
+addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey="shift+D")
+addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 
 
 
@@ -77,23 +79,23 @@ addMenuItem('m', kuMu, '$GUI Switch/reverse',   "GUISwitch(mode='reverse')",    
 
 tBar = nuke.toolbar("T_Bar")
 
-addMenuItem('f', tBar, 'Select Child Nodes',"selectChildNodes()",icon="Output.png")
+addMenuItem('f', tBar, 'Select Child Nodes',"selectChildNodes()", icon="Output.png")
 tBar.addMenu('Align Nodes', icon="align_menu.png")
-addMenuItem('m', tBar, 'Align Nodes/top',"AlignNodes('up')",icon="align_T.png")
-addMenuItem('m', tBar, 'Align Nodes/bottom',"AlignNodes('down')",icon="align_B.png")
-addMenuItem('m', tBar, 'Align Nodes/left',"AlignNodes('left')",icon="align_L.png")
-addMenuItem('m', tBar, 'Align Nodes/right',"AlignNodes('right')",icon="align_R.png")
-addMenuItem('f', tBar, 'Filter Selection',"filterSelection()",icon="NoOp.png")
-addMenuItem('m', tBar, 'Backdrop Resize',"BackdropResize()",icon="BackdropResize.png")
-addMenuItem('m', tBar, 'KuDrop',"ColorCode()",icon="Backdrop.png")
-addMenuItem('m', tBar, 'Dot Cam Connect',"DotCamConnect()",icon="Camera.png")
-addMenuItem('m', tBar, 'Roto AutoLife',"autolife()",icon="Roto.png")
+addMenuItem('m', tBar, 'Align Nodes/top', "AlignNodes('up')", icon="align_T.png")
+addMenuItem('m', tBar, 'Align Nodes/bottom', "AlignNodes('down')", icon="align_B.png")
+addMenuItem('m', tBar, 'Align Nodes/left', "AlignNodes('left')", icon="align_L.png")
+addMenuItem('m', tBar, 'Align Nodes/right', "AlignNodes('right')", icon="align_R.png")
+addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
+addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="BackdropResize.png")
+addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
+addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
+addMenuItem('m', tBar, 'Roto AutoLife', "autolife()", icon="Roto.png")
+addMenuItem('f', tBar, 'Stack IBK', "stackIBK()", icon="IBKColour.png")
 
 
 
 
 ########## DEFAULT NODE VALUE ##########
-
 
 
 
