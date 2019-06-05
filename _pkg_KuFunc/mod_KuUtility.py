@@ -356,22 +356,29 @@ def cycleChannels(mode='rgba'):
 	if not nuke.selectedNodes():
 		nuke.message('Select some nodes, Sil vous plait')
 	else:
+		ls_ch = []
 
 		if mode == 'rgba':
-			global ls_ch = ['rgb', 'rgba', 'alpha']
+			ls_ch = ['rgb', 'rgba', 'alpha','all']
 		elif mode == 'all':
-			ls_ch = nuke.selectedNode().channels()
+			ls_ch = nuke.layers(nuke.selectedNode())
 
-		print "\n=====\n"
+		print "\n====="
 
 		for n in nuke.selectedNodes():
 			try:
 				ch = n['channels']
 				ch_cur = ch.value()
-				ch_count = ls_ch.index(ch_cur)
-				ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
-				ch_new = ls_ch[int(ch_new_idx)]
-				ch.setValue(ch_new)
+				ch_new = None
+				if ch_cur in ls_ch:
+				    ch_count = ls_ch.index(ch_cur)
+				    ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
+				    ch_new = ls_ch[int(ch_new_idx)]
+			    else:
+			        ch_new = ls_ch[0]
+			        
+		        ch.setValue(ch_new)
 				print "%s set to %s" % (n.name(), ch_new)
 			except:
 				print "knob 'channels' not in %s" % n.name()
+
