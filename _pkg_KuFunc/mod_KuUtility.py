@@ -384,15 +384,17 @@ def cycleChannels(mode='rgba'):
 
 
 				
-def setSize(increment = 0.5):
-	'''Set knob values with increments'''
-	
-	knobs = ['size', 'Size', 'value', 'which', 'saturation']
-	for n in nuke.selectedNodes():
-		for k in n.knobs()
-			k_size = k if k in knobs else None
-		if k_size:
-			k_val = n[k_size].value()
-			n[k_size].setValue(k_val+increment)
-		else:
-			print "no size knobs in %s" % n.name()
+def setSize(increment = 1.5):
+    '''Set knob values with multiplical increments'''
+    
+    knobs = ['size', 'Size', 'value', 'which', 'saturation']
+    for n in nuke.selectedNodes():
+        for k in n.knobs():
+            k_size = None
+            if k in knobs:
+                k_size = k
+                k_val = n[k_size].value()
+                n[k_size].setValue(k_val*increment)
+		print "%s %s set to %s" % (n.name(), k_size, k_val*increment)
+            else:
+                pass
