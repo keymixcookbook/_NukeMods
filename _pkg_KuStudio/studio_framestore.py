@@ -1,3 +1,11 @@
+import nuke
+import nukescripts
+
+
+
+
+
+
 def launchRV():
     '''launch RV with multiple selections and stack'''
     path_read = []
