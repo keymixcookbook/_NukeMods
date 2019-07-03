@@ -59,10 +59,13 @@ addMenuItem('m', kuMu, 'Linked Postage Stamp',"LinkedStamp()", hotkey="f4")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
 addMenuItem('m', kuMu, 'Branching', "Branching()", hotkey="j", shortcutContext=2)
-addMenuItem('f', kuMu, 'Cycle through rgba', "cycleChannels()", hotkey="c", shortcutContext=2)
-addMenuItem('f', kuMu, 'Cycle through all channels', "cycleChannels(mode='all')", hotkey="shift+c", shortcutContext=2)
-addMenuItem('f', kuMu, 'Value +', "setSize(1.25)", hotkey="alt+.", shortcutContext=2)
-addMenuItem('f', kuMu, 'Value -', "setSize(0.25)", hotkey="alt+,", shortcutContext=2)
+addMenuItem('f', kuMu, 'CycleChannels/rgba', "cycleChannels()", hotkey="c", shortcutContext=2)
+addMenuItem('f', kuMu, 'CycleChannels/all channels', "cycleChannels(mode='all')", hotkey="shift+c", shortcutContext=2)
+addMenuItem('f', kuMu, 'SetVal/>', "setSize(0.25)", hotkey="alt+.", shortcutContext=2)
+addMenuItem('f', kuMu, 'SetVal/<', "setSize(-0.25)", hotkey="alt+,", shortcutContext=2)
+addMenuItem('f', kuMu, 'SetVal/>>', "setSize(0.5)", hotkey="shift+alt+.", shortcutContext=2)
+addMenuItem('f', kuMu, 'SetVal/<<', "setSize(-0.5)", hotkey="shift+alt+,", shortcutContext=2)
+addMenuItem('f', kuMu, 'Launch Selection in RV', "launchRV()", hotkey="f2")
 kuMu.addSeparator()
 addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()")
 addMenuItem('m', kuMu, 'Link Clone', "LinkClone()")
@@ -71,8 +74,9 @@ addMenuItem('m', kuMu, 'Scale DAG', "ScaleTree()")
 kuMu.addSeparator()
 addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey="shift+D")
 addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
-
+kuMu.addSeparator()
 kuMu.addCommand('Shuffle', "nuke.createNode('Shuffle')", "h", shortcutContext=2)
+kuMu.addCommand('Expression', "nuke.createNode('Expression')", "e", shortcutContext=2)
 
 
 
@@ -111,6 +115,7 @@ nuke.knobDefault('Blur.channels', 'alpha')
 nuke.knobDefault('FilterErode.channels', 'alpha')
 nuke.knobDefault('FilterErode.filter', 'gaussian')
 nuke.knobDefault('Dilate.channels', 'alpha')
+nuke.knobDefault('Defocus.channels', 'alpha')
 
 nuke.knobDefault('OFXuk.co.thefoundry.keylight.keylight_v201.show', 'Intermediate Result')
 
@@ -124,13 +129,19 @@ nuke.knobDefault('Remove.label', '[value channels]')
 nuke.knobDefault('Switch.which', '1')
 nuke.knobDefault('Switch.label', '[value which]')
 
-nuke.knobDefault('log2lin2.label', '[value operation]')
+nuke.knobDefault('log2lin.label', '[value operation]')
+nuke.knobDefault('log2lin1.operation', 'lin2log')
 
 nuke.knobDefault('StickyNote.note_font', 'bold')
 nuke.knobDefault('StickyNote.note_font_size', '24')
 
 nuke.knobDefault('Multiply.label', '[value value]')
 nuke.knobDefault('Expression.label', 'a::[value expr3]')
+nuke.knobDefault('Invert.channels', 'alpha')
+nuke.knobDefault('IBKColourV3.Size', '1')
+nuke.knobDefault('Shuffle.label', '[value in]')
+nuke.knobDefault('Roto.cliptype', 'no clip')
+nuke.knobDefault('Rotopaint.cliptype', 'no clip')
 
 ### Viewer Node ###
 nuke.knobDefault('Viewer.frame_increment', '8')
@@ -139,10 +150,21 @@ nuke.knobDefault('Viewer.hide_input', 'True')
 
 
 
-########## Custom OnUserCreate ##########
-
-
-
 # nuke.addOnUserCreate(function, nodeClass='Class')
 
 nuke.addOnCreate(mod_StudioENV.StudioENV, nodeClass='Root')
+
+def viewerSetting():
+    for n in nuke.allNodes('Viewer'):
+        n['frame_increment'].setValue(8)
+        n['hide_input'].setValue(True)
+        
+nuke.addOnCreate(viewerSetting, nodeClass='Root')
+
+
+
+
+
+# Nuke Tab alternative
+m_tab = nuke.menu("Nuke").findItem("Edit")
+m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
