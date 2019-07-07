@@ -1,11 +1,12 @@
 set cut_paste_input [stack 0]
+
 Group {
  inputs 0
  name ku_Radial
- note_font "Verdana Bold Bold Bold"
+ note_font "Verdana Bold Bold"
  selected true
- xpos 1646
- ypos 38037
+ xpos -7710
+ ypos 15287
  addUserKnob {20 tb_user l ku_Radial}
  addUserKnob {41 solid l "solid circle" T _SOLID_DRAW_.disable}
  addUserKnob {6 antialiace l AA -STARTLINE}
@@ -27,5 +28,92 @@ Group {
  addUserKnob {22 bt_center l Center T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])" +STARTLINE}
  addUserKnob {22 bt_fit_x l "Fit Width" -STARTLINE T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])\nn\['radius'].setValue(center_x)"}
  addUserKnob {22 bt_fit_y l "Fit Height" -STARTLINE T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])\nn\['radius'].setValue(center_y)"}
- addUserKnob {26 tx_de
-    [pasted text truncated for security]
+ addUserKnob {26 tx_desc l "" +STARTLINE 
+}
+ Constant {
+  inputs 0
+  channels rgb
+  name _FRAME_
+  xpos 179
+  ypos -273
+ }
+ AdjBBox {
+  numpixels {{_CORE_.center<=input.width/2?(_CORE_.center-_CORE_.radius)*-1:abs(_CORE_.radius-(input.width-_CORE_.center))} {_CORE_.center<=input.height/2?(_CORE_.center-_CORE_.radius)*-1:abs(_CORE_.radius-(input.height-_CORE_.center))}}
+  name _EXPAND_
+  xpos 179
+  ypos -201
+ }
+ Expression {
+  temp_name0 s
+  temp_expr0 radius
+  channel0 rgba
+  expr0 "smoothstep(0,1,clamp((s - sqrt(pow2(x-center.x) + pow2(y-center.y)))/s))"
+  name _CORE_
+  xpos 179
+  ypos -177
+  addUserKnob {20 User}
+  addUserKnob {12 center}
+  center {960 540}
+  addUserKnob {7 radius R 1 2000}
+  radius 500
+ }
+ 
+ Crop {
+  box {{_CORE_.center-_CORE_.radius-margin} {_CORE_.center-_CORE_.radius-margin} {_CORE_.radius+_CORE_.center+margin} {_CORE_.center.y+_CORE_.radius+margin}}
+  name _BBOX_
+  xpos 179
+  ypos -153
+  addUserKnob {20 User}
+  addUserKnob {7 margin R 0 50}
+  margin 25
+ }
+ Gamma {
+  channels rgba
+  name _FALLOFF_
+  xpos 179
+  ypos -129
+ }
+set Nc64fe8f0 [stack 0]
+push $Nc64fe8f0
+ Expression {
+  expr0 r>0
+  expr1 g>0
+  expr2 b>0
+  expr3 a>0
+  name _SOLID_
+  xpos 289
+  ypos -129
+ }
+ Matrix {
+  matrix {
+      {0 1 0}
+      {1 4 1}
+      {0 1 0}
+    }
+  normalize true
+  name _SOLD_AA_
+  selected true
+  xpos 289
+  ypos -105
+  disable {{!parent.antialiace}}
+ }
+ Switch {
+inputs 2
+  which 1
+  name _SOLID_DRAW_
+  label "\[value which]"
+  xpos 179
+  ypos -105
+ }
+ Transform {
+  center {{parent._CORE_.center} {parent._CORE_.center}}
+  name _TRANSFORM_
+  xpos 179
+  ypos -73
+ }
+ Output {
+  name Output
+  xpos 179
+  ypos -34
+ }
+end_group
