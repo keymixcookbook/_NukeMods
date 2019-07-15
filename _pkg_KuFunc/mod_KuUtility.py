@@ -384,7 +384,7 @@ def cycleChannels(mode='rgba'):
 
 
 				
-def setSize(increment = 1.5):
+def setSize(increment = 0.5):
     '''Set knob values with multiplical increments'''
     
     knobs = ['size', 'Size', 'value', 'which', 'saturation']
@@ -394,7 +394,13 @@ def setSize(increment = 1.5):
             if k in knobs:
                 k_size = k
                 k_val = n[k_size].value()
-                n[k_size].setValue(k_val*increment)
+                n[k_size].setValue(k_val*(1+increment))
 		print "%s %s set to %s" % (n.name(), k_size, k_val*increment)
             else:
                 pass
+
+	
+	
+def setExpr():
+	'''set fields in the expression node, with or without selection'''
+	for n in nuke.selectedNodes('Expression')
