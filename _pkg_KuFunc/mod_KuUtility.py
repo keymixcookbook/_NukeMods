@@ -403,4 +403,6 @@ def setSize(increment = 0.5):
 	
 def setExpr():
 	'''set fields in the expression node, with or without selection'''
-	for n in nuke.selectedNodes('Expression')
+	sel = nuke.selectedNodes('Expression')
+	node = sel if sel else nuke.createNode('Expression')
+
