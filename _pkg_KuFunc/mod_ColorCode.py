@@ -1,5 +1,8 @@
 def _version_():
     ver='''
+	
+	version 2.1
+    - replace html tag for note_font_size with integer number
 
     version 2.0
     - more Color options (Random)
