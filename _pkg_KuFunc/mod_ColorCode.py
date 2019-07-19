@@ -5,7 +5,6 @@ def _version_():
     - more Color options (Random)
     - Header Size options
 
-
     version 1.0
     - Fixing error when cancel nuke panel
     - Fixing Default value of backdrop label
@@ -134,7 +133,6 @@ def colorButtons(bd, hex_group, blk):
 
 
 
-
 ########## Main Function ##########
 
 
@@ -183,11 +181,14 @@ def ColorCode():
         p.addEnumerationPulldown('Type: ', ' '.join(sorted(hex_group.keys())))
         p.addSingleLineInput('Label: ', most_class)
         p.addEnumerationPulldown('Font Size: ', 'h3 h2 h1')
+		p.addBooleanCheckBox('center',False)
 
         if p.show():
             bd_type = p.value('Type: ')
             bd_label = p.value('Label: ')
             bd_font = p.value('Font Size: ')
+			bd_center = p.value('center')
+			dir_font = {'h1': 200, 'h2': 96, 'h1': 48}
 
             colorButtons(bd, hex_group, blk)
 
@@ -199,11 +200,14 @@ def ColorCode():
                 rand_r, rand_g, rand_b = hsv2rgb(rand_h,.25,.36)
 
                 bd.knob('tile_color').setValue(nukeColor(rand_r,rand_g,rand_b))
+				bd.knob('note_font_size').setValue(dir_font[bd_font])
                 bd.knob('note_font_color').setValue(nukeColor(int(rand_r*2),int(rand_g*2),int(rand_b*2)))
-                bd.knob('label').setValue("<%s>%s" % (bd_font,bd_label))
+				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label 
+                bd.knob('label').setValue(setLabel)
             else:
                 bd.knob('bt_%s' % bd_type).execute()
-                bd.knob('label').setValue("<%s>%s" % (bd_font,bd_label))
+				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label 
+                bd.knob('label').setValue(setLabel)
             nuke.show(bd)
 
         else:
