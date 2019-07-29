@@ -11,6 +11,8 @@ A General scripting format and structure guide
   - `./_mod_Drafts`
   - `./_mod_Download`
   - `menu.py`
+  - `menuItems.py`
+  - `menuDefaults.py`
   - `init.py`
 
 ### Installation
@@ -84,7 +86,7 @@ also includes:
 
 
 
-########## SECTION TITLE 4 SPACES UP & DOWN ##########
+########## Section Title 4 Space up and Down (Capital Letters) ##########
 
 
 
@@ -119,7 +121,7 @@ class ThisClass:
 
 
 
-########## SECTION TITLE 4 SPACES FROM UP LINE ##########
+########## Secton Title 4 Space from the last line, start on the 5th line ##########
 
 
 
