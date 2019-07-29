@@ -15,5 +15,5 @@ to used in a VFX Studio enviroment
 
 
 
-from menuItems import *
-from menuDefaults import *
+from menu_items import *
+from menu_defaults import *
