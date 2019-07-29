@@ -57,3 +57,15 @@ addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotke
 kuMu.addSeparator()
 kuMu.addCommand('Shuffle', "nuke.createNode('Shuffle')", "h", shortcutContext=2)
 kuMu.addCommand('Expression', "nuke.createNode('Expression')", "e", shortcutContext=2)
+
+
+
+
+########## 3rd Party Menus ###########
+
+
+
+
+# Nuke Tab alternative
+m_tab = nuke.menu("Nuke").findItem("Edit")
+m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
