@@ -31,6 +31,10 @@ A General scripting format and structure guide
     - must indicate version number, and what's new
     - Once finished, merge to `master` branch, and close Issue
 
+### IDE
+  - Atom desktop
+  - [Gitpod web-IDE](https://be96a86d-acd9-4dbf-bb88-ad36b745317a.ws-us0.gitpod.io/#/workspace/_NukeStudio)
+
 ###### Version Indication Example
 ``` python
 
