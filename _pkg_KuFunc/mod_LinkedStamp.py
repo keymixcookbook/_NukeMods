@@ -62,7 +62,7 @@ def stpColor(rNode):
     elif node_top_class.startswith('Deep'):
         node_color = 24831 # system deep class color
     else:
-        node_color = 0 # default
+        node_color = 12040191 # pascal cyan
 
     return node_color
 
@@ -92,6 +92,8 @@ def LinkedStamp():
     stp['label'].setValue(rNode_nam)
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
+
+    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else pass
 
     # Reset Selections
     stp['selected'].setValue(False)
