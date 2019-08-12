@@ -1,0 +1,187 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+push $cut_paste_input
+Group {
+ name ku_GradeCAT
+ autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['in'].value()"
+ tile_color 0x7aa9ffff
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos 6254
+ ypos -5277
+ addUserKnob {20 tb_user l ku_GradeCAT}
+ addUserKnob {41 in l CAT T _CAT_.in}
+ addUserKnob {6 ck_preview l "Preview CAT" -STARTLINE}
+ addUserKnob {4 mu_graded l "| view" -STARTLINE M {Orig Graded ContactSheet ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 blackpoint T _GRADE_.blackpoint}
+ addUserKnob {41 whitepoint T _GRADE_.whitepoint}
+ addUserKnob {41 black l lift T _GRADE_.black}
+ addUserKnob {41 white l gain T _GRADE_.white}
+ addUserKnob {41 multiply T _GRADE_.multiply}
+ addUserKnob {41 gamma T _GRADE_.gamma}
+ addUserKnob {41 add l offset T _GRADE_.add}
+ addUserKnob {41 saturation T _SATURATION_.saturation}
+ addUserKnob {26 "" l "  "}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 524
+  ypos 400
+ }
+ Dot {
+  name Dot69
+  xpos 555
+  ypos 504
+ }
+set N16200940 [stack 0]
+ Dot {
+  name Dot5
+  xpos 726
+  ypos 504
+ }
+set Nbab11630 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1124
+  ypos 504
+ }
+ LayerContactSheet {
+  showLayerNames true
+  name _LAYERCONTACT_
+  xpos 1093
+  ypos 763
+ }
+set Nb93c4cc0 [stack 0]
+push $Nbab11630
+ Shuffle {
+  name _CAT_
+  label "\[value in]"
+  xpos 695
+  ypos 551
+ }
+ Dot {
+  name Dot68
+  xpos 726
+  ypos 615
+ }
+set Nd758c70 [stack 0]
+ Grade {
+  black_clamp false
+  name _GRADE_
+  xpos 695
+  ypos 705
+ }
+ Saturation {
+  mode Maximum
+  name _SATURATION_
+  xpos 695
+  ypos 763
+ }
+set Nbf7e1930 [stack 0]
+push $Nd758c70
+ Dot {
+  name Dot4
+  xpos 964
+  ypos 615
+ }
+ Switch {
+  inputs 3
+  which {{mu_graded}}
+  name _MULTIFIED_
+  label "\[value which]"
+  xpos 933
+  ypos 757
+ }
+ Dot {
+  name Dot3
+  xpos 964
+  ypos 1076
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 654
+  ypos 938
+  number 1
+ }
+push $N16200940
+ Dot {
+  name Dot2
+  xpos 416
+  ypos 571
+ }
+ Dot {
+  name Dot1
+  xpos 416
+  ypos 939
+ }
+push $Nbf7e1930
+push $Nbf7e1930
+push $Nd758c70
+push $N16200940
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name _FROM_
+  xpos 524
+  ypos 614
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output rgb
+  name _PLUS_
+  xpos 524
+  ypos 763
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent._CAT_.in}}}
+  name _OVERWRITE_
+  label "\[value out]"
+  xpos 524
+  ypos 841
+ }
+ Keymix {
+  inputs 3
+  invertMask true
+  name Keymix1
+  xpos 524
+  ypos 932
+  disable {{"!\[ exists parent.input\[value mask.number] ]"}}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name _PREVIEW_
+  label "\[value which]"
+  xpos 524
+  ypos 1069
+  disable {{!ck_preview}}
+ }
+ Output {
+  name Output
+  xpos 524
+  ypos 1151
+ }
+push $Nb93c4cc0
+ Viewer {
+  frame_range 1001-1100
+  frame_increment 8
+  useGPUForInputs true
+  viewerProcess "Backpack (P3)"
+  name Viewer1
+  xpos 1500
+  ypos -10
+  hide_input true
+ }
+end_group
