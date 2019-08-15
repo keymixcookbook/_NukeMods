@@ -1,6 +1,6 @@
 def _version_():
     ver='''
-	
+
 	version 2.1
     - replace html tag for note_font_size with integer number
 
@@ -24,7 +24,7 @@ def _version_():
 
 
 
-import nuke, nukescripts
+import nuke, nukescripts, math
 
 
 
@@ -205,11 +205,11 @@ def ColorCode():
                 bd.knob('tile_color').setValue(nukeColor(rand_r,rand_g,rand_b))
 				bd.knob('note_font_size').setValue(dir_font[bd_font])
                 bd.knob('note_font_color').setValue(nukeColor(int(rand_r*2),int(rand_g*2),int(rand_b*2)))
-				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label 
+				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label
                 bd.knob('label').setValue(setLabel)
             else:
                 bd.knob('bt_%s' % bd_type).execute()
-				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label 
+				setLabel = "<center>%s" % bd_label if bd_center == True else bd_label
                 bd.knob('label').setValue(setLabel)
             nuke.show(bd)
 
