@@ -376,17 +376,17 @@ def cycleChannels(mode='rgba'):
 				    ch_new = ls_ch[int(ch_new_idx)]
 			    else:
 			        ch_new = ls_ch[0]
-			        
+
 		        ch.setValue(ch_new)
 				print "%s set to %s" % (n.name(), ch_new)
 			except:
 				print "knob 'channels' not in %s" % n.name()
 
 
-				
+
 def setSize(increment = 0.5):
     '''Set knob values with multiplical increments'''
-    
+
     knobs = ['size', 'Size', 'value', 'which', 'saturation']
     for n in nuke.selectedNodes():
         for k in n.knobs():
@@ -399,10 +399,33 @@ def setSize(increment = 0.5):
             else:
                 pass
 
-	
-	
-def setExpr():
-	'''set fields in the expression node, with or without selection'''
-	sel = nuke.selectedNodes('Expression')
-	node = sel if sel else nuke.createNode('Expression')
+
+
+def disable():
+    '''customized disable function, with changing tile_color'''
+    '''replace hotkey D'''
+
+    nodes = nuke.selectedNodes()
+
+    col_red = 780084223
+    col_green = 2133009407
+    col_white = 4294967295
+    col_yellow = 4290707711
+
+    if len(nodes)<0:
+        nuke.message("Select a node or two, man")
+    else:
+        for n in nodes:
+            k_disable = n['disable']
+            if k_disable.value() == False:
+                k_disable.setValue(True)
+                if n.Class() == 'Switch':
+                    n['tile_color'].setValue(col_yellow)
+                    n['note_font_color'].setValue(col_white)
+            else:
+                k_disable.setValue(False)
+                if n.Class() == 'Switch':
+                    n['tile_color'].setValue(col_green)
+                    n['note_font_color'].setValue(col_white)
+
 
