@@ -16,40 +16,55 @@ import nuke
 
 
 
-def ExprPrompt():
+def findNode():
+    '''Node if selected, else create'''
 
-    nodes = nuke.selectedNodes('Expression')
-
-    if len(nodes)<=0:
-        nuke.message("Please Select Expression nodes")
+    nodes = None
+    if len(nuke.selectedNodes('Expression'))>0:
+        nodes = selectedNodes('Expression')
     else:
+        nodes = nuke.createdNode('Expression')
 
-        p = nuke.Panel("Expression Value")
+    return nodes
 
-        p.addEnumerationPulldown('Set Channel', 'alpha rgb rgba')
-        p.addSingleLineInput('expr: ')
 
-        p.addButton('Cancel')
-        p.addButton('Set!')
 
-        if p.show():
+def setFields(node, ch, expr):
+    '''set the expr field with given node'''
 
-            sel_channel = p.value('Set Channel')
-            input_expr = p.value('expr: ')
+    fields = {
+            'alpha': ['expr3'],
+            'rgb': ['expr0', 'expr1', 'expr2'],
+            'rgba': ['expr0', 'expr1', 'expr2', 'expr3']
+            }
 
-            channel_set = []
+    for k in fields[f]:
+        node[k].setValue(expr)
 
-            if sel_channel == "alpha":
-                channel_set = ['expr3']
-            elif sel_channel == "rgba":
-                channel_set = ['expr0', 'expr1', 'expr2', 'expr3']
-            elif sel_channel == "rgb":
-                channel_set = ['expr0', 'expr1', 'expr2']
 
-            # Set Expressions
+def ExprPrompt():
+    '''main function'''
 
+    nodes = findNode()
+
+    p = nuke.Panel("Expression Value")
+
+    p.addSingleLineInput('expr: ')
+    p.addEnumerationPulldown('Set Channel', 'alpha rgb rgba')
+
+    p.addButton('Cancel')
+    p.addButton('Set!')
+
+    if p.show():
+
+        ch = p.value('Set Channel')
+        expr = p.value('expr: ')
+
+        if isinstance(nodes, list):
             for n in nodes:
-                for ch in channel_set:
-                    n[ch].setValue(input_expr)
+                setFields(n, ch, expr)
         else:
-            print "Set Expression Cancelled"
+            setFields(nodes, ch, expr)
+
+    else:
+        print "Set Expression Cancelled"
