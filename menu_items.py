@@ -52,6 +52,7 @@ addMenuItem('f', kuMu, 'SetVal/<', "setSize(-0.25)", hotkey="alt+,", shortcutCon
 addMenuItem('f', kuMu, 'SetVal/>>', "setSize(0.5)", hotkey="shift+alt+.", shortcutContext=2)
 addMenuItem('f', kuMu, 'SetVal/<<', "setSize(-0.5)", hotkey="shift+alt+,", shortcutContext=2)
 addMenuItem('f', kuMu, 'Launch Selection in RV', "launchRV()", hotkey="f2")
+addMenuItem('m', kuMu, 'Expression', "ExprPrompt()", hotkey="e", shortcutContext=2)
 kuMu.addSeparator()
 addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()")
 addMenuItem('m', kuMu, 'Link Clone', "LinkClone()")
@@ -62,7 +63,6 @@ addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey=
 addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 kuMu.addSeparator()
 kuMu.addCommand('Shuffle', "nuke.createNode('Shuffle')", "h", shortcutContext=2)
-kuMu.addCommand('Expression', "nuke.createNode('Expression')", "e", shortcutContext=2)
 
 
 
