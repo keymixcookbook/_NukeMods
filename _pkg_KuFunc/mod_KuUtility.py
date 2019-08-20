@@ -417,15 +417,17 @@ def disable():
     else:
         for n in nodes:
             k_disable = n['disable']
-            if k_disable.value() == False:
-                k_disable.setValue(True)
-                if n.Class() == 'Switch':
-                    n['tile_color'].setValue(col_yellow)
-                    n['note_font_color'].setValue(col_white)
-            else:
-                k_disable.setValue(False)
-                if n.Class() == 'Switch':
-                    n['tile_color'].setValue(col_green)
-                    n['note_font_color'].setValue(col_white)
+
+            if k_disable:
+                if k_disable.value() == False:
+                    k_disable.setValue(True)
+                    if n.Class() == 'Switch':
+                        n['tile_color'].setValue(col_yellow)
+                        n['note_font_color'].setValue(col_white)
+                else:
+                    k_disable.setValue(False)
+                    if n.Class() == 'Switch':
+                        n['tile_color'].setValue(col_green)
+                        n['note_font_color'].setValue(col_white)
 
 

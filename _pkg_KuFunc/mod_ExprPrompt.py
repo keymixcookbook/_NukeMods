@@ -38,7 +38,7 @@ def setFields(node, ch, expr):
             'rgba': ['expr0', 'expr1', 'expr2', 'expr3']
             }
 
-    for k in fields[f]:
+    for k in fields[ch]:
         node[k].setValue(expr)
 
 
