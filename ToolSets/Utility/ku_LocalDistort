@@ -1,0 +1,91 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+push $cut_paste_input
+Group {
+name ku_LocalDistort
+autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['tx_node'].value()"
+tile_color 0xa57aaaff
+note_font "DejaVu Sans Bold"
+selected true
+xpos -6556
+ypos 12575
+addUserKnob {20 tb_user l Ku_LocalDistort}
+addUserKnob {1 tx_node l "Transform Node: " t "Transform Node to link to"}
+tx_node "pick a transform node"
+addUserKnob {22 bt_pick l "Pick Transform Node" -STARTLINE T "n = nuke.thisNode()\nn.end()\nnode_transform = \[t.name() for t in nuke.allNodes('Transform')]\nsorted(node_transform)\n\np = nuke.Panel('Pick Tranform node to Link')\np.addEnumerationPulldown('node:', ' '.join(node_transform))\n\nif p.show():\n    sel_transform = p.value('node:')\n    n\['tx_node'].setValue(sel_transform)"}
+addUserKnob {26 ""}
+addUserKnob {41 translate T _TRANSFORM_.translate}
+addUserKnob {7 rotate_offset l "rotate offset" R -90 90}
+addUserKnob {41 scale T _TRANSFORM_.scale}
+addUserKnob {41 skewX l "skew X" T _TRANSFORM_.skewX}
+addUserKnob {41 skewY l "skew Y" T _TRANSFORM_.skewY}
+addUserKnob {26 ""}
+addUserKnob {26 tx_discr l "" +STARTLINE T "Distortion that follows the movement of the Object / Linked Track"}
+}
+Input {
+inputs 0
+name mask
+xpos -605
+ypos 560
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -1053
+ypos 426
+}
+set N29b7f190 [stack 0]
+Expression {
+expr0 x/(width+0.5)
+expr1 y/(height+0.5)
+expr2 0
+name Expression7
+label "a::\[value expr3]"
+xpos -796
+ypos 420
+}
+set N29bbc390 [stack 0]
+Transform {
+rotate {{-parent._TRANSFORM_.rotate}}
+center {{parent._TRANSFORM_.center} {parent._TRANSFORM_.center}}
+name _ALIGN_
+tile_color 0xff00ff
+gl_color 0xff00ff
+xpos -948
+ypos 520
+}
+Transform {
+rotate {{"\[value tx_node].rotate+rotate_offset"}}
+scale {1 1}
+center {{"\[value tx_node].center+\[value tx_node].translate"} {"\[value tx_node].center+\[value tx_node].translate"}}
+name _TRANSFORM_
+xpos -948
+ypos 560
+}
+push $N29bbc390
+Keymix {
+inputs 3
+name Keymix4
+xpos -796
+ypos 554
+}
+push $N29b7f190
+Dot {
+name Dot224
+xpos -1022
+ypos 713
+}
+STMap {
+inputs 2
+uv rgba
+name _STMAP_
+xpos -796
+ypos 706
+}
+Output {
+name Output
+xpos -796
+ypos 806
+}
+end_group
