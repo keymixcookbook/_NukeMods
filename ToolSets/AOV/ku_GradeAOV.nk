@@ -4,17 +4,20 @@ push $cut_paste_input
 Group {
  name ku_GradeCAT
  autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['in'].value()"
- tile_color 0x7aa9ffff
- note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold"
+ tile_color 0x3c547fff
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 6254
- ypos -5277
+ xpos -153
+ ypos -602
  addUserKnob {20 tb_user l ku_GradeCAT}
  addUserKnob {41 in l CAT T _CAT_.in}
  addUserKnob {6 ck_preview l "Preview CAT" -STARTLINE}
+ ck_preview true
  addUserKnob {4 mu_graded l "| view" -STARTLINE M {Orig Graded ContactSheet ""}}
+ mu_graded ContactSheet
  addUserKnob {26 ""}
+ addUserKnob {41 saturation T _SATURATION_.saturation}
  addUserKnob {41 blackpoint T _GRADE_.blackpoint}
  addUserKnob {41 whitepoint T _GRADE_.whitepoint}
  addUserKnob {41 black l lift T _GRADE_.black}
@@ -22,113 +25,150 @@ Group {
  addUserKnob {41 multiply T _GRADE_.multiply}
  addUserKnob {41 gamma T _GRADE_.gamma}
  addUserKnob {41 add l offset T _GRADE_.add}
- addUserKnob {41 saturation T _SATURATION_.saturation}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T _MIX_.which}
  addUserKnob {26 "" l "  "}
 }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x2e5c5cff
+  label "XTRA EDIT"
+  note_font "Bitstream Vera Sans Bold"
+  note_font_size 42
+  note_font_color 0xc0ccccff
+  xpos 665
+  ypos 207
+  bdwidth 1305
+  bdheight 883
+ }
  Input {
   inputs 0
   name Input
   xpos 524
-  ypos 400
+  ypos -74
  }
  Dot {
   name Dot69
   xpos 555
-  ypos 504
+  ypos 30
  }
-set N16200940 [stack 0]
- Dot {
-  name Dot5
-  xpos 726
-  ypos 504
- }
-set Nbab11630 [stack 0]
+set Nd5e2760 [stack 0]
  Dot {
   name Dot6
-  xpos 1124
-  ypos 504
+  xpos 396
+  ypos 30
+ }
+set Nd555cd0 [stack 0]
+ Crop {
+  box {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+  reformat true
+  crop false
+  name _CROP_TO_BBOX_
+  xpos 365
+  ypos 1091
  }
  LayerContactSheet {
-  showLayerNames true
+  showLayerNames {{ck_preview}}
   name _LAYERCONTACT_
-  xpos 1093
-  ypos 763
+  xpos 365
+  ypos 1132
  }
-set Nb93c4cc0 [stack 0]
-push $Nbab11630
+push $Nd5e2760
+ Dot {
+  name Dot5
+  xpos 1108
+  ypos 30
+ }
  Shuffle {
   name _CAT_
   label "\[value in]"
-  xpos 695
-  ypos 551
+  xpos 1077
+  ypos 88
  }
  Dot {
   name Dot68
-  xpos 726
-  ypos 615
+  xpos 1108
+  ypos 141
  }
-set Nd758c70 [stack 0]
+set Nd5e1660 [stack 0]
  Grade {
   black_clamp false
   name _GRADE_
-  xpos 695
-  ypos 705
+  xpos 1077
+  ypos 1130
  }
- Saturation {
+Saturation {
   mode Maximum
   name _SATURATION_
-  xpos 695
-  ypos 763
+  xpos 1077
+  ypos 1156
  }
-set Nbf7e1930 [stack 0]
-push $Nd758c70
+ Dot {
+  name Dot9
+  xpos 1108
+  ypos 1212
+ }
+ Dot {
+  name Dot8
+  xpos 691
+  ypos 1212
+ }
+set Ne2ebb70 [stack 0]
+ Dot {
+  name Dot10
+  xpos 691
+  ypos 1327
+ }
+push $Nd5e1660
  Dot {
   name Dot4
-  xpos 964
-  ypos 615
+  xpos 245
+  ypos 141
  }
  Switch {
   inputs 3
   which {{mu_graded}}
   name _MULTIFIED_
   label "\[value which]"
-  xpos 933
-  ypos 757
+  xpos 214
+  ypos 1320
  }
  Dot {
   name Dot3
-  xpos 964
-  ypos 1076
+  xpos 245
+  ypos 1645
  }
  Input {
   inputs 0
   name mask
   xpos 654
-  ypos 938
+  ypos 1606
   number 1
  }
-push $N16200940
+push $Nd555cd0
  Dot {
   name Dot2
-  xpos 416
-  ypos 571
+  xpos 138
+  ypos 30
  }
  Dot {
   name Dot1
-  xpos 416
-  ypos 939
+  xpos 138
+  ypos 1607
  }
-push $Nbf7e1930
-push $Nbf7e1930
-push $Nd758c70
-push $N16200940
+set Nd6265f0 [stack 0]
+push $Ne2ebb70
+push $Ne2ebb70
+push $Nd5e2760
+push $Nd5e1660
  Merge2 {
   inputs 2
-  operation from
+  operation minus
   output rgb
-  name _FROM_
+  name _MINUS_
   xpos 524
-  ypos 614
+  ypos 140
  }
  Merge2 {
   inputs 2
@@ -137,7 +177,7 @@ push $N16200940
   output rgb
   name _PLUS_
   xpos 524
-  ypos 763
+  ypos 1211
  }
  ShuffleCopy {
   inputs 2
@@ -149,14 +189,14 @@ push $N16200940
   name _OVERWRITE_
   label "\[value out]"
   xpos 524
-  ypos 841
+  ypos 1264
  }
  Keymix {
   inputs 3
   invertMask true
   name Keymix1
   xpos 524
-  ypos 932
+  ypos 1600
   disable {{"!\[ exists parent.input\[value mask.number] ]"}}
  }
  Switch {
@@ -165,23 +205,25 @@ push $N16200940
   name _PREVIEW_
   label "\[value which]"
   xpos 524
-  ypos 1069
+  ypos 1638
   disable {{!ck_preview}}
+ }
+push $Nd6265f0
+ Dot {
+  name Dot7
+  xpos 138
+  ypos 1683
+ }
+ Dissolve {
+  inputs 2
+  which 1
+  name _MIX_
+  xpos 524
+  ypos 1676
  }
  Output {
   name Output
   xpos 524
-  ypos 1151
- }
-push $Nb93c4cc0
- Viewer {
-  frame_range 1001-1100
-  frame_increment 8
-  useGPUForInputs true
-  viewerProcess "Backpack (P3)"
-  name Viewer1
-  xpos 1500
-  ypos -10
-  hide_input true
+  ypos 1839
  }
 end_group
