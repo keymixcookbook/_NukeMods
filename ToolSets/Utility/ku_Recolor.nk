@@ -1,0 +1,110 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+push $cut_paste_input
+Group {
+ name ku_Recolor
+ tile_color 0x7aa9ffff
+ selected true
+ xpos -664
+ ypos -659
+ lifetimeStart 1009
+ lifetimeEnd 1061
+ addUserKnob {20 tb_user l ku_Recolor}
+ addUserKnob {4 sw_mode l Color M {Input Manual Channel "" ""}}
+ addUserKnob {41 in l Channel -STARTLINE T _CHANNEL_.in}
+ addUserKnob {18 color_1 l "Manual Color"}
+ color_1 {0 0 0}
+ addUserKnob {6 color_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T _MIX_.which}
+ addUserKnob {22 addMask l "Add Mask" -STARTLINE T "if nuke.toNode('mask'):\n    nuke.delete(nuke.toNode('mask'))\n    nuke.thisKnob().setLabel(\"Add Mask\")\nelse:\n    m = nuke.nodes.Input(name='mask')\n    mix = nuke.toNode('_MIX_')\n    m.setXYpos(mix.xpos()+100,mix.ypos())\n    mix.setInput(mix.optionalInput(), m)\n    nuke.thisKnob().setLabel(\"Remove Mask\")\n"}
+}
+ Input {
+  inputs 0
+  name col
+  xpos -502
+  ypos -713
+  number 1
+ }
+set Nd429a60 [stack 0]
+ Shuffle {
+  name _CHANNEL_
+  xpos -635
+  ypos -621
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.color_1} {parent.color_1} {parent.color_1} {parent.color_1}}
+  name _COL_
+  xpos -327
+  ypos -644
+ }
+push $Nd429a60
+ Switch {
+  inputs 3
+  which {{sw_mode}}
+  name _SWITCH_
+  label "\[value which]"
+  xpos -502
+  ypos -627
+ }
+ Colorspace {
+  colorspace_out CIE-Lab
+  name _LIN_LAB_COL_
+  xpos -502
+  ypos -512
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -747
+  ypos -716
+ }
+set Nd45ad30 [stack 0]
+ Colorspace {
+  colorspace_out CIE-Lab
+  name _LIN_LAB_LUMA
+  xpos -747
+  ypos -511
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  from1 rgba.blue
+  to1 rgba.blue
+  name Copy13
+  xpos -747
+  ypos -441
+ }
+ Colorspace {
+  colorspace_in CIE-Lab
+  name _LAB_LIN_
+  xpos -747
+  ypos -369
+ }
+push $Nd45ad30
+ Dot {
+  name Dot193
+  xpos -850
+  ypos -715
+ }
+ Dot {
+  name Dot161
+  xpos -850
+  ypos -295
+ }
+ Dissolve {
+  inputs 2
+  which 1
+  name _MIX_
+  xpos -747
+  ypos -302
+ }
+ Output {
+  name Output1
+  xpos -747
+  ypos -202
+ }
+end_group
