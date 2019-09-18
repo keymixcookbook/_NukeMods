@@ -5,15 +5,14 @@ Group {
  name ku_GradeCAT
  autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['in'].value()"
  tile_color 0x3c547fff
- note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos -153
- ypos -602
+ xpos -855
+ ypos -587
  addUserKnob {20 tb_user l ku_GradeCAT}
  addUserKnob {41 in l CAT T _CAT_.in}
  addUserKnob {6 ck_preview l "Preview CAT" -STARTLINE}
- ck_preview true
  addUserKnob {4 mu_graded l "| view" -STARTLINE M {Orig Graded ContactSheet ""}}
  mu_graded ContactSheet
  addUserKnob {26 ""}
@@ -28,13 +27,16 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {41 mix T _MIX_.which}
  addUserKnob {26 "" l "  "}
+ addUserKnob {22 additive l Minus/Plus T "nuke.toNode('_SUB_')\['operation'].setValue('minus')\nnuke.toNode('_ADD_')\['operation'].setValue('plus')\n\nprint \"operation Minus/Plus\"\n" +STARTLINE}
+ addUserKnob {22 multiplictive l Divide/Multiply -STARTLINE T "nuke.toNode('_SUB_')\['operation'].setValue('divide')\nnuke.toNode('_ADD_')\['operation'].setValue('multiply')\n\nprint \"operation Divide/Multiply\""}
+ addUserKnob {22 addMask l "Add Mask" -STARTLINE T "if nuke.toNode('mask'):\n    keymix = nuke.toNode('_KEYMIX_')\n    nuke.delete(nuke.toNode('mask'))\n    keymix\['disable'].setValue(True)\n    nuke.thisKnob().setLabel(\"Add Mask\")\nelse:\n    m = nuke.nodes.Input(name='mask')\n    keymix = nuke.toNode('_KEYMIX_')\n    m.setXYpos(keymix.xpos()+100,keymix.ypos())\n    keymix.setInput(2, m)\n    keymix\['disable'].setValue(False)\n    nuke.thisKnob().setLabel(\"Remove Mask\")\n"}
 }
  BackdropNode {
   inputs 0
   name BackdropNode1
   tile_color 0x2e5c5cff
   label "XTRA EDIT"
-  note_font "Bitstream Vera Sans Bold"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold"
   note_font_size 42
   note_font_color 0xc0ccccff
   xpos 665
@@ -53,13 +55,13 @@ Group {
   xpos 555
   ypos 30
  }
-set Nd5e2760 [stack 0]
+set Nbced800 [stack 0]
  Dot {
   name Dot6
   xpos 396
   ypos 30
  }
-set Nd555cd0 [stack 0]
+set Nbcf1500 [stack 0]
  Crop {
   box {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
   reformat true
@@ -69,36 +71,36 @@ set Nd555cd0 [stack 0]
   ypos 1091
  }
  LayerContactSheet {
-  showLayerNames {{ck_preview}}
+  showLayerNames {{_MULTIFIED_.which==2&ck_preview==1?1:0}}
   name _LAYERCONTACT_
   xpos 365
-  ypos 1132
+  ypos 1130
  }
-push $Nd5e2760
+push $Nbced800
  Dot {
   name Dot5
   xpos 1108
   ypos 30
  }
  Shuffle {
+  alpha red2
   name _CAT_
   label "\[value in]"
   xpos 1077
-  ypos 88
+  ypos 86
  }
  Dot {
   name Dot68
   xpos 1108
   ypos 141
  }
-set Nd5e1660 [stack 0]
+set Nc899940 [stack 0]
  Grade {
-  black_clamp false
   name _GRADE_
   xpos 1077
   ypos 1130
  }
-Saturation {
+ Saturation {
   mode Maximum
   name _SATURATION_
   xpos 1077
@@ -114,13 +116,13 @@ Saturation {
   xpos 691
   ypos 1212
  }
-set Ne2ebb70 [stack 0]
+set Nc8bff80 [stack 0]
  Dot {
   name Dot10
   xpos 691
   ypos 1327
  }
-push $Nd5e1660
+push $Nc899940
  Dot {
   name Dot4
   xpos 245
@@ -139,14 +141,7 @@ push $Nd5e1660
   xpos 245
   ypos 1645
  }
- Input {
-  inputs 0
-  name mask
-  xpos 654
-  ypos 1606
-  number 1
- }
-push $Nd555cd0
+push $Nbcf1500
  Dot {
   name Dot2
   xpos 138
@@ -157,16 +152,17 @@ push $Nd555cd0
   xpos 138
   ypos 1607
  }
-set Nd6265f0 [stack 0]
-push $Ne2ebb70
-push $Ne2ebb70
-push $Nd5e2760
-push $Nd5e1660
+set Nc8e4120 [stack 0]
+push $Nc8bff80
+push $Nc8bff80
+push $Nbced800
+push $Nc899940
  Merge2 {
   inputs 2
   operation minus
-  output rgb
-  name _MINUS_
+  metainput A
+  rangeinput A
+  name _SUB_
   xpos 524
   ypos 140
  }
@@ -175,7 +171,7 @@ push $Nd5e1660
   operation plus
   Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
   output rgb
-  name _PLUS_
+  name _ADD_
   xpos 524
   ypos 1211
  }
@@ -189,15 +185,15 @@ push $Nd5e1660
   name _OVERWRITE_
   label "\[value out]"
   xpos 524
-  ypos 1264
+  ypos 1265
  }
  Keymix {
-  inputs 3
+  inputs 2
   invertMask true
-  name Keymix1
+  name _KEYMIX_
   xpos 524
   ypos 1600
-  disable {{"!\[ exists parent.input\[value mask.number] ]"}}
+  disable true
  }
  Switch {
   inputs 2
@@ -208,7 +204,7 @@ push $Nd5e1660
   ypos 1638
   disable {{!ck_preview}}
  }
-push $Nd6265f0
+push $Nc8e4120
  Dot {
   name Dot7
   xpos 138
