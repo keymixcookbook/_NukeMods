@@ -3,7 +3,7 @@ version 10.0 v4
 push $cut_paste_input
 Group {
  name ku_GradeCAT
- autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['in'].value()"
+ autolabel "nuke.thisNode().name()+'\\n'+(nuke.thisNode()\['in'].value() if len(nuke.thisNode()['label'].value())<=0 else nuke.thisNode()\['in'].value()+'\\n'+nuke.thisNode()['label'].value())"
  tile_color 0x3c547fff
  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
