@@ -97,7 +97,7 @@ def LinkedStamp():
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
 
-    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else pass
+    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
 
     # Reset Selections
     stp['selected'].setValue(False)
