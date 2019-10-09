@@ -64,4 +64,3 @@ def link_roto(tracker_node, node_roto=False):
 	transform_attr.setScaleAnimCurve(1, scale_curve)
 	transform_attr.setPivotPointAnimCurve(0, center_curve_x)
 	transform_attr.setPivotPointAnimCurve(1, center_curve_y)
-curves_knob.rootLayer.append(mm_layer)
