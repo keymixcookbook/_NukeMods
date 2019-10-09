@@ -40,7 +40,7 @@ def findElements():
         node_roto = sel[0]
         k = node_roto['curves']
         all_transform = [n.name() for n in nuke.allNodes('Transform')]
-        all_curves = [c.name for k.rootLayer if isinstance(c, nuke.rotopaint.Shape)]
+        all_curves = [c.name for c in k.rootLayer if isinstance(c, nuke.rotopaint.Shape)]
         p = nuke.Panel("Select Transform node and Shape")
         p.addEnumerationPulldown('MatchMove', ' '.join(all_transform))
         p.addEnumerationPulldown('Shape', ' '.join(all_curves.insert(0,'all')))
@@ -67,7 +67,7 @@ def findElements():
         node_trans = [t for r in sel if t.Class() in class_transform][0]
         if node_roto and node_trans:
             k = node_roto['curves']
-            all_curves = [c.name for k.rootLayer if isinstance(c, nuke.rotopaint.Shape)]
+            all_curves = [c.name for c in k.rootLayer if isinstance(c, nuke.rotopaint.Shape)]
             p = nuke.Panel("Select Shape")
             p.addEnumerationPulldown('Shape', ' '.join(all_curves.insert(0,'all')))
             if p.show():
