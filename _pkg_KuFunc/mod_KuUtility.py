@@ -410,8 +410,8 @@ def disable():
     col_red = 780084223
     col_green = 2133009407
     col_white = 4294967295
-    col_yellow = 4290707711
-
+	col_yellow = 3891223551
+	
     if len(nodes)<0:
         nuke.message("Select a node or two, man")
     else:
@@ -422,12 +422,12 @@ def disable():
                 if k_disable.value() == False:
                     k_disable.setValue(True)
                     if n.Class() == 'Switch':
-                        n['tile_color'].setValue(col_yellow)
+                        n['tile_color'].setValue(col_red)
                         n['note_font_color'].setValue(col_white)
                 else:
                     k_disable.setValue(False)
                     if n.Class() == 'Switch':
-                        n['tile_color'].setValue(col_green)
+                        n['tile_color'].setValue(col_yellow)
                         n['note_font_color'].setValue(col_white)
 
 

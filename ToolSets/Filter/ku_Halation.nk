@@ -1,0 +1,196 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+push $cut_paste_input
+Group {
+name ku_Halation
+tile_color 0xcc804eff
+note_font "Bitstream Vera Sans Bold"
+selected true
+xpos -222
+ypos 14450
+addUserKnob {20 tb_user l ku_Halation}
+addUserKnob {4 output M {result halation}}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {7 amount R 1 2}
+amount 1
+addUserKnob {7 glow l "glow multiplier" R 1 4}
+glow 1
+addUserKnob {41 hue_rotation l "hue rotation" T _HUESHIFT_.hue_rotation}
+addUserKnob {7 aspect l "pixel aspect ratio"}
+aspect 1
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {41 intensity l "global intensity" T _INTENSITY_.value}
+addUserKnob {41 center_intensity l "center intensity" T _CENTER_.value}
+}
+Input {
+inputs 0
+name mask
+xpos -585
+ypos 560
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -85
+ypos 335
+}
+Log2Lin {
+operation lin2log
+unpremult -rgba.alpha
+name _LIN_TO_LOG_
+xpos -85
+ypos 449
+disable {{output}}
+}
+set Nddac1bb0 [stack 0]
+Keyer {
+operation "luminance key"
+name _LUMA_
+xpos -416
+ypos 443
+}
+Merge2 {
+inputs 2
+operation mask
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+name _MASK_
+note_font "Verdana Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos -416
+ypos 554
+disable {{"!\[exists parent.input1]"}}
+}
+Premult {
+name _PREMULT_
+xpos -416
+ypos 722
+}
+Transform {
+scale {{aspect} 1}
+center {{input.width/2} {input.height/2}}
+name _ASPECT_
+xpos -416
+ypos 748
+}
+set Ndeec5d90 [stack 0]
+FilterErode {
+channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+size {{amount*-2}}
+filter quadratic
+name _HALA_A_
+xpos -514
+ypos 742
+}
+FilterErode {
+channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+size {{amount*-4}}
+filter quadratic
+mix 0.25
+name _HALA_B_
+xpos -514
+ypos 780
+}
+FilterErode {
+channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+size {{amount*-16}}
+filter quadratic
+mix {{0.0625*glow}}
+name _HALA_C_
+xpos -514
+ypos 818
+}
+push $Ndeec5d90
+Merge2 {
+inputs 2
+operation minus
+name _MINUS_
+xpos -416
+ypos 824
+}
+HueShift {
+name _HUESHIFT_
+xpos -416
+ypos 850
+}
+Transform {
+scale {{1/parent._ASPECT_.scale.w} 1}
+center {{parent._ASPECT_.center} {parent._ASPECT_.center}}
+name _ASPECT_REVERT_
+xpos -416
+ypos 876
+}
+Multiply {
+value 0.75
+name _INTENSITY_
+label "\[value value]"
+xpos -416
+ypos 940
+}
+set N32b1f910 [stack 0]
+Shuffle {
+alpha black
+name _BLACK_
+xpos -289
+ypos 1030
+}
+Radial {
+area {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+name _CENTER_MASK_
+xpos -289
+ypos 1056
+}
+push $N32b1f910
+Multiply {
+inputs 1+1
+value 0.36
+name _CENTER_
+label "\[value value]"
+xpos -416
+ypos 1044
+}
+Dot {
+name Dot250
+xpos -385
+ypos 1142
+}
+set Ncaf833a0 [stack 0]
+push $Ncaf833a0
+push $Nddac1bb0
+Merge2 {
+inputs 2
+operation plus
+name _PLUS_
+xpos -85
+ypos 1141
+}
+Clamp {
+channels alpha
+MinClampTo_enable true
+MaxClampTo_enable true
+name _CLAMP_
+xpos -85
+ypos 1167
+}
+Log2Lin {
+unpremult -rgba.alpha
+name _LOG_TO_LIN_
+xpos -85
+ypos 1205
+}
+Switch {
+inputs 2
+which {{output}}
+name _OUT_
+note_font_color 0xffffffff
+xpos -85
+ypos 1281
+}
+Output {
+name Output1
+xpos -85
+ypos 1400
+}
+end_group

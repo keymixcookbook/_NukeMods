@@ -1,6 +1,10 @@
 def _version_():
     ver='''
 
+    version 3.2
+    - Change Deep node linkStamp from Dot to NoOp
+    - Dynamically change knobChanged() effected Class
+    
     version 3.1
     - if topnode is a roto node, change tile_color to match
     - add a PyScript button, copy current LinkedStamp and its input
@@ -83,7 +87,7 @@ def LinkedStamp():
     stp = None
 
     if rNode.Class().startswith('Deep'):
-        stp = nuke.createNode('Dot')
+        stp = nuke.createNode('NoOp')
     else:
         stp = nuke.createNode('PostageStamp')
 
@@ -93,7 +97,7 @@ def LinkedStamp():
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
 
-    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else pass
+    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
 
     # Reset Selections
     stp['selected'].setValue(False)
@@ -156,4 +160,4 @@ def LinkedStamp():
             n['tx_nodename'].setValue("<b>%s</b>" % (stp['label'].value()))
 
 
-    nuke.addKnobChanged(inputUpdate, nodeClass='PostageStamp')
+    nuke.addKnobChanged(inputUpdate, nodeClass=stp.Class())
