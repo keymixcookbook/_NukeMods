@@ -62,3 +62,19 @@ notes = [
 	"we need some rim light on this piece of mirror",
 	"Can you make that cloud happier?"
 	]
+dice = ['9763','9856','9857','9858','9859','9860','9861']
+mood = ['9785','9786','9752','9760']
+weather = ['9729','9730','9728','9889','9925','9928']
+
+cmd_notes = '''
+import random
+nuke.message("Client Feedback:\n%s" % notes[random.randint(0,len(note)-1)])
+
+'''
+
+
+p = nukescripts.PythonPanel('Artist Insainty Check')
+
+k_notes = nuke.PyScript_Knob('bt_notes',"<h1>CLIENT NOTES GENERATOR</h1>", cmd_notes)
+k_dice = nuke.PyScript_Knob('bt_dice',"<h1>ROLL A DICE</h1>", cmd_dice)
+k_weather = nuke.PyScript_Knob('bt_mood',"<h1>WHAT WEATHER OUTSIDE</h1>", cmd_weather)
