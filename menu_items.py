@@ -53,6 +53,7 @@ addMenuItem('f', kuMu, 'SetVal/>>', "setSize(0.5)", hotkey="shift+alt+.", shortc
 addMenuItem('f', kuMu, 'SetVal/<<', "setSize(-0.5)", hotkey="shift+alt+,", shortcutContext=2)
 addMenuItem('f', kuMu, 'Launch Selection in RV', "launchRV()", hotkey="f2")
 addMenuItem('m', kuMu, 'Expression', "ExprPrompt()", hotkey="e", shortcutContext=2)
+addMenuItem('m', kuMu, 'Tracked Roto', "TrackedRoto()", hotkey="shift-t", shortcutContext=2)
 kuMu.addSeparator()
 addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()")
 addMenuItem('m', kuMu, 'Link Clone', "LinkClone()")
