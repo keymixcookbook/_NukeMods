@@ -157,7 +157,6 @@ def LinkedStamp():
         k = nuke.thisKnob()
         if n.Class() in ['PostageStamp', 'NoOp']:
             if k.name() == "inputChange":
-                nuke.updateUI
                 if len(n.dependencies())<=0:
                     n['note_font'].setValue('bold')
                     n['note_font_color'].setValue(3623878911) # Dark Red
