@@ -4,7 +4,9 @@ def _version_():
     version 3.2
     - Change Deep node linkStamp from Dot to NoOp
     - Dynamically change knobChanged() effected Class
-    
+    - remove node name from autolabel
+    - change note_font when disconnected
+
     version 3.1
     - if topnode is a roto node, change tile_color to match
     - add a PyScript button, copy current LinkedStamp and its input
@@ -40,7 +42,7 @@ import nuke, nukescripts
 
 def stpRename(base_name):
 
-    all_stp = [n.name() for n in nuke.allNodes('PostageStamp') if base_name in n.name()]
+    all_stp = [n.name() for n in nuke.allNodes() if base_name in n.name()]
 
     if len(all_stp) > 0:
         stp_max = max(all_stp)
@@ -83,28 +85,23 @@ def LinkedStamp():
     rNode = nuke.selectedNode()
     rNode_nam = rNode.name()
     base_name = "LinkStamp"
-    rNode.setSelected(False)
     stp = None
 
     if rNode.Class().startswith('Deep'):
-        stp = nuke.createNode('NoOp')
+        stp = nuke.nodes.NoOp()
     else:
-        stp = nuke.createNode('PostageStamp')
+        stp = nuke.nodes.PostageStamp()
 
     stp.setInput(0, rNode)
     stp['hide_input'].setValue(1)
-    stp['label'].setValue(rNode_nam)
+    #stp['label'].setValue(rNode_nam)
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
 
     stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
 
-    # Reset Selections
-    stp['selected'].setValue(False)
-    rNode['selected'].setValue(True)
-
     # Add User knobs
-    py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['label'].value()))"
+    py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"
     py_cmd_orig = "origNode = nuke.thisNode().input(0);\
                     origXpos = origNode.xpos();\
                     origYpos = origNode.ypos();\
@@ -123,41 +120,56 @@ def LinkedStamp():
 
 
     k_tab = nuke.Tab_Knob("LinkedStamp")
-    k_text = nuke.Text_Knob('tx_nodename', "Set Input to: ")
+    k_text = nuke.String_Knob('tx_nodename', "Set Input to: ")
+    k_enable = nuke.Boolean_Knob('ck_enable', "Enable")
     k_setInput = nuke.PyScript_Knob('link', "Set Input", py_cmd_restore)
     k_showParent = nuke.PyScript_Knob('orig', "Show Parent Node", py_cmd_orig)
     k_copy = nuke.PyScript_Knob('copy', "Copy this Node", py_cmd_copy)
+    k_connect = nuke.String_Knob('connect','toConnect',rNode_nam)
 
     k_setInput.setFlag(nuke.STARTLINE)
+    k_text.setEnabled(False)
+    k_enable.clearFlag(nuke.STARTLINE)
     k_showParent.clearFlag(nuke.STARTLINE)
     k_copy.clearFlag(nuke.STARTLINE)
+    k_connect.setFlag(nuke.INVISIBLE)
 
     stp.addKnob(k_tab)
     stp.addKnob(k_text)
+    stp.addKnob(k_enable)
     stp.addKnob(k_setInput)
     stp.addKnob(k_showParent)
     stp.addKnob(k_copy)
+    stp.addKnob(k_connect)
 
-    k_text.setValue("<b>%s</b>" % (stp['label'].value()))
+
+    k_text.setValue(stp['connect'].value())
     k_setInput.setTooltip("Taking the node name from label and connect")
     k_showParent.setTooltip("Show parent node in DAG")
     k_copy.setTooltip("Copy this node with its inputs")
+
+    stp['knobChanged'].setValue('k=nuke.thisKnob()\nif k.name()=="ck_enable":\n\tnuke.thisNode()["tx_nodename"].setEnabled(k.value())')
+    stp['autolabel'].setValue("('Disconnected from\\n' if len(nuke.thisNode().dependencies())<=0 else 'Linked to\\n')+nuke.thisNode()['tx_nodename'].value()")
 
     def inputUpdate():
 
         n = nuke.thisNode()
         k = nuke.thisKnob()
-
-        try:
+        if n.Class() in ['PostageStamp', 'NoOp']:
             if k.name() == "inputChange":
-                n['label'].setValue(n.dependencies()[0].name())
-                n['tx_nodename'].setValue("<b>%s</b>" % (stp['label'].value()))
-                stpColor(nuke.inputs(0))
-        except:
-            pass
+                nuke.updateUI
+                if len(n.dependencies())<=0:
+                    n['note_font'].setValue('bold')
+                    n['note_font_color'].setValue(3623878911) # Dark Red
+                    n['hide_input'].setValue(False)
+                elif len(n.dependencies())>0:
+                    n['connect'].setValue(n.dependencies()[0].name())
+                    n['tx_nodename'].setValue(stp['connect'].value())
+                    n['note_font'].setValue('DejaVu Sans')
+                    n['note_font_color'].setValue(0)
+                    n['hide_input'].setValue(True)
+            elif k.name() == 'tx_nodename':
+                n['connect'].setValue(k.value())
 
-        if k.name() == "label": # Manually Change Label
-            n['tx_nodename'].setValue("<b>%s</b>" % (stp['label'].value()))
 
-
-    nuke.addKnobChanged(inputUpdate, nodeClass=stp.Class())
+    nuke.addKnobChanged(inputUpdate, nodeClass='*')
