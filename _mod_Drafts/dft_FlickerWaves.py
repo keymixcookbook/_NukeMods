@@ -4,42 +4,39 @@ n = nuke.nodes.NoOp(name='ku_FlickerWaves')
 
 k_tab = nuke.Tab_Knob('tb_main', 'ku_FlickerWaves')
 
-k_output = nuke.Double_Knob('wave', 'wave')
+k_output = nuke.Double_Knob('wave', 'output wave')
 k_fade = nuke.Double_Knob('fade','fade')
 
 k_div1 = nuke.Text_Knob('','')
 
+k_tx1 = nuke.Text_Knob('','Array Order',"[Base Wave, Mid Wave, High Wave]")
 k_seed = nuke.Array_Knob('seed','seed',3)
-k_freq_ratio = nuke.Array_Knob('freq_ratio','frequency ratio',3)
+k_freq_ratio = nuke.Array_Knob('freq_ratio','freq ratio',3)
 k_timeoffset = nuke.Array_Knob('timeoffset','timeoffset',3)
 
 k_div2 = nuke.Text_Knob('','')
 
-k_b_amp = nuke.Double_Knob('base_amp','base amplitude')
-k_m_amp = nuke.Double_Knob('mid_amp','mid amplitude')
-k_h_amp = nuke.Double_Knob('high_amp','high amplitude')
+k_amp = nuke.Array_Knob('amp','amp',3)
+k_freq = nuke.Array_Knob('freq','freq',3)
+k_shift = nuke.Array_Knob('shift','base shift',3)
 
-k_b_freq = nuke.Double_Knob('base_freq','base freq')
-k_m_freq = nuke.Double_Knob('mid_freq','mid freq')
-k_h_freq = nuke.Double_Knob('high_freq','high freq')
+k_div3 = nuke.Tab_Knob('','Output Waves')
 
-k_b_shift = nuke.Double_Knob('base_shift','base amp shift')
-k_m_shift = nuke.Double_Knob('mid_shift','mid amp shift')
-k_h_shift = nuke.Double_Knob('high_shift','high amp shift')
+k_b_out = nuke.Double_Knob('base_wave', 'base freq')
+k_m_out = nuke.Double_Knob('mid_wave', 'mid freq')
+k_h_out = nuke.Double_Knob('high_wave', 'high freq')
 
-k_div3 = nuke.Text_Knob('','')
-
-k_b_out = nuke.Double_Knob('base_wave', 'base freq wave')
-k_m_out = nuke.Double_Knob('mid_wave', 'mid freq wave')
-k_h_out = nuke.Double_Knob('high_wave' 'high freq wave')
-
+k_fade.setValue(1)
+k_seed.setValue([666,888,686])
+k_freq_ratio.setValue([1,0.5,0.25])
+k_amp.setValue([1,1,1])
+k_freq.setValue([1,1,1])
 
 ls_knob = [
 k_tab,k_output,k_fade,k_div1,
-k_seed,k_freq_ratio,k_timeoffset,
-k_b_amp,k_m_amp,k_h_amp,
-k_b_freq,k_m_freq,k_h_freq,
-k_b_shift,k_m_shift,k_h_shift
+k_tx1,k_seed,k_freq_ratio,k_timeoffset,k_div2,
+k_amp,k_freq,k_shift,k_div3,
+k_b_out,k_m_out,k_h_out
 ]
 
 for k in ls_knob:
