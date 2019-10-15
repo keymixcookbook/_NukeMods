@@ -161,12 +161,14 @@ def LinkedStamp():
                     n['note_font'].setValue('bold')
                     n['note_font_color'].setValue(3623878911) # Dark Red
                     n['hide_input'].setValue(False)
+                    print '%s disconnected' % n.name()
                 elif len(n.dependencies())>0:
                     n['connect'].setValue(n.dependencies()[0].name())
                     n['tx_nodename'].setValue(stp['connect'].value())
-                    n['note_font'].setValue('DejaVu Sans')
+                    n['note_font'].setValue('')
                     n['note_font_color'].setValue(0)
                     n['hide_input'].setValue(True)
+                    print '%s connected' % n.name()
             elif k.name() == 'tx_nodename':
                 n['connect'].setValue(k.value())
 
