@@ -1,0 +1,87 @@
+set cut_paste_input [stack 0]
+version 10.0 v4
+BackdropNode {
+ inputs 0
+ tile_color 0x7f4523ff
+ label <center>IP
+ note_font "bold Bold Bold"
+ note_font_size 48
+ note_font_color 0xffad7fff
+ selected true
+ xpos -14941
+ ypos -7714
+ bdwidth 463
+ bdheight 421
+}
+push $cut_paste_input
+Group {
+ name VIEWER_INPUT
+ autolabel "\n('exp: %s\\n' % nuke.thisNode()\['exposure'].value())+('gamma: %s\\n' % nuke.thisNode()\['y'].value())+('sat: %s\\n' % nuke.thisNode()\['saturation'].value())+('cc: %s\\n' % nuke.thisNode()\['gain'].value())\n"
+ tile_color 0x7f4523ff
+ note_font "Bitstream Vera Sans Bold Bold Bold"
+ note_font_size 48
+ note_font_color 0xffad7fff
+ selected true
+ xpos -14749
+ ypos -7601
+ hide_input true
+ addUserKnob {20 tb_user l ku_IP}
+ addUserKnob {7 exposure}
+ exposure 1
+ addUserKnob {6 d_exp l disable -STARTLINE}
+ addUserKnob {7 y l gamma R 1 4.4}
+ y 2.2
+ addUserKnob {6 d_y l disable -STARTLINE}
+ d_y true
+ addUserKnob {7 saturation R 0 4}
+ saturation 2
+ addUserKnob {6 d_sat l disable -STARTLINE}
+ d_sat true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 gain T _CC_.gain}
+ addUserKnob {6 dis_gain l disable -STARTLINE}
+ dis_gain true
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 528
+  ypos -664
+ }
+ EXPTool {
+  mode Stops
+  red {{parent.exposure}}
+  green {{parent.exposure}}
+  blue {{parent.exposure}}
+  name _EXPOSURE_
+  xpos 528
+  ypos -557
+  disable {{parent.d_exp}}
+ }
+ Gamma {
+  channels rgb
+  value {{parent.y}}
+  name _GAMMA_
+  xpos 528
+  ypos -531
+  disable {{parent.d_y}}
+ }
+ Saturation {
+  saturation {{parent.saturation}}
+  name _SATURATION_
+  xpos 528
+  ypos -505
+  disable {{parent.d_sat}}
+ }
+ ColorCorrect {
+  name _CC_
+  xpos 528
+  ypos -452
+  disable {{parent.dis_gain}}
+ }
+ Output {
+  name Output1
+  xpos 528
+  ypos -356
+ }
+end_group
