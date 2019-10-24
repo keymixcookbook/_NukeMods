@@ -97,8 +97,9 @@ def LinkedStamp():
     #stp['label'].setValue(rNode_nam)
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
+    stp.setXpos(rNode.xpos()+75,rNode.ypos()+25)
 
-    stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
+    #stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
 
     # Add User knobs
     py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"

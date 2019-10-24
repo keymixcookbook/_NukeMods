@@ -431,3 +431,45 @@ def disable():
                         n['note_font_color'].setValue(col_white)
 
 
+
+def swapColorspace():
+    '''swap in and out OCIOcolorspace node'''
+    nodes = nuke.selectedNodes('OCIOColorSpace')
+
+    if nodes:
+        for n in nodes:
+            old_in = n['in_colorspace'].value()
+            old_out = n['out_colorspace'].value()
+
+            n['in_colorspace'].setValue(old_out)
+            n['out_colorspace'].setValue(old_in)
+    else:
+        nuke.message('Select OCIOColorSpace node')
+
+
+
+def diceRoll():
+    '''just roll a dice'''
+    import random
+    face = ['9856','9857','9858','9859','9860','9861']
+
+    roll = random.randint(0,int(len(face)-1))
+
+    nuke.thisNode()['label'].setValue('<h1>&#%s;' % face[roll])
+
+
+
+def showIPPanel(panelfloat=True):
+    '''Show viewer input control panel'''
+    try:
+        node_ip = nuke.activeViewer().node()['input_process_node'].value()
+        nuke.toNode(node_ip).showControlPanel(forceFloat=panelfloat)
+        print "VIEWER_INPUT Shown" 
+    except:
+        if nuke.ask('No Viewer_Input found, load one?'):
+            nuke.loadToolset("/net/homes/tjiang/.nuke/ToolSets/Utility/ku_IP.nk")
+        else:
+            nuke.message("Oh well then")
+    finally:
+        nuke.message("Error loading VIEWER_INPUT node")
+

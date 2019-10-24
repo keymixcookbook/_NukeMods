@@ -54,6 +54,7 @@ addMenuItem('f', kuMu, 'SetVal/<<', "setSize(-0.5)", hotkey="shift+alt+,", short
 addMenuItem('f', kuMu, 'Launch Selection in RV', "launchRV()", hotkey="f2")
 addMenuItem('m', kuMu, 'Expression', "ExprPrompt()", hotkey="e", shortcutContext=2)
 addMenuItem('m', kuMu, 'Tracked Roto', "TrackedRoto()", hotkey="shift-t", shortcutContext=2)
+addMenuItem('f', kuMu, 'Disable', "disable()", hotkey="d", shortcutContext=1)
 kuMu.addSeparator()
 addMenuItem('m', kuMu, 'Set Grain Channels', "GrainChannel()")
 addMenuItem('m', kuMu, 'Link Clone', "LinkClone()")
@@ -64,6 +65,50 @@ addMenuItem('m', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey=
 addMenuItem('m', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
 kuMu.addSeparator()
 kuMu.addCommand('Shuffle', "nuke.createNode('Shuffle')", "h", shortcutContext=2)
+
+
+
+
+########## KuFunc Toolbar ##########
+
+
+
+
+tBar = nuke.toolbar("T_Bar")
+
+addMenuItem('f', tBar, 'Select Child Nodes',"selectChildNodes()", icon="Output.png")
+tBar.addMenu('Align Nodes', icon="align_menu.png")
+addMenuItem('m', tBar, 'Align Nodes/top', "AlignNodes('up')", icon="align_T.png")
+addMenuItem('m', tBar, 'Align Nodes/bottom', "AlignNodes('down')", icon="align_B.png")
+addMenuItem('m', tBar, 'Align Nodes/left', "AlignNodes('left')", icon="align_L.png")
+addMenuItem('m', tBar, 'Align Nodes/right', "AlignNodes('right')", icon="align_R.png")
+addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
+addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="BackdropResize.png")
+addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
+addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
+addMenuItem('m', tBar, 'Roto AutoLife', "autolife()", icon="Roto.png")
+addMenuItem('f', tBar, 'Stack IBK', "stackIBK()", icon="IBKColour.png")
+tBar.addSeparator()
+tBar.addCommand('ClearAllCache', "nukescripts.clearAllCaches()", "shift+f12", icon="DiskCache.png", shortcutContext=1)
+addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
+
+
+
+
+########## KuFunc Toolbar ##########
+
+
+
+
+# Nuke Tab alternative
+m_tab = nuke.menu("Nuke").findItem("Edit")
+m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
+
+tN = nuke.menu('Nuke').findItem('KU')
+tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcutContext=2)
+tN.addCommand('Turbo/TurboShuffle', 'mod_TurboMerge.turboShuffle.open()', '', shortcutContext=2)
+tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'alt+O', shortcutContext=2)
+
 
 
 
