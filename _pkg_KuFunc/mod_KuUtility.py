@@ -411,7 +411,7 @@ def disable():
     col_green = 2133009407
     col_white = 4294967295
 	col_yellow = 3891223551
-	
+
     if len(nodes)<0:
         nuke.message("Select a node or two, man")
     else:
@@ -464,12 +464,11 @@ def showIPPanel(panelfloat=True):
     try:
         node_ip = nuke.activeViewer().node()['input_process_node'].value()
         nuke.toNode(node_ip).showControlPanel(forceFloat=panelfloat)
-        print "VIEWER_INPUT Shown" 
+        print "VIEWER_INPUT Shown"
     except:
         if nuke.ask('No Viewer_Input found, load one?'):
-            nuke.loadToolset("/net/homes/tjiang/.nuke/ToolSets/Utility/ku_IP.nk")
+            import os
+            nuke.loadToolset(os.path.join(os.getEnv('HOME'), 'nuke/ToolSets/Utility/ku_IP.nk'))
         else:
             nuke.message("Oh well then")
-    finally:
-        nuke.message("Error loading VIEWER_INPUT node")
 
