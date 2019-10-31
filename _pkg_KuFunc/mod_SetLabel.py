@@ -11,21 +11,29 @@ def _version_():
 
 
 import nuke, nukescripts
-import PySide.QtGui as QtGui
-import PySide.QtCore as QtCore
+try:
+    #nuke <11
+    import PySide.QtCore as QtCore
+    import PySide.QtGui as QtWidgets
+
+except:
+    #nuke>=11
+    import PySide2.QtCore as QtCore
+    import PySide2.QtGui as QtGui
+    import PySide2.QtWidgets as QtWidgets
 
 
-class Core_SetLabel(QtGui.QDialog):
+class Core_SetLabel(QtWidgets.QDialog):
     def __init__(self):
         super(Core_SetLabel,self).__init__()
 
-        self.lineInput = QtGui.QLineEdit()
+        self.lineInput = QtWidgets.QLineEdit()
         self.lineInput.setAlignment(QtCore.Qt.AlignCenter)
         self.lineInput.returnPressed.connect(self.onPressed)
-        self.title = QtGui.QLabel("<b>Set Label</b>")
+        self.title = QtWidgets.QLabel("<b>Set Label</b>")
         self.title.setAlignment(QtCore.Qt.AlignHCenter)
 
-        self.layout = QtGui.QVBoxLayout()
+        self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.title)
         self.layout.addWidget(self.lineInput)
         self.setLayout(self.layout)
@@ -62,7 +70,7 @@ class Core_SetLabel(QtGui.QDialog):
         '''rerun instance'''
         self.setDefault()
         self.show()
-        self.move(QtGui.QCursor.pos()+QtCore.QPoint(-100,-12))
+        self.move(QtWidgets.QCursor.pos()+QtCore.QPoint(-100,-12))
 
 
 SetLabel = Core_SetLabel()
