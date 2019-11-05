@@ -175,4 +175,5 @@ def LinkedStamp():
                 n['connect'].setValue(k.value())
 
 
-    nuke.addKnobChanged(inputUpdate, nodeClass='*')
+nuke.addKnobChanged(inputUpdate, nodeClass='PostageStamp')
+nuke.addKnobChanged(inputUpdate, nodeClass='NoOp')

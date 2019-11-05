@@ -28,6 +28,8 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
         mu.addCommand(name, "mod_{mod}.{func}".format(mod=mod.split('(')[0],func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
     elif type == 'f':
         mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
+    elif type == 'c':
+        mu.addCommand(name, "mod_{cls}.{cls}.run()".format(cls=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
 
 
 
@@ -95,7 +97,7 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
-########## KuFunc Toolbar ##########
+########## 3rd Party ##########
 
 
 
@@ -109,15 +111,3 @@ tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcut
 tN.addCommand('Turbo/TurboShuffle', 'mod_TurboMerge.turboShuffle.open()', '', shortcutContext=2)
 tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'alt+O', shortcutContext=2)
 
-
-
-
-
-########## 3rd Party Menus ###########
-
-
-
-
-# Nuke Tab alternative
-m_tab = nuke.menu("Nuke").findItem("Edit")
-m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
