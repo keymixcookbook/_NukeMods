@@ -28,6 +28,8 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
         mu.addCommand(name, "mod_{mod}.{func}".format(mod=mod.split('(')[0],func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
     elif type == 'f':
         mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
+    elif type == 'c':
+        mu.addCommand(name, "mod_{mod}.{mod}.run()".format(mod=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
 
 
 
@@ -40,7 +42,7 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 kuMu = nuke.menu('Nuke').addMenu('KU')
 
 addMenuItem('f', kuMu, 'Connect Mask Input', "mask()", hotkey="ctrl+Y")
-addMenuItem('f', kuMu, 'Change label',"labelChange()", hotkey="shift+N")
+addMenuItem('c', kuMu, 'Change label',"SetLabel", hotkey="shift+N")
 addMenuItem('m', kuMu, 'Linked Postage Stamp',"LinkedStamp()", hotkey="f4")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
@@ -95,7 +97,7 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
-########## KuFunc Toolbar ##########
+########## 3rd Party Menus ###########
 
 
 
@@ -107,17 +109,4 @@ m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
 tN = nuke.menu('Nuke').findItem('KU')
 tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcutContext=2)
 tN.addCommand('Turbo/TurboShuffle', 'mod_TurboMerge.turboShuffle.open()', '', shortcutContext=2)
-tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'alt+O', shortcutContext=2)
-
-
-
-
-
-########## 3rd Party Menus ###########
-
-
-
-
-# Nuke Tab alternative
-m_tab = nuke.menu("Nuke").findItem("Edit")
-m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
+tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'm', shortcutContext=2)
