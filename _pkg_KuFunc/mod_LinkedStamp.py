@@ -94,6 +94,7 @@ def LinkedStamp():
 
     stp.setInput(0, rNode)
     stp['hide_input'].setValue(1)
+    stp['postage_stamp'].setValue(True)
     #stp['label'].setValue(rNode_nam)
     stp['tile_color'].setValue(stpColor(rNode))
     stp.setName(stpRename(base_name))
