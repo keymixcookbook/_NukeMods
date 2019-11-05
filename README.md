@@ -26,40 +26,49 @@ A General scripting format and structure guide
   - **Update Board** linked with [Trello](https://trello.com/b/4FR8ZOcZ)
   - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
   - **New Versions** of exsisting modules:
-    - Create a **Branch**: `Upd.mod_ThisMod.v#.#`
-    - Create a **Trello Card**: `Upd.mod_ThisMod.v#.#`
+    - Duplicate the module and **rename**: `Upd.mod_ThisMod.v#.#`
+    - Create a **Trello Card** with same name
     - must indicate version number, and what's new
-    - Once finished, merge to `master` branch, and close Issue
 
 ### IDE
   - Atom desktop
-  - [Gitpod web-IDE](https://be96a86d-acd9-4dbf-bb88-ad36b745317a.ws-us0.gitpod.io/#/workspace/_NukeStudio)
+  - [Gitpod web-IDE](https://gitpod.io/workspaces/)
 
-###### Version Indication Example
+###### Version Control
+Defined at the beginning of the module, at module level
 ``` python
+def _version_():
+    ver='''
 
-def UpdateFunction():
+    version 1.1
+    - feature bug fix
+    - feature refine/optimization
 
-  '''
+    version 1.0
+    - new feature added
 
-  version 3.0
-  - something new
+    version 0
+    - Basic features
 
-  version 2.0
-  - something old
-
-  '''
-
+    '''
+    return ver
 ```
 
 
 ### Formatting Guide for python
-Following briefly with Python PEP 8 guidlines, except:
+Following briefly with Python PEP 8 guidelines, except:
 
-- **UpperCamelCase** for **standalone** functions and modules:
-  - `ThisFuntion()`, `ThisModule.py`
+- **Utility Function**
+  - `utilityFunction()` - **lowerCamelCase**
+- **Module as Function**
+  - `mod_ThisModule.ThisModule()` - **UpperCamelCase**
+  - module name keeps the same
+- **Module as Class**
+  - `mod_ClassModule.ClassModule.run()` - **UpperCamelCase**
+    - `ClassModule = Core_ClassModule()`
+  - `getMethod()`, `setMethod()` - **lowerCamelCase**
 
-> Methods with in a Class is still the same: `ThisClass.itsMethod()`
+
 
 also includes:
 - `<>` for variable in comments:
@@ -68,24 +77,22 @@ also includes:
   - `this_file.ext`, `this_var`, `./this_folder`
 - `__` for **other Folders** that is not part of the package:
   - `./__misc`
-- `""` for multiword strings, `''` for keywords or attributes:
+- `"s"` for multiword strings, `'s'` for keywords or attributes,`'''str'''` for function description:
   - `string = 'word'`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
-  - `More than one word`
+  - `"More than one word"`
+  - `'''for one/more line function description'''`
 
 
 ### Script General Format
 ```python
-'''
+def _version_():
+    ver='''
 
-# Section
-- What does this script do
-- 1 space up & down
+    version 0
+    - Basic features
 
-# With 1 Space In-between
-- <variable>, <used_in>, <comments>
-- Temp Directory: /<temp>/directory/_in_comments
-
-'''
+    '''
+    return ver
 
 
 
@@ -99,7 +106,8 @@ also includes:
 def ThisFunction(arg='keywords', quote='singleQuotes'):
 
   '''
-  - Function description
+  Function description
+
   - Function name using: UpperCamelCase
   - Variables name using: lowerCamelCase
   - Global/Special variables: ALL_CAP
@@ -116,16 +124,33 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
     print 'properties' ## use single quote
 
 
-class ThisClass:
+class Core_ThisClass(Inheritance):
 
-  def itsMethod():
-    print "3 spaces between Functions"
-    print "from last line of the previous"
+  def __init__(self):
+    super(ThisClass, self).__int__()
+
+    self.setDefault()
+
+  def setDefault(self):
+    '''set default values when initializing'''
+
+
+  def itsMethod(self):
+    print "2 spaces between Functions..."
+    print "...from last line of the previous"
+
+
+  def run(self):
+    '''Main method for running the class'''
+    self.show()
+
+# create instance when script is loaded
+ThisClass = Core_ThisClass()
 
 
 
 
-########## Secton Title 4 Space from the last line, start on the 5th line ##########
+########## Section Title 4 Space from the last line, start on the 5th line ##########
 
 
 
