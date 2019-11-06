@@ -15,6 +15,9 @@ uistate.ini
 /MTTF
 FileChooser_Favorites.pref
 nukePyDummy.py
+/__init__.py
+.Qt.py
+/_mod_Drafts/__init__.py
 
 *.ai
 

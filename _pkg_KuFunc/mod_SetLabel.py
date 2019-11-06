@@ -11,16 +11,7 @@ def _version_():
 
 
 import nuke, nukescripts
-try:
-    #nuke <11
-    import PySide.QtCore as QtCore
-    import PySide.QtGui as QtWidgets
-
-except:
-    #nuke>=11
-    import PySide2.QtCore as QtCore
-    import PySide2.QtGui as QtGui
-    import PySide2.QtWidgets as QtWidgets
+from Qt import QtWidgets, QtGui, QtCore
 
 
 class Core_SetLabel(QtWidgets.QDialog):
@@ -70,7 +61,7 @@ class Core_SetLabel(QtWidgets.QDialog):
         '''rerun instance'''
         self.setDefault()
         self.show()
-        self.move(QtWidgets.QCursor.pos()+QtCore.QPoint(-100,-12))
+        self.move(QtGui.QCursor.pos()+QtCore.QPoint(-100,-12))
 
 
 SetLabel = Core_SetLabel()
