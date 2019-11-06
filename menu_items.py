@@ -29,11 +29,7 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
     elif type == 'f':
         mu.addCommand(name, "{func}".format(func=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
     elif type == 'c':
-<<<<<<< HEAD
         mu.addCommand(name, "mod_{cls}.{cls}.run()".format(cls=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
-=======
-        mu.addCommand(name, "mod_{mod}.{mod}.run()".format(mod=mod), hotkey, icon=icon, shortcutContext=shortcutContext)
->>>>>>> cd972ef145bcfd2e23d33a3b7ea12242bbd2dd15
 
 
 
@@ -101,10 +97,6 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
-<<<<<<< HEAD
-########## 3rd Party ##########
-=======
-########## 3rd Party Menus ###########
 >>>>>>> cd972ef145bcfd2e23d33a3b7ea12242bbd2dd15
 
 
@@ -117,9 +109,4 @@ m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
 tN = nuke.menu('Nuke').findItem('KU')
 tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcutContext=2)
 tN.addCommand('Turbo/TurboShuffle', 'mod_TurboMerge.turboShuffle.open()', '', shortcutContext=2)
-<<<<<<< HEAD
-tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'alt+O', shortcutContext=2)
-
-=======
 tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'm', shortcutContext=2)
->>>>>>> cd972ef145bcfd2e23d33a3b7ea12242bbd2dd15
