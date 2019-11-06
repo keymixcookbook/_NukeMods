@@ -97,7 +97,7 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
->>>>>>> cd972ef145bcfd2e23d33a3b7ea12242bbd2dd15
+########## 3rd Party Menus ###########
 
 
 
