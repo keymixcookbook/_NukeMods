@@ -1,5 +1,5 @@
 #import nuke, nukescripts
-import json, sys
+import json, sys, os
 from Qt import QtWidgets, QtGui, QtCore
 
 
@@ -25,6 +25,45 @@ class StatusBox(QtWidgets.QComboBox):
 
 
 
+class DataAdd(QtWidgets.QDialog):
+    def __init__(self):
+        super(DataAdd, self).__init__()
+
+        self.st_shot = QtWidgets.QLineEdit()
+        self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
+        self.st_task = QtWidgets.QLineEdit()
+        self.st_task.setPlaceholderText('Task (ie. mastercomp)')
+        self.lb_version = QtWidgets.QLabel('Version: ')
+        self.no_version = QtWidgets.QSpinBox()
+        self.st_comments = QtWidgets.QLineEdit()
+        self.bt_add = QtWidgets.QPushButton('ADD')
+        self.bt_add.clicked.connect(self.onClicked)
+
+        self.layout_master = QtWidgets.QVBoxLayout()
+        self.layout_version = QtWidgets.QHBoxLayout()
+        self.layout_version.addWidget(self.st_shot)
+        self.layout_version.addWidget(self.st_task)
+        self.layout_version.addWidget(self.lb_version)
+        self.layout_version.addWidget(self.no_version)
+        self.layout_master.addLayout(self.layout_version)
+        self.layout_master.addWidget(self.st_comments)
+        self.layout_master.addWidget(self.bt_add)
+        self.setLayout(self.layout_master)
+        self.setWindowTitle("Add a version")
+
+
+    def onClicked(self):
+        '''collect data from GUI and assign to variables'''
+        thisShot, thisTask, thisVersion, thisComments = None, None, None, None
+
+        return thisShot, thisTask, thisVersion, thisComments
+
+
+    def run(self):
+        self.show()
+
+
+
 class Main_ShotStatusTracker(QtWidgets.QDialog):
     def __init__(self):
         super(Main_ShotStatusTracker,self).__init__()
@@ -33,12 +72,19 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.bt_reload.clicked.connect(self.onReload)
         self.bt_save = QtWidgets.QPushButton('Save')
         self.bt_save.clicked.connect(self.onSave)
+        self.bt_add = QtWidgets.QPushButton('Add')
+        self.bt_add.clicked.connect(self.onAdd)
+        self.bt_remove = QtWidgets.QPushButton('Remove')
+        self.bt_remove.clicked.connect(self.onRemove)
         self.core = Core_ShotStatusTracker()
 
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout_button = QtWidgets.QHBoxLayout()
         self.layout_button.setAlignment(QtCore.Qt.AlignLeft)
+        self.layout_button.addWidget(self.bt_add)
+        self.layout_button.addWidget(self.bt_remove)
+        self.layout_button.addStretch(1)
         self.layout_button.addWidget(self.bt_reload)
         self.layout_button.addWidget(self.bt_save)
 
@@ -46,6 +92,7 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.layout.addLayout(self.layout_button)
         self.resize(800,500)
         self.setLayout(self.layout)
+        self.setWindowTitle("Shot Status Tracker - beta")
 
 
     def getCellValue(self, core_obj, idx_r, idx_c, column):
@@ -61,15 +108,14 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
             val_cell = int(core_obj.item(idx_r,idx_c).text().replace('v',''))
         elif cellTypes[column] == 'combo':
             val_cell = core_obj.cellWidget(idx_r,idx_c).currentText()
-
         return val_cell
 
 
     def onSave(self):
         '''when save button is pressed'''
 
-        out_path = '/Users/Tianlun/Desktop/_NukeTestScript/doc/ShotStatusTracker_Datasets_onSave.json'
         core = self.core
+        out_path = os.path.join(core.json_folder,'ShotStatusTracker_Datasets_onSave.json')
         allRow = core.rowCount()
         allColumn = core.columnCount()
         column = core.ls_header
@@ -82,16 +128,24 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
             for idx_c, c in enumerate(column): # column
                 dic_row[c] = self.getCellValue(core, idx_r, idx_c, c)
             ls_out.append(dic_row)
-        print ls_out
+
         with open(out_path, 'w') as f:
             f.write(json.dumps(ls_out,indent=2))
 
-        print "data save to json"
+        print "data save to json: %s entries" % len(ls_out)
 
 
     def onReload(self):
         '''when reload button is pressed'''
+        self.core.setDefault()
         print "data load from json"
+
+    def onAdd(self):
+        '''add data entry'''
+
+
+    def onRemove(self):
+        '''remove data of the last row'''
 
 
     def run(self):
@@ -104,6 +158,11 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
 class Core_ShotStatusTracker(QtWidgets.QTableWidget):
     def __init__(self):
         super(Core_ShotStatusTracker, self).__init__()
+
+        self.json_filename = 'ShotStatusTracker_datasets.json'
+        #self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
+        self.json_folder = '/net/homes/tjiang/Documents/'
+        self.json_file_path = os.path.join(self.json_folder,self.json_filename)
 
         self.data = self.getData()
         self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
@@ -129,7 +188,6 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
     def setDefault(self):
         '''set default value when instancing'''
-
         self.setTable(self.getData())
 
 
@@ -182,12 +240,9 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         self.setAlternatingRowColors(True)
 
 
-
-
     def getData(self):
         '''get data from json file'''
-        file_path = '/Users/Tianlun/Desktop/_NukeTestScript/doc/ShotStatusTracker_Datasets.json'
-        with open(file_path, 'r') as f:
+        with open(self.json_file_path, 'r') as f:
             data = json.load(f)
 
         return data
@@ -197,7 +252,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 # Show the panel
 
 
-if __name__ == '__main__':
+if __name__ != '__main__':
     app = QtWidgets.QApplication(sys.argv)
     ShotStatusTracker = Main_ShotStatusTracker()
     ShotStatusTracker.run()
