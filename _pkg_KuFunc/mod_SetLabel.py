@@ -4,6 +4,9 @@ def _version_():
     version 0:
     - Basically working, when run(), prompt a frameless popup with line edit field
 
+    version 0.1:
+    - replace with Qt
+
 
     '''
 
@@ -60,8 +63,11 @@ class Core_SetLabel(QtWidgets.QDialog):
     def run(self):
         '''rerun instance'''
         self.setDefault()
-        self.show()
         self.move(QtGui.QCursor.pos()+QtCore.QPoint(-100,-12))
+        self.raise_()
+        self.lineInput.setFocus()
+        self.lineInput.selectAll()
+        self.show()
 
 
 SetLabel = Core_SetLabel()
