@@ -3,6 +3,8 @@ import json, sys, os
 from Qt import QtWidgets, QtGui, QtCore
 
 
+class getRowData:
+
 
 
 class StatusBox(QtWidgets.QComboBox):
@@ -26,15 +28,21 @@ class StatusBox(QtWidgets.QComboBox):
 
 
 class DataAdd(QtWidgets.QDialog):
+    entry = None
     def __init__(self):
         super(DataAdd, self).__init__()
+
+        self.ls_header = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
 
         self.st_shot = QtWidgets.QLineEdit()
         self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
         self.st_task = QtWidgets.QLineEdit()
         self.st_task.setPlaceholderText('Task (ie. mastercomp)')
+        self.st_task.setCompleter(QtWidgets.QCompleter(['comp', 'mastercomp','precomp-']))
         self.lb_version = QtWidgets.QLabel('Version: ')
         self.no_version = QtWidgets.QSpinBox()
+        self.bx_status = QtWidgets.QComboBox()
+        self.bx_status.addItems(self.ls_header)
         self.st_comments = QtWidgets.QLineEdit()
         self.bt_add = QtWidgets.QPushButton('ADD')
         self.bt_add.clicked.connect(self.onClicked)
@@ -45,23 +53,36 @@ class DataAdd(QtWidgets.QDialog):
         self.layout_version.addWidget(self.st_task)
         self.layout_version.addWidget(self.lb_version)
         self.layout_version.addWidget(self.no_version)
+        self.layout_version.addWidget(self.bx_status)
         self.layout_master.addLayout(self.layout_version)
         self.layout_master.addWidget(self.st_comments)
         self.layout_master.addWidget(self.bt_add)
         self.setLayout(self.layout_master)
         self.setWindowTitle("Add a version")
+        self.show()
 
 
     def onClicked(self):
         '''collect data from GUI and assign to variables'''
-        thisShot, thisTask, thisVersion, thisComments = None, None, None, None
 
-        return thisShot, thisTask, thisVersion, thisComments
+        self.entry = {}
 
+        thisShot, thisTask, thisVersion, thisStatus, thisComments = None, None, None, None, None
 
-    def run(self):
-        self.show()
+        thisShot = self.st_shot.text()
+        thisTask = self.st_task.text()
+        thisVersion = int(self.no_version.text())
+        thisStatus = self.bx_status.currentText()
+        thisComments = self.st_comments.text()
+        self.entry['SHOT']=thisShot
+        self.entry['TASK']=thisTask
+        self.entry['VERSION']=thisVersion
+        self.entry['STATUS']=thisStatus
+        self.entry['COMMENTS']=thisComments
+        self.entry['NOTES']=""
+        #print "added\n---SHOT: %s\n---TASK: %s\n---VERSION: %s\n---STATUS: %s\n---COMMENTS: %s" % (thisShot, thisTask, thisVersion, thisStatus, thisComments)
 
+        self.close()
 
 
 class Main_ShotStatusTracker(QtWidgets.QDialog):
@@ -142,10 +163,21 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
 
     def onAdd(self):
         '''add data entry'''
+        core = self.core
+        core.setRowCount(core.rowCount()+1)
+        r = core.rowCount()-1
+        d = DataAdd()
+        d.show()
+        thisData = d.entry
+        for i,c in enumerate(core.ls_header):
+            core.setCell(thisData, r, c, i)
+            print r, c, i
 
 
     def onRemove(self):
         '''remove data of the last row'''
+        core = self.core
+        core.setRowCount(core.rowCount()-1)
 
 
     def run(self):
@@ -160,14 +192,13 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         super(Core_ShotStatusTracker, self).__init__()
 
         self.json_filename = 'ShotStatusTracker_datasets.json'
-        #self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
-        self.json_folder = '/net/homes/tjiang/Documents/'
+        self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
+        # self.json_folder = '/net/homes/tjiang/Documents/'
         self.json_file_path = os.path.join(self.json_folder,self.json_filename)
 
         self.data = self.getData()
         self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
         self.ls_status = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
-        self.task_completer = QtWidgets.QCompleter(['comp', 'mastercomp', 'precomp-'])
         self.resize(800,500)
         self.setShowGrid(False)
         self.setSortingEnabled(False)
@@ -191,52 +222,62 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         self.setTable(self.getData())
 
 
+    def int2str(self, int):
+        '''convert integer to string'''
+        return "v%03d" % int
+
+
+    def setCell(self, d, r, c, i):
+        '''
+        set cell value
+        d: data, r: row, c: column value, i: column index
+        '''
+        thisData, thisCell = None, None
+        if c=='SHOT':
+            thisData = d[c]
+            thisCell = QtWidgets.QTableWidgetItem(thisData)
+            thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.setItem(r, i, thisCell)
+        elif c=='TASK':
+            thisData = d[c]
+            thisCell = QtWidgets.QTableWidgetItem(thisData)
+            self.setItem(r, i, thisCell)
+        elif c=='VERSION':
+            thisData = self.int2str(d[c])
+            thisCell = QtWidgets.QTableWidgetItem(thisData)
+            thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
+            self.setItem(r, i, thisCell)
+        elif c=='STATUS':
+            thisData = d[c]
+            thisCell = StatusBox()
+            # thisCell.setStyleSheet("QComboBox::down-arrow {border: 1px; image: none}")
+            # thisCell.insertSeparator(0)
+            thisCell.addItems(self.ls_status)
+            thisCell.setCurrentIndex(thisCell.findText(thisData))
+            self.setCellWidget(r, i, thisCell)
+        elif c=='COMMENTS':
+            thisData = d[c]
+            thisCell = QtWidgets.QTableWidgetItem(thisData)
+            thisCell.setToolTip(thisData)
+            # self.setItem(r, i, thisCell)
+        elif c=='NOTES':
+            thisData = d[c]
+            thisCell = QtWidgets.QTableWidgetItem(thisData)
+            thisCell.setToolTip(thisData)
+            self.setItem(r, i, thisCell)
+
+
     def setTable(self, data):
         '''populating table with data'''
 
-        def int2str(int):
-            '''convert integer to string'''
-            return "v%03d" % int
-
-        for r, c in enumerate(data):
-            #r: row number, c: data for this row - 'SHOT', 'TASK', 'VERSION', 'COMMENTS', 'NOTES'
+        for r, d in enumerate(data):
+            #r: row number, d: data for this row - 'SHOT', 'TASK', 'VERSION', 'COMMENTS', 'NOTES'
             # self.setRowHeight(r,24)
-            for i, d in enumerate(self.ls_header):
-                # i: column index, d: column title
+            for i, c in enumerate(self.ls_header):
+                # i: column index, c: column title
                 # SHOT: String | TASK: String with completer | VERSION: Integer | COMMENTS: String | NOTES: String
-                thisData, thisCell = None, None
-                if d=='SHOT':
-                    thisData = c[d]
-                    thisCell = QtWidgets.QTableWidgetItem(thisData)
-                    thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
-                    self.setItem(r, i, thisCell)
-                elif d=='TASK':
-                    thisData = c[d]
-                    thisCell = QtWidgets.QTableWidgetItem(thisData)
-                    self.setItem(r, i, thisCell)
-                elif d=='VERSION':
-                    thisData = int2str(c[d])
-                    thisCell = QtWidgets.QTableWidgetItem(thisData)
-                    thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
-                    self.setItem(r, i, thisCell)
-                elif d=='STATUS':
-                    thisData = c[d]
-                    thisCell = StatusBox()
-                    # thisCell.setStyleSheet("QComboBox::down-arrow {border: 1px; image: none}")
-                    # thisCell.insertSeparator(0)
-                    thisCell.addItems(self.ls_status)
-                    thisCell.setCurrentIndex(thisCell.findText(thisData))
-                    self.setCellWidget(r, i, thisCell)
-                elif d=='COMMENTS':
-                    thisData = c[d]
-                    thisCell = QtWidgets.QTableWidgetItem(thisData)
-                    thisCell.setToolTip(thisData)
-                    self.setItem(r, i, thisCell)
-                elif d=='NOTES':
-                    thisData = c[d]
-                    thisCell = QtWidgets.QTableWidgetItem(thisData)
-                    thisCell.setToolTip(thisData)
-                    self.setItem(r, i, thisCell)
+                self.setCell(d,r,c,i)
+
         self.setAlternatingRowColors(True)
 
 
@@ -252,7 +293,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 # Show the panel
 
 
-if __name__ != '__main__':
+if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     ShotStatusTracker = Main_ShotStatusTracker()
     ShotStatusTracker.run()
