@@ -3,8 +3,6 @@ import json, sys, os
 from Qt import QtWidgets, QtGui, QtCore
 
 
-class getRowData:
-
 
 
 class StatusBox(QtWidgets.QComboBox):
@@ -28,11 +26,10 @@ class StatusBox(QtWidgets.QComboBox):
 
 
 class DataAdd(QtWidgets.QDialog):
-    entry = None
     def __init__(self):
         super(DataAdd, self).__init__()
 
-        self.ls_header = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
+        self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
 
         self.st_shot = QtWidgets.QLineEdit()
         self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
@@ -59,30 +56,38 @@ class DataAdd(QtWidgets.QDialog):
         self.layout_master.addWidget(self.bt_add)
         self.setLayout(self.layout_master)
         self.setWindowTitle("Add a version")
-        self.show()
 
 
     def onClicked(self):
         '''collect data from GUI and assign to variables'''
 
-        self.entry = {}
-
         thisShot, thisTask, thisVersion, thisStatus, thisComments = None, None, None, None, None
 
-        thisShot = self.st_shot.text()
-        thisTask = self.st_task.text()
-        thisVersion = int(self.no_version.text())
-        thisStatus = self.bx_status.currentText()
-        thisComments = self.st_comments.text()
-        self.entry['SHOT']=thisShot
-        self.entry['TASK']=thisTask
-        self.entry['VERSION']=thisVersion
-        self.entry['STATUS']=thisStatus
-        self.entry['COMMENTS']=thisComments
-        self.entry['NOTES']=""
+        self.thisShot = self.st_shot.text()
+        self.thisTask = self.st_task.text()
+        self.thisVersion = int(self.no_version.text())
+        self.thisStatus = self.bx_status.currentText()
+        self.thisComments = self.st_comments.text()
+
         #print "added\n---SHOT: %s\n---TASK: %s\n---VERSION: %s\n---STATUS: %s\n---COMMENTS: %s" % (thisShot, thisTask, thisVersion, thisStatus, thisComments)
 
         self.close()
+
+    def getEntryValues(self, key):
+        '''get entry values from the pop up'''
+        if key == 'SHOT':
+            return self.thisShot
+        if key == 'TASK':
+            return self.thisTask
+        if key == 'VERSION':
+            return self.thisVersion
+        if key == 'STATUS':
+            return self.thisStatus
+        if key == 'COMMENTS':
+            return self.thisComments
+        if key == 'NOTES':
+            return ""
+
 
 
 class Main_ShotStatusTracker(QtWidgets.QDialog):
@@ -166,12 +171,9 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         core = self.core
         core.setRowCount(core.rowCount()+1)
         r = core.rowCount()-1
-        d = DataAdd()
-        d.show()
-        thisData = d.entry
+        thisData = {'SHOT': '', 'TASK': '', 'VERSION': 1, 'STATUS': '', 'COMMENTS': 'Enter your comments', 'NOTES': ''}
         for i,c in enumerate(core.ls_header):
             core.setCell(thisData, r, c, i)
-            print r, c, i
 
 
     def onRemove(self):
