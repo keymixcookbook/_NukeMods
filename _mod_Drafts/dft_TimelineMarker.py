@@ -7,43 +7,43 @@ class MarkerAdd(QtWidgets.QDialog):
     GUI for adding markers
     data to be stored:frame, tooltip, id(<SHOW>-<timestamp>, PHX-12345678)
     '''
-    def __init__(ma, layout_obj):
-        super(MarkerAdd, ma).__init__()
+    def __init__(self, layout_obj):
+        super(MarkerAdd, self).__init__()
 
         # cur_frame = nuke.frame()
         cur_frame = 1001
-        ma.thisLayout = layout_obj
-        ma.m_frame = QtWidgets.QSpinBox()
-        ma.m_frame.setMaximum(3000)
-        ma.m_frame.setPrefix('x')
-        ma.m_frame.setValue(cur_frame)
-        ma.m_frame.selectAll()
-        ma.m_label = QtWidgets.QLineEdit()
-        ma.m_label.setPlaceholderText("Keep it short")
-        ma.m_add = QtWidgets.QPushButton('Add Marker')
-        ma.m_add.clicked.connect(ma.add)
+        self.thisLayout = layout_obj
+        self.m_frame = QtWidgets.QSpinBox()
+        self.m_frame.setMaximum(3000)
+        self.m_frame.setPrefix('x')
+        self.m_frame.setValue(cur_frame)
+        self.m_frame.selectAll()
+        self.m_label = QtWidgets.QLineEdit()
+        self.m_label.setPlaceholderText("Keep it short")
+        self.m_add = QtWidgets.QPushButton('Add Marker')
+        self.m_add.clicked.connect(self.add)
 
-        ma.layout = QtWidgets.QVBoxLayout()
-        ma.layout.addWidget(ma.m_frame)
-        ma.layout.addWidget(ma.m_label)
-        ma.layout.addWidget(ma.m_add)
-        ma.setLayout(ma.layout)
+        self.layout = QtWidgets.QVBoxLayout()
+        self.layout.addWidget(self.m_frame)
+        self.layout.addWidget(self.m_label)
+        self.layout.addWidget(self.m_add)
+        self.setLayout(self.layout)
+        self.setWindowTitle("Add Frame Marker")
 
 
-    def add(ma):
+    def add(self):
         '''add button'''
-        thisFrame = int(ma.m_frame.text().replace('x', ''))
+        thisFrame = int(self.m_frame.text().replace('x', ''))
         thisId = int(time.time())
-        thisLabel = ma.m_label.text()
+        thisLabel = self.m_label.text()
         thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
         # thisMarker.customContextMenuRequested.connect(Core_TimelineMarker.removeMarker)
 
-        label_button = ma.m_label.text() if len(ma.m_label.text())<=10 else ma.m_label.text()[:10]+'...'
+        label_button = self.m_label.text() if len(self.m_label.text())<=10 else self.m_label.text()[:10]+'...'
         thisMarker.setText(label_button)
         thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
-        ma.thisLayout.addWidget(thisMarker)
-
-        ma.close()
+        self.thisLayout.addWidget(thisMarker)
+        self.close()
 
         #self.onSave()
 
@@ -61,6 +61,15 @@ class MarkerButton(QtWidgets.QPushButton):
         self.id = id
         self.frame = frame
         self.label = label
+
+    # def mousePressEvent(self, event):
+    #     '''
+    #     remove a MarkerButton when Right-Clicked
+    #     '''
+    #     if event.button() == QtCore.Qt.MouseButton.RightButton:
+    #         self.setParent(None)
+
+
 
 
 
@@ -107,15 +116,29 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.setContentsMargins(0,0,0,0)
 
 
+    def mousePressEvent(self, event):
+        thisMouseBtn = event.button()
+        thisWidget = self.sender()
+
+        if isinstance(thisWidget, MarkerButton) and thisMouseBtn == QtCore.Qt.MouseButton.LeftButton:
+            self.setFrame()
+        elif isinstance(thisWidget, MarkerButton) and thisMouseBtn == QtCore.Qt.MouseButton.RightButton:
+            self.layout_markers.removeWidget(thisWidget)
+
+
     def saveMarkers(self):
         '''save marker into json files'''
         layout_markers = self.layout_markers
         num_widget = layout_markers.count()
-        json_marker = {}
+        json_marker = []
 
         for w in range(0,num_widget):
+            thisData = {}
             thisWidget = layout_markers.itemAt(w).widget()
-
+            thisData['id'] = thisWidget.id
+            thisData['frame'] = thisWidget.frame
+            thisData['label'] = thisWidget.label
+            json_marker.append(thisData)
 
 
     def addMarker(self):
@@ -123,7 +146,16 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.p = MarkerAdd(self.layout_markers)
         self.p.exec_()
         # add connect signal to the last widgets
-        self.layout_markers.itemAt(self.layout_markers.count()-1).widget().clicked.connect(self.setFrame)
+        newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
+        newWidget.clicked.connect(self.setFrame)
+        newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
+
+
+    def removeMarker_RClicked(self):
+        sender = self.sender()
+        self.layout_markers.removeWidget(sender)
+        sender.deleteLater()
 
 
     def removeMarker(self):
@@ -137,7 +169,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
             print "no markers to be removed"
 
 
-
     def reloadMarkers(self):
         '''reload from json file and rebuild MarkerButtons'''
 
@@ -148,6 +179,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
     def setFrame(self):
         '''set the frame in nuke when marker is clicked'''
+        # nuke.frame(thisSender.frame)
         thisSender = self.sender()
         print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
 
