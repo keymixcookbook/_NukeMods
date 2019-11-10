@@ -3,6 +3,7 @@ def _version_():
 
 	version 0.0
     - sets a dot node as markers for all deepRecolor node
+	- creates DeepMerge node to connect with DeepMarker
 
 	'''
 	return ver
