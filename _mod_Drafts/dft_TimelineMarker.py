@@ -1,5 +1,5 @@
 from Qt import QtWidgets, QtGui, QtCore
-import sys, time
+import sys, time, os, json
 
 
 class MarkerAdd(QtWidgets.QDialog):
@@ -62,26 +62,22 @@ class MarkerButton(QtWidgets.QPushButton):
         self.frame = frame
         self.label = label
 
-    # def mousePressEvent(self, event):
-    #     '''
-    #     remove a MarkerButton when Right-Clicked
-    #     '''
-    #     if event.button() == QtCore.Qt.MouseButton.RightButton:
-    #         self.setParent(None)
-
-
-
-
 
 class Core_TimelineMarker(QtWidgets.QWidget):
     def __init__(self):
         super(Core_TimelineMarker, self).__init__()
+
+        self.data_folder = "/Users/Tianlun/Desktop/_NukeTestScript"
+        self.data_filename = "TimelineMarker_dataset.json"
+        self.data_file = os.path.join(self.data_folder, self.data_filename)
 
         self.bt_add = QtWidgets.QPushButton('+')
         self.bt_add.clicked.connect(self.addMarker)
         self.bt_add.setStyle(QtGui.QFont().setBold(True))
         self.bt_remove = QtWidgets.QPushButton('-')
         self.bt_remove.clicked.connect(self.removeMarker)
+        self.bt_save = QtWidgets.QPushButton('save')
+        self.bt_save.clicked.connect(self.saveMarkers)
         self.bt_reload = QtWidgets.QPushButton('reload')
         self.bt_reload.clicked.connect(self.reloadMarkers)
         self.bt_reloadFile = QtWidgets.QPushButton('reload from file')
@@ -104,6 +100,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_editMarkers.addWidget(self.bt_add)
         self.layout_editMarkers.addWidget(self.bt_remove)
         self.layout_editMarkers.setSpacing(0)
+        self.layout_reload.addWidget(self.bt_save)
         self.layout_reload.addWidget(self.bt_reload)
         self.layout_reload.addWidget(self.bt_reloadFile)
 
@@ -115,15 +112,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.setMinimumWidth(1000)
         self.setContentsMargins(0,0,0,0)
 
-
-    def mousePressEvent(self, event):
-        thisMouseBtn = event.button()
-        thisWidget = self.sender()
-
-        if isinstance(thisWidget, MarkerButton) and thisMouseBtn == QtCore.Qt.MouseButton.LeftButton:
-            self.setFrame()
-        elif isinstance(thisWidget, MarkerButton) and thisMouseBtn == QtCore.Qt.MouseButton.RightButton:
-            self.layout_markers.removeWidget(thisWidget)
 
 
     def saveMarkers(self):
@@ -140,19 +128,27 @@ class Core_TimelineMarker(QtWidgets.QWidget):
             thisData['label'] = thisWidget.label
             json_marker.append(thisData)
 
+        with open(self.data_file, 'w') as f:
+            json_data = json.dumps(json_marker, indent=2)
+            f.write(json_data)
+
 
     def addMarker(self):
         '''add MarkerButton widget'''
         self.p = MarkerAdd(self.layout_markers)
-        self.p.exec_()
         # add connect signal to the last widgets
-        newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
-        newWidget.clicked.connect(self.setFrame)
-        newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
+        self.p.exec_()
+        try:
+            newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
+            newWidget.clicked.connect(self.setFrame)
+            newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
+        except:
+            pass
 
 
     def removeMarker_RClicked(self):
+        '''remove marker when right-clicked'''
         sender = self.sender()
         self.layout_markers.removeWidget(sender)
         sender.deleteLater()
@@ -171,6 +167,29 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
     def reloadMarkers(self):
         '''reload from json file and rebuild MarkerButtons'''
+        thisFile = self.data_file
+        thisData = []
+        with open(self.data_file, 'r') as f:
+            thisData = json.load(f)
+            print thisData
+
+        num_widget = self.layout_markers.count()
+        for w in range(num_widget):
+            thisWidget = self.layout_markers.itemAt(w).widget()
+            thisWidget.setParent(None)
+
+        for w in thisData:
+            thisFrame = w['frame']
+            thisId = w['id']
+            thisLabel = w['label']
+            thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
+
+            label_button = thisLabel if len(thisLabel)<=10 else thisLabel[:10]+'...'
+            thisMarker.setText(label_button)
+            thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
+            self.layout_markers.addWidget(thisMarker)
+
+
 
 
     def loadFromFile(self):
