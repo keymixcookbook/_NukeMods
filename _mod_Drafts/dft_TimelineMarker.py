@@ -18,8 +18,6 @@ class MarkerButton(QtWidgets.QPushButton):
         self.label = label
 
         self.setMinimumWidth(48)
-        self.setFixedHeight(48)
-
 
 class MarkerAdd(QtWidgets.QDialog):
     '''
@@ -99,35 +97,43 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.bt_reloadFile = QtWidgets.QPushButton('reload from file')
         self.bt_reloadFile.clicked.connect(self.loadFromFile)
 
-        self.layout_master = QtWidgets.QHBoxLayout()
-        self.layout_editMarkers = QtWidgets.QVBoxLayout()
-        self.layout_editMarkers.setAlignment(QtCore.Qt.AlignLeft)
+        self.bt_add.setMaximumWidth(48)
+        self.bt_remove.setMaximumWidth(48)
+
+        
+        self.layout_editMarkers = QtWidgets.QHBoxLayout()
+        #self.layout_editMarkers.setAlignment(QtCore.Qt.AlignLeft)
         self.layout_editMarkers.setContentsMargins(0,0,0,0)
+        self.layout_editMarkers.addWidget(self.bt_add)
+        self.layout_editMarkers.addWidget(self.bt_remove)
+        self.layout_editMarkers.setSpacing(0)
 
         self.layout_markers = QtWidgets.QHBoxLayout()
         self.group_markers = QtWidgets.QGroupBox('Markers')
         self.group_markers.setContentsMargins(0,0,0,0)
         self.group_markers.setLayout(self.layout_markers)
-        self.group_markers.setAlignment(QtCore.Qt.AlignLeft)
+        #self.group_markers.setAlignment(QtCore.Qt.AlignLeft)
 
-        self.layout_reload = QtWidgets.QVBoxLayout()
-        self.layout_reload.setAlignment(QtCore.Qt.AlignRight)
+        self.layout_reload = QtWidgets.QHBoxLayout()
+        #self.layout_reload.setAlignment(QtCore.Qt.AlignRight)
         self.layout_reload.setContentsMargins(0,0,0,0)
 
-        self.layout_editMarkers.addWidget(self.bt_add)
-        self.layout_editMarkers.addWidget(self.bt_remove)
-        self.layout_editMarkers.setSpacing(0)
         self.layout_reload.addWidget(self.bt_save)
         self.layout_reload.addWidget(self.bt_reload)
         self.layout_reload.addWidget(self.bt_reloadFile)
         self.layout_reload.setSpacing(0)
 
+        self.layout_master = QtWidgets.QHBoxLayout()
+        #self.layout_master.setAlignment(QtCore.Qt.AlignLeft)
+        self.layout_master.setSpacing(0)
+        self.layout_master.setContentsMargins(0,0,0,0)
+        self.layout_master.addStretch()
         self.layout_master.addLayout(self.layout_editMarkers)
         self.layout_master.addWidget(self.group_markers)
-        self.layout_master.addStretch()
         self.layout_master.addLayout(self.layout_reload)
+        
         self.setLayout(self.layout_master)
-        self.setMinimumWidth(1000)
+        self.resize(1000,50)
         self.setContentsMargins(0,0,0,0)
 
         self.reloadMarkers()
@@ -175,7 +181,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
     def addMarker(self):
         '''add MarkerButton widget'''
-        self.p = MarkerAdd(self.layout_markers, 1001)
+        self.p = MarkerAdd(self.layout_markers, nuke.frame())
         self.p.exec_()
         # add connect signal to the last widgets
         newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
@@ -253,14 +259,22 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
     def setFrame(self):
         '''set the frame in nuke when marker is clicked'''
-        # nuke.frame(thisSender.frame)
         thisSender = self.sender()
+        nuke.frame(thisSender.frame)
         print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
 
 
+nukescripts.registerWidgetAsPanel('Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
 
-app = QtWidgets.QApplication(sys.argv)
-p = Core_TimelineMarker()
-p.show()
-p.raise_()
-app.exec_()
+
+if __name__ != "__main__":    
+    app = QtWidgets.QApplication(sys.argv)
+    p = Core_TimelineMarker()
+    p.show()
+    p.raise_()
+    app.exec_()
+else:
+    p = Core_TimelineMarker()
+    p.show()
+    p.raise_()
+    
