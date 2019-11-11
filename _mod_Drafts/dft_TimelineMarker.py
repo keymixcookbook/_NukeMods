@@ -2,6 +2,17 @@ from Qt import QtWidgets, QtGui, QtCore
 import sys, time, os, json
 
 
+class MarkerButton(QtWidgets.QPushButton):
+    def __init__(self, id, frame, label):
+        super(MarkerButton, self).__init__()
+
+        self.id = id
+        self.frame = frame
+        self.label = label
+
+        self.resize(66,66)
+
+
 class MarkerAdd(QtWidgets.QDialog):
     '''
     GUI for adding markers
@@ -13,22 +24,30 @@ class MarkerAdd(QtWidgets.QDialog):
         # cur_frame = nuke.frame()
         cur_frame = 1001
         self.thisLayout = layout_obj
+        self.m_title = QtWidgets.QLabel('<b>Set Frame</b>')
         self.m_frame = QtWidgets.QSpinBox()
         self.m_frame.setMaximum(3000)
         self.m_frame.setPrefix('x')
         self.m_frame.setValue(cur_frame)
-        self.m_frame.selectAll()
         self.m_label = QtWidgets.QLineEdit()
+        self.m_label.setText('x%s' % cur_frame)
         self.m_label.setPlaceholderText("Keep it short")
         self.m_add = QtWidgets.QPushButton('Add Marker')
         self.m_add.clicked.connect(self.add)
 
+        self.layout_frame = QtWidgets.QHBoxLayout()
         self.layout = QtWidgets.QVBoxLayout()
-        self.layout.addWidget(self.m_frame)
+        self.layout_frame.addWidget(self.m_title)
+        self.layout_frame.addWidget(self.m_frame)
+        self.layout.addLayout(self.layout_frame)
         self.layout.addWidget(self.m_label)
         self.layout.addWidget(self.m_add)
+        self.layout_frame.setSpacing(0)
         self.setLayout(self.layout)
         self.setWindowTitle("Add Frame Marker")
+
+        self.m_label.setFocus()
+        self.m_label.selectAll()
 
 
     def add(self):
@@ -52,15 +71,6 @@ class MarkerAdd(QtWidgets.QDialog):
         '''save buttons when clicked'''
         num_widget = layout_obj.count()
         self.saveMarkers()
-
-
-class MarkerButton(QtWidgets.QPushButton):
-    def __init__(self, id, frame, label):
-        super(MarkerButton, self).__init__()
-
-        self.id = id
-        self.frame = frame
-        self.label = label
 
 
 class Core_TimelineMarker(QtWidgets.QWidget):
@@ -89,7 +99,9 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_editMarkers.setContentsMargins(0,0,0,0)
 
         self.layout_markers = QtWidgets.QHBoxLayout()
+        self.layout_markers.setSpacing(0)
         self.group_markers = QtWidgets.QGroupBox('Markers')
+        self.group_markers.setContentsMargins(0,0,0,0)
         self.group_markers.setLayout(self.layout_markers)
         self.group_markers.setAlignment(QtCore.Qt.AlignLeft)
 
@@ -103,6 +115,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_reload.addWidget(self.bt_save)
         self.layout_reload.addWidget(self.bt_reload)
         self.layout_reload.addWidget(self.bt_reloadFile)
+        self.layout_reload.setSpacing(0)
 
         self.layout_master.addLayout(self.layout_editMarkers)
         self.layout_master.addWidget(self.group_markers)
@@ -111,6 +124,8 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.setLayout(self.layout_master)
         self.setMinimumWidth(1000)
         self.setContentsMargins(0,0,0,0)
+
+        self.reloadMarkers()
 
 
 
@@ -138,13 +153,10 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.p = MarkerAdd(self.layout_markers)
         # add connect signal to the last widgets
         self.p.exec_()
-        try:
-            newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
-            newWidget.clicked.connect(self.setFrame)
-            newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
-        except:
-            pass
+        newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
+        newWidget.clicked.connect(self.setFrame)
+        newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
 
 
     def removeMarker_RClicked(self):
@@ -159,25 +171,31 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         try:
             num_widget = self.layout_markers.count()-1
             thisWidget = self.layout_markers.itemAt(num_widget).widget()
-            thisWidget.setParent(None)
-            self.saveMarkers()
+            self.layout_markers.removeWidget(thisWidget)
+            thisWidget.deleteLater()
         except:
             print "no markers to be removed"
 
 
     def reloadMarkers(self):
         '''reload from json file and rebuild MarkerButtons'''
+        # Clear Widgets
+        num_widgets = self.layout_markers.count()
+        all_widgets = [self.layout_markers.itemAt(n).widget() for n in range(num_widgets)]
+        for w in all_widgets:
+            self.layout_markers.removeWidget(w)
+            w.deleteLater()
+            print "Widget Removed: %s" % w.label
+
+
+
+        # Find data
         thisFile = self.data_file
         thisData = []
         with open(self.data_file, 'r') as f:
             thisData = json.load(f)
-            print thisData
-
-        num_widget = self.layout_markers.count()
-        for w in range(num_widget):
-            thisWidget = self.layout_markers.itemAt(w).widget()
-            thisWidget.setParent(None)
-
+        print "loaded: %s" % thisFile
+        # Rebuild Widgets
         for w in thisData:
             thisFrame = w['frame']
             thisId = w['id']
@@ -187,7 +205,12 @@ class Core_TimelineMarker(QtWidgets.QWidget):
             label_button = thisLabel if len(thisLabel)<=10 else thisLabel[:10]+'...'
             thisMarker.setText(label_button)
             thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
+            thisMarker.clicked.connect(self.setFrame)
+            thisMarker.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            thisMarker.customContextMenuRequested.connect(self.removeMarker_RClicked)
             self.layout_markers.addWidget(thisMarker)
+
+        print "final widget count: %s" % self.layout_markers.count()
 
 
 
