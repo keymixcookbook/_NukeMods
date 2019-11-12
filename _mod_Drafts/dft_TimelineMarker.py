@@ -1,5 +1,8 @@
+
+
 from Qt import QtWidgets, QtGui, QtCore
 import sys, time, os, json
+import HTMLParser as html
 
 
 
@@ -17,7 +20,7 @@ class MarkerButton(QtWidgets.QPushButton):
         self.frame = frame
         self.label = label
 
-        self.setMinimumWidth(48)
+        # self.setFixedWidth(48)
 
 class MarkerAdd(QtWidgets.QDialog):
     '''
@@ -27,7 +30,6 @@ class MarkerAdd(QtWidgets.QDialog):
     def __init__(self, layout_obj, frame):
         super(MarkerAdd, self).__init__()
 
-        # cur_frame = nuke.frame()
         cur_frame = frame
         self.thisLayout = layout_obj
         self.m_title_frame = QtWidgets.QLabel('Frame: ')
@@ -40,7 +42,7 @@ class MarkerAdd(QtWidgets.QDialog):
         self.m_label.setText('x%s' % cur_frame)
         self.m_label.setPlaceholderText("Keep it short")
         self.m_add = QtWidgets.QPushButton('Add Marker')
-        self.m_add.clicked.connect(self.add)
+        self.m_add.clicked.connect(self.confirm)
 
         self.layout = QtWidgets.QGridLayout()
         self.layout.addWidget(self.m_title_frame, 0,0, QtCore.Qt.AlignRight)
@@ -57,7 +59,7 @@ class MarkerAdd(QtWidgets.QDialog):
         self.m_label.selectAll()
 
 
-    def add(self):
+    def confirm(self):
         '''add button'''
         thisFrame = int(self.m_frame.text().replace('x', ''))
         thisId = int(time.time())
@@ -85,53 +87,54 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
         self.data_file = self.getJSONPath()
 
-        self.bt_add = QtWidgets.QPushButton('+')
+        self.tx_shot = QtWidgets.QLabel()
+        self.bt_add = QtWidgets.QPushButton(u"\u002B")
         self.bt_add.clicked.connect(self.addMarker)
         self.bt_add.setStyle(QtGui.QFont().setBold(True))
-        self.bt_remove = QtWidgets.QPushButton('-')
+        self.bt_remove = QtWidgets.QPushButton(u"\u2212")
         self.bt_remove.clicked.connect(self.removeMarker)
+        self.bt_remove.setStyle(QtGui.QFont().setBold(True))
         self.bt_save = QtWidgets.QPushButton('save')
+        self.bt_save.setToolTip("Save Current Markers")
         self.bt_save.clicked.connect(self.saveMarkers)
         self.bt_reload = QtWidgets.QPushButton('reload')
+        self.bt_reload.setToolTip("Reload Markers from Loaded File")
         self.bt_reload.clicked.connect(self.reloadMarkers)
         self.bt_reloadFile = QtWidgets.QPushButton('reload from file')
         self.bt_reloadFile.clicked.connect(self.loadFromFile)
+        self.bt_reloadFile.setToolTip("Load Markers from selected File")
 
-        self.bt_add.setMaximumWidth(48)
-        self.bt_remove.setMaximumWidth(48)
+        self.bt_add.resize(48,48)
+        self.bt_remove.resize(48,48)
 
-        
-        self.layout_editMarkers = QtWidgets.QHBoxLayout()
-        #self.layout_editMarkers.setAlignment(QtCore.Qt.AlignLeft)
+
+        self.layout_editMarkers = QtWidgets.QGridLayout()
         self.layout_editMarkers.setContentsMargins(0,0,0,0)
-        self.layout_editMarkers.addWidget(self.bt_add)
-        self.layout_editMarkers.addWidget(self.bt_remove)
         self.layout_editMarkers.setSpacing(0)
+        self.layout_editMarkers.addWidget(self.tx_shot,0,0,1,2)
+        self.layout_editMarkers.addWidget(self.bt_add,1,0)
+        self.layout_editMarkers.addWidget(self.bt_remove,1,1)
 
         self.layout_markers = QtWidgets.QHBoxLayout()
-        self.group_markers = QtWidgets.QGroupBox('Markers')
+        self.group_markers = QtWidgets.QGroupBox()
         self.group_markers.setContentsMargins(0,0,0,0)
         self.group_markers.setLayout(self.layout_markers)
-        #self.group_markers.setAlignment(QtCore.Qt.AlignLeft)
 
-        self.layout_reload = QtWidgets.QHBoxLayout()
-        #self.layout_reload.setAlignment(QtCore.Qt.AlignRight)
+        self.layout_reload = QtWidgets.QGridLayout()
         self.layout_reload.setContentsMargins(0,0,0,0)
-
-        self.layout_reload.addWidget(self.bt_save)
-        self.layout_reload.addWidget(self.bt_reload)
-        self.layout_reload.addWidget(self.bt_reloadFile)
         self.layout_reload.setSpacing(0)
+        self.layout_reload.addWidget(self.bt_save, 0,0)
+        self.layout_reload.addWidget(self.bt_reload, 0,1)
+        self.layout_reload.addWidget(self.bt_reloadFile, 1,0,1,2)
 
         self.layout_master = QtWidgets.QHBoxLayout()
-        #self.layout_master.setAlignment(QtCore.Qt.AlignLeft)
-        self.layout_master.setSpacing(0)
         self.layout_master.setContentsMargins(0,0,0,0)
-        self.layout_master.addStretch()
+        self.layout_master.setSpacing(0)
         self.layout_master.addLayout(self.layout_editMarkers)
         self.layout_master.addWidget(self.group_markers)
+        self.layout_master.addStretch()
         self.layout_master.addLayout(self.layout_reload)
-        
+
         self.setLayout(self.layout_master)
         self.resize(1000,50)
         self.setContentsMargins(0,0,0,0)
@@ -181,7 +184,13 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
     def addMarker(self):
         '''add MarkerButton widget'''
-        self.p = MarkerAdd(self.layout_markers, nuke.frame())
+
+        try:
+            frame = nuke.frame()
+        except:
+            frame = 1001
+
+        self.p = MarkerAdd(self.layout_markers, frame)
         self.p.exec_()
         # add connect signal to the last widgets
         newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
@@ -243,7 +252,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
                 thisMarker.customContextMenuRequested.connect(self.removeMarker_RClicked)
                 self.layout_markers.addWidget(thisMarker)
 
-            self.group_markers.setTitle('SHOT: ' + os.path.basename(self.data_file).split('_TMDataset.json')[0])
+            self.tx_shot.setText('SHOT: <b>%s</b>' % os.path.basename(self.data_file).split('_TMDataset.json')[0])
             print "Markers added: %s" % self.layout_markers.count()
 
 
@@ -260,14 +269,19 @@ class Core_TimelineMarker(QtWidgets.QWidget):
     def setFrame(self):
         '''set the frame in nuke when marker is clicked'''
         thisSender = self.sender()
-        nuke.frame(thisSender.frame)
+        try:
+            nuke.frame(thisSender.frame)
+        except:
+            pass
         print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
 
 
-nukescripts.registerWidgetAsPanel('Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
+try:
+    nukescripts.registerWidgetAsPanel('Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
+except:
+    pass
 
-
-if __name__ != "__main__":    
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     p = Core_TimelineMarker()
     p.show()
@@ -277,4 +291,3 @@ else:
     p = Core_TimelineMarker()
     p.show()
     p.raise_()
-    
