@@ -1,8 +1,10 @@
 
-
+try:
+    import nuke, nukescripts
+except:
+    pass
 from Qt import QtWidgets, QtGui, QtCore
 import sys, time, os, json
-import HTMLParser as html
 
 
 
@@ -104,19 +106,26 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.bt_reloadFile.clicked.connect(self.loadFromFile)
         self.bt_reloadFile.setToolTip("Load Markers from selected File")
 
-        self.bt_add.resize(48,48)
-        self.bt_remove.resize(48,48)
+        self.bt_add.setFixedWidth(50)
+        self.bt_remove.setFixedWidth(50)
+        self.bt_add.setFlat(True)
+        self.bt_remove.setFlat(True)
+        self.bt_save.setFlat(True)
+        self.bt_reload.setFlat(True)
+        self.bt_reloadFile.setFlat(True)
 
 
         self.layout_editMarkers = QtWidgets.QGridLayout()
         self.layout_editMarkers.setContentsMargins(0,0,0,0)
         self.layout_editMarkers.setSpacing(0)
-        self.layout_editMarkers.addWidget(self.tx_shot,0,0,1,2)
-        self.layout_editMarkers.addWidget(self.bt_add,1,0)
-        self.layout_editMarkers.addWidget(self.bt_remove,1,1)
+        self.layout_editMarkers.addWidget(self.tx_shot,0,0)
+        self.layout_editMarkers.addWidget(self.bt_add,0,2)
+        self.layout_editMarkers.addWidget(self.bt_remove,0,3)
 
         self.layout_markers = QtWidgets.QHBoxLayout()
+        self.layout_markers.setSpacing(0)
         self.group_markers = QtWidgets.QGroupBox()
+        self.group_markers.setTitle('Markers')
         self.group_markers.setContentsMargins(0,0,0,0)
         self.group_markers.setLayout(self.layout_markers)
 
@@ -125,18 +134,20 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_reload.setSpacing(0)
         self.layout_reload.addWidget(self.bt_save, 0,0)
         self.layout_reload.addWidget(self.bt_reload, 0,1)
-        self.layout_reload.addWidget(self.bt_reloadFile, 1,0,1,2)
+        self.layout_reload.addWidget(self.bt_reloadFile, 0,2)
 
         self.layout_master = QtWidgets.QHBoxLayout()
         self.layout_master.setContentsMargins(0,0,0,0)
         self.layout_master.setSpacing(0)
         self.layout_master.addLayout(self.layout_editMarkers)
+        self.layout_master.addSpacerItem(QtWidgets.QSpacerItem(10,10))
         self.layout_master.addWidget(self.group_markers)
         self.layout_master.addStretch()
         self.layout_master.addLayout(self.layout_reload)
 
         self.setLayout(self.layout_master)
         self.resize(1000,50)
+        self.setMinimumnHeight(60)
         self.setContentsMargins(0,0,0,0)
 
         self.reloadMarkers()
@@ -277,27 +288,15 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
 try:
-    class TimelineMarkerPane_Knob():
-      def makeUI(self):
-        self.TimelineMarker = Core_TimelineMarker()
-        return self.TimelineMarker
-
-    class TimelineMarkerPane(nukescripts.PythonPanel):
-        super(TimelineMarkerPane, self).__init__()
-        self.TimelineMarkerPane = nuke.PyCustom_Knob( "TimelineMarker", "", "%s.TimelineMarkerPane_Knob()" % __file__)
-        self.addKnob( self.TimelineMarkerPane )
-
-    nukescripts.registerWidgetAsPanel('TimelineMarkerPane', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
+    nukescripts.registerWidgetAsPanel('mod_TimelineMarker.Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
 except:
-    pass
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    p = Core_TimelineMarker()
-    p.show()
-    p.raise_()
-    app.exec_()
-else:
-    p = Core_TimelineMarker()
-    p.show()
-    p.raise_()
+    try:
+        app = QtWidgets.QApplication(sys.argv)
+        p = Core_TimelineMarker()
+        p.show()
+        p.raise_()
+        app.exec_()
+    except:
+        p = Core_TimelineMarker()
+        p.show()
+        p.raise_()
