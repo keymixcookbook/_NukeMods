@@ -277,7 +277,17 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
 try:
-    nukescripts.registerWidgetAsPanel('Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
+    class TimelineMarkerPane_Knob():
+      def makeUI(self):
+        self.TimelineMarker = Core_TimelineMarker()
+        return self.TimelineMarker
+
+    class TimelineMarkerPane(nukescripts.PythonPanel):
+        super(TimelineMarkerPane, self).__init__()
+        self.TimelineMarkerPane = nuke.PyCustom_Knob( "TimelineMarker", "", "%s.TimelineMarkerPane_Knob()" % __file__)
+        self.addKnob( self.TimelineMarkerPane )
+
+    nukescripts.registerWidgetAsPanel('TimelineMarkerPane', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
 except:
     pass
 
