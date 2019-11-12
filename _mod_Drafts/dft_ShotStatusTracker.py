@@ -152,7 +152,7 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         '''when save button is pressed'''
 
         core = self.core
-        out_path = os.path.join(core.json_folder,'ShotStatusTracker_Datasets_onSave.json')
+        out_path = core.json_file_path
         allRow = core.rowCount()
         allColumn = core.columnCount()
         column = core.ls_header
@@ -298,8 +298,12 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
     def getData(self):
         '''get data from json file'''
-        with open(self.json_file_path, 'r') as f:
-            data = json.load(f)
+        try:
+            with open(self.json_file_path, 'r') as f:
+                data = json.load(f)
+        except:
+            data = []
+            print "No SSTDataset file"
 
         return data
 
