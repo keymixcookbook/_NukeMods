@@ -1,4 +1,7 @@
-#import nuke, nukescripts
+try:
+    import nuke, nukescripts
+except:
+    pass
 import json, sys, os
 from Qt import QtWidgets, QtGui, QtCore
 
@@ -327,15 +330,15 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         return data_file
 
-
-# Show the panel
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    ShotStatusTracker = Main_ShotStatusTracker()
-    ShotStatusTracker.run()
-    app.exec_()
-else:
-    ShotStatusTracker = Main_ShotStatusTracker()
-    ShotStatusTracker.run()
+try: 
+    nukescripts.registerWidgetAsPanel('mod_ShotStatusTracker.Main_ShotStatusTracker', 'Shot Status Tracker','uk.co.thefoundry.ShotStatusTracker')
+except:
+    if __name__ == '__main__':
+        app = QtWidgets.QApplication(sys.argv)
+        ShotStatusTracker = Main_ShotStatusTracker()
+        ShotStatusTracker.run()
+        app.exec_()
+    else:
+        ShotStatusTracker = Main_ShotStatusTracker()
+        ShotStatusTracker.run()
+'''
