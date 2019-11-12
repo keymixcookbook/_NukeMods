@@ -26,21 +26,29 @@ class StatusBox(QtWidgets.QComboBox):
 
 
 class DataAdd(QtWidgets.QDialog):
-    entry = None
-    def __init__(self):
+    def __init__(self, core, thisRow, ls_shots):
+        '''
+        core: QTableWidget
+        thisRow: index for the new row
+        '''
         super(DataAdd, self).__init__()
 
-        self.ls_header = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
+        self.core = core
+        self.thisRow = thisRow
+        self.ls_shots = ls_shots
 
-        self.st_shot = QtWidgets.QLineEdit()
-        self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
+        self.st_shot = QtWidgets.QComboBox()
+        # self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
+        # self.st_shot.setCompleter(QtWidgets.QCompleter(ls_shots))
+        self.st_shot.addItems(self.ls_shots)
+        self.st_shot.setEditable(True)
         self.st_task = QtWidgets.QLineEdit()
         self.st_task.setPlaceholderText('Task (ie. mastercomp)')
         self.st_task.setCompleter(QtWidgets.QCompleter(['comp', 'mastercomp','precomp-']))
         self.lb_version = QtWidgets.QLabel('Version: ')
         self.no_version = QtWidgets.QSpinBox()
         self.bx_status = QtWidgets.QComboBox()
-        self.bx_status.addItems(self.ls_header)
+        self.bx_status.addItems(self.core.ls_status)
         self.st_comments = QtWidgets.QLineEdit()
         self.bt_add = QtWidgets.QPushButton('ADD')
         self.bt_add.clicked.connect(self.onClicked)
@@ -57,28 +65,31 @@ class DataAdd(QtWidgets.QDialog):
         self.layout_master.addWidget(self.bt_add)
         self.setLayout(self.layout_master)
         self.setWindowTitle("Add a version")
-        self.show()
 
 
     def onClicked(self):
         '''collect data from GUI and assign to variables'''
 
-        self.entry = {}
+        entry = {}
 
         thisShot, thisTask, thisVersion, thisStatus, thisComments = None, None, None, None, None
 
-        thisShot = self.st_shot.text()
+        thisShot = self.st_shot.currentText()
         thisTask = self.st_task.text()
         thisVersion = int(self.no_version.text())
         thisStatus = self.bx_status.currentText()
         thisComments = self.st_comments.text()
-        self.entry['SHOT']=thisShot
-        self.entry['TASK']=thisTask
-        self.entry['VERSION']=thisVersion
-        self.entry['STATUS']=thisStatus
-        self.entry['COMMENTS']=thisComments
-        self.entry['NOTES']=""
-        #print "added\n---SHOT: %s\n---TASK: %s\n---VERSION: %s\n---STATUS: %s\n---COMMENTS: %s" % (thisShot, thisTask, thisVersion, thisStatus, thisComments)
+        entry['SHOT']=thisShot
+        entry['TASK']=thisTask
+        entry['VERSION']=thisVersion
+        entry['STATUS']=thisStatus
+        entry['COMMENTS']=thisComments
+        entry['NOTES']=""
+
+        for i,c in enumerate(self.core.ls_header):
+            self.core.setCell(entry, self.thisRow, c, i)
+
+        print "added\n---SHOT: %s\n---TASK: %s\n---VERSION: %s\n---STATUS: %s\n---COMMENTS: %s" % (thisShot, thisTask, thisVersion, thisStatus, thisComments)
 
         self.close()
 
@@ -86,6 +97,8 @@ class DataAdd(QtWidgets.QDialog):
 class Main_ShotStatusTracker(QtWidgets.QDialog):
     def __init__(self):
         super(Main_ShotStatusTracker,self).__init__()
+
+        self.core = Core_ShotStatusTracker()
 
         self.bt_reload = QtWidgets.QPushButton('Reload')
         self.bt_reload.clicked.connect(self.onReload)
@@ -95,7 +108,6 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.bt_add.clicked.connect(self.onAdd)
         self.bt_remove = QtWidgets.QPushButton('Remove')
         self.bt_remove.clicked.connect(self.onRemove)
-        self.core = Core_ShotStatusTracker()
 
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -115,7 +127,13 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
 
 
     def getCellValue(self, core_obj, idx_r, idx_c, column):
-        '''gets the value for current cell, if cell type differ from cell to cell'''
+        '''
+        gets the value for current cell, if cell type differ from cell to cell
+        core_obj: QTableWidget
+        idx_r: row index
+        idx_c: column index
+        column: Header name (use to get cellTypes)
+        '''
 
         cellTypes={'SHOT': 'item', 'TASK': 'item', 'VERSION': 'integer', 'STATUS': 'combo', 'COMMENTS': 'item', 'NOTES': 'item'}
 
@@ -159,17 +177,16 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.core.setDefault()
         print "data load from json"
 
+
     def onAdd(self):
         '''add data entry'''
         core = self.core
         core.setRowCount(core.rowCount()+1)
-        r = core.rowCount()-1
-        d = DataAdd()
-        d.show()
-        thisData = d.entry
-        for i,c in enumerate(core.ls_header):
-            core.setCell(thisData, r, c, i)
-            print r, c, i
+        thisRow = core.rowCount()-1
+        ls_shots_all = [self.getCellValue(core, r, 0, 'SHOT') for r in range(core.rowCount()-1)]
+        ls_shots = list(dict.fromkeys(ls_shots_all))
+        self.d = DataAdd(core, thisRow, ls_shots)
+        self.d.exec_()
 
 
     def onRemove(self):
@@ -189,10 +206,10 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
     def __init__(self):
         super(Core_ShotStatusTracker, self).__init__()
 
-        self.json_filename = 'ShotStatusTracker_datasets.json'
-        self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
+        # self.json_filename = 'ShotStatusTracker_datasets.json'
+        # self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
         # self.json_folder = '/net/homes/tjiang/Documents/'
-        self.json_file_path = os.path.join(self.json_folder,self.json_filename)
+        self.json_file_path = self.getJSONPath()
 
         self.data = self.getData()
         self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
@@ -257,7 +274,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
             thisData = d[c]
             thisCell = QtWidgets.QTableWidgetItem(thisData)
             thisCell.setToolTip(thisData)
-            # self.setItem(r, i, thisCell)
+            self.setItem(r, i, thisCell)
         elif c=='NOTES':
             thisData = d[c]
             thisCell = QtWidgets.QTableWidgetItem(thisData)
@@ -286,6 +303,25 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         return data
 
+
+    def getJSONPath(self):
+        '''
+        reutrn file path for the json file
+        Naming convension:
+        <HOME Dir>/.nuke/ShotStatusTracker/<SHOW>_SSTDataset.json
+        /Users/Tianlun/.nuke/TimelineMarker/PHX_SSTDataset.json
+        '''
+        # Get pipline enviroment variables
+        data_SHOW = os.getenv('PL_SHOW') if os.getenv('PL_SHOW') else 'KUHQ'
+
+        data_folder = os.path.join(os.getenv('HOME'), '.nuke','ShotStatusTracker')
+        data_filename = "%s_SSTDataset.json" % data_SHOW
+        data_file = os.path.join(data_folder, data_SHOW, data_filename)
+
+        if not os.path.isdir(os.path.dirname(data_file)):
+            os.makedirs(os.path.dirname(data_file))
+
+        return data_file
 
 
 # Show the panel
