@@ -1,3 +1,19 @@
+def _version_():
+	ver='''
+
+	version 0.0
+    - Dockable nuke widget to set current frame
+    - left-click to set frame, right-click to remove button
+    - display current SHOW and SHOT (if ENV variable is set up)
+    - can save, reload and load file from a JSON dataset
+
+	'''
+	return ver
+
+
+import nuke, nukescripts
+
+
 
 try:
     import nuke, nukescripts
