@@ -84,11 +84,6 @@ class MarkerAdd(QtWidgets.QDialog):
         thisId = int(time.time())
         thisLabel = self.m_label.text()
         thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
-        # thisMarker.customContextMenuRequested.connect(Core_TimelineMarker.removeMarker)
-
-        label_button = self.m_label.text() if len(self.m_label.text())<=5 else self.m_label.text()[:5]+'...'
-        thisMarker.setText(label_button)
-        thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
         self.thisLayout.addWidget(thisMarker)
         self.close()
 
@@ -209,8 +204,13 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
     def setMarkerButtonAttributes(self, marker_obj):
-        '''set Right-Click remove attribute'''
+        '''set MarkerButton attributes'''
+        '''label, tooltip, left-click set frame, right-click remove'''
 
+        label_button = marker_obj.label if len(marker_obj.label)<=5 else marker_obj.label[:5]+'...'
+        marker_obj.setText(label_button)
+        marker_obj.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)<br><br><i>Right-Click to Remove</i>" % (marker_obj.frame, marker_obj.label, marker_obj.id) )
+        
         marker_obj.clicked.connect(self.setFrame)
         marker_obj.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         marker_obj.customContextMenuRequested.connect(self.removeMarker_RClicked)
@@ -226,12 +226,9 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
         self.p = MarkerAdd(self.layout_markers, frame)
         self.p.exec_()
-        # add connect signal to the last widgets
+
         newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
         self.setMarkerButtonAttributes(newWidget)
-        # newWidget.clicked.connect(self.setFrame)
-        # newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        # newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
 
         self.saveMarkers()
 
@@ -280,18 +277,14 @@ class Core_TimelineMarker(QtWidgets.QWidget):
                 thisId = w['id']
                 thisLabel = w['label']
                 thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
-
-                label_button = thisLabel if len(thisLabel)<=5 else thisLabel[:5]+'...'
-                thisMarker.setText(label_button)
-                thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
-                
                 self.setMarkerButtonAttributes(thisMarker)
-                # thisMarker.clicked.connect(self.setFrame)
-                # thisMarker.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-                # thisMarker.customContextMenuRequested.connect(self.removeMarker_RClicked)
+
                 self.layout_markers.addWidget(thisMarker)
 
-            self.tx_shot.setText('SHOT: <b>%s</b>' % os.path.basename(self.data_file).split('_TMDataset.json')[0])
+            jsonfile_show = os.path.basename(os.path.dirname(self.data_file))
+            jsonfile_shot = os.path.basename(self.data_file).split('_TMDataset.json')[0]
+
+            self.tx_shot.setText('%s: <b>%s</b>' % (jsonfile_show, jsonfile_shot))
             print "Markers added: %s" % self.layout_markers.count()
 
 
