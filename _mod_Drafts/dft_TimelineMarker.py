@@ -14,6 +14,23 @@ import sys, time, os, json
 
 
 
+
+def set_widget_margins_to_zero(widget_object):
+
+    if widget_object:
+        target_widgets = set()
+        target_widgets.add(widget_object.parentWidget().parentWidget())
+        target_widgets.add(widget_object.parentWidget().parentWidget().parentWidget().parentWidget())
+
+        for widget_layout in target_widgets:
+            try:
+                widget_layout.layout().setContentsMargins(0, 0, 0, 0)
+            except:
+                pass
+
+
+
+
 class MarkerButton(QtWidgets.QPushButton):
     def __init__(self, id, frame, label):
         super(MarkerButton, self).__init__()
@@ -125,7 +142,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_markers = QtWidgets.QHBoxLayout()
         self.layout_markers.setSpacing(0)
         self.group_markers = QtWidgets.QGroupBox()
-        self.group_markers.setTitle('Markers')
         self.group_markers.setContentsMargins(0,0,0,0)
         self.group_markers.setLayout(self.layout_markers)
 
@@ -137,7 +153,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.layout_reload.addWidget(self.bt_reloadFile, 0,2)
 
         self.layout_master = QtWidgets.QHBoxLayout()
-        self.layout_master.setContentsMargins(0,0,0,0)
+        self.layout_master.setContentsMargins(10,0,10,0)
         self.layout_master.setSpacing(0)
         self.layout_master.addLayout(self.layout_editMarkers)
         self.layout_master.addSpacerItem(QtWidgets.QSpacerItem(10,10))
@@ -147,7 +163,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
         self.setLayout(self.layout_master)
         self.resize(1000,50)
-        self.setMinimumnHeight(60)
         self.setContentsMargins(0,0,0,0)
 
         self.reloadMarkers()
@@ -193,6 +208,14 @@ class Core_TimelineMarker(QtWidgets.QWidget):
             f.write(json_data)
 
 
+    def setMarkerButtonAttributes(self, marker_obj):
+        '''set Right-Click remove attribute'''
+
+        marker_obj.clicked.connect(self.setFrame)
+        marker_obj.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        marker_obj.customContextMenuRequested.connect(self.removeMarker_RClicked)
+
+
     def addMarker(self):
         '''add MarkerButton widget'''
 
@@ -205,9 +228,12 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         self.p.exec_()
         # add connect signal to the last widgets
         newWidget = self.layout_markers.itemAt(self.layout_markers.count()-1).widget()
-        newWidget.clicked.connect(self.setFrame)
-        newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
+        self.setMarkerButtonAttributes(newWidget)
+        # newWidget.clicked.connect(self.setFrame)
+        # newWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        # newWidget.customContextMenuRequested.connect(self.removeMarker_RClicked)
+
+        self.saveMarkers()
 
 
     def removeMarker_RClicked(self):
@@ -258,9 +284,11 @@ class Core_TimelineMarker(QtWidgets.QWidget):
                 label_button = thisLabel if len(thisLabel)<=5 else thisLabel[:5]+'...'
                 thisMarker.setText(label_button)
                 thisMarker.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (thisMarker.frame, thisMarker.label, thisMarker.id) )
-                thisMarker.clicked.connect(self.setFrame)
-                thisMarker.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-                thisMarker.customContextMenuRequested.connect(self.removeMarker_RClicked)
+                
+                self.setMarkerButtonAttributes(thisMarker)
+                # thisMarker.clicked.connect(self.setFrame)
+                # thisMarker.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+                # thisMarker.customContextMenuRequested.connect(self.removeMarker_RClicked)
                 self.layout_markers.addWidget(thisMarker)
 
             self.tx_shot.setText('SHOT: <b>%s</b>' % os.path.basename(self.data_file).split('_TMDataset.json')[0])
@@ -285,6 +313,18 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         except:
             pass
         print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
+    
+    
+    def event(self, event):
+        if event.type() == QtCore.QEvent.Type.Show:
+
+            try:
+                set_widget_margins_to_zero(self)
+            except:
+                pass
+
+        return QtWidgets.QWidget.event(self, event)
+
 
 
 try:
