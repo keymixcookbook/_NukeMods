@@ -177,7 +177,10 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
 
     def onReload(self):
         '''when reload button is pressed'''
-        self.core.setDefault()
+        core = self.core
+        core.setRowCount(0)
+        data = core.getData(core.json_file_path)
+        core.setTable(data, core.ls_header, core.setCell)
         print "data load from json"
 
 
@@ -214,7 +217,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         # self.json_folder = '/net/homes/tjiang/Documents/'
         self.json_file_path = self.getJSONPath()
 
-        self.data = self.getData()
+        self.data = self.getData(self.json_file_path)
         self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
         self.ls_status = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
         self.resize(800,500)
@@ -237,7 +240,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
     def setDefault(self):
         '''set default value when instancing'''
-        self.setTable(self.getData())
+        self.setTable(self.getData(self.json_file_path), self.ls_header, self.setCell)
 
 
     def int2str(self, int):
@@ -285,24 +288,24 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
             self.setItem(r, i, thisCell)
 
 
-    def setTable(self, data):
+    def setTable(self, data, ls_header, setCell):
         '''populating table with data'''
 
         for r, d in enumerate(data):
             #r: row number, d: data for this row - 'SHOT', 'TASK', 'VERSION', 'COMMENTS', 'NOTES'
             # self.setRowHeight(r,24)
-            for i, c in enumerate(self.ls_header):
+            for i, c in enumerate(ls_header):
                 # i: column index, c: column title
                 # SHOT: String | TASK: String with completer | VERSION: Integer | COMMENTS: String | NOTES: String
-                self.setCell(d,r,c,i)
+                setCell(d,r,c,i)
 
         self.setAlternatingRowColors(True)
 
 
-    def getData(self):
+    def getData(self, json_file_path):
         '''get data from json file'''
         try:
-            with open(self.json_file_path, 'r') as f:
+            with open(json_file_path, 'r') as f:
                 data = json.load(f)
         except:
             data = []
@@ -333,12 +336,11 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 try: 
     nukescripts.registerWidgetAsPanel('mod_ShotStatusTracker.Main_ShotStatusTracker', 'Shot Status Tracker','uk.co.thefoundry.ShotStatusTracker')
 except:
-    if __name__ == '__main__':
+    try:
         app = QtWidgets.QApplication(sys.argv)
         ShotStatusTracker = Main_ShotStatusTracker()
         ShotStatusTracker.run()
         app.exec_()
-    else:
+    except:
         ShotStatusTracker = Main_ShotStatusTracker()
         ShotStatusTracker.run()
-'''
