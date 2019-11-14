@@ -8,6 +8,69 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
+def int2str(int):
+    '''convert integer to string'''
+    return "v%03d" % int
+
+
+
+def setCell(obj_table, d, r, c, i):
+    '''
+    set cell value
+    obj_table: QTableWidget, d: data, r: row, c: column value, i: column index
+    '''
+
+    thisData, thisCell = None, None
+    if c=='SHOT':
+        thisData = d[c]
+        thisCell = QtWidgets.QTableWidgetItem(thisData)
+        thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
+        obj_table.setItem(r, i, thisCell)
+    elif c=='TASK':
+        thisData = d[c]
+        thisCell = QtWidgets.QTableWidgetItem(thisData)
+        obj_table.setItem(r, i, thisCell)
+    elif c=='VERSION':
+        thisData = int2str(d[c])
+        thisCell = QtWidgets.QTableWidgetItem(thisData)
+        thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
+        obj_table.setItem(r, i, thisCell)
+    elif c=='STATUS':
+        thisData = d[c]
+        thisCell = StatusBox()
+        thisCell.addItems(obj_table.ls_status)
+        thisCell.setCurrentIndex(thisCell.findText(thisData))
+        obj_table.setCellWidget(r, i, thisCell)
+    elif c=='COMMENTS':
+        thisData = d[c]
+        thisCell = QtWidgets.QTableWidgetItem(thisData)
+        thisCell.setToolTip(thisData)
+        obj_table.setItem(r, i, thisCell)
+    elif c=='NOTES':
+        thisData = d[c]
+        thisCell = QtWidgets.QTableWidgetItem(thisData)
+        thisCell.setToolTip(thisData)
+        obj_table.setItem(r, i, thisCell)
+
+
+def setTable(obj_table, data, ls_header):
+    '''
+    populating table with data
+    obj_table: QTableWidget, data: JSON data, ls_header: header columns
+    '''
+
+    print "%s entries" % len(data)
+
+    for r, d in enumerate(data):
+        #r: row number, d: data for this row - 'SHOT', 'TASK', 'VERSION', 'COMMENTS', 'NOTES'
+        # self.setRowHeight(r,24)
+        for i, c in enumerate(ls_header):
+            # i: column index, c: column title
+            # SHOT: String | TASK: String with completer | VERSION: Integer | COMMENTS: String | NOTES: String
+            setCell(obj_table,d,r,c,i)
+
+
+
 class StatusBox(QtWidgets.QComboBox):
     '''
     source: https://stackoverflow.com/questions/3241830/qt-how-to-disable-mouse-scrolling-of-qcombobox
@@ -90,7 +153,7 @@ class DataAdd(QtWidgets.QDialog):
         entry['NOTES']=""
 
         for i,c in enumerate(self.core.ls_header):
-            self.core.setCell(entry, self.thisRow, c, i)
+            setCell(self.core, entry, self.thisRow, c, i)
 
         print "added\n---SHOT: %s\n---TASK: %s\n---VERSION: %s\n---STATUS: %s\n---COMMENTS: %s" % (thisShot, thisTask, thisVersion, thisStatus, thisComments)
 
@@ -178,10 +241,10 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
     def onReload(self):
         '''when reload button is pressed'''
         core = self.core
-        core.setRowCount(0)
         data = core.getData(core.json_file_path)
-        core.setTable(data, core.ls_header, core.setCell)
-        print "data load from json"
+        core.setRowCount(len(data))
+        setTable(core, data, core.ls_header)
+
 
 
     def onAdd(self):
@@ -212,9 +275,6 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
     def __init__(self):
         super(Core_ShotStatusTracker, self).__init__()
 
-        # self.json_filename = 'ShotStatusTracker_datasets.json'
-        # self.json_folder = '/Users/Tianlun/Desktop/_NukeTestScript/doc/'
-        # self.json_folder = '/net/homes/tjiang/Documents/'
         self.json_file_path = self.getJSONPath()
 
         self.data = self.getData(self.json_file_path)
@@ -238,68 +298,10 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         self.setDefault()
 
+
     def setDefault(self):
         '''set default value when instancing'''
-        self.setTable(self.getData(self.json_file_path), self.ls_header, self.setCell)
-
-
-    def int2str(self, int):
-        '''convert integer to string'''
-        return "v%03d" % int
-
-
-    def setCell(self, d, r, c, i):
-        '''
-        set cell value
-        d: data, r: row, c: column value, i: column index
-        '''
-        thisData, thisCell = None, None
-        if c=='SHOT':
-            thisData = d[c]
-            thisCell = QtWidgets.QTableWidgetItem(thisData)
-            thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.setItem(r, i, thisCell)
-        elif c=='TASK':
-            thisData = d[c]
-            thisCell = QtWidgets.QTableWidgetItem(thisData)
-            self.setItem(r, i, thisCell)
-        elif c=='VERSION':
-            thisData = self.int2str(d[c])
-            thisCell = QtWidgets.QTableWidgetItem(thisData)
-            thisCell.setTextAlignment(QtCore.Qt.AlignCenter)
-            self.setItem(r, i, thisCell)
-        elif c=='STATUS':
-            thisData = d[c]
-            thisCell = StatusBox()
-            # thisCell.setStyleSheet("QComboBox::down-arrow {border: 1px; image: none}")
-            # thisCell.insertSeparator(0)
-            thisCell.addItems(self.ls_status)
-            thisCell.setCurrentIndex(thisCell.findText(thisData))
-            self.setCellWidget(r, i, thisCell)
-        elif c=='COMMENTS':
-            thisData = d[c]
-            thisCell = QtWidgets.QTableWidgetItem(thisData)
-            thisCell.setToolTip(thisData)
-            self.setItem(r, i, thisCell)
-        elif c=='NOTES':
-            thisData = d[c]
-            thisCell = QtWidgets.QTableWidgetItem(thisData)
-            thisCell.setToolTip(thisData)
-            self.setItem(r, i, thisCell)
-
-
-    def setTable(self, data, ls_header, setCell):
-        '''populating table with data'''
-
-        for r, d in enumerate(data):
-            #r: row number, d: data for this row - 'SHOT', 'TASK', 'VERSION', 'COMMENTS', 'NOTES'
-            # self.setRowHeight(r,24)
-            for i, c in enumerate(ls_header):
-                # i: column index, c: column title
-                # SHOT: String | TASK: String with completer | VERSION: Integer | COMMENTS: String | NOTES: String
-                setCell(d,r,c,i)
-
-        self.setAlternatingRowColors(True)
+        setTable(self, self.getData(self.json_file_path), self.ls_header)
 
 
     def getData(self, json_file_path):
@@ -333,7 +335,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         return data_file
 
-try: 
+try:
     nukescripts.registerWidgetAsPanel('mod_ShotStatusTracker.Main_ShotStatusTracker', 'Shot Status Tracker','uk.co.thefoundry.ShotStatusTracker')
 except:
     try:
