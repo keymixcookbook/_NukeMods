@@ -1,14 +1,14 @@
 def _version_():
-	ver='''
+    ver='''
 
-	version 0.0
+    version 0.0
     - Dockable nuke widget to set current frame
     - left-click to set frame, right-click to remove button
     - display current SHOW and SHOT (if ENV variable is set up)
     - can save, reload and load file from a JSON dataset
 
-	'''
-	return ver
+    '''
+    return ver
 
 
 import nuke, nukescripts
@@ -226,7 +226,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         label_button = marker_obj.label if len(marker_obj.label)<=5 else marker_obj.label[:5]+'...'
         marker_obj.setText(label_button)
         marker_obj.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)<br><br><i>Right-Click to Remove</i>" % (marker_obj.frame, marker_obj.label, marker_obj.id) )
-        
+
         marker_obj.clicked.connect(self.setFrame)
         marker_obj.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         marker_obj.customContextMenuRequested.connect(self.removeMarker_RClicked)
@@ -322,8 +322,8 @@ class Core_TimelineMarker(QtWidgets.QWidget):
         except:
             pass
         print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
-    
-    
+
+
     def event(self, event):
         if event.type() == QtCore.QEvent.Type.Show:
 
