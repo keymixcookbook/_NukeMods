@@ -7,6 +7,10 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
+def getTooltip(version, commments, notes):
+    '''set tooltips'''
+    return "<b>v%03d</b><br><br>%s<br>------<br>NOTES: %s" % (version,commments,notes)
+
 
 def int2str(int):
     '''convert integer to string'''
@@ -29,7 +33,7 @@ def setCell(obj_table, d, r, c, i):
     elif c=='TASK':
         thisData = d[c]
         thisCell = QtWidgets.QTableWidgetItem(thisData)
-        thisCell.setToolTip("<b>v%03d</b><br><br>%s<br>------<br>NOTES: %s" % (d['VERSION'],d['COMMENTS'],d['NOTES']))
+        thisCell.setToolTip(getTooltip(d['VERSION'],d['COMMENTS'],d['NOTES']))
         obj_table.setItem(r, i, thisCell)
     elif c=='VERSION':
         thisData = int2str(d[c])
@@ -81,11 +85,11 @@ class StatusBox(QtWidgets.QComboBox):
 
         #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
         self.colorCode = {
-            'FARM':     (195 ,  75, 100),
-            'RENDERED': (125 ,  75, 100),
-            'VIEWED':   (248 ,  50, 50),
-            'DAILIED':  (248 ,  75, 100),
-            'NOTED':    (53  ,  75, 100),
+            'FARM':     (195 ,  75,  100),
+            'RENDERED': (125 ,  75,  100),
+            'VIEWED':   (248 ,  50,  50),
+            'DAILIED':  (248 ,  75,  100),
+            'NOTED':    (53  ,  75,  100),
             'SENT':     (30  ,  100, 100),
             'FINAL':    (80  ,  100, 100)
             }
@@ -94,6 +98,7 @@ class StatusBox(QtWidgets.QComboBox):
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
         self.currentIndexChanged.connect(self.setColorCode)
+
 
     def setColorCode(self):
         thisColor = self.colorCode[self.currentText()]
@@ -214,6 +219,14 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.setLayout(self.layout)
         self.setWindowTitle("Shot Status Tracker - beta")
 
+        self.core.cellChanged.connect(self.onUpdateCells)
+
+    def closeEvent(self, event):
+        '''save on close'''
+        self.onSave()
+        print 'save and closed'
+
+
 
     def getCellValue(self, core_obj, idx_r, idx_c, column):
         '''
@@ -285,6 +298,25 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         '''remove data of the last row'''
         core = self.core
         core.setRowCount(core.rowCount()-1)
+
+
+    def onUpdateCells(self):
+        '''update cells when changed'''
+        core = self.core
+        cur_r = core.currentRow()
+        cur_c = core.currentColumn()
+
+        if core.ls_header[cur_c] == 'COMMENTS' or core.ls_header[cur_c] == 'NOTES':
+            thisItem = core.item(cur_r,cur_c)
+            thisItem.setToolTip(thisItem.text())
+
+            row_verion = self.getCellValue(core, cur_r, core.ls_header.index('VERSION'), 'VERSION')
+            row_comments = self.getCellValue(core, cur_r, core.ls_header.index('COMMENTS'), 'COMMENTS')
+            row_notes = self.getCellValue(core, cur_r, core.ls_header.index('NOTES'), 'NOTES')
+            thisTask = core.item(cur_r, 1)
+            thisTask.setToolTip(getTooltip(row_verion,row_comments,row_notes)) # version, commments, notes
+
+        self.onSave()
 
 
     def run(self):
