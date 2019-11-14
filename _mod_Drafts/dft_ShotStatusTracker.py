@@ -9,7 +9,8 @@ from Qt import QtWidgets, QtGui, QtCore
 
 def getTooltip(version, commments, notes):
     '''set tooltips'''
-    return "<b>v%03d</b><br><br>%s<br>------<br>NOTES: %s" % (version,commments,notes)
+    return "<b>v%03d</b><br><br>%s<br>------<br>NOTES: <b>%s</b>" % (version,commments,notes)
+
 
 
 def int2str(int):
@@ -119,6 +120,21 @@ class StatusBox(QtWidgets.QComboBox):
 
 
 
+class VersionBox(QtWidgets.QSpinBox):
+    def __init__(self):
+        super(VersionBox, self).__init__()
+        self.valueChanged.connect(self.zeroPadding)
+        self.setFixedWidth(60)
+        self.setRange(0,999)
+    def zeroPadding(self):
+        input_len = len(str(self.value()))
+        if input_len <= 3:
+            self.setPrefix('v%s' % ('0'*(3-input_len)))
+        else:
+            self.setPrefix('v')
+
+
+
 class DataAdd(QtWidgets.QDialog):
     def __init__(self, core, thisRow, ls_shots):
         '''
@@ -139,8 +155,8 @@ class DataAdd(QtWidgets.QDialog):
         self.st_task = QtWidgets.QLineEdit()
         self.st_task.setPlaceholderText('Task (ie. mastercomp)')
         self.st_task.setCompleter(QtWidgets.QCompleter(['comp', 'mastercomp','precomp-']))
-        self.lb_version = QtWidgets.QLabel('Version: ')
-        self.no_version = QtWidgets.QSpinBox()
+        self.no_version = VersionBox()
+        self.no_version.setValue(1)
         self.bx_status = QtWidgets.QComboBox()
         self.bx_status.addItems(self.core.ls_status)
         self.st_comments = QtWidgets.QLineEdit()
@@ -151,14 +167,13 @@ class DataAdd(QtWidgets.QDialog):
         self.layout_version = QtWidgets.QHBoxLayout()
         self.layout_version.addWidget(self.st_shot)
         self.layout_version.addWidget(self.st_task)
-        self.layout_version.addWidget(self.lb_version)
         self.layout_version.addWidget(self.no_version)
         self.layout_version.addWidget(self.bx_status)
         self.layout_master.addLayout(self.layout_version)
         self.layout_master.addWidget(self.st_comments)
         self.layout_master.addWidget(self.bt_add)
         self.setLayout(self.layout_master)
-        self.setWindowTitle("Add a version")
+        self.setWindowTitle("Add a version: entry %s" % self.thisRow)
 
 
     def onClicked(self):
@@ -170,7 +185,7 @@ class DataAdd(QtWidgets.QDialog):
 
         thisShot = self.st_shot.currentText()
         thisTask = self.st_task.text()
-        thisVersion = int(self.no_version.text())
+        thisVersion = int(self.no_version.text().replace('v',''))
         thisStatus = self.bx_status.currentText()
         thisComments = self.st_comments.text()
         entry['SHOT']=thisShot
@@ -202,13 +217,17 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.bt_add.clicked.connect(self.onAdd)
         self.bt_remove = QtWidgets.QPushButton('Remove')
         self.bt_remove.clicked.connect(self.onRemove)
+        self.tx_show = QtWidgets.QLabel('<i>NO SHOW SET</i>')
 
         self.layout = QtWidgets.QVBoxLayout()
-        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setContentsMargins(10,0,10,0)
+        self.layout.setSpacing(0)
         self.layout_button = QtWidgets.QHBoxLayout()
         self.layout_button.setAlignment(QtCore.Qt.AlignLeft)
         self.layout_button.addWidget(self.bt_add)
         self.layout_button.addWidget(self.bt_remove)
+        self.layout_button.addStretch(1)
+        self.layout_button.addWidget(self.tx_show)
         self.layout_button.addStretch(1)
         self.layout_button.addWidget(self.bt_reload)
         self.layout_button.addWidget(self.bt_save)
@@ -220,6 +239,13 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.setWindowTitle("Shot Status Tracker - beta")
 
         self.core.cellChanged.connect(self.onUpdateCells)
+
+        try:
+            self.tx_show.setText('<b>%s</b>' % os.path.basename(self.core.json_file_path).split('_')[0])
+        except:
+            print "No Show Set"
+
+
 
     def closeEvent(self, event):
         '''save on close'''
@@ -261,17 +287,21 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
 
         ls_out = []
 
-        for r in range(allRow): # row
-            idx_r = r
-            dic_row = {} # resets column value for every row
-            for idx_c, c in enumerate(column): # column
-                dic_row[c] = self.getCellValue(core, idx_r, idx_c, c)
-            ls_out.append(dic_row)
+        try:
+            for r in range(allRow): # row
+                idx_r = r
+                dic_row = {} # resets column value for every row
+                for idx_c, c in enumerate(column): # column
+                    dic_row[c] = self.getCellValue(core, idx_r, idx_c, c)
+                ls_out.append(dic_row)
 
-        with open(out_path, 'w') as f:
-            f.write(json.dumps(ls_out,indent=2))
+                with open(out_path, 'w') as f:
+                    f.write(json.dumps(ls_out,indent=2))
+        except:
+            pass
 
-        print "data save to json: %s entries" % len(ls_out)
+
+        # print "data save to json: %s entries" % len(ls_out)
 
 
     def onReload(self):
@@ -280,6 +310,8 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         data = core.getData(core.json_file_path)
         core.setRowCount(len(data))
         setTable(core, data, core.ls_header)
+        self.tx_show.setText('<b>%s</b>' % os.path.basename(core.json_file_path).split('_')[0])
+
 
 
 
@@ -310,12 +342,14 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
             thisItem = core.item(cur_r,cur_c)
             thisItem.setToolTip(thisItem.text())
 
-            row_verion = self.getCellValue(core, cur_r, core.ls_header.index('VERSION'), 'VERSION')
-            row_comments = self.getCellValue(core, cur_r, core.ls_header.index('COMMENTS'), 'COMMENTS')
-            row_notes = self.getCellValue(core, cur_r, core.ls_header.index('NOTES'), 'NOTES')
-            thisTask = core.item(cur_r, 1)
-            thisTask.setToolTip(getTooltip(row_verion,row_comments,row_notes)) # version, commments, notes
-
+            try:
+                row_verion = self.getCellValue(core, cur_r, core.ls_header.index('VERSION'), 'VERSION')
+                row_comments = self.getCellValue(core, cur_r, core.ls_header.index('COMMENTS'), 'COMMENTS')
+                row_notes = self.getCellValue(core, cur_r, core.ls_header.index('NOTES'), 'NOTES')
+                thisTask = core.item(cur_r, 1)
+                thisTask.setToolTip(getTooltip(row_verion,row_comments,row_notes)) # version, commments, notes
+            except:
+                pass
         self.onSave()
 
 
@@ -347,8 +381,8 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         self.setAlternatingRowColors(True)
 
         self.setColumnWidth(0,125)
-        self.setColumnWidth(1,125)
-        self.setColumnWidth(2,80)
+        self.setColumnWidth(1,150)
+        self.setColumnWidth(2,70)
         self.setColumnWidth(3,100)
         self.setColumnWidth(4,150)
         self.setColumnWidth(5,150)
