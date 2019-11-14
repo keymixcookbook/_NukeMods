@@ -29,6 +29,7 @@ def setCell(obj_table, d, r, c, i):
     elif c=='TASK':
         thisData = d[c]
         thisCell = QtWidgets.QTableWidgetItem(thisData)
+        thisCell.setToolTip("<b>v%03d</b><br><br>%s<br>------<br>NOTES: %s" % (d['VERSION'],d['COMMENTS'],d['NOTES']))
         obj_table.setItem(r, i, thisCell)
     elif c=='VERSION':
         thisData = int2str(d[c])
@@ -77,8 +78,30 @@ class StatusBox(QtWidgets.QComboBox):
     '''
     def __init__(self, scrollWidget=None, *args, **kwargs):
         super(StatusBox, self).__init__(*args, **kwargs)
+
+        #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
+        self.colorCode = {
+            'FARM':     (195 ,  75, 100),
+            'RENDERED': (125 ,  75, 100),
+            'VIEWED':   (248 ,  50, 50),
+            'DAILIED':  (248 ,  75, 100),
+            'NOTED':    (53  ,  75, 100),
+            'SENT':     (30  ,  100, 100),
+            'FINAL':    (80  ,  100, 100)
+            }
+
         self.scrollWidget=scrollWidget
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
+
+        self.currentIndexChanged.connect(self.setColorCode)
+
+    def setColorCode(self):
+        thisColor = self.colorCode[self.currentText()]
+        self.setStyleSheet('''
+            QComboBox {background: hsv(%s,%s,%s); color: white;}
+            QComboBox QAbstractItemView {background: hsv(0,0,25); selection-background-color: hsv(0,0,50); color: hsv(0,0,75)}
+            ''' % thisColor)
+
 
     def wheelEvent(self, *args, **kwargs):
         if self.hasFocus():
@@ -289,12 +312,14 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         # for i, h in enumerate(self.ls_header):
         #     self.setHorizontalHeaderItem(i,QtWidgets.QTableWidgetItem(h))
         self.horizontalHeader().setStretchLastSection(True)
+        self.setAlternatingRowColors(True)
 
         self.setColumnWidth(0,125)
-        self.setColumnWidth(1,150)
+        self.setColumnWidth(1,125)
         self.setColumnWidth(2,80)
         self.setColumnWidth(3,100)
         self.setColumnWidth(4,150)
+        self.setColumnWidth(5,150)
 
         self.setDefault()
 
@@ -340,6 +365,8 @@ try:
 except:
     try:
         app = QtWidgets.QApplication(sys.argv)
+        #['bb10dark', 'bb10bright', 'cleanlooks', 'cde', 'motif', 'plastique', 'Windows', 'Fusion']
+        # app.setStyle('Plastique')
         ShotStatusTracker = Main_ShotStatusTracker()
         ShotStatusTracker.run()
         app.exec_()
