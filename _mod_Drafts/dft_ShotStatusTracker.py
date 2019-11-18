@@ -192,7 +192,7 @@ class DataAdd(QtWidgets.QDialog):
         self.layout_master.addWidget(self.st_comments)
         self.layout_master.addWidget(self.bt_add)
         self.setLayout(self.layout_master)
-        self.setWindowTitle("Add a version: entry %s" % self.thisRow)
+        self.setWindowTitle("Add a version: entry %s" % (self.thisRow+1))
 
 
     def onClicked(self):
