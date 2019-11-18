@@ -7,9 +7,24 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
-def getTooltip(version, commments, notes):
+def set_widget_margins_to_zero(widget_object):
+
+    if widget_object:
+        target_widgets = set()
+        target_widgets.add(widget_object.parentWidget().parentWidget())
+        target_widgets.add(widget_object.parentWidget().parentWidget().parentWidget().parentWidget())
+
+        for widget_layout in target_widgets:
+            try:
+                widget_layout.layout().setContentsMargins(0, 0, 0, 0)
+            except:
+                pass
+
+
+
+def getTooltip(shot, version, commments, notes):
     '''set tooltips'''
-    return "<b>v%03d</b><br><br>%s<br>------<br>NOTES: <b>%s</b>" % (version,commments,notes)
+    return "<b>%s - v%03d</b><br><br>%s<br>------<br>NOTES:<br><b>%s</b>" % (shot, version,commments,notes)
 
 
 
@@ -34,7 +49,7 @@ def setCell(obj_table, d, r, c, i):
     elif c=='TASK':
         thisData = d[c]
         thisCell = QtWidgets.QTableWidgetItem(thisData)
-        thisCell.setToolTip(getTooltip(d['VERSION'],d['COMMENTS'],d['NOTES']))
+        thisCell.setToolTip(getTooltip(d['SHOT'],d['VERSION'],d['COMMENTS'],d['NOTES']))
         obj_table.setItem(r, i, thisCell)
     elif c=='VERSION':
         thisData = int2str(d[c])
@@ -74,6 +89,8 @@ def setTable(obj_table, data, ls_header):
             # i: column index, c: column title
             # SHOT: String | TASK: String with completer | VERSION: Integer | COMMENTS: String | NOTES: String
             setCell(obj_table,d,r,c,i)
+    
+    obj_table.scrollToBottom()
 
 
 
@@ -86,14 +103,16 @@ class StatusBox(QtWidgets.QComboBox):
 
         #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
         self.colorCode = {
-            'FARM':     (195 ,  75,  100),
-            'RENDERED': (125 ,  75,  100),
-            'VIEWED':   (248 ,  50,  50),
-            'DAILIED':  (248 ,  75,  100),
-            'NOTED':    (53  ,  75,  100),
-            'SENT':     (30  ,  100, 100),
-            'FINAL':    (80  ,  100, 100)
+            'FARM':     (195 ,  100,  100, 'white'),
+            'RENDERED': (125 ,  75,   100, 'white'),
+            'VIEWED':   (248 ,   0,    50, 'gray' ),
+            'DAILIED':  (248 ,  75,   100, 'white'),
+            'NOTED':    (53  ,  75,    50, 'Peru' ),
+            'SENT':     (30  ,  100,  100, 'white'),
+            'FINAL':    (80  ,  100,  100, 'white')
             }
+
+
 
         self.scrollWidget=scrollWidget
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
@@ -104,7 +123,7 @@ class StatusBox(QtWidgets.QComboBox):
     def setColorCode(self):
         thisColor = self.colorCode[self.currentText()]
         self.setStyleSheet('''
-            QComboBox {background: hsv(%s,%s,%s); color: white;}
+            QComboBox {background: hsv(%s,%s,%s); color: %s;}
             QComboBox QAbstractItemView {background: hsv(0,0,25); selection-background-color: hsv(0,0,50); color: hsv(0,0,75)}
             ''' % thisColor)
 
@@ -194,6 +213,7 @@ class DataAdd(QtWidgets.QDialog):
         entry['STATUS']=thisStatus
         entry['COMMENTS']=thisComments
         entry['NOTES']=""
+        self.core.setRowCount(self.core.rowCount()+1)
 
         for i,c in enumerate(self.core.ls_header):
             setCell(self.core, entry, self.thisRow, c, i)
@@ -318,12 +338,13 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
     def onAdd(self):
         '''add data entry'''
         core = self.core
-        core.setRowCount(core.rowCount()+1)
-        thisRow = core.rowCount()-1
+        # core.setRowCount(core.rowCount()+1)
+        thisRow = core.rowCount()
         ls_shots_all = [self.getCellValue(core, r, 0, 'SHOT') for r in range(core.rowCount()-1)]
         ls_shots = list(dict.fromkeys(ls_shots_all))
         self.d = DataAdd(core, thisRow, ls_shots)
         self.d.exec_()
+        core.scrollToBottom()
 
 
     def onRemove(self):
@@ -343,14 +364,26 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
             thisItem.setToolTip(thisItem.text())
 
             try:
+                row_shot = self.getCellValue(core, cur_r, core.ls_header.index('SHOT'), 'SHOT')
                 row_verion = self.getCellValue(core, cur_r, core.ls_header.index('VERSION'), 'VERSION')
                 row_comments = self.getCellValue(core, cur_r, core.ls_header.index('COMMENTS'), 'COMMENTS')
                 row_notes = self.getCellValue(core, cur_r, core.ls_header.index('NOTES'), 'NOTES')
                 thisTask = core.item(cur_r, 1)
-                thisTask.setToolTip(getTooltip(row_verion,row_comments,row_notes)) # version, commments, notes
+                thisTask.setToolTip(getTooltip(row_shot,row_verion,row_comments,row_notes)) # shot, version, commments, notes
             except:
                 pass
         self.onSave()
+
+
+    def event(self, event): 
+        if event.type() == QtCore.QEvent.Type.Show:
+
+            try:
+                set_widget_margins_to_zero(self)
+            except:
+                pass
+
+        return QtWidgets.QWidget.event(self, event)
 
 
     def run(self):
@@ -388,6 +421,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         self.setColumnWidth(5,150)
 
         self.setDefault()
+        self.scrollToBottom()
 
 
     def setDefault(self):
@@ -419,7 +453,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         data_folder = os.path.join(os.getenv('HOME'), '.nuke','ShotStatusTracker')
         data_filename = "%s_SSTDataset.json" % data_SHOW
-        data_file = os.path.join(data_folder, data_SHOW, data_filename)
+        data_file = os.path.join(data_folder, data_filename)
 
         if not os.path.isdir(os.path.dirname(data_file)):
             os.makedirs(os.path.dirname(data_file))
