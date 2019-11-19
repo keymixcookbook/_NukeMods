@@ -94,10 +94,12 @@ class MarkerButton(QtWidgets.QPushButton):
 
         # self.setFixedWidth(48)
 
+
+
 class MarkerAdd(QtWidgets.QDialog):
     '''
     GUI for adding markers
-    data to be stored:frame, tooltip, id(<SHOW>-<timestamp>, PHX-12345678)
+    data to be stored:frame, tooltip, id(<timestamp>, 12345678)
     '''
     def __init__(self, layout_obj, frame):
         super(MarkerAdd, self).__init__()
