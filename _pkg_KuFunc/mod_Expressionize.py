@@ -107,7 +107,9 @@ class Core_Expressionize(QtWidgets.QWidget):
         '''extend the completer with layers'''
 
         layer_extended = sel_layer
-        self.st_expr.setCompleter(QtWidgets.QCompleter(layer_extended))
+        thisCompleter = QtWidgets.QCompleter(layer_extended)
+        thisCompleter.setCompletionMode(QtWidgets.QCompleter.InlineCompletion)
+        self.st_expr.setCompleter(thisCompleter)
 
     def setPrevExpr(self, node_expr, node_sel):
         '''previously expression, none if nothing selected'''
