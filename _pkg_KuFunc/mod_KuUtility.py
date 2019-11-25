@@ -472,3 +472,12 @@ def showIPPanel(panelfloat=True):
         else:
             nuke.message("Oh well then")
 
+
+def copyMasterNodeStyle():
+    '''Copy Master node style to children that are expression linked'''
+
+    n = nuke.selectedNode()
+
+    for d in nuke.dependentNodes(nodes=[n]):
+        d['tile_color'].setValue(n['tile_color'].value())
+        d['note_font_color'].setValue(n['note_font_color'].value())
