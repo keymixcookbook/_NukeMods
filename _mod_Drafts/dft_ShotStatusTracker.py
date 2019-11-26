@@ -21,6 +21,12 @@ def set_widget_margins_to_zero(widget_object):
                 pass
 
 
+def getShot():
+    '''get current shotname'''
+    data_SHOT = os.getenv('PL_SHOT') if os.getenv('PL_SHOT') else 'ALL_0000'
+    return data_SHOT
+
+
 
 def getTooltip(shot, version, commments, notes):
     '''set tooltips'''
@@ -102,13 +108,13 @@ class StatusBox(QtWidgets.QComboBox):
         super(StatusBox, self).__init__(*args, **kwargs)
 
         #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','ADRESSEE','SENT','FINAL']
-         self.colorCode = {
+        self.colorCode = {
             'FARM':     (195 ,  100,  100, 'white'),
             'RENDERED': (125 ,  75,   100, 'white'),
             'VIEWED':   (248 ,   0,    50, 'gray' ),
             'DAILIED':  (248 ,  75,   100, 'white'),
             'NOTED':    (53  ,  75,    50, 'Peru' ),
-            'ADRESSEE': (248 ,   0,    50, 'white' ),
+            'ADRESSEE': (248 ,   0,    50, 'white'),
             'SENT':     (30  ,  100,  100, 'white'),
             'FINAL':    (80  ,  100,  100, 'white')
             }
@@ -165,15 +171,19 @@ class DataAdd(QtWidgets.QDialog):
         self.core = core
         self.thisRow = thisRow
         self.ls_shots = ls_shots
+        self.curShot = getShot()
+        self.taskCompleter = QtWidgets.QCompleter(['comp', 'mastercomp','precomp-'])
+        self.taskCompleter.setCompletionMode(QtWidgets.QCompleter.InlineCompletion)
 
         self.st_shot = QtWidgets.QComboBox()
         # self.st_shot.setPlaceholderText('Shot (ie. str050_1010)')
         # self.st_shot.setCompleter(QtWidgets.QCompleter(ls_shots))
         self.st_shot.addItems(self.ls_shots)
         self.st_shot.setEditable(True)
+        self.st_shot.setCurrentIndex(self.st_shot.findText(self.curShot))
         self.st_task = QtWidgets.QLineEdit()
         self.st_task.setPlaceholderText('Task (ie. mastercomp)')
-        self.st_task.setCompleter(QtWidgets.QCompleter(['comp', 'mastercomp','precomp-']))
+        self.st_task.setCompleter(self.taskCompleter)
         self.no_version = VersionBox()
         self.no_version.setValue(1)
         self.bx_status = QtWidgets.QComboBox()
@@ -237,7 +247,15 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.bt_add.clicked.connect(self.onAdd)
         self.bt_remove = QtWidgets.QPushButton('Remove')
         self.bt_remove.clicked.connect(self.onRemove)
-        self.tx_show = QtWidgets.QLabel('<i>NO SHOW SET</i>')
+        self.bt_show = QtWidgets.QPushButton('<i>SHOW </i>')
+        self.bt_show.setFlat(True)
+        self.bt_show.clicked.connect(self.onFilter)
+        self.bt_show.setToolTip("Clear filter<br>Click again to scroll to bottom")
+        self.bt_shot = QtWidgets.QPushButton('<i>SHOT </i>')
+        self.bt_shot.setFlat(True)
+        self.bt_shot.clicked.connect(self.onFilter)
+        self.bt_shot.setToolTip("Filter by current shot")
+
 
         self.layout = QtWidgets.QVBoxLayout()
         self.layout.setContentsMargins(10,0,10,0)
@@ -247,7 +265,8 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.layout_button.addWidget(self.bt_add)
         self.layout_button.addWidget(self.bt_remove)
         self.layout_button.addStretch(1)
-        self.layout_button.addWidget(self.tx_show)
+        self.layout_button.addWidget(self.bt_show)
+        self.layout_button.addWidget(self.bt_shot)
         self.layout_button.addStretch(1)
         self.layout_button.addWidget(self.bt_reload)
         self.layout_button.addWidget(self.bt_save)
@@ -261,7 +280,8 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         self.core.cellChanged.connect(self.onUpdateCells)
 
         try:
-            self.tx_show.setText('<b>%s</b>' % os.path.basename(self.core.json_file_path).split('_')[0])
+            self.bt_show.setText('%s:' % os.path.basename(self.core.json_file_path).split('_')[0])
+            self.bt_shot.setText('%s' % getShot())
         except:
             print "No Show Set"
 
@@ -330,9 +350,7 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         data = core.getData(core.json_file_path)
         core.setRowCount(len(data))
         setTable(core, data, core.ls_header)
-        self.tx_show.setText('<b>%s</b>' % os.path.basename(core.json_file_path).split('_')[0])
-
-
+        self.bt_show.setText('%s' % os.path.basename(core.json_file_path).split('_')[0])
 
 
     def onAdd(self):
@@ -340,7 +358,7 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         core = self.core
         # core.setRowCount(core.rowCount()+1)
         thisRow = core.rowCount()
-        ls_shots_all = [self.getCellValue(core, r, 0, 'SHOT') for r in range(core.rowCount()-1)]
+        ls_shots_all = [self.getCellValue(core, r, 0, 'SHOT') for r in range(core.rowCount())]
         ls_shots = list(dict.fromkeys(ls_shots_all))
         self.d = DataAdd(core, thisRow, ls_shots)
         self.d.exec_()
@@ -373,6 +391,34 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
             except:
                 pass
         self.onSave()
+
+
+    def onFilter(self):
+        '''filter by current shot'''
+        core = self.core
+        sender = self.sender()
+        thisShot = getShot()
+        ls_shotRow = []
+        # Shot Filter
+        if sender == self.bt_shot:
+            print "Filter %s" % thisShot
+            # get row numbers to hide
+            for r in range(core.rowCount()):
+                thisCell = self.getCellValue(core, r, 0, 'SHOT')
+                if thisCell != thisShot:
+                    ls_shotRow.append(r)
+            # hide rows
+            for s in ls_shotRow:
+                core.setRowHidden(s, True)
+            self.bt_shot.setText(thisShot+" (filtered)")
+            core.scrollToBottom()
+        # Clear Filter
+        elif sender == self.bt_show:
+            print "Clear Filter"
+            for r in range(core.rowCount()):
+                core.setRowHidden(r, False)
+            self.bt_shot.setText(thisShot)
+            core.scrollToBottom()
 
 
     def event(self, event): 
@@ -449,7 +495,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         /Users/Tianlun/.nuke/TimelineMarker/PHX_SSTDataset.json
         '''
         # Get pipline enviroment variables
-        data_SHOW = os.getenv('PL_SHOW') if os.getenv('PL_SHOW') else 'KUHQ'
+        data_SHOW = os.getenv('PL_SHOW') if os.getenv('PL_SHOW') else 'GENERAL'
 
         data_folder = os.path.join(os.getenv('HOME'), '.nuke','ShotStatusTracker')
         data_filename = "%s_SSTDataset.json" % data_SHOW
@@ -461,7 +507,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
         return data_file
 
 try:
-    nukescripts.registerWidgetAsPanel('mod_ShotStatusTracker.Main_ShotStatusTracker', 'Shot Status Tracker','uk.co.thefoundry.ShotStatusTracker')
+    --nukescripts.registerWidgetAsPanel('mod_ShotStatusTracker.Main_ShotStatusTracker', 'Shot Status Tracker','uk.co.thefoundry.ShotStatusTracker')
 except:
     try:
         app = QtWidgets.QApplication(sys.argv)
