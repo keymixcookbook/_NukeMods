@@ -108,6 +108,7 @@ class StatusBox(QtWidgets.QComboBox):
             'VIEWED':   (248 ,   0,    50, 'gray' ),
             'DAILIED':  (248 ,  75,   100, 'white'),
             'NOTED':    (53  ,  75,    50, 'Peru' ),
+            'ADRESSEE': (248 ,   0,    50, 'white' ),
             'SENT':     (30  ,  100,  100, 'white'),
             'FINAL':    (80  ,  100,  100, 'white')
             }
@@ -401,7 +402,7 @@ class Core_ShotStatusTracker(QtWidgets.QTableWidget):
 
         self.data = self.getData(self.json_file_path)
         self.ls_header = ['SHOT', 'TASK', 'VERSION','STATUS','COMMENTS', 'NOTES']
-        self.ls_status = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
+        self.ls_status = ['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','ADRESSEE','SENT','FINAL']
         self.resize(800,500)
         self.setShowGrid(False)
         self.setSortingEnabled(False)
