@@ -101,8 +101,8 @@ class StatusBox(QtWidgets.QComboBox):
     def __init__(self, scrollWidget=None, *args, **kwargs):
         super(StatusBox, self).__init__(*args, **kwargs)
 
-        #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','SENT','FINAL']
-        self.colorCode = {
+        #['FARM', 'RENDERED', 'VIEWED', 'DAILIED','NOTED','ADRESSEE','SENT','FINAL']
+         self.colorCode = {
             'FARM':     (195 ,  100,  100, 'white'),
             'RENDERED': (125 ,  75,   100, 'white'),
             'VIEWED':   (248 ,   0,    50, 'gray' ),
@@ -112,7 +112,6 @@ class StatusBox(QtWidgets.QComboBox):
             'SENT':     (30  ,  100,  100, 'white'),
             'FINAL':    (80  ,  100,  100, 'white')
             }
-
 
 
         self.scrollWidget=scrollWidget
@@ -466,8 +465,6 @@ try:
 except:
     try:
         app = QtWidgets.QApplication(sys.argv)
-        #['bb10dark', 'bb10bright', 'cleanlooks', 'cde', 'motif', 'plastique', 'Windows', 'Fusion']
-        # app.setStyle('Plastique')
         ShotStatusTracker = Main_ShotStatusTracker()
         ShotStatusTracker.run()
         app.exec_()
