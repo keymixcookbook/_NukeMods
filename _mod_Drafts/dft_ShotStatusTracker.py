@@ -161,7 +161,7 @@ class VersionBox(QtWidgets.QSpinBox):
 
 
 class DataAdd(QtWidgets.QDialog):
-    def __init__(self, core, thisRow, ls_shots):
+    def __init__(self, core, thisRow, ls_shots, ls_tasks):
         '''
         core: QTableWidget
         thisRow: index for the new row
@@ -172,7 +172,9 @@ class DataAdd(QtWidgets.QDialog):
         self.thisRow = thisRow
         self.ls_shots = ls_shots
         self.curShot = getShot()
-        self.taskCompleter = QtWidgets.QCompleter(['comp', 'mastercomp','precomp-'])
+        self.ls_tasks = ls_tasks if len(ls_tasks)>0 else ['comp', 'mastercomp', 'precomp-']
+
+        self.taskCompleter = QtWidgets.QCompleter(self.ls_tasks)
         self.taskCompleter.setCompletionMode(QtWidgets.QCompleter.InlineCompletion)
 
         self.st_shot = QtWidgets.QComboBox()
@@ -360,7 +362,9 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         thisRow = core.rowCount()
         ls_shots_all = [self.getCellValue(core, r, 0, 'SHOT') for r in range(core.rowCount())]
         ls_shots = list(dict.fromkeys(ls_shots_all))
-        self.d = DataAdd(core, thisRow, ls_shots)
+        ls_tasks_all = [self.getCellValue(core, r, 1, 'TASK') for r in range(core.rowCount())]
+        ls_tasks = list(dict.fromkeys(ls_tasks_all))
+        self.d = DataAdd(core, thisRow, ls_shots, ls_tasks)
         self.d.exec_()
         core.scrollToBottom()
 
@@ -378,10 +382,9 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
         cur_c = core.currentColumn()
 
         if core.ls_header[cur_c] == 'COMMENTS' or core.ls_header[cur_c] == 'NOTES':
-            thisItem = core.item(cur_r,cur_c)
-            thisItem.setToolTip(thisItem.text())
-
             try:
+                thisItem = core.item(cur_r,cur_c)
+                thisItem.setToolTip(thisItem.text())
                 row_shot = self.getCellValue(core, cur_r, core.ls_header.index('SHOT'), 'SHOT')
                 row_verion = self.getCellValue(core, cur_r, core.ls_header.index('VERSION'), 'VERSION')
                 row_comments = self.getCellValue(core, cur_r, core.ls_header.index('COMMENTS'), 'COMMENTS')
@@ -390,6 +393,7 @@ class Main_ShotStatusTracker(QtWidgets.QDialog):
                 thisTask.setToolTip(getTooltip(row_shot,row_verion,row_comments,row_notes)) # shot, version, commments, notes
             except:
                 pass
+        
         self.onSave()
 
 
