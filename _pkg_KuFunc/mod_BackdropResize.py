@@ -28,9 +28,11 @@ import nuke, nukescripts
 
 
 def bdFind(nodes):
+	'''Finds the largest Backdrop node
+	@nodes: nodes selected (list of objs)
+	return: obj
 	'''
-	Finds the largest Backdrop node
-	'''
+
 	all_bd = [n for n in nodes if n.Class() == 'BackdropNode']
 
 	if len(all_bd)<=0:
@@ -50,8 +52,10 @@ def bdFind(nodes):
 
 
 def bdSizeFit(nodes, node_bd):
-	'''
-	Filter out Backdrop node and calculate new size
+	'''Filter out Backdrop node and calculate new size
+	@nodes: selecteds nodes (list of objs)
+	@node_bd: backdrop nodes (objs)
+	return: [new_x, new_y, new_w, new_h] (list of ints)
 	'''
 
 	nodes.remove(node_bd)
@@ -75,8 +79,12 @@ def bdSizeFit(nodes, node_bd):
 
 
 def bdSizeScale(node_bd, input_w, input_h, center):
-	'''
-	Resize with manual input values
+	'''Resize with manual input values
+	@node_bd: backdrop node (obj)
+	@input_w: input width (int)
+	@input_h: input height (int)
+	@center: if scale from center (bool)
+	return: [new_x, new_y, new_w, new_h] (list of ints)
 	'''
 	cur_x = node_bd.xpos()
 	cur_y = node_bd.ypos()
@@ -104,8 +112,9 @@ def bdSizeScale(node_bd, input_w, input_h, center):
 
 
 def resize(node, new_size):
-	'''
-	Resize the `Backdrop`
+	'''Resize the Backdrop
+	@node: backdrop node to resize (obj)
+	@new_size: size value (list of int)
 	'''
 	knobs = ['xpos', 'ypos', 'bdwidth', 'bdheight']
 	for k in knobs:
@@ -120,6 +129,7 @@ def resize(node, new_size):
 
 
 def BackdropResize():
+	'''main function'''
 
 	nodes = nuke.selectedNodes()
 

@@ -41,7 +41,9 @@ def setMarkers():
 
 
 def getMarker():
-    '''finds all the deep markers in the script'''
+    '''finds all the deep markers in the script
+	return: markers (list of obj)
+	'''
 
     markers = [n for n in nuke.allNodes('Dot') if 'tb_deepMarker' in n.knobs()]
     for m in markers:
@@ -51,7 +53,9 @@ def getMarker():
 
 
 def findTopNode(n):
-    '''Returns a name of the top node'''
+    '''Returns a name of the top node
+	return: topnode_name (str)
+	'''
     topnode_name = nuke.tcl("full_name [topnode %s]" % n.name())
     return topnode_name
 
@@ -63,8 +67,7 @@ def findTopNode(n):
 
 
 def DeepCollect(mode='collect'):
-    '''
-    collects or sets markers
+    '''collects or sets markers
     mode='collect': collects deep from markers
     mode='markers': sets markers
     '''

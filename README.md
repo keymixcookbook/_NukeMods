@@ -14,6 +14,7 @@ A General scripting format and structure guide
   - `menuItems.py`
   - `menuDefaults.py`
   - `init.py`
+  - `Qt.py`
 
 ### Installation
   - Download this entire folder `/_NukeStudio`
@@ -105,12 +106,10 @@ def _version_():
 
 def ThisFunction(arg='keywords', quote='singleQuotes'):
 
-  '''
-  Function description
-
-  - Function name using: UpperCamelCase
-  - Variables name using: lowerCamelCase
-  - Global/Special variables: ALL_CAP
+  '''Function description
+  @args: description (type)
+  @kargs: description (type, <default value>)
+  return: variables (type)
   '''
 
   # What does the lines below do
@@ -125,7 +124,7 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
 
 
 class Core_ThisClass(Inheritance):
-
+  '''Class Object contain core functions'''
   def __init__(self):
     super(ThisClass, self).__int__()
 
@@ -143,6 +142,14 @@ class Core_ThisClass(Inheritance):
   def run(self):
     '''Main method for running the class'''
     self.show()
+
+class Main_ThisClass:
+  '''Class Object as a container for core class'''
+  def __init__(self):
+      super(Main_ThisClass, self).__init__()
+
+      self.core = Core_ThisClass()
+
 
 # create instance when script is loaded
 ThisClass = Core_ThisClass()

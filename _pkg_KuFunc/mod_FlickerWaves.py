@@ -1,6 +1,10 @@
 import nuke
 
 def setNode():
+    '''builds controls
+    return: n (obj)
+    '''
+
     n = nuke.nodes.NoOp()
     n.setName('ku_FlickerWaves')
     n['label'].setValue('[format "%.2f" [value wave]]')
@@ -61,6 +65,9 @@ def setNode():
     return n
 
 def setExpr(n):
+    '''set expression for given node
+    @n: node to set expression with
+    '''
 
     n['knobChanged'].setValue("nuke.thisNode()['wave'].setEnabled(nuke.thisNode()['edit'].value())")
 

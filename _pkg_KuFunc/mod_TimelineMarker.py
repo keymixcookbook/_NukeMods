@@ -11,9 +11,6 @@ def _version_():
     return ver
 
 
-import nuke, nukescripts
-
-
 
 try:
     import nuke, nukescripts
@@ -180,8 +177,9 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
     def getJSONPath(self):
-        '''
-        reutrn file path for the json file
+        '''get file path for the json file
+        return: data_file (str)
+
         Naming convension:
         <HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
         /Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
@@ -220,8 +218,8 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
     def setMarkerButtonAttributes(self, marker_obj):
-        '''set MarkerButton attributes'''
-        '''label, tooltip, left-click set frame, right-click remove'''
+        '''set MarkerButton attributes
+        label, tooltip, left-click set frame, right-click remove'''
 
         label_button = marker_obj.label if len(marker_obj.label)<=5 else marker_obj.label[:5]+'...'
         marker_obj.setText(label_button)
@@ -325,6 +323,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
     def event(self, event):
+        '''set nuke pane margin to 0'''
         if event.type() == QtCore.QEvent.Type.Show:
 
             try:

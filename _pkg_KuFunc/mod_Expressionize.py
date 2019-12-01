@@ -112,8 +112,11 @@ class Core_Expressionize(QtWidgets.QWidget):
         self.st_expr.setCompleter(thisCompleter)
 
     def setPrevExpr(self, node_expr, node_sel):
-        '''previously expression, none if nothing selected'''
-        '''
+        '''previously expression, none if nothing selected
+		@node_expr: expressions to add (str)
+		@node_sel: nodes selected (list of obj)
+		return: prevExpr (str)
+
         nothing selected: node_sel = None, node_expr = New Expression
         one non-Expression selected: node_sel = selected node, node_expr = New Expression
         one Expression selected: node_sel = None, node_expr = selected expression
@@ -130,7 +133,9 @@ class Core_Expressionize(QtWidgets.QWidget):
 
 
     def getSelected(self):
-        '''get values for the checkboxs and comboboxs'''
+        '''get values for the checkboxs and comboboxs
+		return: [sel_layer, sel_channel, sel_wrapper] (list of lists)
+		'''
         sel_layer = self.mu_layers.currentText() # 'Id06'
 
         sel_channel, sel_wrapper = [],[]
@@ -146,7 +151,10 @@ class Core_Expressionize(QtWidgets.QWidget):
 
 
     def setExpr(self, node, sel):
-        '''get string from expression line edit'''
+        '''get string from expression line edit
+		@node: node to set expression (obj)
+		@sel: values to set expressions with (list of lists)
+		'''
 
         sel_layer, sel_channel, sel_wrapper = sel
 
@@ -191,7 +199,9 @@ class Core_Expressionize(QtWidgets.QWidget):
 
 
     def setLayers(self,node_expr,node_sel):
-        '''get layers from root'''
+        '''get layers from root
+		return: ls_layers (list of str)
+		'''
         self.mu_layers.clear()
         self.ls_layers = nuke.layers() if node_sel == None else nuke.layers(node_sel)
         self.mu_layers.addItems(self.ls_layers)
@@ -202,6 +212,8 @@ class Core_Expressionize(QtWidgets.QWidget):
     def getNode(self):
         '''
         find out the node_sel and node_expr
+		return: [node_expr, node_sel] (list of objs)
+		
         nothing selected: node_sel = None, node_expr = New Expression
         one non-Expression selected: node_sel = selected node, node_expr = New Expression
         one Expression selected: node_sel = None, node_expr = selected expression

@@ -8,7 +8,7 @@ def _version_():
     - fix bottom node not connecting
     - fix `Dot` node alignment
     - fix bottom node connect with wrong pipe
-    
+
     version 1.0
     - Only need to select branches and trunk_top, will detect trunk_bottom base on xpos
 
@@ -27,11 +27,11 @@ import nuke, nukescripts
 
 
 def nodeSplit(nodes):
+    '''Filter selection to parts
+    @nodes: selected nodes (list of obj)
+    return: [trunks, branches] (list of lists)
+    '''
 
-    '''
-    Filter selection to parts
-    '''
-    
     def centerPoint(node):
         return int((node.xpos()+node.screenWidth())/2)
 
@@ -55,8 +55,10 @@ def nodeSplit(nodes):
 
 
 def move(branches, trunks):
-    '''
-    Move Branches nodes to trunks
+    '''Move Branches nodes to trunks
+    @branches: nodes to merge (list of obj)
+    @trunks: nodes to merge with (list of obj)
+    return: None
     '''
 
     trunk_x = (trunks[0].xpos()+trunks[1].xpos())/2
@@ -72,8 +74,9 @@ def move(branches, trunks):
 
 
 def bonds(branches):
-    '''
-    Find the top and bottom of the branches
+    '''Find the top and bottom of the branches
+    @branches: nodes about to be merged (list of obj)
+    return: [branch_top, branch_bottom] (list of obj)
     '''
 
     print branches
@@ -101,8 +104,10 @@ def bonds(branches):
 
 
 def attach(trunks, ends):
-    '''
-    Attach branches to trunks
+    '''Attach branches to trunks
+    @trunks: nodes to merge with (list of obj)
+    @ends: nodes about to be merged (list of obj)
+    return: None
     '''
 
     trunk_top, trunk_bottom = trunks
@@ -128,13 +133,12 @@ def attach(trunks, ends):
 
 
 def Branching():
+    '''main function'''
 
     nodes = nuke.selectedNodes()
-
     if len(nodes)<=0:
         nuke.message("Select branches to merge")
     else:
-
         trunks, branches = nodeSplit(nodes)
 
         ends = bonds(branches)
