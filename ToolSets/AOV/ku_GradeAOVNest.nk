@@ -1,7 +1,7 @@
 set cut_paste_input [stack 0]
 push $cut_paste_input
 Group {
- name ku_GradeCATNest
+ name ku_GradeAOVNest
  autolabel "nuke.thisNode().name()+'\\n'+nuke.thisNode()\['tx_cats'].value().replace('<i>','').replace('</i>','')"
  tile_color 0x3c547fff
  label "\[value channels0]"
@@ -10,11 +10,11 @@ Group {
  selected true
  xpos -65
  ypos 114
- addUserKnob {20 tb_user l ku_GradeCATNest}
- addUserKnob {26 tx_cats l "Selected CATs: " T "<i>NO PASSES PICKED</i>"}
- addUserKnob {22 bt_pick l "Pick CATs" T "n = nuke.thisNode()\nlayer_all = nuke.layers(n)\nlayer = \[l for l in layer_all if l not in \['rgb', 'rgba', 'Bty', 'alpha']]\nlayer.insert(0,'none')\n\np = nuke.Panel('%s: Pick CATs (4 max)' % n.name())\np.addEnumerationPulldown('cat 1', ' '.join(layer))\np.addEnumerationPulldown('cat 2', ' '.join(layer))\np.addEnumerationPulldown('cat 3', ' '.join(layer))\np.addEnumerationPulldown('cat 4', ' '.join(layer))\n\nif p.show():\n    sel_layers = \[p.value('cat %s' % i) for i in range(1,5)]\n    sel_layers = list(dict.fromkeys(sel_layers))\n    sel_layers = \[l for l in sel_layers if l != 'none']\n    n\['tx_cats'].setValue(', '.join(sorted(sel_layers)))\n\n    node_keep = nuke.toNode('%s._KEEP_' % n.name())\n    node_expr = nuke.toNode('%s._KEPT_PASSES_' % n.name())\n    for i in range(len(sel_layers)):\n        if i == 0:\n            node_keep\['channels'].setValue(sel_layers\[i])\n        else:\n            node_keep\['channels%s' % (i+1)].setValue(sel_layers\[i])\n    for e, ch in enumerate(\['red', 'green', 'blue']):\n        # Each expr\n        field = ''\n        for i, l in enumerate(sel_layers):\n            # eachLayer\n            if i<(len(sel_layers)-1):\n                field += '%s.%s' % (l, ch)\n                field += '+'\n            else:\n                field += '%s.%s' % (l, ch)\n        print field\n        node_expr\['expr%s' % e].setValue(field)" +STARTLINE}
+ addUserKnob {20 tb_user l ku_GradeAOVNest}
+ addUserKnob {26 tx_cats l "Selected AOVs: " T "<i>NO PASSES PICKED</i>"}
+ addUserKnob {22 bt_pick l "Pick AOVs" T "n = nuke.thisNode()\nlayer_all = nuke.layers(n)\nlayer = \[l for l in layer_all if l not in \['rgb', 'rgba', 'Bty', 'alpha']]\nlayer.insert(0,'none')\n\np = nuke.Panel('%s: Pick AOVs (4 max)' % n.name())\np.addEnumerationPulldown('cat 1', ' '.join(layer))\np.addEnumerationPulldown('cat 2', ' '.join(layer))\np.addEnumerationPulldown('cat 3', ' '.join(layer))\np.addEnumerationPulldown('cat 4', ' '.join(layer))\n\nif p.show():\n    sel_layers = \[p.value('cat %s' % i) for i in range(1,5)]\n    sel_layers = list(dict.fromkeys(sel_layers))\n    sel_layers = \[l for l in sel_layers if l != 'none']\n    n\['tx_cats'].setValue(', '.join(sorted(sel_layers)))\n\n    node_keep = nuke.toNode('%s._KEEP_' % n.name())\n    node_expr = nuke.toNode('%s._KEPT_PASSES_' % n.name())\n    for i in range(len(sel_layers)):\n        if i == 0:\n            node_keep\['channels'].setValue(sel_layers\[i])\n        else:\n            node_keep\['channels%s' % (i+1)].setValue(sel_layers\[i])\n    for e, ch in enumerate(\['red', 'green', 'blue']):\n        # Each expr\n        field = ''\n        for i, l in enumerate(sel_layers):\n            # eachLayer\n            if i<(len(sel_layers)-1):\n                field += '%s.%s' % (l, ch)\n                field += '+'\n            else:\n                field += '%s.%s' % (l, ch)\n        print field\n        node_expr\['expr%s' % e].setValue(field)" +STARTLINE}
  addUserKnob {22 bt_clear l "Clear Picked" -STARTLINE T "n = nuke.thisNode()\nnode_keep = nuke.toNode('%s._KEEP_' % n.name())\nnode_expr = nuke.toNode('%s._KEPT_PASSES_' % n.name())\n\nfor i in range(4):\n    node_keep\['channels'].setValue('none') if i==0 else node_keep\['channels%s' % (i+1)].setValue('none')\n    node_expr\['expr%s' % i].setValue('')\n\nn\['tx_cats'].setValue('<i>NO PASSES PICKED</i>')\n"}
- addUserKnob {6 ck_preview l "Preview CAT" -STARTLINE}
+ addUserKnob {6 ck_preview l "Preview AOV" -STARTLINE}
  addUserKnob {4 mu_graded l "| view" -STARTLINE M {Orig Graded ContactSheet ""}}
  mu_graded ContactSheet
  addUserKnob {26 ""}
