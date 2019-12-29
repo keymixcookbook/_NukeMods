@@ -82,50 +82,50 @@ def imgSeqDir(path, upDir = -1):
 
 
 def mask():
-    for n in nuke.selectedNodes():
-        if n != 0:
-            mk = n.optionalInput()
-            n.setInput(mk, nuke.selectedNodes()[0])
+	for n in nuke.selectedNodes():
+		if n != 0:
+			mk = n.optionalInput()
+			n.setInput(mk, nuke.selectedNodes()[0])
 
 
 def labelChange():
-    prevLabel = nuke.selectedNode()['label'].getValue()
+	prevLabel = nuke.selectedNode()['label'].getValue()
 
-    newLabel = nuke.getInput('Change Node Label', prevLabel)
+	newLabel = nuke.getInput('Change Node Label', prevLabel)
 
-    # Change Values
+	# Change Values
 
-    for n in nuke.selectedNodes():
-        n['name'].getValue()
-        n['label'].setValue(newLabel)
+	for n in nuke.selectedNodes():
+		n['name'].getValue()
+		n['label'].setValue(newLabel)
 
 
 def reloadRead():
 
-    #Define Functions
-    def reload(node,node_list):
-        node['reload'].execute()
-        node_list.append("%s Reloaded" % (node.name()))
+	#Define Functions
+	def reload(node,node_list):
+		node['reload'].execute()
+		node_list.append("%s Reloaded" % (node.name()))
 
-    #Define Variables
+	#Define Variables
 
-    read_sel = nuke.selectedNodes('Read')
-    reload_list = []
+	read_sel = nuke.selectedNodes('Read')
+	reload_list = []
 
-    #Reloading
+	#Reloading
 
-    if len(read_sel)>0: #if there are Read node Selectred
-        for s in read_sel:
-            if s.Class() == "Read":
-                reload(s,reload_list)
+	if len(read_sel)>0: #if there are Read node Selectred
+		for s in read_sel:
+			if s.Class() == "Read":
+				reload(s,reload_list)
 
-    elif len(nuke.allNodes('Read'))>0: #if there are Read Node Enabled
-        for e in nodes_read:
-            if e['disable'] == False:
-                reload(e,reload_list)
+	elif len(nuke.allNodes('Read'))>0: #if there are Read Node Enabled
+		for e in nodes_read:
+			if e['disable'] == False:
+				reload(e,reload_list)
 
-    else:
-        nuke.message("No Read Nodes to Reload")
+	else:
+		nuke.message("No Read Nodes to Reload")
 
 	print '\n, '"="*25, '\n'
 	print "\n".join(reload_list)
@@ -134,125 +134,125 @@ def reloadRead():
 
 def showFileDir():
 
-    nodes = nuke.allNodes('Read')
+	nodes = nuke.allNodes('Read')
 
-    print "========== FILES ==========", "\n\n"
+	print "========== FILES ==========", "\n\n"
 
-    for n in nodes:
-        print '------  ', n.name() , " -> ",n['file'].value(), "\n", "__________"
+	for n in nodes:
+		print '------  ', n.name() , " -> ",n['file'].value(), "\n", "__________"
 
-    print "\n\n", "========== END FILES =========="
+	print "\n\n", "========== END FILES =========="
 
 
 def resetNodeCol():
-    aNode = []
+	aNode = []
 
-    for n in nuke.allNodes():
-        if n.Class() == "Grade" or n.Class() == "Merge2" or n.Class() == "Keymix":
-            n['tile_color'].setValue(0)
-            aNode.append(n.name())
+	for n in nuke.allNodes():
+		if n.Class() == "Grade" or n.Class() == "Merge2" or n.Class() == "Keymix":
+			n['tile_color'].setValue(0)
+			aNode.append(n.name())
 
-    nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
+	nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
 
 
 def selectChildNodes():
-    sel = nuke.selectedNode()
-    childNodes = []
+	sel = nuke.selectedNode()
+	childNodes = []
 
-    for n in nuke.selectedNode().dependent():
-        n['selected'].setValue(True)
-        childNodes.append(n.name())
+	for n in nuke.selectedNode().dependent():
+		n['selected'].setValue(True)
+		childNodes.append(n.name())
 
-    sel['selected'].setValue(False)
+	sel['selected'].setValue(False)
 
-    print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
+	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
 
 
 def groupConnect():
-    sel = nuke.selectedNodes()
+	sel = nuke.selectedNodes()
 
-    for n in nuke.selectedNodes():
-        if n != 0:
-            n.setInput(0, sel[0])  # Connecting the A pipe
+	for n in nuke.selectedNodes():
+		if n != 0:
+			n.setInput(0, sel[0])  # Connecting the A pipe
 
 
 def selectiveCache():
-    lst = []
+	lst = []
 
-    # Storing Shit in an Array
-    for n in nuke.allNodes('DiskCache'):
-        lst.append(n.name())
+	# Storing Shit in an Array
+	for n in nuke.allNodes('DiskCache'):
+		lst.append(n.name())
 
-    # Panels
-    p = nuke.Panel('Tree 2 Cache')
-    p.addEnumerationPulldown('Node', ' '.join(lst))
-    p.addEnumerationPulldown('Channels', 'rgb rgba alpha')
-    p.show()
+	# Panels
+	p = nuke.Panel('Tree 2 Cache')
+	p.addEnumerationPulldown('Node', ' '.join(lst))
+	p.addEnumerationPulldown('Channels', 'rgb rgba alpha')
+	p.show()
 
-    # Select Nodes by Name
-    for n in nuke.allNodes('DiskCache'):
-        if n.name() == p.value('Node'):
-            n['channels'].setValue(p.value('Channels'))
-            n['Precache'].execute()
+	# Select Nodes by Name
+	for n in nuke.allNodes('DiskCache'):
+		if n.name() == p.value('Node'):
+			n['channels'].setValue(p.value('Channels'))
+			n['Precache'].execute()
 
 
 def filterSelection():
 
-    nodes = nuke.selectedNodes()
+	nodes = nuke.selectedNodes()
 
-    if len(nodes)>0:
+	if len(nodes)>0:
 
-        node_class = list(set([n.Class() for n in nodes]))
+		node_class = list(set([n.Class() for n in nodes]))
 
-        p = nuke.Panel('Filter Selection')
-        p.addEnumerationPulldown('Class', ' '.join(node_class))
+		p = nuke.Panel('Filter Selection')
+		p.addEnumerationPulldown('Class', ' '.join(node_class))
 
-        class_sel = p.value('Class')
+		class_sel = p.value('Class')
 
-        if p.show():
-            class_sel = p.value('Class')
+		if p.show():
+			class_sel = p.value('Class')
 
-            for n in nodes:
-                if n.Class() != class_sel:
-                    n['selected'].setValue(False)
-    else:
-        nuke.message('Please Select a node')
+			for n in nodes:
+				if n.Class() != class_sel:
+					n['selected'].setValue(False)
+	else:
+		nuke.message('Please Select a node')
 
 
 def alignNodes():
 
-    nodes = nuke.selectedNodes()
+	nodes = nuke.selectedNodes()
 
-    p = nuke.Panel("Align")
-    p.addEnumerationPulldown('IN','X-Vertical Y-Horizontal')
+	p = nuke.Panel("Align")
+	p.addEnumerationPulldown('IN','X-Vertical Y-Horizontal')
 
-    if len( nodes ) < 2:
-        return
+	if len( nodes ) < 2:
+		return
 
-    if p.show():
-        direction = p.value("IN")
+	if p.show():
+		direction = p.value("IN")
 
-        positions = [ float( n[ direction[0].lower()+'pos' ].value() ) for n in nodes]
-        avrg = sum( positions ) / len( positions )
+		positions = [ float( n[ direction[0].lower()+'pos' ].value() ) for n in nodes]
+		avrg = sum( positions ) / len( positions )
 
-        for n in nodes:
-            if direction == 'X-Vertical':
-                for n in nodes:
-                    n.setXpos( int(avrg) )
-            else:
-                for n in nodes:
-                    n.setYpos( int(avrg) )
+		for n in nodes:
+			if direction == 'X-Vertical':
+				for n in nodes:
+					n.setXpos( int(avrg) )
+			else:
+				for n in nodes:
+					n.setYpos( int(avrg) )
 
 def selConnected():
 
-    for n in nuke.selectedNodes():
-        n_frist = n.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
-        n_second = n_first.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
+	for n in nuke.selectedNodes():
+		n_frist = n.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
+		n_second = n_first.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
 
-        n_first['selected'].setValue(True)
-        n_sec['selected'].setValue(True)
+		n_first['selected'].setValue(True)
+		n_sec['selected'].setValue(True)
 
-        n['selected'].setValue(False)
+		n['selected'].setValue(False)
 
 
 def quickChannel():
@@ -326,24 +326,24 @@ def mergeOp():
 
 
 def stackIBK():
-    '''build IBK stack with one IBK master node selected'''
+	'''build IBK stack with one IBK master node selected'''
 
-    if not nuke.selectedNodes('IBKColourV3'):
-        nuke.message('Select a IBKColour node')
-    else:
-        node_master = nuke.selectedNode()
-        ls_stack = [6,24,96,192]
+	if not nuke.selectedNodes('IBKColourV3'):
+		nuke.message('Select a IBKColour node')
+	else:
+		node_master = nuke.selectedNode()
+		ls_stack = [6,24,96,192]
 
-        for idx, s in enumerate(ls_stack,0):
-            node_slave = nuke.createNode('IBKColourV3', inpanel=False)
+		for idx, s in enumerate(ls_stack,0):
+			node_slave = nuke.createNode('IBKColourV3', inpanel=False)
 
-			node_slave.setYpos(node_slave.ypos()+18) if idx == 0 else pass
+			node_slave.setYpos(node_slave.ypos()+18) if idx == 0 else idx
 
 			knobs = ['screen_type','Size','off','mult']
-            for k in knobs:
-                print k
-                node_slave[k].setValue(node_master[k].value())
-            node_slave.knob('multi').setValue(int(s))
+			for k in knobs:
+				print k
+				node_slave[k].setValue(node_master[k].value())
+			node_slave.knob('multi').setValue(int(s))
 
 
 
@@ -371,13 +371,13 @@ def cycleChannels(mode='rgba'):
 				ch_cur = ch.value()
 				ch_new = None
 				if ch_cur in ls_ch:
-				    ch_count = ls_ch.index(ch_cur)
-				    ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
-				    ch_new = ls_ch[int(ch_new_idx)]
-			    else:
-			        ch_new = ls_ch[0]
+					ch_count = ls_ch.index(ch_cur)
+					ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
+					ch_new = ls_ch[int(ch_new_idx)]
+				else:
+					ch_new = ls_ch[0]
 
-		        ch.setValue(ch_new)
+				ch.setValue(ch_new)
 				print "%s set to %s" % (n.name(), ch_new)
 			except:
 				print "knob 'channels' not in %s" % n.name()
@@ -385,99 +385,99 @@ def cycleChannels(mode='rgba'):
 
 
 def setSize(increment = 0.5):
-    '''Set knob values with multiplical increments'''
+	'''Set knob values with multiplical increments'''
 
-    knobs = ['size', 'Size', 'value', 'which', 'saturation']
-    for n in nuke.selectedNodes():
-        for k in n.knobs():
-            k_size = None
-            if k in knobs:
-                k_size = k
-                k_val = n[k_size].value()
-                n[k_size].setValue(k_val*(1+increment))
-		print "%s %s set to %s" % (n.name(), k_size, k_val*increment)
-            else:
-                pass
+	knobs = ['size', 'Size', 'value', 'which', 'saturation']
+	for n in nuke.selectedNodes():
+		for k in n.knobs():
+			k_size = None
+			if k in knobs:
+				k_size = k
+				k_val = n[k_size].value()
+				n[k_size].setValue(k_val*(1+increment))
+				print "%s %s set to %s" % (n.name(), k_size, k_val*increment)
+			else:
+				pass
 
 
 
 def disable():
-    '''customized disable function, with changing tile_color'''
-    '''replace hotkey D'''
+	'''customized disable function, with changing tile_color'''
+	'''replace hotkey D'''
 
-    nodes = nuke.selectedNodes()
+	nodes = nuke.selectedNodes()
 
-    col_red = 780084223
-    col_green = 2133009407
-    col_white = 4294967295
+	col_red = 780084223
+	col_green = 2133009407
+	col_white = 4294967295
 	col_yellow = 3891223551
 
-    if len(nodes)<0:
-        nuke.message("Select a node or two, man")
-    else:
-        for n in nodes:
-            k_disable = n['disable']
+	if len(nodes)<0:
+		nuke.message("Select a node or two, man")
+	else:
+		for n in nodes:
+			k_disable = n['disable']
 
-            if k_disable:
-                if k_disable.value() == False:
-                    k_disable.setValue(True)
-                    if n.Class() == 'Switch':
-                        n['tile_color'].setValue(col_red)
-                        n['note_font_color'].setValue(col_white)
-                else:
-                    k_disable.setValue(False)
-                    if n.Class() == 'Switch':
-                        n['tile_color'].setValue(col_yellow)
-                        n['note_font_color'].setValue(col_white)
+			if k_disable:
+				if k_disable.value() == False:
+					k_disable.setValue(True)
+					if n.Class() == 'Switch':
+						n['tile_color'].setValue(col_red)
+						n['note_font_color'].setValue(col_white)
+				else:
+					k_disable.setValue(False)
+					if n.Class() == 'Switch':
+						n['tile_color'].setValue(col_yellow)
+						n['note_font_color'].setValue(col_white)
 
 
 
 def swapColorspace():
-    '''swap in and out OCIOcolorspace node'''
-    nodes = nuke.selectedNodes('OCIOColorSpace')
+	'''swap in and out OCIOcolorspace node'''
+	nodes = nuke.selectedNodes('OCIOColorSpace')
 
-    if nodes:
-        for n in nodes:
-            old_in = n['in_colorspace'].value()
-            old_out = n['out_colorspace'].value()
+	if nodes:
+		for n in nodes:
+			old_in = n['in_colorspace'].value()
+			old_out = n['out_colorspace'].value()
 
-            n['in_colorspace'].setValue(old_out)
-            n['out_colorspace'].setValue(old_in)
-    else:
-        nuke.message('Select OCIOColorSpace node')
+			n['in_colorspace'].setValue(old_out)
+			n['out_colorspace'].setValue(old_in)
+	else:
+		nuke.message('Select OCIOColorSpace node')
 
 
 
 def diceRoll():
-    '''just roll a dice'''
-    import random
-    face = ['9856','9857','9858','9859','9860','9861']
+	'''just roll a dice'''
+	import random
+	face = ['9856','9857','9858','9859','9860','9861']
 
-    roll = random.randint(0,int(len(face)-1))
+	roll = random.randint(0,int(len(face)-1))
 
-    nuke.thisNode()['label'].setValue('<h1>&#%s;' % face[roll])
+	nuke.thisNode()['label'].setValue('<h1>&#%s;' % face[roll])
 
 
 
 def showIPPanel(panelfloat=True):
-    '''Show viewer input control panel'''
-    try:
-        node_ip = nuke.activeViewer().node()['input_process_node'].value()
-        nuke.toNode(node_ip).showControlPanel(forceFloat=panelfloat)
-        print "VIEWER_INPUT Shown"
-    except:
-        if nuke.ask('No Viewer_Input found, load one?'):
-            import os
-            nuke.loadToolset(os.path.join(os.getEnv('HOME'), 'nuke/ToolSets/Utility/ku_IP.nk'))
-        else:
-            nuke.message("Oh well then")
+	'''Show viewer input control panel'''
+	try:
+		node_ip = nuke.activeViewer().node()['input_process_node'].value()
+		nuke.toNode(node_ip).showControlPanel(forceFloat=panelfloat)
+		print "VIEWER_INPUT Shown"
+	except:
+		if nuke.ask('No Viewer_Input found, load one?'):
+			import os
+			nuke.loadToolset(os.path.join(os.getEnv('HOME'), 'nuke/ToolSets/Utility/ku_IP.nk'))
+		else:
+			nuke.message("Oh well then")
 
 
 def copyMasterNodeStyle():
-    '''Copy Master node style to children that are expression linked'''
+	'''Copy Master node style to children that are expression linked'''
 
-    n = nuke.selectedNode()
+	n = nuke.selectedNode()
 
-    for d in nuke.dependentNodes(nodes=[n]):
-        d['tile_color'].setValue(n['tile_color'].value())
-        d['note_font_color'].setValue(n['note_font_color'].value())
+	for d in nuke.dependentNodes(nodes=[n]):
+		d['tile_color'].setValue(n['tile_color'].value())
+		d['note_font_color'].setValue(n['note_font_color'].value())
