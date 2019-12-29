@@ -43,7 +43,7 @@ kuMu = nuke.menu('Nuke').addMenu('KU')
 
 addMenuItem('f', kuMu, 'Connect Mask Input', "mask()", hotkey="ctrl+Y")
 addMenuItem('c', kuMu, 'Change label',"SetLabel", hotkey="shift+N")
-ddMenuItem('m', kuMu, 'Linked Postage Stamp/set',"LinkedStamp()", hotkey="f4")
+addMenuItem('m', kuMu, 'Linked Postage Stamp/set',"LinkedStamp()", hotkey="f4")
 addMenuItem('m', kuMu, 'Linked Postage Stamp/reconnect',"LinkedStamp(mode='reconnect')", hotkey="shift+f4")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
@@ -108,7 +108,7 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 # Nuke Tab alternative
 m_tab = nuke.menu("Nuke").findItem("Edit")
-m_tab.addCommand("Tabtabtab", mod_tabtabtab.main, "Tab", shortcutContext=2)
+m_tab.addCommand("Tabtabtab", mod_Tabtabtab.main, "Tab", shortcutContext=2)
 
 tN = nuke.menu('Nuke').findItem('KU')
 tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcutContext=2)
