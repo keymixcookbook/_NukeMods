@@ -26,6 +26,10 @@ import _curvelib as cl
 
 
 
+LINKERLABEL = '--'
+
+
+
 def findElements(sel):
 	'''Find Roto node, Transform node and Curve'''
 	'''
@@ -163,8 +167,9 @@ def linkRoto(node_roto, node_trans, roto_curve):
 	transform_attr.setPivotPointAnimCurve(0, center_curve_x)
 	transform_attr.setPivotPointAnimCurve(1, center_curve_y)
 
-	node_roto['label'].setValue("%s\n%s -> %s" % (node_roto['label'].value(), roto_curve.name, name_trans))
-
+	#node_roto['label'].setValue("%s\n%s -> %s" % (node_roto['label'].value(), roto_curve.name, name_trans))
+	curve_name = roto_curve.name.split(LINKERLABEL)[0]
+	curve_name += '%s%s' % (LINKERLABEL, node_trans.name())
 
 
 def renameTransform(node):
@@ -213,4 +218,4 @@ def TrackedRoto():
 			pass
 		else:
 			linkRoto(elem['r'],elem['t'],elem['c'])
-			print "{}.{} linked to {}".format(elem['r'].name(),elem['c'].name,elem['t'].name())
+			print "{}.{}".format(elem['r'].name(),elem['c'].name)
