@@ -224,7 +224,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		'''set MarkerButton attributes
 		label, tooltip, left-click set frame, right-click remove'''
 
-		label_button = marker_obj.label if len(marker_obj.label)<=5 else marker_obj.label[:5]+'...'
+		label_button = marker_obj.label if len(marker_obj.label)<=8 else marker_obj.label[:8]+'...'
 		marker_obj.setText(label_button)
 		marker_obj.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)<br><br><i>Right-Click to Remove</i>" % (marker_obj.frame, marker_obj.label, marker_obj.id) )
 
