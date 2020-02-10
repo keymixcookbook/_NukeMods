@@ -114,7 +114,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 		self.data_file = self.getJSONPath()
 
-		self.tx_shot = QtWidgets.QLabel()
+		self.tx_shot = QtWidgets.QLabel("NO ENV SET")
 		self.bt_add = QtWidgets.QPushButton(u"\u002B")
 		self.bt_add.clicked.connect(self.addMarker)
 		self.bt_add.setStyle(QtGui.QFont().setBold(True))
@@ -172,30 +172,33 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		self.setLayout(self.layout_master)
 		self.resize(1000,50)
 		self.setContentsMargins(0,0,0,0)
+		self.setWindowTitle("Timeline Markers - beta")
 
 		self.reloadMarkers()
 
 
 	def getJSONPath(self):
-		'''get file path for the json file
-		return: data_file (str)
+        '''get file path for the json file
+        return: data_file (str)
 
-		Naming convension:
-		<HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
-		/Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
-		'''
-		# Get pipline enviroment variables
-		data_SHOW = os.getenv('PL_SHOW') if os.getenv('PL_SHOW') else 'KUHQ'
-		data_SHOT = os.getenv('PL_SHOT') if os.getenv('PL_SHOT') else 'ku66_8686'
+        Naming convension:
+        <HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
+        /Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
+        '''
+        # Get pipline enviroment variables
+        env_SHOW = os.getenv('PL_SHOW')
+        env_SHOT = os.getenv('PL_SHOT')
+        data_SHOW = env_SHOW if env_SHOW else 'GENERAL'
+        data_SHOT = env_SHOT if env_SHOT else 'GENERAL'
 
-		data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
-		data_filename = "%s_TMDataset.json" % data_SHOT
-		data_file = os.path.join(data_folder, data_SHOW, data_filename)
+        data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
+        data_filename = "%s_TMDataset.json" % data_SHOT
+        data_file = os.path.join(data_folder, data_SHOW, data_filename)
 
-		if not os.path.isdir(os.path.dirname(data_file)):
-			os.makedirs(os.path.dirname(data_file))
+        if not os.path.isdir(os.path.dirname(data_file)):
+            os.makedirs(os.path.dirname(data_file))
 
-		return data_file
+        return data_file
 
 
 	def saveMarkers(self):
@@ -271,6 +274,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 		if not os.path.exists(thisFile):
 			print "No TMDataset.json file found"
+            self.tx_shot.setText("NO ENV SET")
 		else:
 			# Clear Widgets
 			num_widgets = self.layout_markers.count()
