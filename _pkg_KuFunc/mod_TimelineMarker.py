@@ -178,27 +178,27 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 
 	def getJSONPath(self):
-        '''get file path for the json file
-        return: data_file (str)
+		'''get file path for the json file
+		return: data_file (str)
 
-        Naming convension:
-        <HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
-        /Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
-        '''
-        # Get pipline enviroment variables
-        env_SHOW = os.getenv('PL_SHOW')
-        env_SHOT = os.getenv('PL_SHOT')
-        data_SHOW = env_SHOW if env_SHOW else 'GENERAL'
-        data_SHOT = env_SHOT if env_SHOT else 'GENERAL'
+		Naming convension:
+		<HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
+		/Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
+		'''
+		# Get pipline enviroment variables
+		env_SHOW = os.getenv('PL_SHOW')
+		env_SHOT = os.getenv('PL_SHOT')
+		data_SHOW = env_SHOW if env_SHOW else 'GENERAL'
+		data_SHOT = env_SHOT if env_SHOT else 'GENERAL'
 
-        data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
-        data_filename = "%s_TMDataset.json" % data_SHOT
-        data_file = os.path.join(data_folder, data_SHOW, data_filename)
+		data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
+		data_filename = "%s_TMDataset.json" % data_SHOT
+		data_file = os.path.join(data_folder, data_SHOW, data_filename)
 
-        if not os.path.isdir(os.path.dirname(data_file)):
-            os.makedirs(os.path.dirname(data_file))
+		if not os.path.isdir(os.path.dirname(data_file)):
+			os.makedirs(os.path.dirname(data_file))
 
-        return data_file
+		return data_file
 
 
 	def saveMarkers(self):
@@ -274,7 +274,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 		if not os.path.exists(thisFile):
 			print "No TMDataset.json file found"
-            self.tx_shot.setText("NO ENV SET")
+			self.tx_shot.setText("NO ENV SET")
 		else:
 			# Clear Widgets
 			num_widgets = self.layout_markers.count()

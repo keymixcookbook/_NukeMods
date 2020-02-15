@@ -28,7 +28,7 @@ Group {
  addUserKnob {22 bt_center l Center T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])" +STARTLINE}
  addUserKnob {22 bt_fit_x l "Fit Width" -STARTLINE T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])\nn\['radius'].setValue(center_x)"}
  addUserKnob {22 bt_fit_y l "Fit Height" -STARTLINE T "n = nuke.thisNode()\n\ncenter_x = nuke.root().width()/2\ncenter_y = nuke.root().height()/2\n\nn\['center'].setValue(\[center_x,center_y])\nn\['radius'].setValue(center_y)"}
- addUserKnob {26 tx_desc l "" +STARTLINE 
+ addUserKnob {26 tx_desc l "" +STARTLINE}
 }
  Constant {
   inputs 0
@@ -57,7 +57,6 @@ Group {
   addUserKnob {7 radius R 1 2000}
   radius 500
  }
- 
  Crop {
   box {{_CORE_.center-_CORE_.radius-margin} {_CORE_.center-_CORE_.radius-margin} {_CORE_.radius+_CORE_.center+margin} {_CORE_.center.y+_CORE_.radius+margin}}
   name _BBOX_
