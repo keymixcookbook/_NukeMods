@@ -9,4 +9,4 @@ Contain sets of 'Light Weight' Functions, shouldn't be longer than 50 lines
 
 '''
 
-import studio_framestore
+import studio_kuhq
