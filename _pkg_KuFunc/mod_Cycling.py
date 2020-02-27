@@ -2,7 +2,7 @@ def _version_():
 	ver='''
 
 	version 0.0
-    - one hotkey cycling channels and merge operations
+	- one hotkey cycling channels and merge operations
 
 	'''
 	return ver
@@ -42,15 +42,15 @@ def setKnob(node, knob, ls_k):
 
 
 def coreCycle(knob, node, mode):
-    '''main cycling operation
-    @knob='ch': channels for nodes with channels knob
-    @knob='op': operation for merge node
-    @mode='regular': often used channels/operations in merge node
+	'''main cycling operation
+	@knob='ch': channels for nodes with channels knob
+	@knob='op': operation for merge node
+	@mode='regular': often used channels/operations in merge node
 	@mode='all': all channels/operations in last selected node
-    @node: input node, obj
-    '''
-    if knob=='ch':
-        ls_ch = []
+	@node: input node, obj
+	'''
+	if knob=='ch':
+		ls_ch = []
 		if mode == 'regular':
 			ls_ch = ['rgb', 'rgba', 'alpha','all']
 		elif mode == 'all':
@@ -64,7 +64,7 @@ def coreCycle(knob, node, mode):
 			setKnob(node,'in',ls_ch)
 		else:
 			setKnob(node,'channels', ls_ch)
-    elif knob=='op':
+	elif knob=='op':
 		ls_op = []
 		if mode == 'regular':
 			ls_op = ['plus', 'minus', 'mask', 'stencil', 'over', 'under', 'max', 'min', 'hypot']

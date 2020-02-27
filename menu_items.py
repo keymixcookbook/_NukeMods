@@ -55,7 +55,7 @@ addMenuItem('f', kuMu, 'SetVal/<', "setSize(-0.25)", hotkey="alt+,", shortcutCon
 addMenuItem('f', kuMu, 'SetVal/>>', "setSize(0.5)", hotkey="shift+alt+.", shortcutContext=2)
 addMenuItem('f', kuMu, 'SetVal/<<', "setSize(-0.5)", hotkey="shift+alt+,", shortcutContext=2)
 addMenuItem('f', kuMu, 'Launch Selection in RV', "launchRV()", hotkey="f2")
-addMenuItem('m', kuMu, 'Expression', "ExprPrompt()", hotkey="e", shortcutContext=2)
+addMenuItem('c', kuMu, 'Expression', "ExprPrompt", hotkey="e", shortcutContext=2)
 addMenuItem('m', kuMu, 'Tracked Roto', "TrackedRoto()", hotkey="shift-t", shortcutContext=2)
 addMenuItem('f', kuMu, 'Disable', "disable()", hotkey="d", shortcutContext=1)
 kuMu.addSeparator()
@@ -107,8 +107,8 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 # Nuke Tab alternative
-m_tab = nuke.menu("Nuke").findItem("Edit")
-m_tab.addCommand("Tabtabtab", mod_Tabtabtab.main, "Tab", shortcutContext=2)
+#m_tab = nuke.menu("Nuke").findItem("Edit")
+#m_tab.addCommand("Tabtabtab", mod_Tabtabtab.main, "Tab")
 
 tN = nuke.menu('Nuke').findItem('KU')
 tN.addCommand('Turbo/TurboCopy', 'mod_TurboMerge.turboCopy.open()', '', shortcutContext=2)

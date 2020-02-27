@@ -27,13 +27,13 @@ except:
 import re
 
 
-class Core_Expressionize(QtWidgets.QWidget):
+class Core_ExprPrompt(QtWidgets.QWidget):
 	def __init__(self):
-		super(Core_Expressionize, self).__init__()
+		super(Core_ExprPrompt, self).__init__()
 		# set
 		self.ls_layers = ['rgb', 'rgba', 'alpha']
 		# define widgets
-		self.title = QtWidgets.QLabel("<b>Expressionize</b>")
+		self.title = QtWidgets.QLabel("<b>ExprPrompte</b>")
 		self.st_expr = QtWidgets.QLineEdit()
 		self.st_expr.setPlaceholderText('_l: layer (Id06), _ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
@@ -79,7 +79,7 @@ class Core_Expressionize(QtWidgets.QWidget):
 
 
 		#self.resize(400,240)
-		self.setWindowTitle("Expressionize")
+		self.setWindowTitle("ExprPrompte")
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefault()
@@ -255,4 +255,4 @@ class Core_Expressionize(QtWidgets.QWidget):
 
 
 # set instanse
-Expressionize = Core_Expressionize()
+ExprPrompt = Core_ExprPrompt()
