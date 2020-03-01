@@ -14,16 +14,8 @@ def _version_():
 
 
 import nuke, nukescripts
-try:
-	#nuke <11
-	import PySide.QtCore as QtCore
-	import PySide.QtGui as QtWidgets
 
-except:
-	#nuke>=11
-	import PySide2.QtCore as QtCore
-	import PySide2.QtGui as QtGui
-	import PySide2.QtWidgets as QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
 import re
 
 
