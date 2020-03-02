@@ -416,7 +416,10 @@ def disable():
 		nuke.message("Select a node or two, man")
 	else:
 		for n in nodes:
-			k_disable = n['disable']
+			try:
+				k_disable = n['disable']
+			except:
+				k_disable = None
 
 			if k_disable:
 				if k_disable.value() == False:
@@ -448,17 +451,6 @@ def swapColorspace():
 
 
 
-def diceRoll():
-	'''just roll a dice'''
-	import random
-	face = ['9856','9857','9858','9859','9860','9861']
-
-	roll = random.randint(0,int(len(face)-1))
-
-	nuke.thisNode()['label'].setValue('<h1>&#%s;' % face[roll])
-
-
-
 def showIPPanel(panelfloat=True):
 	'''Show viewer input control panel'''
 	try:
@@ -468,7 +460,7 @@ def showIPPanel(panelfloat=True):
 	except:
 		if nuke.ask('No Viewer_Input found, load one?'):
 			import os
-			nuke.loadToolset(os.path.join(os.getEnv('HOME'), 'nuke/ToolSets/Utility/ku_IP.nk'))
+			nuke.loadToolset(os.path.join(os.getEnv('HOME'), '.nuke/ToolSets/Utility/ku_IP.nk'))
 		else:
 			nuke.message("Oh well then")
 
