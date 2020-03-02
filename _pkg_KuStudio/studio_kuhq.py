@@ -213,7 +213,8 @@ def ku_knobChange():
     k = nuke.thisKnob()
 
     if n['kupipline'].value() == 'kuWrite':
-        ku_nukePipline.kuWrite.set_kuWrite(n)
+        if k.name() in ['tb_kuWrite', 'fp_proj', 'tx_scene', 'mu_type','nm_ver']:
+            studio_kuhq.kuWrite.set_kuWrite(n)
 
 
 nuke.addKnobChanged(ku_knobChange, nodeClass='Write')
