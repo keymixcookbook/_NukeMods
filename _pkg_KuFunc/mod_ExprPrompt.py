@@ -237,7 +237,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.extendCompleter(ls_layers)
 		self.setPrevExpr(node_expr, node_sel)
 		self.st_expr.selectAll()
-		self.move(QtWidgets.QCursor.pos())
+		self.move(QtGui.QCursor.pos())
 		self.show()
 
 
