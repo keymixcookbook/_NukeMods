@@ -25,7 +25,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		# set
 		self.ls_layers = ['rgb', 'rgba', 'alpha']
 		# define widgets
-		self.title = QtWidgets.QLabel("<b>ExprPrompte</b>")
+		self.title = QtWidgets.QLabel("<b>ExprPrompt</b>")
 		self.st_expr = QtWidgets.QLineEdit()
 		self.st_expr.setPlaceholderText('_l: layer (Id06), _ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
