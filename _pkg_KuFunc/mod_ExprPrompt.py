@@ -23,7 +23,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_ExprPrompt, self).__init__()
 		# set
-		self.ls_layers = ['rgb', 'rgba', 'alpha']
+		self.ls_layers = ['rgb', 'rgba', 'alpha', 'max(r,g,b)', 'a>0']
 		# define widgets
 		self.title = QtWidgets.QLabel("<b>ExprPrompt</b>")
 		self.st_expr = QtWidgets.QLineEdit()
