@@ -107,49 +107,50 @@ def SequenceLoader():
 
 
 
+def set_settings(node):
+    '''setting export element settings'''
+    PADDING_VER = 3
+    PADDING_FRAME = '%04d'
+    projDir = node['fp_proj'].value()
+    scene = node['tx_scene'].value()
+    out_type = node['mu_type'].value()
+    ver = int(node['nm_ver'].value())
+
+    if out_type == 'comp':
+        out_file = '%s_%s_v%s' % (scene, out_type, str(ver).zfill(PADDING_VER))
+    elif out_type == 'precomp':
+        out_file = '%s_%s_%s_v%s' % (scene, out_type, node['tx_precomp'].value(), str(ver).zfill(PADDING_VER))
+    out_path = os.path.join(projDir,'EXPORT', scene, out_file, '%s.%s.exr' % (out_file, PADDING_FRAME))
+    node['file'].setValue(out_path)
+    ch = 'rgb' if out_type == 'comp' else 'all'
+    node['channels'].setValue(ch)
+
+    print "==========\n\n%s\n\n%s-%s\n\n==========" % (
+    out_file, nuke.Root()['first_frame'].value(), nuke.Root()['last_frame'].value()
+    )
+
+
+def render_node(node):
+    '''launch render'''
+    out_path = node['file'].value()
+    askMessage = "Render Node: %s\nFile: %s\nFramerage: %s-%s\n" % (
+    node.name(), os.path.basename(node['file'].value()), nuke.Root()['first_frame'].value(), nuke.Root()['last_frame'].value()
+    )
+    c = nuke.ask(askMessage)
+    if c:
+        if os.path.exists(out_path):
+            nuke.execute(node)
+        else:
+            os.makedirs(out_path)
+            nuke.execute(node)
+    else:
+        print "user cancelled"
+
 
 def kuWrite():
     '''Adding inputs for auto generate output path'''
 
     RENDER_TYPE = ['comp', 'precomp']
-
-    def set_settings(node):
-        '''setting export element settings'''
-        PADDING_VER = 3
-        PADDING_FRAME = '%04d'
-        projDir = node['fp_proj'].value()
-        scene = node['tx_scene'].value()
-        out_type = node['mu_type'].value()
-        ver = int(node['nm_ver'].value())
-        out_file = '%s_%s_v%s' % (scene, out_type, str(ver).zfill(PADDING_VER))
-        out_path = os.path.join(projDir,'EXPORT', scene, out_file, '%s.%s.exr' % (out_file, PADDING_FRAME))
-        node['file'].setValue(out_path)
-        ch = 'rgb' if out_type == 'comp' else 'all'
-        node['channels'].setValue(ch)
-
-        print "==========\n\n%s\n\n%s-%s\n\n==========" % (
-            out_file, nuke.Root()['first_frame'].value(), nuke.Root()['last_frame'].value()
-            )
-
-
-
-    def render_node(node):
-        '''launch render'''
-        out_path = node['file'].value()
-        askMessage = "Render Node: %s\nFile: %s\nFramerage: %s-%s\n" % (
-            node.name(), os.path.basename(node['file'].value()), nuke.Root()['first_frame'].value(), nuke.Root()['last_frame'].value()
-            )
-        c = nuke.ask(askMessage)
-        if c:
-            if os.path.exists(out_path):
-                nuke.execute(node)
-            else:
-                os.makedirs(out_path)
-                nuke.execute(node)
-        else:
-            print "user cancelled"
-
-
 
     node = nuke.createNode('Write')
     node.setName('KuWrite')
@@ -161,21 +162,24 @@ def kuWrite():
     k_projDir = nuke.File_Knob('fp_proj', 'proj dir')
     k_scene = nuke.String_Knob('tx_scene', 'scene', os.path.basename(nuke.scriptName()).split('_v')[0])
     k_type = nuke.Enumeration_Knob('mu_type', 'type', RENDER_TYPE)
+    k_precomp = nuke.String_Knob('tx_precomp', '_', 'NewPass')
     k_ver = nuke.Int_Knob('nm_ver', 'version', 1)
     k_div = nuke.Text_Knob('divider','')
-    k_set = nuke.PyScript_Knob('bt_set', '<b>Set Write</b>', 'studio_kuhq.kuWrite.set_setting(nuke.thisNode())')
-    k_render = nuke.PyScript_Knob('bt_render', '<b>Render</b>', 'studio_kuhq.kuWrite.render_node(nuke.thisNode())')
+    k_set = nuke.PyScript_Knob('bt_set', '<b>Set Write</b>', 'studio_kuhq.set_settings(nuke.thisNode())')
+    k_render = nuke.PyScript_Knob('bt_render', '<b>Render</b>', 'studio_kuhq.render_node(nuke.thisNode())')
 
     path_proj = os.path.dirname(nuke.script_directory())
     k_projDir.setValue(path_proj)
+    k_precomp.clearFlag(nuke.STARTLINE)
+    k_precomp.setVisible(False)
     k_ver.setValue(1)
     k_render.clearFlag(nuke.STARTLINE)
     k_pipline.setVisible(False)
 
-    for k in [k_tab, k_pipline, k_projDir, k_scene, k_type, k_ver, k_div, k_set, k_render]:
+    for k in [k_tab, k_pipline, k_projDir, k_scene, k_type, k_precomp, k_ver, k_div, k_set, k_render]:
         node.addKnob(k)
 
-    set_kuWrite(node)
+    set_settings(node)
 
 
 
@@ -213,8 +217,15 @@ def ku_knobChange():
     k = nuke.thisKnob()
 
     if n['kupipline'].value() == 'kuWrite':
-        if k.name() in ['tb_kuWrite', 'fp_proj', 'tx_scene', 'mu_type','nm_ver']:
-            studio_kuhq.kuWrite.set_kuWrite(n)
+        if k.name() in ['tb_kuWrite', 'fp_proj', 'tx_scene','mu_type', 'tx_precomp', 'nm_ver']:
+            import studio_kuhq
+            studio_kuhq.set_settings(n)
+
+        if k.name() == 'mu_type':
+            if n['mu_type'].value() == 'precomp':
+                n['tx_precomp'].setVisible(True)
+            else:
+                n['tx_precomp'].setVisible(False)
 
 
 nuke.addKnobChanged(ku_knobChange, nodeClass='Write')
