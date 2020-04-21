@@ -46,12 +46,12 @@ def getENV():
 	if not os.path.isdir(data_folder):
 		os.makedirs(data_folder)
 
-	try:
+	try: #config file exist
 		with open(file_config, 'r') as f:
 			thisENV = json.load(f)[0]
 			env_show = thisENV['SHOW']
 			env_shot = thisENV['SHOT']
-	except:
+	except: #config file doens't exist
 		try:
 			thisENV = nuke.getInput("'ENV variable name (SHOW, SHOT; saperated by ',')")
 			if thisENV:
@@ -64,6 +64,31 @@ def getENV():
 			env_shot = None
 
 	return {'SHOW': env_show, 'SHOT': env_shot}
+
+
+
+def getJSONPath(data_config):
+	'''
+	reutrn file path for the json file
+	Naming convension:
+	<HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
+	/Users/Tianlun/.nuke/TimelineMarker/GENERAL/MARKERS_TMDataset.json
+	/Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
+	'''
+	# Get pipline enviroment variables
+	thisSHOW = os.getenv(data_config['SHOW'])
+	thisSHOT = os.getenv(data_config['SHOT'])
+	data_SHOW = thisSHOW if thisSHOW else 'GENERAL'
+	data_SHOT = thisSHOT if thisSHOT else 'MARKERS'
+
+	data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
+	data_filename = "%s_TMDataset.json" % data_SHOT
+	data_file = os.path.join(data_folder, data_SHOW, data_filename)
+
+	if not os.path.isdir(os.path.dirname(data_file)):
+		os.makedirs(os.path.dirname(data_file))
+
+	return data_file
 
 
 
@@ -154,7 +179,10 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_TimelineMarker, self).__init__()
 
-		self.data_file = self.getJSONPath()
+		config = getENV()
+		self.SHOW = config['SHOW']
+		self.SHOT = config['SHOT']
+		self.data_file = getJSONPath(config)
 
 		self.tx_shot = QtWidgets.QLabel()
 		self.bt_add = QtWidgets.QPushButton(u"\u002B")
@@ -169,10 +197,8 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		self.bt_reload = QtWidgets.QPushButton('reload')
 		self.bt_reload.setToolTip("Reload Markers from Loaded File")
 		self.bt_reload.clicked.connect(self.reloadMarkers)
-		self.bt_reloadFile = QtWidgets.QPushButton('load file')
-		self.bt_reloadFile.clicked.connect(self.loadFromFile)
 		self.bt_config = QtWidgets.QPushButton('config')
-		self.bt_config.clicked.connect(getENV)
+		self.bt_config.clicked.connect(setConfig)
 		self.bt_config.setToolTip("sets which enviroment varible to find")
 
 		self.bt_add.setFixedWidth(50)
@@ -183,7 +209,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		self.bt_reload.setFlat(True)
 		self.bt_reloadFile.setFlat(True)
 		self.bt_config.setFlat(True)
-
 
 		self.layout_editMarkers = QtWidgets.QGridLayout()
 		self.layout_editMarkers.setContentsMargins(0,0,0,0)
@@ -218,30 +243,10 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		self.setLayout(self.layout_master)
 		self.resize(1000,50)
 		self.setContentsMargins(0,0,0,0)
+		if self.SHOW:
+			self.tx_shot.setText('%s: <b>%s</b>' % (self.SHOW, self.SHOW))
 
 		self.reloadMarkers()
-
-
-	def getJSONPath(self):
-		'''
-		reutrn file path for the json file
-		Naming convension:
-		<HOME Dir>/.nuke/TimelineMarker/<SHOW>/<SHOT>_TMDataset.json
-		/Users/Tianlun/.nuke/TimelineMarker/PHX/str050_1010_TMDataset.json
-		'''
-		# Get pipline enviroment variables
-		data_config = getENV() # Return the variable name
-		data_SHOW = os.getenv(data_config['SHOW']) if os.getenv(data_config['SHOW']) else 'SHOW'
-		data_SHOT = os.getenv(data_config['SHOT']) if os.getenv(data_config['SHOT']) else 'SHOT_6666'
-
-		data_folder = os.path.join(os.getenv('HOME'), '.nuke','TimelineMarker')
-		data_filename = "%s_TMDataset.json" % data_SHOT
-		data_file = os.path.join(data_folder, data_SHOW, data_filename)
-
-		if not os.path.isdir(os.path.dirname(data_file)):
-			os.makedirs(os.path.dirname(data_file))
-
-		return data_file
 
 
 	def saveMarkers(self):
@@ -331,6 +336,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			with open(self.data_file, 'r') as f:
 				thisData = json.load(f)
 			print "loaded: %s" % thisFile
+
 			# Rebuild Widgets
 			for w in thisData:
 				thisFrame = w['frame']
@@ -348,16 +354,6 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			print "Markers added: %s" % self.layout_markers.count()
 
 
-	def loadFromFile(self):
-		'''load buttons from a json file'''
-		sel_json = QtWidgets.QFileDialog().getOpenFileName(self,"Select a TMDataset json file", os.path.join(os.getenv('HOME'), '.nuke'), 'JSON files (*.json)')[0]
-		if sel_json:
-			self.data_file = sel_json
-			self.reloadMarkers()
-		else:
-			print "Inviald file path"
-
-
 	def setFrame(self):
 		'''set the frame in nuke when marker is clicked'''
 		thisSender = self.sender()
@@ -368,14 +364,23 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
 
 
-	def event(self, event):
-		if event.type() == QtCore.QEvent.Type.Show:
+	def setConfig(self):
+		'''set config file'''
+		thisENV = nuke.getInput("'ENV variable name (SHOW, SHOT; saperated by ',')", "%s,%s" % (self.SHOW, self.SHOT))
+		if thisENV:
+			env_show = thisENV.split(',')[0].strip()
+			env_shot = thisENV.split(',')[1].strip()
+			with open(file_config, 'w') as f:
+				f.write(json.dumps([{'SHOW': env_show, 'SHOT': env_shot}]))
 
+
+	def event(self, event):
+		'''set margin to zero for panels'''
+		if event.type() == QtCore.QEvent.Type.Show:
 			try:
 				set_widget_margins_to_zero(self)
 			except:
 				pass
-
 		return QtWidgets.QWidget.event(self, event)
 
 
