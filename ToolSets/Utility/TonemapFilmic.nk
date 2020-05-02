@@ -1,0 +1,111 @@
+Group {
+ name TonemapFilmic
+ help "Implementing John Hable's Filmic Tonemapping algorithm as a Nuke gizmo.\n\nhttp://filmicgames.com/archives/75\nhttp://www.slideshare.net/ozlael/hable-john-uncharted2-hdr-lighting\n\n## Filmic Tonemapping\nA = Shoulder Strength\nB = Linear Strength\nC = Linear Angle\nD = Toe Strength\nE = Toe Numerator\nF = Toe Denominator\n\tNote: E/F = Toe Angle\nLinearWhite = Linear White Point Value\n\nF(x) = ((x*(A*x+C*B) + D*E) / (x*(A*x+B) + D*F)) - E/F\nFinalColor = F(LinearColor)/F(LinearWhite)\n\nA = 0.22\nB = 0.30\nC = 0.10\nD = 0.20\nE = 0.01\nF = 0.30\nLinearWhite = 11.2\nThese numbers are assuming linear source data."
+ addUserKnob {20 Tonamap l Tonemap}
+ addUserKnob {26 ""}
+ addUserKnob {7 exposure t "Adjust the exposure before the tonemap in stops." R -4 4}
+ addUserKnob {41 shStr l "Shoulder Strength" T Expression_Filmic_Tonemap.shStr}
+ addUserKnob {41 linStr l "Linear Strength" T Expression_Filmic_Tonemap.linStr}
+ addUserKnob {41 linAngle l "Linear Angle" T Expression_Filmic_Tonemap.linAngle}
+ addUserKnob {41 toeStr l "Toe Strength" T Expression_Filmic_Tonemap.toeStr}
+ addUserKnob {41 toeNum l "Toe Numerator" T Expression_Filmic_Tonemap.toeNum}
+ addUserKnob {41 toeDenom l "Toe Denominator" T Expression_Filmic_Tonemap.toeDenom}
+ addUserKnob {41 linWhite l "Linear White" T Expression_Filmic_Tonemap.linWhite}
+ addUserKnob {26 ""}
+ addUserKnob {41 use_mask_input l "mask input" T NodeWrapper.use_mask_input}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Expression_Filmic_Tonemap.maskChannelMask}
+ addUserKnob {41 maskChannelInput l " input" -STARTLINE T Expression_Filmic_Tonemap.maskChannelInput}
+ addUserKnob {41 inject T Expression_Filmic_Tonemap.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Expression_Filmic_Tonemap.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Expression_Filmic_Tonemap.fringe}
+ addUserKnob {41 unpremult l "(un)premult by" T Expression_Filmic_Tonemap.unpremult}
+ addUserKnob {41 invert_unpremult l invert -STARTLINE T Expression_Filmic_Tonemap.invert_unpremult}
+ addUserKnob {41 which l mix T NodeWrapper.which}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -370
+  ypos -561
+ }
+ Dot {
+  name Dot1
+  note_font_size 42
+  note_font_color 0x7f7f7f01
+  xpos -336
+  ypos -342
+ }
+set Nfc0aeac0 [stack 0]
+ Multiply {
+  channels rgba
+  value {{"pow(2, parent.exposure)"}}
+  maskChannelMask {{{parent.Expression_Filmic_Tonemap.maskChannelMask}}}
+  inject {{parent.Expression_Filmic_Tonemap.inject}}
+  invert_mask {{parent.Expression_Filmic_Tonemap.invert_mask}}
+  fringe {{parent.Expression_Filmic_Tonemap.fringe}}
+  unpremult {{{parent.Expression_Filmic_Tonemap.unpremult}}}
+  invert_unpremult {{parent.Expression_Filmic_Tonemap.invert_unpremult}}
+  mix {{parent.Expression_Filmic_Tonemap.mix}}
+  name Exposure
+  xpos -370
+  ypos -177
+ }
+ Expression {
+  expr0 "((r*(shStr*r+linAngle*linStr) + toeStr*toeNum) / (r*(shStr*r+linStr)+toeStr*toeDenom) - toeNum/toeDenom)/linWhiteMult"
+  expr1 "((g*(shStr*g+linAngle*linStr) + toeStr*toeNum) / (g*(shStr*g+linStr)+toeStr*toeDenom) - toeNum/toeDenom)/linWhiteMult"
+  expr2 "((b*(shStr*b+linAngle*linStr) + toeStr*toeNum) / (b*(shStr*b+linStr)+toeStr*toeDenom) - toeNum/toeDenom)/linWhiteMult"
+  name Expression_Filmic_Tonemap
+  selected true
+  xpos -370
+  ypos -133
+  addUserKnob {20 User}
+  addUserKnob {7 shStr l "Shoulder Strength"}
+  shStr 0.305
+  addUserKnob {7 linStr l "Linear Strength"}
+  linStr 0.055
+  addUserKnob {7 linAngle l "Linear Angle"}
+  linAngle 0.49
+  addUserKnob {7 toeStr l "Toe Strength"}
+  toeStr 0.225
+  addUserKnob {7 toeNum l "Toe Numerator"}
+  toeNum 0.04
+  addUserKnob {7 toeDenom l "Toe Denominator"}
+  toeDenom 0.22
+  addUserKnob {7 linWhite l "Linear White" R 0 50}
+  linWhite 11.2
+  addUserKnob {7 linWhiteMult R 0 12}
+  linWhiteMult {{"((linWhite*(shStr*linWhite+linAngle*linStr) + toeStr*toeNum) / (linWhite*(shStr*linWhite+linStr)+toeStr*toeDenom) - toeNum/toeDenom)"}}
+ }
+ Dot {
+  name Dot4
+  note_font_size 42
+  note_font_color 0x7f7f7f01
+  xpos -336
+  ypos -6
+ }
+push $Nfc0aeac0
+ Dot {
+  name Dot3
+  note_font_size 42
+  note_font_color 0x7f7f7f01
+  xpos -116
+  ypos -342
+ }
+ Dissolve {
+  inputs 2
+  channels rgba
+  which 1
+  fringe true
+  name NodeWrapper
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'use_mask_input':\n    mask_input_name = 'InputMask'\n    pn = nuke.toNode('.'.join(n.fullName().split('.')\[:-1]))\n    pn.setInput(1, None)\n    mask_input = nuke.toNode(mask_input_name)\n    masknodes = \['Expression_Filmic_Tonemap', 'Exposure']\n    if not k.value():\n        nuke.delete(mask_input)\n    else:\n        mask_input = nuke.nodes.Input()\n        mask_input\['name'].setValue('InputMask')\n        mask_input.setXpos( 0 )\n        mask_input.setYpos( 0 )\n        for mn in masknodes:\n            nuke.toNode(mn).setInput(1, mask_input)\n"
+  xpos -150
+  ypos -9
+  addUserKnob {20 User}
+  addUserKnob {6 use_mask_input +STARTLINE}
+ }
+ Output {
+  name Output1
+  xpos -150
+  ypos 120
+ }
+end_group
