@@ -9,8 +9,9 @@ package:
 - `<file1>.py`
 - `<file2>.py`
 
-![ALT_TEXT](https://github.com/tianlunjiang/_NukeStudio/blob/master/__Doc/_wiki/<img_file>)
+![ALT_TEXT]()
 
-nukepedia: [link](http://www.nukepedia.com/...)
+- nukepedia: [link]()
+- [direct download]()
 
 [&#9776; Back to top](#Tool-list)
