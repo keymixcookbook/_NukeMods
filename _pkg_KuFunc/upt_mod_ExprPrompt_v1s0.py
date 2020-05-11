@@ -1,14 +1,23 @@
 def _version_():
 	ver='''
 
+	version 1.0
+	- add preset buttons
+
 	version 0.0
 	- Expression node with prompt options
-	- string replace keys ('_l': layer, '_ch': channels)
+	- string replace keys ('$ly': layer, '$ch': channels)
 	- input field completer with layers
 	- Create Expression node if non-Expression node selected, auto fill LineEdit if Expression node selected
 
 	'''
 	return ver
+
+
+
+#------------------------------------------------------------------------------
+#-imports
+#------------------------------------------------------------------------------
 
 
 
@@ -19,15 +28,39 @@ from Qt import QtCore, QtGui, QtWidgets
 import re
 
 
+
+#------------------------------------------------------------------------------
+#-Variable
+#------------------------------------------------------------------------------
+
+
+
+PRESET = [
+	'rgb', 'rgba', 'alpha', 'max(r,g,b)', 'min(r,g,b)', 'a>0',
+	'r/g', 'r/b', 'g/r', 'g/b', 'b/r', 'b/g',
+	'isinf($ch)?$ch(x+1,y):$ch','isnan($ch)?$ch(x-1,y):$ch',
+]
+
+
+
+
+#------------------------------------------------------------------------------
+#-Core Class
+#------------------------------------------------------------------------------
+
+
+
+
 class Core_ExprPrompt(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_ExprPrompt, self).__init__()
 		# set
-		self.ls_layers = ['rgb', 'rgba', 'alpha', 'max(r,g,b)', 'a>0']
-		# define widgets
-		self.title = QtWidgets.QLabel("<b>ExprPrompt</b>")
+		self.ls_layers = PRESET
+
+		# Left Widgets
+		self.title = QtWidgets.QLabel("<b>ExprPrompt v1.0</b>")
 		self.st_expr = QtWidgets.QLineEdit()
-		self.st_expr.setPlaceholderText('_l: layer (Id06), _ch: channel (red)')
+		self.st_expr.setPlaceholderText('$ly: layer (Id06), $ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
 		self.st_expr.setCompleter(QtWidgets.QCompleter(self.ls_layers))
 		#self.st_expr.keyPressEvent(self, event)
@@ -39,17 +72,22 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.ck_ch_b = QtWidgets.QCheckBox('b')
 		self.ck_ch_a = QtWidgets.QCheckBox('alpha')
 		self.bt_ch_all = QtWidgets.QPushButton('all')
-		self.bt_ch_all.clicked.connect(self.setAllChannel)
+		self.bt_ch_all.clicked.connect(self.setChannels)
 		self.ck_clamp = QtWidgets.QCheckBox('clamp')
 		self.ck_invert = QtWidgets.QCheckBox('invert')
 		self.bt_set = QtWidgets.QPushButton('Set!')
 		self.bt_set.clicked.connect(self.onPressed)
 
+		# Right Widgets
+		self.presetBtn1=QtWidgets.QPushButton('UV')
+
 		self.ls_ch_layer = [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b, self.ck_ch_a]
 		self.ls_wrapper = [self.ck_clamp, self.ck_invert]
+
 		# define layouts
-		self.layout_master = QtWidgets.QVBoxLayout()
-		self.layout_main = QtWidgets.QHBoxLayout()
+		self.layout_master = QtWidgets.QHBoxLayout()
+		self.layout_main = QtWidgets.QVBoxLayout()
+		self.layout_right = QtWidgets.QVBoxLayout()
 		self.layout_channels = QtWidgets.QHBoxLayout()
 		self.layout_wrappers = QtWidgets.QHBoxLayout()
 		self.layout_wrappers.setAlignment(QtCore.Qt.AlignLeft)
@@ -62,20 +100,22 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			self.layout_channels.addWidget(c)
 		for w in [self.ck_clamp, self.ck_invert]:
 			self.layout_wrappers.addWidget(w)
-		self.layout_master.addWidget(self.title)
+
+		self.layout_main.addWidget(self.title)
+		self.layout_right.addWidget(self.presetBtn1)
 		self.layout_master.addLayout(self.layout_main)
-		self.layout_master.addLayout(self.layout_channels)
-		self.layout_master.addLayout(self.layout_wrappers)
-		self.layout_master.addWidget(self.bt_set)
+		self.layout_master.addLayout(self.layout_right)
+
+		self.layout_main.addLayout(self.layout_channels)
+		self.layout_main.addLayout(self.layout_wrappers)
+		self.layout_main.addWidget(self.bt_set)
 		self.setLayout(self.layout_master)
 
-
 		#self.resize(400,240)
-		self.setWindowTitle("ExprPrompte")
+		self.setWindowTitle("ExprPrompt")
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefault()
-
 
 	def setDefault(self):
 		'''set default value when instansing'''
@@ -86,18 +126,15 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.st_expr.setFocus()
 		self.mu_layers.setEditable(False)
 
-
 	def onTextChanged(self):
 		'''if string key are in line edit, enable combobox'''
-		if '_l' in self.st_expr.text():
+		if '$ly' in self.st_expr.text():
 			self.mu_layers.setEnabled(True)
 		else:
 			self.mu_layers.setEnabled(False)
 
-
 	def extendCompleter(self, sel_layer):
 		'''extend the completer with layers'''
-
 		layer_extended = sel_layer
 		thisCompleter = QtWidgets.QCompleter(layer_extended)
 		thisCompleter.setCompletionMode(QtWidgets.QCompleter.InlineCompletion)
@@ -123,7 +160,6 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 		return self.prevExpr
 
-
 	def getSelected(self):
 		'''get values for the checkboxs and comboboxs
 		return: [sel_layer, sel_channel, sel_wrapper] (list of lists)
@@ -141,7 +177,6 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 		return [sel_layer, sel_channel, sel_wrapper]
 
-
 	def setExpr(self, node, sel):
 		'''get string from expression line edit
 		@node: node to set expression (obj)
@@ -158,11 +193,11 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		expr_mid = 'clamp(%s)' % expr_mid if 'clamp' in sel_wrapper else expr_mid
 		expr_out = expr_mid
 
-		key_layer = '_l'
-		key_channel = '_ch'
+		key_layer = '$ly'
+		key_channel = '$ch'
 
 		# convert 'alpha' to 'a' and remove '.' if input channel is selected to 'rgba'
-		if sel_layer in ['rgb','rgba'] and '_l' in expr_out:
+		if sel_layer in ['rgb','rgba'] and '$ly' in expr_out:
 			sel_layer = ''
 			try:
 				expr_out = expr_out.replace('.','',1)
@@ -178,28 +213,44 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			expr_out = expr_out.replace(key_layer,sel_layer)
 			node[k].setValue(expr_out.replace(key_channel,knob_to_ch[k]))
 
-
 	def onPressed(self):
 		'''when enter-key is pressed on expression line edit'''
 		self.setExpr(self.node, self.getSelected())
 		self.close()
 
+	def setChannels(self):
+		'''when set channel button is pressed, cycle all, rgba, alpha'''
+		btn = self.sender()
+		ls_state = ['all', 'rgb', 'alpha']
+		dic_state = {
+			'all': ['r', 'g', 'b', 'alpha'],
+			'rgb': ['r', 'g', 'b'],
+			'alpha': ['alpha']
+			}
 
-	def setAllChannel(self):
+		cur_state = btn.text()
+		idx = ls_state.index(cur_state)
+		if idx < 2:
+			idx += 1
+		else:
+			idx = 0
+		btn.setText(ls_state[idx])
+
 		for k in self.ls_ch_layer:
-			k.setChecked(True)
-
+			if k.text() in dic_state[cur_state]:
+				k.setChecked(True)
+			else:
+				k.setChecked(False)
 
 	def setLayers(self,node_expr,node_sel):
 		'''get layers from root
 		return: ls_layers (list of str)
 		'''
 		self.mu_layers.clear()
-		self.ls_layers = nuke.layers() if node_sel == None else nuke.layers(node_sel)
+		self.ls_layers if node_sel == None else self.ls_layers.extend(nuke.layers(node_sel))
 		self.mu_layers.addItems(self.ls_layers)
 
 		return self.ls_layers # ['rgba', 'Id06']
-
 
 	def getNode(self):
 		'''
@@ -243,8 +294,13 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 
 
+#------------------------------------------------------------------------------
+#-Instancing
+#------------------------------------------------------------------------------
 
 
 
-# set instanse
+
 ExprPrompt = Core_ExprPrompt()
+if 'upt_' in __file__:
+	ExprPrompt.run()

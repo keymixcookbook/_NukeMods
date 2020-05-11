@@ -1,6 +1,8 @@
 # Python modules to use in a VFX Studio environment
 A General scripting format and structure guide
 
+[Tool Documentation Page](https://github.com/tianlunjiang/_NukeStudio/wiki)
+
 ### Main Components
   - `./_pkg_KuFunc`
     - `__int__.py`

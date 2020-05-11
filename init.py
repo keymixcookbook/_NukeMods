@@ -8,17 +8,24 @@ to used in a VFX Studio enviroment
 
 
 
-########## PLUGIN DIRECTORIES ##########
-
-
-
 
 import os
-from _pkg_KuStudio import mod_StudioENV
 
-print ">>>", "Start Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<"
+STUDIO = os.environ['KU_STUDIO_ENV']
+print "\n\n\n==========\nStudio set to %s\n==========" % STUDIO
 
-nuke.pluginAddPath('./_pkg_KuFunc')
-nuke.pluginAddPath('./_pkg_KuStudio')
-nuke.pluginAddPath('./_mod_Download')
-nuke.pluginAddPath('./__icons')
+print "\n\n\n>>>", "Start Install %s" % (os.path.basename(os.path.dirname(__file__))), "<<<\n\n\n"
+
+kuPlugInPath=[
+    './_pkg_KuFunc',
+    './_pkg_Studios',
+    './_mod_Download',
+    './__icons',
+
+    './_pkg_Studios/pkgStudio_%s' % STUDIO,
+    ]
+
+print "Adding kupipeline plugin path"
+for p in kuPlugInPath:
+    nuke.pluginAddPath(p)
+    print '--- %s' % p

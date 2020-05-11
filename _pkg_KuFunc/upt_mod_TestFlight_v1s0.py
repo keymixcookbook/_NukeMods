@@ -10,6 +10,9 @@ import importlib
 def _version_():
     ver = '''
 
+    version 1.0
+    - log execute history
+
     version 0.0
 	- nukescript panel for testing modules
 
@@ -38,7 +41,7 @@ def listFiles(dirpath):
     '''list files in the given dir'''
 
     path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.endswith('.py')]
+    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('dft_')]
 
     return ls_files
 
@@ -111,6 +114,7 @@ class Core_TestFlight(QtWidgets.QWidget):
                 sys.path.append(debug_path)
             m=importlib.import_module(debug_mod)
             reload(m)
+
         else:
             nuke.message("Fail to load file")
 

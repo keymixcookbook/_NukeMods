@@ -3,14 +3,16 @@ import sys
 import nukescripts
 import nuke
 from Qt import QtWidgets, QtGui, QtCore
-import mod_StudioLoad
 import importlib
 
 
 def _version_():
     ver = '''
 
-    version 0.0
+    version 0.1
+    - Bug Fix
+
+	version 0.0
 	- nukescript panel for testing modules
 
 	'''
@@ -28,8 +30,7 @@ def _version_():
 
 def findDraftDir():
     '''finds the mod_Draft dir as for default path'''
-    slate = mod_StudioLoad.LoadSlate()
-    path_draft = os.path.join(os.getenv('KU_PKG_PATH'), '_pkg_KuFunc/').replace('\\', '/')
+    path_draft = os.path.join(os.getenv('HOME'), '.nuke').replace('\\', '/')
 
     return path_draft
 
@@ -38,7 +39,7 @@ def listFiles(dirpath):
     '''list files in the given dir'''
 
     path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.endswith('.py')]
+    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('dft_')]
 
     return ls_files
 
@@ -111,6 +112,7 @@ class Core_TestFlight(QtWidgets.QWidget):
                 sys.path.append(debug_path)
             m=importlib.import_module(debug_mod)
             reload(m)
+
         else:
             nuke.message("Fail to load file")
 
@@ -128,17 +130,4 @@ class Core_TestFlight(QtWidgets.QWidget):
         self.raise_()
 
 
-
 nukescripts.registerWidgetAsPanel('mod_TestFlight.Core_TestFlight', 'Test Flight (beta)', 'kp.mod_TestFlight')
-
-
-'''
-try:
-    app = QtWidgets.QApplication(sys.argv)
-    TestFlight = Core_TestFlight()
-    TestFlight.run()
-    app.exec_()
-except:
-    TestFlight = Core_TestFlight()
-    TestFlight.run()
-'''

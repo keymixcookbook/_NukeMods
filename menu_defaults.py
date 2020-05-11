@@ -1,10 +1,9 @@
 import nuke
 from _pkg_KuFunc import *
-from _pkg_KuStudio import *
+from _pkg_Studios import *
 from _mod_Download import *
 
 from _pkg_KuFunc.mod_KuUtility import *
-from _pkg_KuStudio.mod_KuStudio import *
 
 
 
@@ -60,11 +59,11 @@ nuke.knobDefault('Viewer.hide_input', 'True')
 
 
 
-nuke.addOnCreate(mod_StudioENV.StudioENV, nodeClass='Root')
+# nuke.addOnCreate(mod_StudioENV.StudioENV, nodeClass='Root')
 
 def viewerSetting():
     for n in nuke.allNodes('Viewer'):
         n['frame_increment'].setValue(8)
         n['hide_input'].setValue(True)
-        
+
 nuke.addOnCreate(viewerSetting, nodeClass='Root')
