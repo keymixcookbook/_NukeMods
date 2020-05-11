@@ -1,0 +1,1840 @@
+#Halation v2.1
+#by silly calvin
+#2020
+
+version 12.1 v2
+Gizmo {
+ inputs 3
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"glow\"]:\n    no = n\[\"glow\"].value() == 1\n    yes = n\[\"glow\"].value() == 0\n\n    n\[\"glow_intensity\"].setEnabled(not yes)\n    n\[\"glow_radius\"].setEnabled(not yes)\n    n\[\"glow_falloff\"].setEnabled(not yes)\n    n\[\"_1\"].setEnabled(not yes)\n    n\[\"_7\"].setEnabled(not yes)\n    n\[\"_8\"].setEnabled(not yes)\n    n\[\"_9\"].setEnabled(not yes)"
+ tile_color 0xff2323ff
+ addUserKnob {20 User l Controls}
+ addUserKnob {26 Headline l "" +STARTLINE T "<font color=#ddd680 size=\"5\">H</font><font color=#ded990 size=\"5\">a</font><font color=#dfdba0 size=\"5\">l</font><font color=#e0ddb0 size=\"5\">a</font><font color=#e1dfc0 size=\"5\">t</font><font color=#e0ddb0 size=\"5\">i</font><font color=#dfdba0 size=\"5\">on</font><font color=#ded990 size=\"3\"> v</font><font color=#ded990 size=\"2\">2.1</font>\n<font color=#ded990 size=\"2\">| by silly calvin</font>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_2 l "" +STARTLINE T "Halation type:   "}
+ addUserKnob {22 alpha_method l "<font color=#ded990 size=\"3\">Alpha method</font>" t "Operatas a bit more smarter than screen method and even though screen method does as well technically use an alpha, I think the name fits since it tries not to touch the highlights as much as screen method does." -STARTLINE T "nuke.toNode('Switch2').knob('which').setValue(1)\n\nnuke.thisNode().knob('alpha_method').setLabel('<font color=#ded990 size=\"3\">Alpha method</font>')\n\nnuke.thisNode().knob('screen_method').setLabel('Screen method')\n\nnuke.thisNode().knob('blur_method').setEnabled(True)\n\nnuke.thisNode().knob('erode_method').setEnabled(True)\n\nnuke.thisNode().knob('both').setLabel('Both')\n"}
+ addUserKnob {22 screen_method l "Screen method" t "Has a softer look than alpha method and uses a simple screen merge operation, affects the highlights a little bit which can sometimes be something useful. Screen method uses at all time the \"both\" method.\n\nNOTE: If you're working with ACES then screen method is the only one working as of now, read more on the nukepedia page about this issue. (If anyone has a smart way of sorting this out please contact me via twitter, thanks)\n" -STARTLINE T "nuke.toNode('Switch2').knob('which').setValue(0)\n\nnuke.thisNode().knob('screen_method').setLabel('<font color=#ded990 size=\"3\">Screen method</font>')\n\nnuke.thisNode().knob('alpha_method').setLabel('Alpha method')\n\nnuke.thisNode().knob('blur_method').setEnabled(False)\nnuke.thisNode().knob('erode_method').setEnabled(False)\n\nnuke.thisNode().knob('blur_method').setLabel('Blur method')\n\nnuke.thisNode().knob('erode_method').setLabel('Erode method')\nnuke.thisNode().knob('both').setLabel('<font color=#ded990 size=\"3\">Both</font>')\n"}
+ addUserKnob {26 ""}
+ addUserKnob {20 Key n 1}
+ Key 0
+ addUserKnob {26 ""}
+ addUserKnob {6 alpha l "Alpha preview" t "As the name suggests if you toggle this you'll see a preview of what the alpha looks like which is where the halation will affect. It's controlled by the parameters below." +STARTLINE}
+ addUserKnob {41 range l Key T Keyer1.range}
+ addUserKnob {41 size l Blur T Blur5.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 threshold l "Edge threshold" T EdgeDetect2.threshold}
+ addUserKnob {41 size_1 l Blur T Blur1.size}
+ addUserKnob {22 python_button_8 l "Reset to default" t "Reset values to a default state" T "nuke.thisNode().knob('range').setValue((0.43, 0.6, 1 ,1))\nnuke.thisNode().knob('threshold').setValue(0.6)\n\nnuke.thisNode().knob('size').setValue(25)\nnuke.thisNode().knob('size_1').setValue(5)" +STARTLINE}
+ addUserKnob {41 gain l Intensity T ColorCorrect1.gain}
+ addUserKnob {41 contrast l Contrast T ColorCorrect1.contrast}
+ addUserKnob {22 python_button l "Reset to default" t "Reset values to a default state" T "nuke.toNode('ColorCorrect1').knob('gain').setValue(0.75)\nnuke.toNode('ColorCorrect1').knob('contrast').setValue(0.75)\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 Main n 1}
+ Main 0
+ addUserKnob {26 ""}
+ addUserKnob {20 halation l Halation n 1}
+ halation 0
+ addUserKnob {22 blur_method l "<font color=#ded990 size=\"3\">Blur method</font>" t "Uses the blur node for how the halation will spread." T "nuke.toNode('Switch1').knob('which').setValue(0)\n\nnuke.thisNode().knob('blur_method').setLabel('<font color=#ded990 size=\"3\">Blur method</font>')\n\nnuke.thisNode().knob('erode_method').setLabel('Erode method')\nnuke.thisNode().knob('both').setLabel('Both')" +STARTLINE}
+ addUserKnob {22 erode_method l "Erode method" t "A bit harsher than blur and will instead erode the halation outwards." -STARTLINE T "nuke.toNode('Switch1').knob('which').setValue(1)\n\nnuke.thisNode().knob('blur_method').setLabel('Blur method')\n\nnuke.thisNode().knob('erode_method').setLabel('<font color=#ded990 size=\"3\">Erode method</font>')\nnuke.thisNode().knob('both').setLabel('Both')"}
+ addUserKnob {22 both l Both t "As the name suggests it combines both the blur method and erode method." -STARTLINE T "nuke.toNode('Switch1').knob('which').setValue(2)\n\nnuke.thisNode().knob('blur_method').setLabel('Blur method')\n\nnuke.thisNode().knob('erode_method').setLabel('Erode method')\nnuke.thisNode().knob('both').setLabel('<font color=#ded990 size=\"3\">Both</font>')"}
+ addUserKnob {26 text_1 l <b>Blur}
+ addUserKnob {18 Blur l "" +STARTLINE R 0 100}
+ Blur {8 3 0}
+ addUserKnob {6 Blur_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ Blur_panelDropped true
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ color_rgb_panelDropped true
+ addUserKnob {22 _3 l "Reset to default" t "Reset values to a default state" T "nuke.thisNode().knob('Blur').setValue((8, 3, 0))\n" +STARTLINE}
+ addUserKnob {26 text_8 l <b>Erode</b>}
+ addUserKnob {18 Erode l "" +STARTLINE R -100 0}
+ Erode {-1.8 -0.9 0}
+ addUserKnob {6 Erode_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ Erode_panelDropped true
+ addUserKnob {22 _2 l "Reset to default" t "Reset values to a default state" T "nuke.thisNode().knob('Erode').setValue((-1.8, -0.9, 0))\n" +STARTLINE}
+ addUserKnob {20 "" n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 Other t "A set of optiniol neat functions. \n\nNOTE: As of now the Flare function will only work with Alpha method enabled. The flare function is an attempt to automate a larger like halation blob on strong light sources. This is still a WIP so it's not perfect yet." n 1}
+ Other 0
+ addUserKnob {26 ""}
+ addUserKnob {26 Glow l "" t "You can click on the color panel on the right of the knobs to change color if desired." +STARTLINE T <b>Glow</b>}
+ addUserKnob {6 glow l Off/On +STARTLINE}
+ addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ color_rgba_panelDropped true
+ addUserKnob {26 _7 l <b>Intensity +DISABLED}
+ addUserKnob {18 glow_intensity l "" +STARTLINE +DISABLED R 0 10}
+ glow_intensity 0.84
+ addUserKnob {6 glow_intensity_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 _8 l <b>Radius +DISABLED}
+ addUserKnob {18 glow_radius l "" +STARTLINE +DISABLED R 0 10000}
+ glow_radius 35
+ addUserKnob {6 glow_radius_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 _9 l <b>Falloff +DISABLED}
+ addUserKnob {18 glow_falloff l "" +STARTLINE +DISABLED R 0 10}
+ glow_falloff 1
+ addUserKnob {6 glow_falloff_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {22 _1 l "Reset to default" t "Reset values to a default state" +DISABLED T "nuke.thisNode().knob('glow_intensity').setValue(2.7)\n\nnuke.thisNode().knob('glow_radius').setValue(35)\n\nnuke.thisNode().knob('glow_falloff').setValue(1)\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 tab l F_ReGrain}
+ addUserKnob {6 grain l Off/On +STARTLINE}
+ addUserKnob {41 grainType l "Grain Type" T F_ReGrain1.grainType}
+ addUserKnob {41 presetStock l "Preset Stock" T F_ReGrain1.presetStock}
+ addUserKnob {41 amount l "Grain Amount" T F_ReGrain1.amount}
+ addUserKnob {41 size_6 l "Grain Size" T F_ReGrain1.size}
+ addUserKnob {41 output l Output T F_ReGrain1.output}
+ addUserKnob {41 analyse l Analyse T F_ReGrain1.analyse}
+ addUserKnob {20 AnalysisRegion l "Analysis Region" n 1}
+ AnalysisRegion 0
+ addUserKnob {41 regionBL l "Analysis Region BL" T F_ReGrain1.regionBL}
+ addUserKnob {41 regionTR l "Analysis Region TR" T F_ReGrain1.regionTR}
+ addUserKnob {41 frame l "Analysis Frame" T F_ReGrain1.frame}
+ addUserKnob {41 grainColourSpace l "Grain Colour Space" T F_ReGrain1.grainColourSpace}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 Advanced n 1}
+ Advanced 0
+ addUserKnob {41 processRed l "Process Red" T F_ReGrain1.processRed}
+ addUserKnob {41 redAmount l "Red Amount" T F_ReGrain1.redAmount}
+ addUserKnob {41 redSize l "Red Size" T F_ReGrain1.redSize}
+ addUserKnob {41 processGreen l "Process Green" T F_ReGrain1.processGreen}
+ addUserKnob {41 greenAmount l "Green Amount" T F_ReGrain1.greenAmount}
+ addUserKnob {41 greenSize l "Green Size" T F_ReGrain1.greenSize}
+ addUserKnob {41 processBlue l "Process Blue" T F_ReGrain1.processBlue}
+ addUserKnob {41 blueAmount l "Blue Amount" T F_ReGrain1.blueAmount}
+ addUserKnob {41 blueSize l "Blue Size" T F_ReGrain1.blueSize}
+ addUserKnob {20 "Grain Response" n 1}
+ "Grain Response" 0
+ addUserKnob {41 srcColourSpace l "Apply Grain In" T F_ReGrain1.srcColourSpace}
+ addUserKnob {41 lowGain l "Low Gain" T F_ReGrain1.lowGain}
+ addUserKnob {41 midGain l "Mid Gain" T F_ReGrain1.midGain}
+ addUserKnob {41 highGain l "High Gain" T F_ReGrain1.highGain}
+ addUserKnob {41 useResponse l "Use Sampled Response" T F_ReGrain1.useResponse}
+ addUserKnob {41 responseMix l "Sampled Response Mix" T F_ReGrain1.responseMix}
+ addUserKnob {41 sample l "Sample Grain Response" T F_ReGrain1.sample}
+ addUserKnob {41 reset l "Reset Grain Response" T F_ReGrain1.reset}
+ addUserKnob {41 drawResponse l "Draw Response" T F_ReGrain1.drawResponse}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 "" n -1}
+ addUserKnob {41 about l About T F_ReGrain1.about}
+}
+ BackdropNode {
+  inputs 0
+  name highlight
+  tile_color 0x8893b5ff
+  label "OCIO Look Transform \n-\n\n\nPreserve\nHighlight"
+  note_font "Verdana Bold"
+  note_font_size 12
+  xpos -135
+  ypos -212
+  bdwidth 150
+  bdheight 344
+ }
+ BackdropNode {
+  inputs 0
+  name keying
+  tile_color 0x545454ff
+  gl_color 0xf4151bff
+  label Alpha
+  note_font "Verdana Bold"
+  note_font_size 50
+  xpos -1411
+  ypos -402
+  bdwidth 1126
+  bdheight 354
+ }
+ BackdropNode {
+  inputs 0
+  name main
+  tile_color 0x884b00ff
+  label "Halation 2"
+  note_font "Verdana Bold"
+  note_font_size 30
+  xpos 170
+  ypos 29
+  bdwidth 331
+  bdheight 287
+ }
+ BackdropNode {
+  inputs 0
+  name filter
+  tile_color 0x880000ff
+  label "Halation\n"
+  note_font "Verdana Bold"
+  note_font_size 30
+  xpos -860
+  ypos 178
+  bdwidth 362
+  bdheight 258
+  z_order 1
+ }
+ Input {
+  inputs 0
+  name InputMask
+  xpos -266
+  ypos 747
+  number 2
+ }
+ Input {
+  inputs 0
+  name Input
+  note_font_color 0xff
+  xpos -219
+  ypos -352
+ }
+ Dot {
+  name Dot39
+  xpos -185
+  ypos -277
+ }
+set N82242000 [stack 0]
+ Dot {
+  name Dot9
+  xpos -351
+  ypos -277
+ }
+set N8226bc00 [stack 0]
+ OCIOLogConvert {
+  operation "lin to log"
+  name OCIOLogConvert10
+  xpos -510
+  ypos -280
+ }
+ Keyer {
+  operation "luminance key"
+  range {0.43 0.6 1 1}
+  name Keyer1
+  xpos -722
+  ypos -286
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.green 0 1 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle2
+  xpos -877
+  ypos -280
+ }
+ OCIOLogConvert {
+  operation "log to lin"
+  name OCIOLogConvert11
+  xpos -1016
+  ypos -280
+ }
+ OCIOLogConvert {
+  operation "log to lin"
+  name OCIOLogConvert1
+  xpos -1126
+  ypos -280
+ }
+ Defocus {
+  channels rgba
+  defocus 18
+  name Defocus1
+  xpos -1246
+  ypos -280
+ }
+ OCIOLogConvert {
+  operation "lin to log"
+  name OCIOLogConvert2
+  xpos -1369
+  ypos -280
+ }
+ Blur {
+  channels rgb
+  size 25
+  name Blur5
+  selected true
+  xpos -1369
+  ypos -201
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3"
+  name Shuffle3
+  xpos -1369
+  ypos -94
+ }
+push $N8226bc00
+ Dot {
+  name Dot45
+  xpos -351
+  ypos -239
+ }
+set N8229d800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -351
+  ypos -195
+ }
+ OCIOLogConvert {
+  operation "lin to log"
+  name OCIOLogConvert5
+  xpos -492
+  ypos -198
+ }
+ EdgeDetectWrapper {
+  channels {rgba.red rgba.green -rgba.blue rgba.alpha}
+  threshold 0.6
+  blursize 3
+  name EdgeDetect2
+  xpos -635
+  ypos -204
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 black -1 -1 rgba.alpha 0 3 rgba.alpha 0 3 rgba.blue 0 2 rgba.alpha 0 3 rgba.red 0 0 rgba.alpha 0 3 rgba.green 0 1"
+  name Shuffle8
+  xpos -723
+  ypos -198
+ }
+ OCIOLogConvert {
+  operation "log to lin"
+  name OCIOLogConvert7
+  xpos -850
+  ypos -198
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 rgba.blue 0 2 rgba.alpha 0 3 black -1 -1 rgba.green 0 1 black -1 -1 rgba.red 0 0 black -1 -1 rgba.blue 0 2"
+  name Shuffle9
+  xpos -960
+  ypos -198
+ }
+ ColorCorrect {
+  channels alpha
+  contrast 1.3
+  gain 0.016
+  name ColorCorrect4
+  xpos -1092
+  ypos -204
+ }
+ Blur {
+  channels alpha
+  size 5
+  maskChannelInput -rgba.alpha
+  name Blur1
+  xpos -1092
+  ypos -129
+ }
+push $N8229d800
+ Dot {
+  name Dot47
+  xpos -1164
+  ypos -239
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos -1198
+  ypos -100
+ }
+ ColorCorrect {
+  channels alpha
+  contrast 0.75
+  gamma 1.38
+  gain 0.75
+  name ColorCorrect1
+  xpos -984
+  ypos -100
+ }
+ Dot {
+  name Dot20
+  xpos -950
+  ypos -19
+ }
+set N822ca800 [stack 0]
+ Dot {
+  name Dot23
+  label "Alpha preview"
+  note_font_size 20
+  xpos -950
+  ypos 692
+ }
+ Input {
+  inputs 0
+  name Grain
+  xpos -235
+  ypos 476
+  number 1
+ }
+push $N822ca800
+ Dot {
+  name Dot67
+  xpos -581
+  ypos -19
+ }
+ Dot {
+  name Dot17
+  xpos -581
+  ypos 185
+ }
+set N822fb800 [stack 0]
+ Dot {
+  name Dot43
+  xpos -695
+  ypos 185
+ }
+set N822fb400 [stack 0]
+ Dot {
+  name Dot25
+  xpos -837
+  ypos 185
+ }
+ Dot {
+  name Dot35
+  xpos -837
+  ypos 333
+ }
+set N822fac00 [stack 0]
+ Dot {
+  name Dot21
+  xpos -837
+  ypos 361
+ }
+set N822fa800 [stack 0]
+ Dot {
+  name Dot22
+  xpos -837
+  ypos 385
+ }
+push $N822fa800
+push $N822fac00
+push $N822fb400
+ Dot {
+  name Dot6
+  xpos -695
+  ypos 247
+ }
+set N822fa000 [stack 0]
+ Dot {
+  name Dot7
+  xpos -695
+  ypos 271
+ }
+set N82315c00 [stack 0]
+ Dot {
+  name Dot8
+  xpos -695
+  ypos 295
+ }
+set N82315800 [stack 0]
+push $N82315c00
+push $N822fa000
+push $N82242000
+ Dot {
+  name Dot1
+  xpos -61
+  ypos -277
+ }
+set N82315400 [stack 0]
+ OCIOLookTransform {
+  in_colorspace REDLog
+  look ""
+  out_colorspace scene_linear
+  name OCIOLookTransform1
+  xpos -95
+  ypos -167
+ }
+ Dot {
+  name Dot41
+  xpos -61
+  ypos -35
+ }
+ Dot {
+  name Dot11
+  xpos -521
+  ypos -35
+ }
+ Dot {
+  name Dot2
+  xpos -521
+  ypos 220
+ }
+set N82314400 [stack 0]
+ Dot {
+  name Dot28
+  xpos -603
+  ypos 220
+ }
+ Blur {
+  inputs 1+1
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.Blur.r}}
+  mix 0.71
+  name red
+  xpos -637
+  ypos 244
+ }
+ Blur {
+  inputs 1+1
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{parent.Blur.g}}
+  mix 0.675
+  name green
+  xpos -637
+  ypos 268
+ }
+ Blur {
+  inputs 1+1
+  channels {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  size {{parent.Blur.b}}
+  name blue
+  xpos -637
+  ypos 292
+ }
+set N82331400 [stack 0]
+ Dot {
+  name Dot33
+  xpos -603
+  ypos 333
+ }
+ FilterErode {
+  inputs 1+1
+  channels {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  size {{parent.Erode.r}}
+  filter gaussian
+  name ErodeRed1
+  xpos -793
+  ypos 330
+ }
+ FilterErode {
+  inputs 1+1
+  channels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  size {{parent.Erode.g}}
+  filter gaussian
+  name ErodeGreen1
+  xpos -793
+  ypos 358
+ }
+ FilterErode {
+  inputs 1+1
+  channels {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  size {{parent.Erode.b}}
+  filter gaussian
+  name ErodeBlue1
+  xpos -793
+  ypos 382
+ }
+ Dot {
+  name Dot29
+  xpos -759
+  ypos 38
+ }
+ Dot {
+  name Dot49
+  xpos -162
+  ypos 38
+ }
+push $N82315800
+ Dot {
+  name Dot4
+  xpos -695
+  ypos 358
+ }
+set N82361800 [stack 0]
+ Dot {
+  name Dot13
+  xpos -695
+  ypos 386
+ }
+set N82361400 [stack 0]
+ Dot {
+  name Dot16
+  xpos -695
+  ypos 410
+ }
+push $N82361400
+push $N82361800
+push $N82314400
+ Dot {
+  name Dot5
+  xpos -521
+  ypos 358
+ }
+ FilterErode {
+  inputs 1+1
+  channels {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  size {{parent.Erode.r}}
+  filter gaussian
+  name ErodeRed
+  xpos -637
+  ypos 355
+ }
+ FilterErode {
+  inputs 1+1
+  channels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  size {{parent.Erode.g}}
+  filter gaussian
+  name ErodeGreen
+  xpos -637
+  ypos 383
+ }
+ FilterErode {
+  inputs 1+1
+  channels {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  size {{parent.Erode.b}}
+  filter gaussian
+  name ErodeBlue
+  xpos -637
+  ypos 407
+ }
+ Dot {
+  name Dot14
+  xpos -603
+  ypos 53
+ }
+ Dot {
+  name Dot50
+  xpos -162
+  ypos 53
+ }
+push $N82331400
+ Dot {
+  name Dot44
+  xpos -541
+  ypos 295
+ }
+ Dot {
+  name Dot48
+  xpos -541
+  ypos 25
+ }
+ Dot {
+  name Dot12
+  xpos -162
+  ypos 25
+ }
+ Switch {
+  inputs 3
+  name Switch1
+  xpos -100
+  ypos 22
+ }
+ OCIOLookTransform {
+  in_colorspace scene_linear
+  look ""
+  out_colorspace REDLog
+  name OCIOLookTransform2
+  xpos -100
+  ypos 99
+ }
+push $N822fb800
+ Premult {
+  name Premult1
+  xpos 176
+  ypos 182
+ }
+ Dot {
+  name Dot18
+  xpos 210
+  ypos 113
+ }
+ FilterErode {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.Erode.r}}
+  filter gaussian
+  name FilterErode2
+  xpos 263
+  ypos 110
+ }
+ FilterErode {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{parent.Erode.g}}
+  filter gaussian
+  name FilterErode3
+  xpos 263
+  ypos 139
+ }
+ FilterErode {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  size {{parent.Erode.b}}
+  filter gaussian
+  name FilterErode4
+  xpos 263
+  ypos 163
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.Blur.r}}
+  mix 0.285
+  name Blur2
+  xpos 263
+  ypos 187
+ }
+ Blur {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{parent.Blur.g}}
+  name Blur3
+  xpos 263
+  ypos 215
+ }
+ Blur {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  size {{parent.Blur.b}}
+  name Blur4
+  xpos 263
+  ypos 245
+ }
+push $N82315400
+ Dot {
+  name Dot34
+  xpos 71
+  ypos -277
+ }
+set N823a4000 [stack 0]
+ Dot {
+  name Dot32
+  xpos 297
+  ypos -277
+ }
+ Dot {
+  name Dot15
+  xpos 297
+  ypos 4
+ }
+set N823d5800 [stack 0]
+ Dot {
+  name Dot19
+  xpos 431
+  ypos 4
+ }
+ Colorspace {
+  colorspace_in Panalog
+  name Colorspace3
+  xpos 397
+  ypos 93
+ }
+ Merge2 {
+  inputs 2
+  mix 0.25
+  name Merge3
+  xpos 397
+  ypos 245
+ }
+ Colorspace {
+  colorspace_out Panalog
+  name Colorspace4
+  xpos 397
+  ypos 274
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch2
+  xpos -100
+  ypos 274
+ }
+push $N823a4000
+ Dot {
+  name Dot30
+  xpos 71
+  ypos 331
+ }
+set N823d4000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  maskChannelInput -rgba.alpha
+  invert_mask true
+  name Merge2
+  xpos -100
+  ypos 328
+ }
+ Group {
+  name apGlow
+  help "apGlow v1.1 by Adrian Pueyo\n\nExponential glow using a sub-frame iterative blur.\n\nWith the \"area\" input (optional) you can set only a part of the image to emit glow.\n\nCaveats:\n- This node will kill sub-frames as it relies on a floor NoTimeBlur. Do any other sub-frame operations before this!\n- NaN's will be turned black, but on rgba only.\n\nadrianpueyo.com, 2015-2018"
+  onCreate "n = nuke.thisNode()\nfor i in \['intensity','response','max_size','src_black','src_white','response']:\n    n\[i].setFlag(0x00000004)\nn\['max_size'].setRange(0,10000)\nn\['overscan'].setRange(0,1000)"
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"crop\",\"enableOverscan\"]:\n    kcv = n\[\"crop\"].value()\n    kov = n\[\"enableOverscan\"].value()\n    n\[\"enableOverscan\"].setEnabled(not kcv)\n    n\['overscan'].setEnabled(not kcv and kov)"
+  tile_color 0xe88543ff
+  xpos -230
+  ypos 322
+  disable {{parent.glow==0}}
+  addUserKnob {20 apGlow}
+  addUserKnob {41 channels T KeepWhat.channels}
+  addUserKnob {7 intensity t "Intensity multiplier for the resulting glow." R 0 10}
+  intensity {{parent.glow_intensity.r}}
+  addUserKnob {18 persistance t "Color gain of the largest step. Affects the other steps progressively, with 0 effect on the smallest one.\n\nUse as an inverse falloff or as a progressive color tint." R 0 10}
+  persistance 1
+  addUserKnob {6 persistance_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 persistance_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 tint t "Overall color multiplier for the intensity."}
+  tint 1
+  addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 tint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 effect_only l "effect only" +STARTLINE}
+  addUserKnob {26 ""}
+  addUserKnob {7 src_black l "src black" t "Black point of the source image's luminance.\nClip the effect below this luminance value." R 0 4}
+  addUserKnob {7 src_white l "src white" t "White point of the source image's luminance." R 0 4}
+  src_white 1
+  addUserKnob {41 white_clamp l clamp -STARTLINE T Grade1.white_clamp}
+  addUserKnob {7 response t "Gamma on the source image's luminance, to change the response curve falloff." R 0 4}
+  response 1
+  addUserKnob {26 ""}
+  addUserKnob {14 max_size l "max size" t "Maximum pixel size of the exponential glow." R 0 10000}
+  max_size {{parent.glow_radius.r}}
+  addUserKnob {14 falloff l "size falloff" t "Falloff adjustment on the exponential distribution of the blur sizes." R 0 10}
+  falloff {{parent.glow_falloff.r}}
+  addUserKnob {3 steps t "Number of blur iterations to combine together."}
+  steps 10
+  addUserKnob {41 filter T Blur.filter}
+  addUserKnob {41 quality l "" -STARTLINE T Blur.quality}
+  addUserKnob {6 crop l "crop to format" -STARTLINE}
+  crop true
+  addUserKnob {14 overscan +DISABLED R 0 1000}
+  overscan 100
+  addUserKnob {6 enableOverscan l enable -STARTLINE +DISABLED}
+  enableOverscan true
+  addUserKnob {26 ""}
+  addUserKnob {41 maskChannelArea l area -STARTLINE T ExpressionArea.maskChannelMask}
+  addUserKnob {41 inject_area l inject -STARTLINE T ExpressionArea.inject}
+  addUserKnob {41 invert_area l invert -STARTLINE T ExpressionArea.invert_mask}
+  addUserKnob {41 fringe_area l fringe -STARTLINE T ExpressionArea.fringe}
+  addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+  addUserKnob {41 inject -STARTLINE T Merge.inject}
+  addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+  addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+  addUserKnob {41 mix T Merge.mix}
+  addUserKnob {26 version_author l "" t "apGlow v1.1\n2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>apGlow v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2018</span>"}
+ }
+  Input {
+   inputs 0
+   name Inputmask
+   xpos -748
+   ypos 847
+   number 2
+  }
+  Input {
+   inputs 0
+   name Inputarea
+   xpos -156
+   ypos 383
+   number 1
+  }
+  Input {
+   inputs 0
+   name Inputimg
+   xpos -638
+   ypos 220
+  }
+  NoTimeBlur {
+   rounding none
+   name NTB
+   xpos -638
+   ypos 267
+  }
+  Dot {
+   name Dot6
+   xpos -604
+   ypos 308
+  }
+set N82400800 [stack 0]
+  Dot {
+   name Dot7
+   xpos -384
+   ypos 308
+  }
+set N82400400 [stack 0]
+  Dot {
+   name Dot8
+   xpos -232
+   ypos 308
+  }
+  Remove {
+   name RemoveAll
+   xpos -266
+   ypos 345
+  }
+  Expression {
+   inputs 1+1
+   channel0 rgba
+   expr0 1
+   name ExpressionArea
+   xpos -266
+   ypos 383
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Shuffle {
+   red white
+   green white
+   blue white
+   alpha white
+   name ShuffleWhite
+   xpos -266
+   ypos 409
+   disable {{"\[exists parent.input1]"}}
+  }
+push $N82400400
+  Remove {
+   operation keep
+   channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+   name KeepWhat
+   xpos -418
+   ypos 377
+  }
+add_layer {apGlowArea apGlowArea.red}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 apGlowArea.red
+   name Copy1
+   xpos -418
+   ypos 403
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Premult {
+   channels all
+   alpha apGlowArea.red
+   name Premult1
+   xpos -418
+   ypos 441
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Remove {
+   channels apGlowArea
+   name RemoveArea
+   xpos -418
+   ypos 479
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Dot {
+   name Dot5
+   xpos -384
+   ypos 532
+  }
+set N82426000 [stack 0]
+  Dot {
+   name Dot1
+   xpos -284
+   ypos 532
+  }
+  Saturation {
+   channels all
+   saturation 0
+   name Saturation1
+   xpos -318
+   ypos 572
+  }
+set N82459800 [stack 0]
+  Grade {
+   channels all
+   blackpoint {{parent.src_black}}
+   whitepoint {{parent.src_white}}
+   gamma {{parent.response}}
+   name Grade1
+   xpos -318
+   ypos 610
+  }
+push $N82426000
+push $N82459800
+  Merge2 {
+   inputs 2
+   operation divide
+   also_merge all
+   name Merge4
+   xpos -418
+   ypos 578
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   also_merge all
+   name Merge3
+   xpos -418
+   ypos 616
+  }
+  Dot {
+   name DP
+   xpos -384
+   ypos 642
+   addUserKnob {20 User}
+   addUserKnob {14 j R 0 100}
+   j {{"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"} {"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"}}
+  }
+  Blur {
+   size {{"DP.j( (t%1)+1/parent.steps) / parent.falloff"} {"DP.j( (t%1)+1/parent.steps) / parent.falloff"}}
+   crop false
+   name Blur
+   xpos -418
+   ypos 660
+  }
+  Multiply {
+   value {{"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"}}
+   name Multiply
+   xpos -418
+   ypos 699
+  }
+  TimeBlur {
+   divisions {{parent.steps}}
+   shutter 1
+   shutteroffset start
+   shuttercustomoffset 0
+   name TB
+   xpos -418
+   ypos 736
+  }
+  Multiply {
+   value {{parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0}}
+   name MultiplyR
+   xpos -418
+   ypos 762
+  }
+  Expression {
+   expr0 isnan(r)?0:r
+   expr1 isnan(g)?0:g
+   expr2 isnan(b)?0:b
+   expr3 isnan(a)?0:a
+   name NanToBlack
+   xpos -418
+   ypos 800
+  }
+push $N82400800
+  Dot {
+   name Dot4
+   xpos -604
+   ypos 582
+  }
+set N8248d000 [stack 0]
+  Dot {
+   name Dot2
+   xpos -494
+   ypos 582
+  }
+  Shuffle {
+   red black
+   green black
+   blue black
+   name Shuffle
+   xpos -528
+   ypos 660
+   disable {{!parent.effect_only}}
+  }
+  Remove {
+   operation keep
+   channels rgb
+   name Remove1
+   xpos -528
+   ypos 686
+   disable {{!parent.effect_only}}
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge1
+   xpos -528
+   ypos 800
+  }
+  Dot {
+   name Dot3
+   xpos -494
+   ypos 850
+  }
+push $N8248d000
+  Merge2 {
+   inputs 2+1
+   operation copy
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge
+   xpos -638
+   ypos 846
+  }
+  Crop {
+   box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+   intersect true
+   name CropOverscan
+   xpos -638
+   ypos 872
+   disable {{"!parent.enableOverscan && !parent.crop"}}
+  }
+  Output {
+   name Output
+   xpos -638
+   ypos 898
+  }
+ end_group
+ Group {
+  name apGlow1
+  help "apGlow v1.1 by Adrian Pueyo\n\nExponential glow using a sub-frame iterative blur.\n\nWith the \"area\" input (optional) you can set only a part of the image to emit glow.\n\nCaveats:\n- This node will kill sub-frames as it relies on a floor NoTimeBlur. Do any other sub-frame operations before this!\n- NaN's will be turned black, but on rgba only.\n\nadrianpueyo.com, 2015-2018"
+  onCreate "n = nuke.thisNode()\nfor i in \['intensity','response','max_size','src_black','src_white','response']:\n    n\[i].setFlag(0x00000004)\nn\['max_size'].setRange(0,10000)\nn\['overscan'].setRange(0,1000)"
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"crop\",\"enableOverscan\"]:\n    kcv = n\[\"crop\"].value()\n    kov = n\[\"enableOverscan\"].value()\n    n\[\"enableOverscan\"].setEnabled(not kcv)\n    n\['overscan'].setEnabled(not kcv and kov)"
+  tile_color 0xe88543ff
+  xpos -230
+  ypos 410
+  disable {{parent.glow==0}}
+  addUserKnob {20 apGlow}
+  addUserKnob {41 channels T KeepWhat.channels}
+  addUserKnob {7 intensity t "Intensity multiplier for the resulting glow." R 0 10}
+  intensity {{parent.glow_intensity.g}}
+  addUserKnob {18 persistance t "Color gain of the largest step. Affects the other steps progressively, with 0 effect on the smallest one.\n\nUse as an inverse falloff or as a progressive color tint." R 0 10}
+  persistance 1
+  addUserKnob {6 persistance_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 persistance_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 tint t "Overall color multiplier for the intensity."}
+  tint 1
+  addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 tint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 effect_only l "effect only" +STARTLINE}
+  addUserKnob {26 ""}
+  addUserKnob {7 src_black l "src black" t "Black point of the source image's luminance.\nClip the effect below this luminance value." R 0 4}
+  addUserKnob {7 src_white l "src white" t "White point of the source image's luminance." R 0 4}
+  src_white 1
+  addUserKnob {41 white_clamp l clamp -STARTLINE T Grade1.white_clamp}
+  addUserKnob {7 response t "Gamma on the source image's luminance, to change the response curve falloff." R 0 4}
+  response 1
+  addUserKnob {26 ""}
+  addUserKnob {14 max_size l "max size" t "Maximum pixel size of the exponential glow." R 0 10000}
+  max_size {{parent.glow_radius.g}}
+  addUserKnob {14 falloff l "size falloff" t "Falloff adjustment on the exponential distribution of the blur sizes." R 0 10}
+  falloff {{parent.glow_falloff.g}}
+  addUserKnob {3 steps t "Number of blur iterations to combine together."}
+  steps 10
+  addUserKnob {41 filter T Blur.filter}
+  addUserKnob {41 quality l "" -STARTLINE T Blur.quality}
+  addUserKnob {6 crop l "crop to format" -STARTLINE}
+  crop true
+  addUserKnob {14 overscan +DISABLED R 0 1000}
+  overscan 100
+  addUserKnob {6 enableOverscan l enable -STARTLINE +DISABLED}
+  enableOverscan true
+  addUserKnob {26 ""}
+  addUserKnob {41 maskChannelArea l area -STARTLINE T ExpressionArea.maskChannelMask}
+  addUserKnob {41 inject_area l inject -STARTLINE T ExpressionArea.inject}
+  addUserKnob {41 invert_area l invert -STARTLINE T ExpressionArea.invert_mask}
+  addUserKnob {41 fringe_area l fringe -STARTLINE T ExpressionArea.fringe}
+  addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+  addUserKnob {41 inject -STARTLINE T Merge.inject}
+  addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+  addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+  addUserKnob {41 mix T Merge.mix}
+  addUserKnob {26 version_author l "" t "apGlow v1.1\n2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>apGlow v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2018</span>"}
+ }
+  Input {
+   inputs 0
+   name Inputmask
+   xpos -748
+   ypos 847
+   number 2
+  }
+  Input {
+   inputs 0
+   name Inputarea
+   xpos -156
+   ypos 383
+   number 1
+  }
+  Input {
+   inputs 0
+   name Inputimg
+   xpos -638
+   ypos 220
+  }
+  NoTimeBlur {
+   rounding none
+   name NTB
+   xpos -638
+   ypos 267
+  }
+  Dot {
+   name Dot6
+   xpos -604
+   ypos 308
+  }
+set N824e3c00 [stack 0]
+  Dot {
+   name Dot7
+   xpos -384
+   ypos 308
+  }
+set N824e3800 [stack 0]
+  Dot {
+   name Dot8
+   xpos -232
+   ypos 308
+  }
+  Remove {
+   name RemoveAll
+   xpos -266
+   ypos 345
+  }
+  Expression {
+   inputs 1+1
+   channel0 rgba
+   expr0 1
+   name ExpressionArea
+   xpos -266
+   ypos 383
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Shuffle {
+   red white
+   green white
+   blue white
+   alpha white
+   name ShuffleWhite
+   xpos -266
+   ypos 409
+   disable {{"\[exists parent.input1]"}}
+  }
+push $N824e3800
+  Remove {
+   operation keep
+   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+   name KeepWhat
+   xpos -418
+   ypos 377
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 apGlowArea.red
+   name Copy1
+   xpos -418
+   ypos 403
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Premult {
+   channels all
+   alpha apGlowArea.red
+   name Premult1
+   xpos -418
+   ypos 441
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Remove {
+   channels apGlowArea
+   name RemoveArea
+   xpos -418
+   ypos 479
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Dot {
+   name Dot5
+   xpos -384
+   ypos 532
+  }
+set N834df400 [stack 0]
+  Dot {
+   name Dot1
+   xpos -284
+   ypos 532
+  }
+  Saturation {
+   channels all
+   saturation 0
+   name Saturation1
+   xpos -318
+   ypos 572
+  }
+set N834dec00 [stack 0]
+  Grade {
+   channels all
+   blackpoint {{parent.src_black}}
+   whitepoint {{parent.src_white}}
+   gamma {{parent.response}}
+   name Grade1
+   xpos -318
+   ypos 610
+  }
+push $N834df400
+push $N834dec00
+  Merge2 {
+   inputs 2
+   operation divide
+   also_merge all
+   name Merge4
+   xpos -418
+   ypos 578
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   also_merge all
+   name Merge3
+   xpos -418
+   ypos 616
+  }
+  Dot {
+   name DP
+   xpos -384
+   ypos 642
+   addUserKnob {20 User}
+   addUserKnob {14 j R 0 100}
+   j {{"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"} {"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"}}
+  }
+  Blur {
+   size {{"DP.j( (t%1)+1/parent.steps) / parent.falloff"} {"DP.j( (t%1)+1/parent.steps) / parent.falloff"}}
+   crop false
+   name Blur
+   xpos -418
+   ypos 660
+  }
+  Multiply {
+   value {{"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"}}
+   name Multiply
+   xpos -418
+   ypos 699
+  }
+  TimeBlur {
+   divisions {{parent.steps}}
+   shutter 1
+   shutteroffset start
+   shuttercustomoffset 0
+   name TB
+   xpos -418
+   ypos 736
+  }
+  Multiply {
+   value {{parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0}}
+   name MultiplyR
+   xpos -418
+   ypos 762
+  }
+  Expression {
+   expr0 isnan(r)?0:r
+   expr1 isnan(g)?0:g
+   expr2 isnan(b)?0:b
+   expr3 isnan(a)?0:a
+   name NanToBlack
+   xpos -418
+   ypos 800
+  }
+push $N824e3c00
+  Dot {
+   name Dot4
+   xpos -604
+   ypos 582
+  }
+set N8350e400 [stack 0]
+  Dot {
+   name Dot2
+   xpos -494
+   ypos 582
+  }
+  Shuffle {
+   red black
+   green black
+   blue black
+   name Shuffle
+   xpos -528
+   ypos 660
+   disable {{!parent.effect_only}}
+  }
+  Remove {
+   operation keep
+   channels rgb
+   name Remove1
+   xpos -528
+   ypos 686
+   disable {{!parent.effect_only}}
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge1
+   xpos -528
+   ypos 800
+  }
+  Dot {
+   name Dot3
+   xpos -494
+   ypos 850
+  }
+push $N8350e400
+  Merge2 {
+   inputs 2+1
+   operation copy
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge
+   xpos -638
+   ypos 846
+  }
+  Crop {
+   box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+   intersect true
+   name CropOverscan
+   xpos -638
+   ypos 872
+   disable {{"!parent.enableOverscan && !parent.crop"}}
+  }
+  Output {
+   name Output
+   xpos -638
+   ypos 898
+  }
+ end_group
+ Group {
+  name apGlow2
+  help "apGlow v1.1 by Adrian Pueyo\n\nExponential glow using a sub-frame iterative blur.\n\nWith the \"area\" input (optional) you can set only a part of the image to emit glow.\n\nCaveats:\n- This node will kill sub-frames as it relies on a floor NoTimeBlur. Do any other sub-frame operations before this!\n- NaN's will be turned black, but on rgba only.\n\nadrianpueyo.com, 2015-2018"
+  onCreate "n = nuke.thisNode()\nfor i in \['intensity','response','max_size','src_black','src_white','response']:\n    n\[i].setFlag(0x00000004)\nn\['max_size'].setRange(0,10000)\nn\['overscan'].setRange(0,1000)"
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"crop\",\"enableOverscan\"]:\n    kcv = n\[\"crop\"].value()\n    kov = n\[\"enableOverscan\"].value()\n    n\[\"enableOverscan\"].setEnabled(not kcv)\n    n\['overscan'].setEnabled(not kcv and kov)"
+  tile_color 0xe88543ff
+  xpos -98
+  ypos 410
+  disable {{parent.glow==0}}
+  addUserKnob {20 apGlow}
+  addUserKnob {41 channels T KeepWhat.channels}
+  addUserKnob {7 intensity t "Intensity multiplier for the resulting glow." R 0 10}
+  intensity {{parent.glow_intensity.b}}
+  addUserKnob {18 persistance t "Color gain of the largest step. Affects the other steps progressively, with 0 effect on the smallest one.\n\nUse as an inverse falloff or as a progressive color tint." R 0 10}
+  persistance 1
+  addUserKnob {6 persistance_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 persistance_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 tint t "Overall color multiplier for the intensity."}
+  tint 1
+  addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 tint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 effect_only l "effect only" +STARTLINE}
+  addUserKnob {26 ""}
+  addUserKnob {7 src_black l "src black" t "Black point of the source image's luminance.\nClip the effect below this luminance value." R 0 4}
+  addUserKnob {7 src_white l "src white" t "White point of the source image's luminance." R 0 4}
+  src_white 1
+  addUserKnob {41 white_clamp l clamp -STARTLINE T Grade1.white_clamp}
+  addUserKnob {7 response t "Gamma on the source image's luminance, to change the response curve falloff." R 0 4}
+  response 1
+  addUserKnob {26 ""}
+  addUserKnob {14 max_size l "max size" t "Maximum pixel size of the exponential glow." R 0 10000}
+  max_size {{parent.glow_radius.b}}
+  addUserKnob {14 falloff l "size falloff" t "Falloff adjustment on the exponential distribution of the blur sizes." R 0 10}
+  falloff {{parent.glow_falloff.b}}
+  addUserKnob {3 steps t "Number of blur iterations to combine together."}
+  steps 10
+  addUserKnob {41 filter T Blur.filter}
+  addUserKnob {41 quality l "" -STARTLINE T Blur.quality}
+  addUserKnob {6 crop l "crop to format" -STARTLINE}
+  crop true
+  addUserKnob {6 enableOverscan l enable +DISABLED +STARTLINE}
+  enableOverscan true
+  addUserKnob {14 overscan +DISABLED R 0 1000}
+  overscan 100
+  addUserKnob {26 ""}
+  addUserKnob {41 maskChannelArea l area -STARTLINE T ExpressionArea.maskChannelMask}
+  addUserKnob {41 inject_area l inject -STARTLINE T ExpressionArea.inject}
+  addUserKnob {41 invert_area l invert -STARTLINE T ExpressionArea.invert_mask}
+  addUserKnob {41 fringe_area l fringe -STARTLINE T ExpressionArea.fringe}
+  addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+  addUserKnob {41 inject -STARTLINE T Merge.inject}
+  addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+  addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+  addUserKnob {41 mix T Merge.mix}
+  addUserKnob {26 version_author l "" t "apGlow v1.1\n2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>apGlow v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2018</span>"}
+ }
+  Input {
+   inputs 0
+   name Inputmask
+   xpos -748
+   ypos 847
+   number 2
+  }
+  Input {
+   inputs 0
+   name Inputarea
+   xpos -156
+   ypos 383
+   number 1
+  }
+  Input {
+   inputs 0
+   name Inputimg
+   xpos -638
+   ypos 220
+  }
+  NoTimeBlur {
+   rounding none
+   name NTB
+   xpos -638
+   ypos 267
+  }
+  Dot {
+   name Dot6
+   xpos -604
+   ypos 308
+  }
+set N83567000 [stack 0]
+  Dot {
+   name Dot7
+   xpos -384
+   ypos 308
+  }
+set N83566c00 [stack 0]
+  Dot {
+   name Dot8
+   xpos -232
+   ypos 308
+  }
+  Remove {
+   name RemoveAll
+   xpos -266
+   ypos 345
+  }
+  Expression {
+   inputs 1+1
+   channel0 rgba
+   expr0 1
+   name ExpressionArea
+   xpos -266
+   ypos 383
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Shuffle {
+   red white
+   green white
+   blue white
+   alpha white
+   name ShuffleWhite
+   xpos -266
+   ypos 409
+   disable {{"\[exists parent.input1]"}}
+  }
+push $N83566c00
+  Remove {
+   operation keep
+   channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+   name KeepWhat
+   xpos -418
+   ypos 377
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 apGlowArea.red
+   name Copy1
+   xpos -418
+   ypos 403
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Premult {
+   channels all
+   alpha apGlowArea.red
+   name Premult1
+   xpos -418
+   ypos 441
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Remove {
+   channels apGlowArea
+   name RemoveArea
+   xpos -418
+   ypos 479
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Dot {
+   name Dot5
+   xpos -384
+   ypos 532
+  }
+set N83586800 [stack 0]
+  Dot {
+   name Dot1
+   xpos -284
+   ypos 532
+  }
+  Saturation {
+   channels all
+   saturation 0
+   name Saturation1
+   xpos -318
+   ypos 572
+  }
+set N83586000 [stack 0]
+  Grade {
+   channels all
+   blackpoint {{parent.src_black}}
+   whitepoint {{parent.src_white}}
+   gamma {{parent.response}}
+   name Grade1
+   xpos -318
+   ypos 610
+  }
+push $N83586800
+push $N83586000
+  Merge2 {
+   inputs 2
+   operation divide
+   also_merge all
+   name Merge4
+   xpos -418
+   ypos 578
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   also_merge all
+   name Merge3
+   xpos -418
+   ypos 616
+  }
+  Dot {
+   name DP
+   xpos -384
+   ypos 642
+   addUserKnob {20 User}
+   addUserKnob {14 j R 0 100}
+   j {{"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"} {"pow(2, t*(log(parent.max_size*parent.falloff)/log(2)) )"}}
+  }
+  Blur {
+   size {{"DP.j( (t%1)+1/parent.steps) / parent.falloff"} {"DP.j( (t%1)+1/parent.steps) / parent.falloff"}}
+   crop false
+   name Blur
+   xpos -418
+   ypos 660
+  }
+  Multiply {
+   value {{"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"} {"parent.persistance * (t%1) + (1-t%1)"}}
+   name Multiply
+   xpos -418
+   ypos 699
+  }
+  TimeBlur {
+   divisions {{parent.steps}}
+   shutter 1
+   shutteroffset start
+   shuttercustomoffset 0
+   name TB
+   xpos -418
+   ypos 736
+  }
+  Multiply {
+   value {{parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0} {parent.steps?parent.intensity*parent.tint:0}}
+   name MultiplyR
+   xpos -418
+   ypos 762
+  }
+  Expression {
+   expr0 isnan(r)?0:r
+   expr1 isnan(g)?0:g
+   expr2 isnan(b)?0:b
+   expr3 isnan(a)?0:a
+   name NanToBlack
+   xpos -418
+   ypos 800
+  }
+push $N83567000
+  Dot {
+   name Dot4
+   xpos -604
+   ypos 582
+  }
+set N835e5800 [stack 0]
+  Dot {
+   name Dot2
+   xpos -494
+   ypos 582
+  }
+  Shuffle {
+   red black
+   green black
+   blue black
+   name Shuffle
+   xpos -528
+   ypos 660
+   disable {{!parent.effect_only}}
+  }
+  Remove {
+   operation keep
+   channels rgb
+   name Remove1
+   xpos -528
+   ypos 686
+   disable {{!parent.effect_only}}
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge1
+   xpos -528
+   ypos 800
+  }
+  Dot {
+   name Dot3
+   xpos -494
+   ypos 850
+  }
+push $N835e5800
+  Merge2 {
+   inputs 2+1
+   operation copy
+   output {rgba.red rgba.green rgba.blue -rgba.alpha}
+   also_merge all
+   name Merge
+   xpos -638
+   ypos 846
+  }
+  Crop {
+   box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+   intersect true
+   name CropOverscan
+   xpos -638
+   ypos 872
+   disable {{"!parent.enableOverscan && !parent.crop"}}
+  }
+  Output {
+   name Output
+   xpos -638
+   ypos 898
+  }
+ end_group
+ OFXuk.co.thefoundry.furnace.f_regrain_v403 {
+  inputs 2
+  grainType "Preset Stock"
+  presetStock "FUJIF250Under 2K"
+  amount 2
+  size 1
+  output Result
+  "Analysis Region" 0
+  regionBL {921.5999756 700.1999815}
+  regionTR {1126.400024 855.8000185}
+  frame 1
+  grainColourSpace sRGB
+  Advanced 0
+  processRed true
+  redAmount 1
+  redSize 1
+  processGreen true
+  greenAmount 1
+  greenSize 1
+  processBlue true
+  blueAmount 1
+  blueSize 1
+  "Grain Response" 0
+  srcColourSpace "Grain Colour Space"
+  lowGain 0
+  midGain 1.5
+  highGain 1
+  useResponse false
+  responseMix 1
+  drawResponse false
+  needsGrainSample true
+  notBeenAnalysed true
+  grainClipNeeded true
+  inputHasChanged false
+  responseR0Counts 0
+  responseR0Samples 0
+  responseG0Counts 0
+  responseG0Samples 0
+  responseB0Counts 0
+  responseB0Samples 0
+  responseR1Counts 0
+  responseR1Samples 0
+  responseG1Counts 0
+  responseG1Samples 0
+  responseB1Counts 0
+  responseB1Samples 0
+  responseR2Counts 0
+  responseR2Samples 0
+  responseG2Counts 0
+  responseG2Samples 0
+  responseB2Counts 0
+  responseB2Samples 0
+  responseR3Counts 0
+  responseR3Samples 0
+  responseG3Counts 0
+  responseG3Samples 0
+  responseB3Counts 0
+  responseB3Samples 0
+  responseR4Counts 0
+  responseR4Samples 0
+  responseG4Counts 0
+  responseG4Samples 0
+  responseB4Counts 0
+  responseB4Samples 0
+  responseR5Counts 0
+  responseR5Samples 0
+  responseG5Counts 0
+  responseG5Samples 0
+  responseB5Counts 0
+  responseB5Samples 0
+  responseR6Counts 0
+  responseR6Samples 0
+  responseG6Counts 0
+  responseG6Samples 0
+  responseB6Counts 0
+  responseB6Samples 0
+  responseR7Counts 0
+  responseR7Samples 0
+  responseG7Counts 0
+  responseG7Samples 0
+  responseB7Counts 0
+  responseB7Samples 0
+  responseR8Counts 0
+  responseR8Samples 0
+  responseG8Counts 0
+  responseG8Samples 0
+  responseB8Counts 0
+  responseB8Samples 0
+  responseR9Counts 0
+  responseR9Samples 0
+  responseG9Counts 0
+  responseG9Samples 0
+  responseB9Counts 0
+  responseB9Samples 0
+  grainSample ""
+  cacheBreaker true
+  name F_ReGrain1
+  xpos -98
+  ypos 476
+  disable {{parent.grain==0}}
+ }
+push $N823d4000
+ Dot {
+  name Dot36
+  xpos 71
+  ypos 521
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -98
+  ypos 518
+ }
+ Switch {
+  inputs 2
+  which {{parent.alpha}}
+  name Switch3
+  xpos -98
+  ypos 689
+ }
+push $N823d5800
+ Dot {
+  name Dot10
+  xpos 127
+  ypos 4
+ }
+ Dot {
+  name Dot27
+  xpos 127
+  ypos 750
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge1
+  xpos -98
+  ypos 747
+ }
+ Shuffle2 {
+  fromInput1 {{0} B}
+  in1 alpha
+  fromInput2 {{0} B}
+  mappings "4 black -1 -1 rgba.alpha 0 3 rgba.alpha 0 0 rgba.red 0 0 rgba.alpha 0 0 rgba.green 0 1 rgba.alpha 0 0 rgba.blue 0 2"
+  name Shuffle1
+  xpos -97
+  ypos 795
+  disable {{parent.alpha==0}}
+ }
+ Output {
+  name Output1
+  xpos -97
+  ypos 861
+ }
+end_group

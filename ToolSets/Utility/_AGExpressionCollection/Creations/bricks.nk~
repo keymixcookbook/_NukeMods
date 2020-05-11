@@ -1,0 +1,28 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 dimension_width
+ temp_expr0 size*width_brick
+ temp_name1 difference_size
+ temp_expr1 size
+ temp_name2 dimension_height
+ temp_expr2 size
+ expr0 "floor(y/size)%2 == 0? (x%(dimension_width*scale))/(difference_size*width_brick*scale) : ((x+offset)%dimension_width)/(difference_size*width_brick)"
+ expr1 "floor(y/size)%2 == 0? (y%dimension_height)/(difference_size) : ((y)%dimension_height)/(difference_size)"
+ name bricks
+ selected true
+ xpos 131
+ ypos -64
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0 200}
+ size 71
+ addUserKnob {7 offset R 0 100}
+ addUserKnob {7 scale R 0 6}
+ scale 1
+ addUserKnob {26 ""}
+ addUserKnob {7 width_brick R 0 5}
+ width_brick 2
+ addUserKnob {3 random_value l INVISIBLE +INVISIBLE}
+ random_value 61
+}
