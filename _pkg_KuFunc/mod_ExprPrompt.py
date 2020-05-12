@@ -1,8 +1,9 @@
 def _version_():
 	ver='''
 
-	version 1.0
-	- add preset buttons
+	version 1.1
+	- add preset buttons and input autocomplet presets
+	- add button to cycle channels
 
 	version 0.0
 	- Expression node with prompt options
@@ -12,6 +13,7 @@ def _version_():
 
 	'''
 	return ver
+
 
 
 
@@ -29,17 +31,41 @@ import re
 
 
 
+
 #------------------------------------------------------------------------------
 #-Variable
 #------------------------------------------------------------------------------
 
 
 
-PRESET = [
+
+PRESET_LINE = [
 	'rgb', 'rgba', 'alpha', 'max(r,g,b)', 'min(r,g,b)', 'a>0',
 	'r/g', 'r/b', 'g/r', 'g/b', 'b/r', 'b/g',
 	'isinf($ch)?$ch(x+1,y):$ch','isnan($ch)?$ch(x-1,y):$ch',
 ]
+
+PRESET_BTN = {
+	'STMap': [
+		('expr0','(x+0.5)/width'),
+		('expr1','(y+0.5)/height')
+		],
+	'Luma-Rec709': [
+		('expr0', 'r*0.2126+g*0.7152+b*0.0722'),
+		('channel0','rgb')
+		],
+	'Raw Lighting': [
+		('expr0', 'rgba.red/<albeto>.red'),
+		('expr1', 'rgba.green/<albeto>.green'),
+		('expr2', 'rgba.blue/<albeto>.blue')
+		],
+	'Depth Normalize': [
+		('channel0', 'depth'),
+		('expr0', 'z==0?0:1/z')
+		]
+}
+
+TITLE = "ExprPrompt"
 
 
 
@@ -55,15 +81,14 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_ExprPrompt, self).__init__()
 		# set
-		self.ls_layers = PRESET
+		self.ls_layers = PRESET_LINE
 
 		# Left Widgets
-		self.title = QtWidgets.QLabel("<b>ExprPrompt v1.0</b>")
+		self.title = QtWidgets.QLabel("<h3>%s</h3>" % TITLE)
 		self.st_expr = QtWidgets.QLineEdit()
 		self.st_expr.setPlaceholderText('$ly: layer (Id06), $ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
 		self.st_expr.setCompleter(QtWidgets.QCompleter(self.ls_layers))
-		#self.st_expr.keyPressEvent(self, event)
 		self.st_expr.textChanged.connect(self.onTextChanged)
 		self.mu_layers = QtWidgets.QComboBox()
 		self.mu_layers.setEnabled(False)
@@ -79,7 +104,10 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.bt_set.clicked.connect(self.onPressed)
 
 		# Right Widgets
-		self.presetBtn1=QtWidgets.QPushButton('UV')
+		for idx, p in enumerate(PRESET_BTN.keys()):
+			exec("self.presetBtn%s=QtWidgets.QPushButton('%s')" % (idx, p))
+			exec("self.presetBtn%s.clicked.connect(self.setPreset)" % (idx))
+
 
 		self.ls_ch_layer = [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b, self.ck_ch_a]
 		self.ls_wrapper = [self.ck_clamp, self.ck_invert]
@@ -87,32 +115,44 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		# define layouts
 		self.layout_master = QtWidgets.QHBoxLayout()
 		self.layout_main = QtWidgets.QVBoxLayout()
+		self.layout_expr = QtWidgets.QHBoxLayout()
+		self.preset_group = QtWidgets.QGroupBox('presets:')
 		self.layout_right = QtWidgets.QVBoxLayout()
+		self.preset_group.setLayout(self.layout_right)
 		self.layout_channels = QtWidgets.QHBoxLayout()
 		self.layout_wrappers = QtWidgets.QHBoxLayout()
 		self.layout_wrappers.setAlignment(QtCore.Qt.AlignLeft)
+
 		# add widgets and set layouts
-		self.setMaximumWidth(200)
-		self.mu_layers.setMaximumWidth(70)
 		for m in [self.st_expr, self.mu_layers]:
-			self.layout_main.addWidget(m)
+			self.layout_expr.addWidget(m)
 		for c in [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b,self.ck_ch_a, self.bt_ch_all]:
 			self.layout_channels.addWidget(c)
 		for w in [self.ck_clamp, self.ck_invert]:
 			self.layout_wrappers.addWidget(w)
 
+		# Main Layout
 		self.layout_main.addWidget(self.title)
-		self.layout_right.addWidget(self.presetBtn1)
-		self.layout_master.addLayout(self.layout_main)
-		self.layout_master.addLayout(self.layout_right)
-
+		self.layout_main.addLayout(self.layout_expr)
 		self.layout_main.addLayout(self.layout_channels)
 		self.layout_main.addLayout(self.layout_wrappers)
 		self.layout_main.addWidget(self.bt_set)
+
+		# Right Layout
+		# self.layout_right.addStretch()
+		for idx, p in enumerate(PRESET_BTN.keys()):
+			eval('self.layout_right.addWidget(self.presetBtn%s)' % idx)
+		self.layout_right.addStretch()
+
+		# Master Layout
+		self.layout_master.addLayout(self.layout_main)
+		self.layout_master.addWidget(self.preset_group)
 		self.setLayout(self.layout_master)
 
-		#self.resize(400,240)
-		self.setWindowTitle("ExprPrompt")
+		self.setMaximumWidth(400)
+		self.mu_layers.setMaximumWidth(70)
+
+		self.setWindowTitle(TITLE)
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefault()
@@ -156,7 +196,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			self.prevExpr = None
 
 		self.st_expr.setText(self.prevExpr)
-		print self.prevExpr
+		# print self.prevExpr
 
 		return self.prevExpr
 
@@ -278,6 +318,41 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 		self.node = node_expr
 		return [node_expr, node_sel]
+
+
+	def setPreset(self):
+		'''Called when preset button is pressed'''
+		thisBtn=self.sender().text()
+		thisPreset=PRESET_BTN[thisBtn]
+		thisNode=self.node
+
+		def setKnobValue(kvPaire, *strSub):
+			'''set knob value
+			@kvPaire: (<knob>, <value>)
+			@*strSub: string to replace if any, (replaceThis, withThis)
+			'''
+			pKnob, pValue = kvPaire
+			if len(strSub)>0 and len(strSub)==2:
+				pValue=re.sub(strSub[0], strSub[1], pValue)
+			else:
+				pValue
+
+			self.node[pKnob].setValue(pValue)
+
+		if thisBtn=='Raw Lighting':
+			p=nuke.Panel('Select the albeto pass')
+			p.addEnumerationPulldown('aov', ' '.join(nuke.layers()))
+			if p.show():
+				albeto=p.value('aov')
+				for k in thisPreset:
+					setKnobValue(k, '<albeto>', albeto)
+		else:
+			for k in thisPreset:
+				setKnobValue(k)
+
+		self.node['label'].setValue(thisBtn)
+		self.close()
+
 
 	def run(self):
 		'''run the instance'''
