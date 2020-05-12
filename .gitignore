@@ -20,6 +20,8 @@ nukePyDummy.py
 /_mod_Drafts/__init__.py
 tab_stats.dat
 *.ai
+.DS_Store
+tab_stats.dat
 
 
 ### OSX ###
