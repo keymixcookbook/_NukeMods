@@ -7,7 +7,7 @@ from Qt import QtWidgets, QtGui, QtCore
 
 class Core__PySidePanel_(QtWidgets.QWidget):
     def __init__(self):
-        super(_PySidePanel_, self).__init__()
+        super(Core_PySidePanel_, self).__init__()
 
 
     def setDefault(self):
