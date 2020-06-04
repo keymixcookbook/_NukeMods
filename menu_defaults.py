@@ -32,8 +32,10 @@ nuke.knobDefault('Remove.label', '[value channels]')
 nuke.knobDefault('Switch.which', '1')
 nuke.knobDefault('Switch.label', '[value which]')
 
-nuke.knobDefault('log2lin.label', '[value operation]')
-nuke.knobDefault('log2lin1.operation', 'lin2log')
+nuke.knobDefault('Log2Lin1.label', '[value operation]')
+nuke.knobDefault('Log2Lin1.operation', 'lin2log')
+nuke.knobDefault('OCIOLogConvert.label', '[value operation]')
+nuke.knobDefault('OCIOLogConvert.operation', 'lin2log')
 
 nuke.knobDefault('StickyNote.note_font', 'bold')
 nuke.knobDefault('StickyNote.note_font_size', '24')
@@ -45,6 +47,8 @@ nuke.knobDefault('IBKColourV3.Size', '1')
 nuke.knobDefault('Shuffle.label', '[value in]')
 nuke.knobDefault('Roto.cliptype', 'no clip')
 nuke.knobDefault('Rotopaint.cliptype', 'no clip')
+nuke.knobDefault('Constant.channels', 'rgba')
+nuke.knobDefault('Constant.color', '[0.18, 0.18, 0.18, 1.0]')
 
 ### Viewer Node ###
 nuke.knobDefault('Viewer.frame_increment', '8')
@@ -55,10 +59,6 @@ nuke.knobDefault('Viewer.hide_input', 'True')
 
 ########## Nuke OnStartUp ##########
 # nuke.addOnUserCreate(function, nodeClass='Class')
-
-
-
-
 # nuke.addOnCreate(mod_StudioENV.StudioENV, nodeClass='Root')
 
 def viewerSetting():
