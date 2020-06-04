@@ -10,9 +10,8 @@
 
 import os, nuke
 
-# Load pkgStudio modules
-#STUDIO = os.getenv("KU_STUDIO_ENV")
-#__import__('pkgStudio_%s' % STUDIO, globals=globals())
+
+
 
 def LoadSlate():
     '''load slate variables per studio'''
@@ -27,6 +26,11 @@ def LoadSlate():
     STUDIO = os.getenv("KU_STUDIO_ENV")
 
     if STUDIO=='kuhq':
+        if os.getenv('KP_SHELL')=='CMD':
+            SHOW    = os.getenv(SLATE[STUDIO][1])
+            SCENE   = os.getenv(SLATE[STUDIO][2])
+            SHOT    = os.getenv(SLATE[STUDIO][3])
+        else:
         # Transfer enviroment variable from WSL to Win
         SHOW, SCENE, SHOT = os.getenv(SLATE[STUDIO][0]).split(':')
     else:
