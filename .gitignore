@@ -21,7 +21,7 @@ nukePyDummy.py
 tab_stats.dat
 *.ai
 .DS_Store
-tab_stats.dat
+*/tab_stats.dat
 
 
 ### OSX ###
