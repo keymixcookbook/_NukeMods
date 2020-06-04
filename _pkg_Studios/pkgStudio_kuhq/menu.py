@@ -6,15 +6,16 @@ from pkgStudio_kuhq import *
 
 
 mu = nuke.menu('Nuke').addMenu('KUHQ')
-mu.addCommand('Sequence Loader', 'mod_SequenceLoader.SequenceLoader()')
+mu.addCommand('Sequence Loader', 'mod_SequenceLoader.SequenceLoader.run()')
 mu.addCommand('Write', 'mod_KuWrite.KuWrite()','w')
-mu.addCommand('Read from Write', 'menu.readFromWrite()','alt+w')
+mu.addCommand('Read from Write', 'readFromWrite()','alt+r')
+mu.addCommand('rving', 'launchRV()','f2')
 
 
 
 def readFromWrite():
     '''create read from write'''
-    for n in nuke.selectedNodes('Read'):
+    for n in nuke.selectedNodes('Write'):
         path = os.path.dirname(n['file'].value())
         exrs = nuke.getFileNameList(path)[0] # ['albedo_1k_v001.####.exr 1-96']
         frames, range = exrs.split(' ')
@@ -28,3 +29,11 @@ def readFromWrite():
             last=last,
             label=os.path.basename(path)
             )
+
+def launchRV():
+    '''launch selected read nodes with RV'''
+    path_read = [nuke.filename(n) for n in nuke.selectedNodes('Read')]
+
+    if path_read:
+        cmd = "rv -c -over %s &" % ' '.join(path_read)
+        os.system(cmd)
