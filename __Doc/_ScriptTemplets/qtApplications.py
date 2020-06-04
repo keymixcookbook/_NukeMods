@@ -1,4 +1,4 @@
-import nuke, nukescripts
+import nuke, nukescripts,sys
 from Qt import QtWidgets, QtGui, QtCore
 
 
@@ -7,7 +7,7 @@ from Qt import QtWidgets, QtGui, QtCore
 
 class Core__PySidePanel_(QtWidgets.QWidget):
     def __init__(self):
-        super(Core_PySidePanel_, self).__init__()
+        super(Core__PySidePanel_, self).__init__()
 
 
     def setDefault(self):
@@ -22,7 +22,7 @@ class Core__PySidePanel_(QtWidgets.QWidget):
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     _PySidePanel_ = Core__PySidePanel_()
     _PySidePanel_.run()
     app.exec_()
