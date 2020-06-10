@@ -31,6 +31,12 @@ ELEMENTS_DIR = joinPath(SHOT_DIR, 'assets', 'elements/')
 DELIVERY_DIR = joinPath(SHOW_DIR, '_delivery/')
 SHOW_TOOL_DIR = joinPath(SHOW_DIR, 'showtools/')
 
+NUKE_DIR = joinPath(SHOW_DIR, 'workbench', 'nuke/')
+MAYA_DIR = joinPath(SHOW_DIR, 'workbench', 'maya/scenes/')
+BLENDER_DIR = joinPath(SHOW_DIR, 'workbench', 'blender/')
+PS_DIR = joinPath(SHOW_DIR, 'workbench', 'ps/')
+AE_DIR = joinPath(SHOW_DIR, 'workbench', 'ae/')
+
 SHOW_CONFIG, SHOT_CONFIG = None, None
 try:
     with open(SHOW_CONFIG_FILE, 'r') as f:

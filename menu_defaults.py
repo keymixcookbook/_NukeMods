@@ -48,7 +48,7 @@ nuke.knobDefault('Shuffle.label', '[value in]')
 nuke.knobDefault('Roto.cliptype', 'no clip')
 nuke.knobDefault('Rotopaint.cliptype', 'no clip')
 nuke.knobDefault('Constant.channels', 'rgba')
-nuke.knobDefault('Constant.color', '[0.18, 0.18, 0.18, 1.0]')
+nuke.knobDefault('Constant.color', '0.18 0.18 0.18 1.0')
 
 ### Viewer Node ###
 nuke.knobDefault('Viewer.frame_increment', '8')

@@ -347,5 +347,5 @@ def render_node(node):
         print("user cancelled")
 
 
-KuWrite()
+# KuWrite()
 # render_node(nuke.toNode('KuWrite1'))

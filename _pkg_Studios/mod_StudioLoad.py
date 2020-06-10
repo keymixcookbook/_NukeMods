@@ -8,7 +8,7 @@
 
 
 
-import os, nuke
+import os
 
 
 
@@ -26,13 +26,14 @@ def LoadSlate():
     STUDIO = os.getenv("KU_STUDIO_ENV")
 
     if STUDIO=='kuhq':
-        if os.getenv('KP_SHELL')=='CMD':
+        shell = os.getenv('KP_SHELL')
+        if shell=="CMD":
             SHOW    = os.getenv(SLATE[STUDIO][1])
             SCENE   = os.getenv(SLATE[STUDIO][2])
             SHOT    = os.getenv(SLATE[STUDIO][3])
         else:
-        # Transfer enviroment variable from WSL to Win
-        SHOW, SCENE, SHOT = os.getenv(SLATE[STUDIO][0]).split(':')
+            # Transfer enviroment variable from WSL to Win
+            SHOW, SCENE, SHOT = os.getenv(SLATE[STUDIO][0]).split(':')
     else:
         SHOW    = os.getenv(SLATE[STUDIO][0])
         SCENE   = os.getenv(SLATE[STUDIO][1])
