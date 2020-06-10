@@ -5,9 +5,9 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
-class Core__PySidePanel_(QtWidgets.QWidget):
+class Core_PYSIDEPANEL(QtWidgets.QWidget):
     def __init__(self):
-        super(Core__PySidePanel_, self).__init__()
+        super(Core_PYSIDEPANEL, self).__init__()
 
 
     def setDefault(self):
@@ -23,9 +23,9 @@ class Core__PySidePanel_(QtWidgets.QWidget):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    _PySidePanel_ = Core__PySidePanel_()
-    _PySidePanel_.run()
+    PYSIDEPANEL = Core_PYSIDEPANEL()
+    PYSIDEPANEL.run()
     app.exec_()
 else:
-    _PySidePanel_ = Core__PySidePanel_()
-    _PySidePanel_.run()
+    PYSIDEPANEL = Core_PYSIDEPANEL()
+    PYSIDEPANEL.run()
