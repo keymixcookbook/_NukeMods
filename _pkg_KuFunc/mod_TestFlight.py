@@ -2,9 +2,11 @@ import os
 import sys
 import nukescripts
 import nuke
+import json
 from Qt import QtWidgets, QtGui, QtCore
 import mod_StudioLoad
 import importlib
+from kputl import joinPath
 
 
 def _version_():
@@ -13,8 +15,23 @@ def _version_():
     version 0.0
 	- nukescript panel for testing modules
 
+    version 1.0
+    - save a log with recent test and auto load on start
+
 	'''
     return ver
+
+
+
+#------------------------------------------------------------------------------
+#-Global Variables
+#------------------------------------------------------------------------------
+
+
+
+
+USER_NUKE = joinPath(os.getenv('HOME'),'.nuke/')
+LOG_FILE = joinPath(USER_NUKE, 'TestFlight_log.json')
 
 
 
@@ -38,7 +55,7 @@ def listFiles(dirpath):
     '''list files in the given dir'''
 
     path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.endswith('.py')]
+    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') and p.endswith('.py')]
 
     return ls_files
 
@@ -61,6 +78,7 @@ class Core_TestFlight(QtWidgets.QWidget):
         self.title_path = QtWidgets.QLabel("path to files")
         self.path = QtWidgets.QLineEdit()
         self.path.setMinimumWidth(500)
+        self.path.editingFinished.connect(self.onPathChanged)
         self.browse = QtWidgets.QPushButton("Browse")
         self.browse.clicked.connect(self.browseDir)
         self.title_file = QtWidgets.QLabel("file to test")
@@ -88,14 +106,44 @@ class Core_TestFlight(QtWidgets.QWidget):
         self.master_layout.addStretch(1)
 
         self.setLayout(self.master_layout)
-        self.setDefault()
         self.setWindowTitle("Test Flight (beta)")
+        self.setDefault()
 
     def setDefault(self):
         '''set default value when instancing'''
+        self.read_log()
 
-        self.path.setText(findDraftDir())
+
+    def onPathChanged(self):
+        '''when path to files is edited'''
+        self.file.clear()
         self.file.addItems(listFiles(self.path.text()))
+
+
+    def save_log(self):
+        '''save latest test log as JSON file'''
+        _path = self.path.text()
+        _file = self.file.currentText()
+
+        _recent = [_path, _file]
+        with open(LOG_FILE,'w') as f:
+            f.write(json.dumps(_recent))
+
+    def read_log(self):
+        '''read latest test log'''
+        if os.path.isfile(LOG_FILE):
+            with open(LOG_FILE, 'r') as f:
+                _recent = json.load(f)
+                self.path.setText(_recent[0])
+                self.file.clear()
+                self.file.addItems(listFiles(self.path.text()))
+                self.file.setCurrentIndex(self.file.findText(_recent[1]))
+        else:
+            self.path.setText(findDraftDir())
+            self.file.clear()
+            self.file.addItems(listFiles(self.path.text()))
+
+
 
     def run(self):
         '''run panel instance'''
@@ -111,8 +159,10 @@ class Core_TestFlight(QtWidgets.QWidget):
                 sys.path.append(debug_path)
             m=importlib.import_module(debug_mod)
             reload(m)
+            self.save_log()
         else:
             nuke.message("Fail to load file")
+
 
     def browseDir(self):
         '''open file browser for draft module location'''
@@ -132,13 +182,12 @@ class Core_TestFlight(QtWidgets.QWidget):
 nukescripts.registerWidgetAsPanel('mod_TestFlight.Core_TestFlight', 'Test Flight (beta)', 'kp.mod_TestFlight')
 
 
-'''
-try:
-    app = QtWidgets.QApplication(sys.argv)
-    TestFlight = Core_TestFlight()
-    TestFlight.run()
-    app.exec_()
-except:
-    TestFlight = Core_TestFlight()
-    TestFlight.run()
-'''
+
+# try:
+#     app = QtWidgets.QApplication(sys.argv)
+#     TestFlight = Core_TestFlight()
+#     TestFlight.run()
+#     app.exec_()
+# except:
+#     TestFlight = Core_TestFlight()
+#     TestFlight.run()
