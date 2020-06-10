@@ -1,0 +1,105 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push $cut_paste_input
+Group {
+ name Recolor1
+ knobChanged "nuke.thisNode()\['color'].setEnabled(True) if nuke.thisNode()\['src'].value()=='constant' else nuke.thisNode()\['color'].setEnabled(False)"
+ tile_color 0x9fffff
+ label "\[value src]"
+ selected true
+ xpos -19
+ ypos -334
+ addUserKnob {20 tb_user l Recolor}
+ addUserKnob {4 src l "color src" M {constant image}}
+ addUserKnob {18 color l "color pick" +DISABLED}
+ color {0 0 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos -232
+  ypos -237
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -97
+  ypos -553
+ }
+set N59632000 [stack 0]
+ Dot {
+  name Dot2
+  xpos 38
+  ypos -552
+ }
+ Dot {
+  name Dot1
+  xpos 38
+  ypos -236
+ }
+ Input {
+  inputs 0
+  name image
+  xpos -436
+  ypos -524
+  number 2
+ }
+ Constant {
+  inputs 0
+  color {{parent.color} {parent.color} {parent.color} {parent.color}}
+  name color
+  xpos -308
+  ypos -576
+ }
+ Switch {
+  inputs 2
+  which {{src}}
+  name Switch1
+  label "\[value which]"
+  xpos -308
+  ypos -459
+ }
+ Colorspace {
+  colorspace_out CIE-Lab
+  name _LAB_A_
+  xpos -308
+  ypos -403
+ }
+push $N59632000
+ Colorspace {
+  colorspace_out CIE-Lab
+  name _LAB_B_
+  xpos -97
+  ypos -482
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  from1 rgba.blue
+  to1 rgba.blue
+  name _COPY_COLOR_
+  selected true
+  xpos -97
+  ypos -416
+ }
+ Colorspace {
+  colorspace_in CIE-Lab
+  name _RGB_
+  xpos -97
+  ypos -314
+ }
+ Keymix {
+  inputs 3
+  name _MASK_
+  xpos -97
+  ypos -243
+ }
+ Output {
+  name Output1
+  xpos -97
+  ypos -184
+ }
+end_group

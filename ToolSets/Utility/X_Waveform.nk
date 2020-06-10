@@ -1,0 +1,304 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push $cut_paste_input
+Group {
+ name X_Waveform1
+ help "Generates a waveform graph from an input image."
+ selected true
+ xpos -375
+ ypos 142
+ addUserKnob {20 X_Waveform}
+ addUserKnob {41 "Local GPU: " T BlinkScript1.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {7 max t "The maximum value of the waveform graph."}
+ max 1
+ addUserKnob {7 min t "The minimum value of the waveform graph."}
+ addUserKnob {7 quality t "The percentage of pixels to be sampled. At 1, all the pixels will be taken in account. At 0.5, only half of the pixels will be used. Decreasing the quality improves the performance." R 0.01 1}
+ quality 0.25
+ addUserKnob {26 ""}
+ addUserKnob {14 size t "The output format for the graph" R 0 100}
+ size {600 200}
+ addUserKnob {7 multiply t "A brightness multiplier for the graph." R 0 100}
+ multiply 10
+ addUserKnob {6 split l "split rgb" t "RGB can be represented as 3 stacked graphs or as 3 separate graphs." +STARTLINE}
+ addUserKnob {20 Guides}
+ addUserKnob {6 draw_grid l "draw guides" t "Enable the guides" +STARTLINE}
+ draw_grid true
+ addUserKnob {26 space l " " T " "}
+ addUserKnob {7 units t "A primary guide will be drawn every n units." R 0 10}
+ units 1
+ addUserKnob {18 units_color l color t "The color for the primary guides."}
+ units_color 1
+ addUserKnob {6 units_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 units_size l width t "The width of the primary guides."}
+ units_size 1
+ addUserKnob {26 space2 l " " T " "}
+ addUserKnob {7 decimal t "Each unit will be divided into n equal segments." R 0 10}
+ decimal 10
+ addUserKnob {18 decimal_color l color t "The color of the secondary guides."}
+ decimal_color 0.1
+ addUserKnob {6 decimal_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 decimal_size l width t "The width of the secondary guides."}
+ decimal_size 0.5
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2017</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#C8C8C8;\">www.xaviermartinvfx.com</span></a>"}
+ addUserKnob {26 space4_1 l "" +STARTLINE T <br>}
+ addUserKnob {22 version l <center>version</center> T "nuke.message('X_Waveform Gizmo <i>v1.0</i><br><b>Xavier Martín © 2017</b>')" +STARTLINE}
+ addUserKnob {22 help_documentation l <center>?</center> -STARTLINE T "nuke.message('You can find more documentation<br>on <a href=\"http://www.nukepedia.com/blink/draw/x_waveform\"><span style=\"color:#BCBCBC;\">Nukepedia</span></a> or my <a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#BCBCBC;\">website</span></a>.')"}
+}
+ Reformat {
+  inputs 0
+  type "to box"
+  format "640 480 0 0 640 480 1 PC_Video"
+  box_width {{parent.size.w}}
+  box_height {{parent.size.h}}
+  box_fixed true
+  scale 0.5
+  resize distort
+  center false
+  filter Impulse
+  name Reformat5
+  selected true
+  xpos -649
+  ypos 49
+ }
+ Grid {
+  number {0 {((parent.max-parent.min)/units)*decimal}}
+  size {{decimal_size}}
+  color {{decimal_color.r} {decimal_color.g} {decimal_color.b} 1}
+  name Grid2
+  xpos -649
+  ypos 75
+ }
+ Grid {
+  number {0 {(parent.max-parent.min)/units}}
+  size {{units_size}}
+  color {{units_color.r} {units_color.g} {units_color.b} 1}
+  name Grid1
+  xpos -649
+  ypos 101
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -475
+  ypos -249
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -475
+  ypos -223
+ }
+ Reformat {
+  type scale
+  scale {{sqrt(quality)}}
+  filter Impulse
+  name Reformat2
+  xpos -475
+  ypos -197
+ }
+ Reformat {
+  type "to box"
+  box_width {{max(Reformat2.format.w,size.w)}}
+  box_height {{max(Reformat2.format.h,size.h)}}
+  box_fixed true
+  resize distort
+  filter Impulse
+  name Reformat3
+  xpos -475
+  ypos -171
+ }
+ Add {
+  channels rgb
+  value {{-parent.min}}
+  name Add1
+  xpos -475
+  ypos -145
+ }
+ Multiply {
+  channels rgb
+  value {{(size.h-1)/(parent.max-parent.min)}}
+  name Multiply3
+  xpos -475
+  ypos -119
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "1 \"X_Waveform\" iterate componentWise 6a42ecefd344c9fc9bf549897c1084a36a4499a55c6e31c06575054e1fac3cc5 2 \"src\" Read Random \"dst\" Write Point 2 \"formaty\" Int 1 AAAAAA== \"sizey\" Int 1 AAAAAA=="
+  kernelSource "kernel X_Waveform : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eWrite, eAccessPoint> dst;\n\n  param:\n    int formaty;\n    int sizey;\n\n  void process(int2 pos) \{\n    int x = pos.x;\n    int y = pos.y;\n    float buffer = 0.0f;\n\n    if(y<sizey) \{\n      for(int j = 0; j < formaty; j++) \{\n        if (y == int(src(x,j))) \{\n          buffer += 1;\n        \}\n      \}\n    dst() = buffer;\n    \}\n   \}\n\};"
+  rebuild ""
+  X_Waveform_formaty {{format.h-1}}
+  X_Waveform_sizey {{parent.size.h}}
+  rebuild_finalise ""
+  maxTileLines 50
+  name BlinkScript1
+  xpos -475
+  ypos -93
+ }
+ Crop {
+  box {0 0 {format.w} {parent.size.h}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -475
+  ypos -55
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove2
+  xpos -475
+  ypos -29
+ }
+set Nd0189c00 [stack 0]
+ Blur {
+  channels rgb
+  size {{format.w/parent.size.w*3} 0}
+  filter box
+  quality 100
+  name Blur2
+  xpos -230
+  ypos -29
+ }
+ Reformat {
+  type "to box"
+  format "640 480 0 0 640 480 1 PC_Video"
+  box_width {{parent.size.w/3}}
+  box_height {{parent.size.h}}
+  box_fixed true
+  scale 0.5
+  resize distort
+  center false
+  filter Impulse
+  name Reformat4
+  xpos -230
+  ypos -3
+ }
+ Multiply {
+  channels rgb
+  value {{parent.multiply/BlinkScript1.X_Waveform_formaty*2}}
+  name Multiply2
+  xpos -230
+  ypos 23
+ }
+set Nd0188c00 [stack 0]
+ Shuffle {
+  red black
+  blue black
+  alpha white
+  out rgb
+  name Shuffle1
+  xpos -230
+  ypos 49
+ }
+set Nd0188800 [stack 0]
+push $Nd0188c00
+ Shuffle {
+  red black
+  green black
+  alpha white
+  out rgb
+  name Shuffle3
+  xpos -107
+  ypos 50
+ }
+push $Nd0188800
+push $Nd0188c00
+ Shuffle {
+  green black
+  blue black
+  alpha white
+  out rgb
+  name Shuffle2
+  xpos -336
+  ypos 50
+ }
+ ContactSheet {
+  inputs 3
+  width {{parent.size.w}}
+  height {{parent.size.h}}
+  rows 1
+  columns 3
+  center true
+  name ContactSheet1
+  xpos -230
+  ypos 75
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  rangeinput A
+  Achannels {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  Bchannels {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  output {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  name Merge2
+  xpos -340
+  ypos 75
+ }
+push $Nd0189c00
+ Blur {
+  channels rgb
+  size {{format.w/parent.size.w} 0}
+  filter box
+  quality 100
+  name Blur1
+  xpos -475
+  ypos -3
+ }
+ Reformat {
+  type "to box"
+  format "640 480 0 0 640 480 1 PC_Video"
+  box_width {{parent.size.w}}
+  box_height {{parent.size.h}}
+  box_fixed true
+  scale 0.5
+  resize distort
+  center false
+  filter Impulse
+  name Reformat1
+  xpos -475
+  ypos 23
+ }
+ Multiply {
+  channels rgb
+  value {{parent.multiply/BlinkScript1.X_Waveform_formaty}}
+  name Multiply1
+  xpos -475
+  ypos 49
+ }
+ Switch {
+  inputs 2
+  which {{split}}
+  name Switch1
+  xpos -475
+  ypos 75
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge1
+  xpos -475
+  ypos 101
+  disable {{1-parent.draw_grid}}
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove3
+  xpos -475
+  ypos 127
+ }
+ Output {
+  name Output1
+  xpos -475
+  ypos 153
+ }
+end_group
