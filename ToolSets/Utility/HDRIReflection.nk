@@ -1,0 +1,121 @@
+set cut_paste_input [stack 0]
+push 0
+push $cut_paste_input
+Group {
+ inputs 2
+ name HDRIreflection1
+ selected true
+ xpos 55
+ ypos 186
+ addUserKnob {20 tb_user l HDRIreflection}
+ addUserKnob {41 in l normal T _NORMAL_.in}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 tile l "hdri tile"}
+ tile 3
+ addUserKnob {7 x_offset l rotate R 0 360}
+}
+ Input {
+  inputs 0
+  name input
+  xpos -103
+  ypos 8
+ }
+set Na3530400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name _ALPHA_
+  xpos -103
+  ypos 137
+ }
+ Dot {
+  name Dot1
+  xpos -72
+  ypos 332
+ }
+push $Na3530400
+ Shuffle {
+  in N
+  name _NORMAL_
+  xpos 26
+  ypos 107
+ }
+ Expression {
+  temp_name0 h
+  temp_expr0 -0.001
+  expr0 r+h
+  expr1 g+h
+  expr2 b+h
+  name add_blackEdge
+  xpos 26
+  ypos 153
+ }
+ Expression {
+  temp_name0 f1
+  temp_expr0 atan2(b,r)
+  temp_name1 f2
+  temp_expr1 asin(g)
+  expr0 "b > 0 ? f1 : (2*pi) + f1"
+  expr1 f2
+  expr2 0
+  name normal_to_radian1
+  xpos 26
+  ypos 186
+ }
+ Expression {
+  expr0 r/(2*pi)
+  expr1 (g+(pi/2))/pi
+  expr2 0
+  name radian_to_UV1
+  xpos 26
+  ypos 219
+ }
+ Input {
+  inputs 0
+  name hdri
+  xpos 243
+  ypos -6
+  number 1
+ }
+ Tile {
+  columns {{parent.tile}}
+  name _TILE_
+  xpos 243
+  ypos 90
+ }
+ Transform {
+  translate {{"((normalize*(center.x*2)) - center.x) % (center.x*2)+parent.x_offset"} {curve}}
+  scale {-3 1}
+  center {{input.width/2} {input.height/2}}
+  name _TILE_OFFSET_
+  xpos 243
+  ypos 116
+  addUserKnob {20 User}
+  addUserKnob {7 iRotation R -180 180}
+  iRotation 148
+  addUserKnob {7 normalize l Normalize}
+  normalize {{"(iRotation +180)/360"}}
+  addUserKnob {41 center_1 l center T _TILE_OFFSET_.center}
+  addUserKnob {41 translate_1 l translate T _TILE_OFFSET_.translate}
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name _STMAP_
+  xpos 243
+  ypos 213
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name _MASK_
+  xpos 243
+  ypos 331
+ }
+ Output {
+  name Output1
+  xpos 243
+  ypos 431
+ }
+end_group

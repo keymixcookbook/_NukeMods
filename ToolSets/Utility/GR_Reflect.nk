@@ -1,0 +1,181 @@
+#! /Applications/Nuke11.3v6/Nuke11.3v6.app/Contents/MacOS//libnuke-11.3.6.dylib -nx
+version 11.3 v6
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="23" w="1440" h="851" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="777" stretch="1"/>
+            <splitter orientation="2">
+                <split size="485"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="341"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/guillemramisadesoto/Documents/NUKE_PHYTON_DEV/GR_Reflect.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+ set_by_user_template true
+}
+Group {
+ inputs 0
+ name GR_Reflect
+ help "04:05:2020\nGuillem Ramisa de Soto\nGR_Reflect_v1.0.1"
+ note_font_size 10
+ xpos 154
+ ypos -58
+ addUserKnob {20 GR_Reflect}
+ addUserKnob {26 REFLECT l " " T " <font size = 4>GR_RƎFLECT</font> v1.0"}
+ addUserKnob {26 ""}
+ addUserKnob {41 in l Normals T Shuffle.in}
+ addUserKnob {6 premult -STARTLINE}
+ addUserKnob {26 space_1 l "" +STARTLINE}
+ addUserKnob {7 ReflectionMult l Multiply R 0 2}
+ ReflectionMult 1
+ addUserKnob {26 space l "" +STARTLINE T " "}
+ addUserKnob {13 ReflectionRotation l Rotation}
+ addUserKnob {12 Offset2D l Offset}
+ addUserKnob {26 ""}
+ addUserKnob {6 FacingRatio l "Facing ratio" +STARTLINE}
+ addUserKnob {26 leg l "    " -STARTLINE T "*<i>Facing ratio requires <b>CAM</b> input</i>"}
+ addUserKnob {7 FacingRatioGamma l Gamma +HIDDEN R 0 4}
+ FacingRatioGamma 2
+ addUserKnob {26 ""}
+ addUserKnob {26 space_3 l "" +STARTLINE T " "}
+ addUserKnob {26 environment l " " T "Node designed to work with <i>equirectangular map</i> (Aspect ratio <b>2:1</b>)"}
+ addUserKnob {20 Settings}
+ addUserKnob {41 "Local GPU: " T BlinkScript.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 format T BlinkScript.format}
+ addUserKnob {41 specifiedFormat l "Specify output format" -STARTLINE T BlinkScript.specifiedFormat}
+ addUserKnob {26 ""}
+ addUserKnob {26 name_1 l "" +STARTLINE T "<br/><font color=#B3B3B3><b>GR_Reflect v1.0.1</b>  |  2020  |   www.guillemramisadesoto.com "}
+}
+ Input {
+  inputs 0
+  name cam
+  note_font_size 12
+  xpos 2498
+  ypos -788
+  number 2
+ }
+ NoOp {
+  name MatrixCam
+  xpos 2498
+  ypos -675
+  addUserKnob {20 User}
+  addUserKnob {78 MatrixCAM1 l 1 n 4}
+  MatrixCAM1 {{"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.0]\} \{return 1\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.1]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.2]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.3]\} \{return 0\}]"}}
+  addUserKnob {78 MatrixCAM2 l 2 n 4}
+  MatrixCAM2 {{"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.4]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.5]\} \{return 1\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.6]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.7]\} \{return 0\}]"}}
+  addUserKnob {78 MatrixCAM3 l 3 n 4}
+  MatrixCAM3 {{"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.8]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.9]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.10]\} \{return 1\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.11]\} \{return 0\}]"}}
+  addUserKnob {78 MatrixCAM4 l 4 n 4}
+  MatrixCAM4 {{"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.12]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.13]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.14]\} \{return 0\}]"} {"\[if \[exists input2] \{return \[value this.parent.input2.world_matrix.15]\} \{return 1\}]"}}
+  addUserKnob {26 ""}
+ }
+ Input {
+  inputs 0
+  name env
+  xpos 2359
+  ypos -789
+  number 1
+ }
+ Constant {
+  inputs 0
+  color {0.5 0.5 0.5 1}
+  name Const_safe
+  xpos 2249
+  ypos -723
+  postage_stamp false
+ }
+set N3a060fa0 [stack 0]
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch1
+  xpos 2359
+  ypos -723
+ }
+ Input {
+  inputs 0
+  name norm
+  xpos 2139
+  ypos -788
+ }
+push $N3a060fa0
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch2
+  xpos 2139
+  ypos -723
+ }
+ Shuffle {
+  name Shuffle
+  xpos 2139
+  ypos -674
+ }
+ BlinkScript {
+  inputs 2
+  recompileCount 1
+  ProgramGroup 1
+  KernelDescription "2 \"GR_Reflect\" iterate pixelWise 3aece8d158b2f7b9a212e6eaa036cb41c39ee7af22ac4ee9f5a0400aeef33ed6 3 \"norm\" Read Point \"env\" Read Random \"dst\" Write Point 7 \"ReflMult\" Float 1 AACAPw== \"rotation\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"offset\" Float 2 AAAAAAAAAAA= \"premult\" Bool 1 AA== \"CamM\" Float 9 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \"FR\" Bool 1 AA== \"Facing Ratio Gamma\" Float 1 AAAAQA== 7 \"ReflMult\" 1 1 \"ROT\" 3 1 \"off\" 2 1 \"pr\" 1 1 \"CamM\" 9 1 \"FR\" 1 1 \"FRgamma\" 1 1 4 \"envconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"pi\" Float 1 1 AAAAAA== \"tmin\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"tmax\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  EncodedSource "1 5934 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"
+  rebuild ""
+  GR_Reflect_ReflMult {{parent.ReflectionMult}}
+  GR_Reflect_rotation {{parent.ReflectionRotation} {parent.ReflectionRotation} {parent.ReflectionRotation}}
+  GR_Reflect_offset {{parent.Offset2D.x/(input.width/2)} {parent.Offset2D.y/(input.height/2)}}
+  GR_Reflect_premult {{parent.premult}}
+  group_GR_Reflect_CamM 1
+  GR_Reflect_CamM {
+      {{parent.MatrixCam.MatrixCAM1.0} {parent.MatrixCam.MatrixCAM1.1} {parent.MatrixCam.MatrixCAM1.2}}
+      {{parent.MatrixCam.MatrixCAM2.0} {parent.MatrixCam.MatrixCAM2.1} {parent.MatrixCam.MatrixCAM2.2}}
+      {{parent.MatrixCam.MatrixCAM3.0} {parent.MatrixCam.MatrixCAM3.1} {parent.MatrixCam.MatrixCAM3.2}}
+    }
+  GR_Reflect_FR {{parent.FacingRatio}}
+  "GR_Reflect_Facing Ratio Gamma" {{parent.FacingRatioGamma}}
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript
+  xpos 2359
+  ypos -678
+  addUserKnob {20 User}
+  addUserKnob {7 cbaks l "" +STARTLINE}
+  cbaks {{"\[python -execlocal par\\ =\\ nuke.thisParent()\\nvis\\ =\\ par.knob('FacingRatio').getValue()\\n\\npar.knob('FacingRatioGamma').setVisible(bool(vis))\\n\\nret\\ =\\ vis]"}}
+ }
+ Output {
+  name Output1
+  xpos 2359
+  ypos -558
+ }
+end_group

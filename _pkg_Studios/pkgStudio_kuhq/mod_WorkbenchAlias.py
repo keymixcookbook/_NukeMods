@@ -32,5 +32,5 @@ nuke.pluginAddPath(r'D:/Dropbox/REPOSITORIES/_systemtools/')
 os.environ['KP_GUI'] = 'nuke'
 from pkgMod_WorkbenchManager import mod_PanelSave
 
-PanelSave = mod_PanelSave.Core_PanelSave()
-PanelSave.run()
+# PanelSave = mod_PanelSave.Core_PanelSave()
+# PanelSave.run()

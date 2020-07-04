@@ -1,0 +1,203 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name MT_OffsetCopies
+ help "This node creates copies of an input element and gives the user the possibility to transform them."
+ tile_color 0xff5f00ff
+ label "Copies: \[value Copies]"
+ note_font Verdana
+ note_font_size 12
+ selected true
+ xpos 339
+ ypos -225
+ addUserKnob {20 Offset_Copies_v001 l "Main Controls"}
+ addUserKnob {3 Copies}
+ Copies 3
+ addUserKnob {22 ReverseLayering l "Reverse Layering" -STARTLINE +HIDDEN T "nodeList = \[]\n\nfor i in nuke.allNodes('NoOp'):\n    nodeList.append(i.name())\n\nnodeList.append('A_Rotate_Transform')\n\nnodeList.sort()\n\nnodeList.reverse()\n\nnodeList_leng = len(nodeList)\n\nmyMerge = nuke.toNode('myMerge')\n\n    \nfor i in range(0, (int(nodeList_leng)+1)):\n    \n   \n    if i < 2:\n        x = nuke.toNode(nodeList\[i])\n    \n        myMerge.setInput(i, x)\n\n    \n    elif i == 2:\n        continue\n\n\n    else:\n        x = nuke.toNode(nodeList\[i-1])\n    \n        myMerge.setInput(i, x)\n\nnuke.thisNode().knob('ReverseLayering').setVisible(False)\nnuke.thisNode().knob('OriginalLayering').setVisible(True)"}
+ addUserKnob {22 OriginalLayering l "Reverse Layering" -STARTLINE +HIDDEN T "\nnodeList = \[]\n\nfor i in nuke.allNodes('NoOp'):\n    nodeList.append(i.name())\n\nnodeList.append('A_Rotate_Transform')\n\nnodeList.sort()\n\nnodeList_leng = len(nodeList)\n\nmyMerge = nuke.toNode('myMerge')\n\n    \nfor i in range(0, (int(nodeList_leng)+1)):\n    \n   \n    if i < 2:\n        x = nuke.toNode(nodeList\[i])\n    \n        myMerge.setInput(i, x)\n\n    \n    elif i == 2:\n        continue\n\n\n    else:\n        x = nuke.toNode(nodeList\[i-1])\n    \n        myMerge.setInput(i, x)\n\nnuke.thisNode().knob('ReverseLayering').setVisible(True)\nnuke.thisNode().knob('OriginalLayering').setVisible(False)"}
+ addUserKnob {26 space l "" -STARTLINE T "        "}
+ addUserKnob {22 CreateCopies l "<font color='lightgreen'>Create Copies</font>" T "myNode = nuke.thisNode()\n\nif myNode.knob('Copies').value() < 1:\n\n    nuke.message('number of copies must be more than 0. Going to 1')\n    myNode.knob('Copies').setValue(1)\n    myIterations = myNode.knob('Copies').value()\n\nelse:\n    myIterations = myNode.knob('Copies').value()\n\n\n#Calling variables--------\n\nDummy = nuke.toNode('Dummy')\n\nxPos = 34\nyPos = 97\nDot_Offset = 0\n\n\nDD = nuke.toNode('Dot_Dummy')\nDD.setInput(0, Dummy)\n\nTransformTS_first = nuke.toNode('TransformTS_first')\n\nTransformTS_last = nuke.toNode('TransformTS_last')\n\nTransformTracker_first = nuke.toNode('TransformTracker_first')\n\nPremult1 = nuke.toNode('Premult1')\n\nUnpremult1 = nuke.toNode('Unpremult1')\n\nGrade_Dummy = nuke.toNode('Grade_Dummy')\n\n#---------------------------------------------------------------\n\nA_Rotate_Transform = nuke.createNode('Transform', inpanel = False)\nA_Rotate_Transform\['center'].setExpression('TransformTS_first.center.x + TransformTS_first.translate.x ', 0)\nA_Rotate_Transform\['center'].setExpression('TransformTS_first.center.y + TransformTS_first.translate.y', 1)\nA_Rotate_Transform\['rotate'].setExpression('Center_Rotation')\nA_Rotate_Transform\['name'].setValue('A_Rotate_Transform')\nA_Rotate_Transform.setInput(0, TransformTracker_first)\nA_Rotate_Transform\['xpos'].setValue(xPos-34)\nA_Rotate_Transform\['ypos'].setValue(yPos + 300)\n\n#DEFINING FUNCTIONS TO REDUCE CODE IN THE LOOPS ===============\n\ndef myGrade_f(lastIT):\n\n\tmyUnpremult = nuke.createNode('Unpremult', inpanel = False)\n\tmyUnpremult\['disable'].setExpression('UnpremultPremult?0:1')\n\n    \tmyGrade = nuke.createNode('Grade', inpanel = False)\n\n\tmyGrade\['blackpoint'].setValue(0.5, 0)\n\tmyGrade\['blackpoint'].setValue(0.6, 1)\n\tmyGrade\['blackpoint'].setValue(0.7, 2)\n\n    \tmyGrade\['blackpoint'].setExpression('Grade_Dummy.blackpoint.r', 0)\n    \tmyGrade\['blackpoint'].setExpression('Grade_Dummy.blackpoint.g', 1)\n    \tmyGrade\['blackpoint'].setExpression('Grade_Dummy.blackpoint.b', 2)\n\n\tmyGrade\['whitepoint'].setValue(0.5, 0)\n\tmyGrade\['whitepoint'].setValue(0.6, 1)\n\tmyGrade\['whitepoint'].setValue(0.7, 2)\n\n    \tmyGrade\['whitepoint'].setExpression('Grade_Dummy.whitepoint.r', 0)\n    \tmyGrade\['whitepoint'].setExpression('Grade_Dummy.whitepoint.g', 1)\n    \tmyGrade\['whitepoint'].setExpression('Grade_Dummy.whitepoint.b', 2)\n\n\tmyGrade\['black'].setValue(0.5, 0)\n\tmyGrade\['black'].setValue(0.6, 1)\n\tmyGrade\['black'].setValue(0.7, 2)\n\n    \tmyGrade\['black'].setExpression('Grade_Dummy.black.r', 0)\n    \tmyGrade\['black'].setExpression('Grade_Dummy.black.g', 1)\n    \tmyGrade\['black'].setExpression('Grade_Dummy.black.b', 2)\n\n\n\tmyGrade\['white'].setValue(0.5, 0)\n\tmyGrade\['white'].setValue(0.6, 1)\n\tmyGrade\['white'].setValue(0.7, 2)\n\n    \tmyGrade\['white'].setExpression('Grade_Dummy.white.r', 0)\n    \tmyGrade\['white'].setExpression('Grade_Dummy.white.g', 1)\n    \tmyGrade\['white'].setExpression('Grade_Dummy.white.b', 2)\n\n\tmyGrade\['multiply'].setValue(0.5, 0)\n\tmyGrade\['multiply'].setValue(0.6, 1)\n\tmyGrade\['multiply'].setValue(0.7, 2)\n  \n    \tmyGrade\['multiply'].setExpression('Grade_Dummy.multiply.r', 0)\n    \tmyGrade\['multiply'].setExpression('Grade_Dummy.multiply.g', 1)    \t\n    \tmyGrade\['multiply'].setExpression('Grade_Dummy.multiply.b', 2)\n\n\tmyGrade\['add'].setValue(0.5, 0)\n\tmyGrade\['add'].setValue(0.6, 1)\n\tmyGrade\['add'].setValue(0.7, 2)\n\n    \tmyGrade\['add'].setExpression('Grade_Dummy.add.r', 0)\n    \tmyGrade\['add'].setExpression('Grade_Dummy.add.g', 1)\n    \tmyGrade\['add'].setExpression('Grade_Dummy.add.b', 2)\n\n\tmyGrade\['gamma'].setValue(0.5, 0)\n\tmyGrade\['gamma'].setValue(0.6, 1)\n\tmyGrade\['gamma'].setValue(0.7, 2)\n\n    \tmyGrade\['gamma'].setExpression('Grade_Dummy.gamma.r', 0)\n    \tmyGrade\['gamma'].setExpression('Grade_Dummy.gamma.g', 1)\n   \tmyGrade\['gamma'].setExpression('Grade_Dummy.gamma.b', 2)\n    \n    \tmyGrade\['disable'].setExpression('Grade_Dummy.disable')\n\n\tif lastIT == False:\n\n    \t\tmyGrade\['mix'].setExpression('(Grade_Dummy.mix/\{\})*\{\}'.format(n,i))\n\n\telif lastIT == True:\n\n    \t\tmyGrade\['mix'].setExpression('Grade_Dummy.mix')\n\n\telse:\n\t\tpass\n\n\tmyPremult = nuke.createNode('Premult', inpanel = False)\n\tmyPremult\['disable'].setExpression('UnpremultPremult?0:1')\n\n\ndef R_Transform_f(lastIT):\n    R_Transform = nuke.createNode('Transform', inpanel = False)\n    R_Transform\['center'].setExpression('A_Rotate_Transform.center')\n\n    if lastIT == False:\n    \tR_Transform\['rotate'].setExpression('A_Rotate_Transform.rotate+(\{\}*OffsetCenterRotate)'.format(i))\n\n    elif lastIT == True:\n\tR_Transform\['rotate'].setExpression('A_Rotate_Transform.rotate+((\{\}+1)*OffsetCenterRotate)'.format(i))\n\n    else:\n\tpass\n\n\ndef offsetNoOp_f(lastIT):\n\n    TimeOffset_Child = nuke.createNode('TimeOffset', inpanel = False)\n    TimeOffset_Child\['disable'].setExpression('TimeOffset_Main.disable')\n\n    if lastIT == False:\n    \t\n    \tTimeOffset_Child\['time_offset'].setExpression('(TimeOffset_Main.time_offset) *(\{\}-(\{\}-1))'.format(n,i))\n\n\n    elif lastIT == True:\n    \tTimeOffset_Child\['time_offset'].setExpression('TimeOffset_Main.time_offset')\n    \t\t\n    else:\n\t\tpass\n\n    SpaceNoOp = nuke.createNode('NoOp', inpanel = False)\n    SpaceNoOp\['xpos'].setValue(xPos + Dot_Offset - 30)\n    SpaceNoOp\['ypos'].setValue(yPos + 200)\n\n\n\n\n# LOOPS ==================================================\n\nfor i in range(1, int(myIterations)):\n\n    ITn = int(int(myIterations)+1) \n\n    DOT = nuke.createNode('Dot', inpanel = False)\n    Dot_Offset = (i+1)*200\n    DOT\['xpos'].setValue(xPos + Dot_Offset)\n    DOT\['ypos'].setValue(yPos)\n\n    DOT.setInput(0, DD)\n\n    n = int(myIterations)\n\n    #---------------------------------------------------------------\n\n    myGrade_f(False)\n\n    #---------------------------------------------------------------\n\n    TransformTS = nuke.createNode('Transform', inpanel = False)\n    TransformTS\['center'].setExpression('TransformTS_first.center.x', 0)\n    TransformTS\['center'].setExpression('TransformTS_first.center.y', 1)\n    TransformTS\['scale'].setExpression('((TransformTS_first.scale+(((TransformTS_last.scale - TransformTS_first.scale)/\{\})*\{\}))*ScaleOffset) + ScaleOffsetNormal'.format(n, i))\n\n    TransformTS\['translate'].setExpression('(((TransformTS_first.translate.x+(((TransformTS_last.translate.x - TransformTS_first.translate.x)/\{\})*\{\}))+(OffsetX))+((((PositionOffsetX)/\{\})*\{\})*10))'.format(n, i, n, i), 0)\n    TransformTS\['translate'].setExpression('(((TransformTS_first.translate.y+(((TransformTS_last.translate.y - TransformTS_first.translate.y)/\{\})*\{\}))+(OffsetY))+((((PositionOffsetY)/\{\})*\{\})*10))'.format(n, i, n, i), 1)\n    \n    TransformTS\['rotate'].setExpression('TransformTS_first.rotate+(((TransformTS_last.rotate - TransformTS_first.rotate)/\{\})*\{\})'.format(n, i))\n\n    TransformTS\['skewX'].setExpression('TransformTS_first.skewX+(((TransformTS_last.skewX - TransformTS_first.skewX)/\{\})*\{\})'.format(n, i))\n    TransformTS\['skewY'].setExpression('TransformTS_first.skewY+(((TransformTS_last.skewY - TransformTS_first.skewY)/\{\})*\{\})'.format(n, i))\n\n    #---------------------------------------------------------------\n\n    TransformTracker_last= nuke.createNode('Transform', inpanel = False)\n\n    TransformTracker_last\['center'].setExpression('TransformTracker_first.center.x + (((translate_2.x - translate_1.x) / \{\})*\{\})'.format(n, i), 0)\n    TransformTracker_last\['center'].setExpression('TransformTracker_first.center.y + (((translate_2.y - translate_1.y) / \{\})*\{\})'.format(n, i), 1)\n\n    TransformTracker_last\['scale'].setExpression('TransformTracker_first.scale+(((TransformTracker_last.scale-TransformTracker_first.scale)/\{\})*\{\})'.format(n,i))\n    TransformTracker_last\['translate'].setExpression('TransformTracker_first.translate+(((TransformTracker_last.translate-TransformTracker_first.translate)/\{\})*\{\})'.format(n,i))\n\n    TransformTracker_last\['rotate'].setExpression('TransformTracker_first.rotate+(((TransformTracker_last.rotate-TransformTracker_first.rotate)/\{\})*\{\})'.format(n,i))\n\n    TransformTracker_last\['disable'].setExpression('TransformTracker_first.disable')\n\n   \n\n    #---------------------------------------------------------------\n\n    \n\n    R_Transform_f(False)\n\n     \n    #---------------------------------------------------------------\n\n\n    offsetNoOp_f(False)\n\n\nelse:\n \n\n\tDOT = nuke.createNode('Dot', inpanel = False)\n\tDot_Offset = ((ITn+1)*200)+50\n\tDOT\['xpos'].setValue(xPos + Dot_Offset)\n\tDOT\['ypos'].setValue(yPos)\n\n\tDOT.setInput(0, DD)\n\n\t#---------------------------------------------------------------\n\n\tmyGrade_f(True)\n\n\t#---------------------------------------------------------------\n\n\tTransformTS_last_Copy = nuke.createNode('Transform', inpanel = False)\n\n\tTransformTS_last_Copy\['name'].setValue('TransformTS_last_Copy')\n\n\tTransformTS_last_Copy \['center'].setExpression('TransformTS_last.center')\n\tTransformTS_last_Copy \['scale'].setExpression('TransformTS_last.scale')\n\tTransformTS_last_Copy \['translate'].setExpression('TransformTS_last.translate')\n\tTransformTS_last_Copy \['rotate'].setExpression('TransformTS_last.rotate')\n\tTransformTS_last_Copy \['skewX'].setExpression('TransformTS_last.skewX')\n\tTransformTS_last_Copy \['skewY'].setExpression('TransformTS_last.skewY')\n\n\t#---------------------------------------------------------------\n\n\tTransformTracker_last_Copy = nuke.createNode('Transform', inpanel = False)\n\n\tTransformTracker_last_Copy\['name'].setValue('TransformTracker_last_Copy')\n\n\tTransformTracker_last_Copy\['center'].setExpression('TransformTracker_last.center')\n\tTransformTracker_last_Copy\['scale'].setExpression('TransformTracker_last.scale')\n\tTransformTracker_last_Copy\['translate'].setExpression('TransformTracker_last.translate')\n\n\tTransformTracker_last_Copy\['rotate'].setExpression('TransformTracker_last.rotate')\n\tTransformTracker_last_Copy\['disable'].setExpression('TransformTracker_first.disable')\n\n\t#---------------------------------------------------------------\n\n\tR_Transform_f(True)\n\n\t\n\t#---------------------------------------------------------------\n\n\toffsetNoOp_f(True)\n\n\n\n#--------------------------------------------------------------------\n#Create MERGE and Merge everything  \n#--------------------------------------------------------------------\n\nnodeList = \[]\nfor i in nuke.allNodes('NoOp'):\n    nodeList.append(i.name())\n\nnodeList.append('A_Rotate_Transform')\n\nnodeList.sort()\n\nnodeList_leng = len(nodeList)\n\nmyMerge = nuke.createNode('Merge2', inpanel = False)\nmyMerge\['name'].setValue('myMerge')\n\n    \nfor i in range(0, (int(nodeList_leng)+1)):\n    \n   \n    if i < 2:\n        x = nuke.toNode(nodeList\[i])\n    \n        myMerge.setInput(i, x)\n\n    \n    elif i == 2:\n        continue\n\n\n    else:\n        x = nuke.toNode(nodeList\[i-1])\n    \n        myMerge.setInput(i, x)\n\n\nOutput1 = nuke.toNode('Output1')\n\nOutput1.setInput(0, myMerge)\n\nnuke.thisNode().knob('Clear_Copies').setVisible(True)\nnuke.thisNode().knob('CreateCopies').setVisible(False)\n\nnuke.thisNode().knob('ReverseLayering').setVisible(True)\n\n\n" +STARTLINE}
+ addUserKnob {22 Clear_Copies l "<font color='orange'>Clear Copies</font>" +HIDDEN T "TransformTS_first = nuke.toNode('TransformTS_first')\nTransformTS_last = nuke.toNode('TransformTS_last')\n\nTransformTracker_first = nuke.toNode('TransformTracker_first')\nTransformTracker_last = nuke.toNode('TransformTracker_last')\n\nElement = nuke.toNode('Element')\nOutput1 = nuke.toNode('Output1')\n\nGrade_Dummy = nuke.toNode('Grade_Dummy')\n\nDo_Not_Delete = nuke.toNode('Do_Not_Delete')\n\n\nclearList = \[]\n\nfor i in nuke.allNodes():\n    \n\tclearList.append(i.name())\n\n\ntry:\n\tclearList.remove('Element')\n\tclearList.remove('Output1')\n\tclearList.remove('Dot_Dummy')\n\tclearList.remove('Dummy')\n\tclearList.remove('TransformTS_first')\n\tclearList.remove('TransformTS_last')\n\tclearList.remove('TimeOffset_Main')\n\tclearList.remove('TransformTracker_first')\n\tclearList.remove('TransformTracker_last')\n\tclearList.remove('Grade_Dummy')\n\tclearList.remove('Do_Not_Delete')\n\n\nexcept:\n\tpass\n\n\n\nclearList_leng = len(clearList)\n\nfor i in range(0, int(clearList_leng)):\n\n\tx = nuke.toNode(clearList\[i])\n\tnuke.delete(x)\n\n\nOutput1.setInput(0,TransformTracker_first)\n\n\nnuke.thisNode().knob('CreateCopies').setVisible(True)\nnuke.thisNode().knob('Clear_Copies').setVisible(False)\n\nnuke.thisNode().knob('ReverseLayering').setVisible(False)\nnuke.thisNode().knob('OriginalLayering').setVisible(False)\n\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 f l "" +STARTLINE T "   "}
+ addUserKnob {22 Center_Pivot l "< font color = 'light green'>Center Pivot on original</font>" T "Dummy = nuke.toNode('Dummy')\n\nxPos = 34\nyPos = 97\nDot_Offset = 0\n\n\nTransformTS_first = nuke.toNode('TransformTS_first')\n\nTransformTS_last = nuke.toNode('TransformTS_last')\n\n\nDot_Crop = nuke.createNode('Dot', inpanel = False)\nDot_Crop.setInput(0, Dummy)\nDot_Crop\['xpos'].setValue(xPos -100)\nDot_Crop\['ypos'].setValue(yPos + 100)\nDot_Crop\['name'].setValue('Dot_Crop')\nDot_Crop = nuke.toNode('Dot_Crop')\n\nnukescripts.autocrop()\n\n\n\nTransformTS_first\['center'].setExpression('(Crop1.box.x+Crop1.box.r)/2', 0)\nTransformTS_first\['center'].setExpression('(Crop1.box.y+Crop1.box.t)/2', 1)\n\nTransformTS_last\['center'].setExpression('TransformTS_first.center.x', 0)\nTransformTS_last\['center'].setExpression('TransformTS_first.center.y', 1)\n\n\ntry:\n    Output1 = nuke.toNode('Output1')\n    Output1.setInput(0, myMerge)\n\nexcept:\n    Output1 = nuke.toNode('Output1')\n    Output1.setInput(0, TransformTS_first)\n\nnuke.thisNode().knob('Clear_Pivot').setVisible(True)\nnuke.thisNode().knob('BottomPivot').setVisible(True)\nnuke.thisNode().knob('Center_Pivot_1').setVisible(True)\nnuke.thisNode().knob('Center_Pivot').setVisible(False)" +STARTLINE}
+ addUserKnob {22 Center_Pivot_1 l "Center Pivot" +HIDDEN T "TransformTS_first\['center'].setExpression('(Crop1.box.x+Crop1.box.r)/2', 0)\nTransformTS_first\['center'].setExpression('(Crop1.box.y+Crop1.box.t)/2', 1)" +STARTLINE}
+ addUserKnob {22 BottomPivot l "Bottom Pivot" -STARTLINE +HIDDEN T "TransformTS_first\['center'].setExpression('(Crop1.box.x+Crop1.box.r)/2', 0)\nTransformTS_first\['center'].setExpression('Crop1.box.y', 1)"}
+ addUserKnob {22 Clear_Pivot l "<font color='orange'>Free Pivot</font>" -STARTLINE +HIDDEN T "nuke.thisNode()\['center'].clearAnimated()\n\n\n\nclearList = \[]\n\nfor i in nuke.allNodes('Crop'):\n    \n\tclearList.append(i.name())\n\n\ntry:\n\tclearList.append('Dot_Crop')\nexcept:\n\tpass\n\ntry:\n\tclearList_leng = len(clearList)\n\n\tfor i in range(0, int(clearList_leng)):\n\n\t\tx = nuke.toNode(clearList\[i])\n\t\tnuke.delete(x)\nexcept:\n\tpass\n\nnuke.thisNode().knob('Center_Pivot').setVisible(True)\nnuke.thisNode().knob('Clear_Pivot').setVisible(False)\nnuke.thisNode().knob('BottomPivot').setVisible(False)\nnuke.thisNode().knob('Center_Pivot_1').setVisible(False)"}
+ addUserKnob {26 space2 l "" +STARTLINE T "      "}
+ addUserKnob {41 center l "Center Original" T TransformTS_first.center}
+ addUserKnob {41 center_1 l "Center Copy" T TransformTS_last.center}
+ addUserKnob {22 FreeCenterCopy l "Free  Center Copy" -STARTLINE T "nuke.thisNode()\['center_1'].clearAnimated()"}
+ addUserKnob {22 RelinkCenter l "Link Center Copy" -STARTLINE T "nuke.thisNode()\['center_1'].setExpression('TransformTS_first.center.x', 0)\nnuke.thisNode()\['center_1'].setExpression('TransformTS_first.center.y', 1)"}
+ addUserKnob {26 ""}
+ addUserKnob {41 translate_1 l "<font color='light green'>Original Translate</font>" T TransformTS_first.translate}
+ addUserKnob {41 translate_2 l "<font color='light blue'>Copy Translate</font>" T TransformTS_last.translate}
+ addUserKnob {26 ""}
+ addUserKnob {41 OriginalRotate l "Original Rotate" T TransformTS_first.rotate}
+ addUserKnob {41 CopyRotate l "Copy Rotate" T TransformTS_last.rotate}
+ addUserKnob {26 ""}
+ addUserKnob {41 scale_1 l "Original Scale" T TransformTS_first.scale}
+ addUserKnob {41 scale_2 l "Copy Scale" T TransformTS_last.scale}
+ addUserKnob {26 ""}
+ addUserKnob {7 Center_Rotation l "2D Center Rotation" R -180 180}
+ addUserKnob {7 OffsetCenterRotate l "Offset Center Rotate" R -180 180}
+ addUserKnob {26 ""}
+ addUserKnob {20 advance n 1}
+ advance 0
+ addUserKnob {3 Time_Offset l "<font color='light blue'>Time Offset</font>"}
+ addUserKnob {6 DisableTimeOffset l "Disable Time Offset" -STARTLINE}
+ DisableTimeOffset true
+ addUserKnob {26 ""}
+ addUserKnob {20 MoreOffsets l "More Offset Tipes" n 1}
+ MoreOffsets 0
+ addUserKnob {7 OffsetX l "Offset X" R -500 500}
+ addUserKnob {7 OffsetY l "Offset Y" R -300 300}
+ addUserKnob {7 PositionOffsetX l "Offset Multiplier X" R -100 100}
+ addUserKnob {7 PositionOffsetY l "Offset Multiplier Y" R -100 100}
+ addUserKnob {26 space3 l "" +STARTLINE T "    "}
+ addUserKnob {7 ScaleOffsetNormal l ScaleOffset R -5 5}
+ addUserKnob {7 ScaleOffset l "Scale Offset Multiplier" R 0 5}
+ ScaleOffset 1
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 Skews n 1}
+ Skews 0
+ addUserKnob {41 skewX_1 l "skew X original" T TransformTS_first.skewX}
+ addUserKnob {41 skewX l "skew X copy" T TransformTS_last.skewX}
+ addUserKnob {41 skewY_1 l "skew Y original" T TransformTS_first.skewY}
+ addUserKnob {41 skewY l "skew Y copy" T TransformTS_last.skewY}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 wer l "" +STARTLINE T "   "}
+ addUserKnob {22 Clear_Controls l "<font color ='orange'>Clear Controls</font>" T "bbox = nuke.Root()\n\nwidth = bbox.width()\nheight = bbox.height()\n\ncwidth = ((int(width))/2)\ncheight = ((int(height))/2)\n\n\nnuke.thisNode()\['DisableTimeOffset'].setValue(1)\n\nnuke.thisNode()\['disable_1'].setValue(1)\nnuke.thisNode()\['UnpremultPremult'].setValue(0)\nnuke.thisNode()\['Disable_Trackers'].setValue(1)\n\nnuke.thisNode()\['center'].setValue(cwidth, 0)\nnuke.thisNode()\['center'].setValue(cheight, 1)\n\n\nnuke.thisNode()\['center_1'].clearAnimated()\nnuke.thisNode()\['center_1'].setValue(cwidth, 0)\nnuke.thisNode()\['center_1'].setValue(cheight, 1)\n\n\nnuke.thisNode()\['OriginalRotate'].setValue(0)\nnuke.thisNode()\['CopyRotate'].setValue(0)\nnuke.thisNode()\['translate_1'].setValue(0)\nnuke.thisNode()\['translate_2'].setValue(0)\nnuke.thisNode()\['scale_1'].setValue(1)\nnuke.thisNode()\['scale_2'].setValue(1)\n\n\nnuke.thisNode()\['Time_Offset'].setValue(0)\nnuke.thisNode()\['Center_Rotation'].setValue(0)\nnuke.thisNode()\['OffsetCenterRotate'].setValue(0)\n\nnuke.thisNode()\['skewX'].setValue(0)\nnuke.thisNode()\['skewX_1'].setValue(0)\nnuke.thisNode()\['skewY'].setValue(0)\nnuke.thisNode()\['skewY_1'].setValue(0)\n\n\nnuke.thisNode()\['OffsetX'].setValue(0)\nnuke.thisNode()\['OffsetY'].setValue(0)\nnuke.thisNode()\['ScaleOffsetNormal'].setValue(0)\nnuke.thisNode()\['PositionOffsetX'].setValue(0)\nnuke.thisNode()\['PositionOffsetY'].setValue(0)\nnuke.thisNode()\['ScaleOffset'].setValue(1)\n\nnuke.thisNode()\['OriginalRotate'].clearAnimated()\nnuke.thisNode()\['CopyRotate'].clearAnimated()\nnuke.thisNode()\['translate_1'].clearAnimated()\nnuke.thisNode()\['translate_2'].clearAnimated()\nnuke.thisNode()\['scale_1'].clearAnimated()\nnuke.thisNode()\['scale_2'].clearAnimated()\n\n\nnuke.thisNode()\['center'].clearAnimated()\n\nnuke.thisNode()\['Time_Offset'].clearAnimated()\nnuke.thisNode()\['Center_Rotation'].clearAnimated()\nnuke.thisNode()\['OffsetCenterRotate'].clearAnimated()\n\nnuke.thisNode()\['skewX'].clearAnimated()\nnuke.thisNode()\['skewX_1'].clearAnimated()\nnuke.thisNode()\['skewY'].clearAnimated()\nnuke.thisNode()\['skewY_1'].clearAnimated()\n\nnuke.thisNode()\['OffsetX'].clearAnimated()\nnuke.thisNode()\['OffsetY'].clearAnimated()\nnuke.thisNode()\['ScaleOffsetNormal'].clearAnimated()\nnuke.thisNode()\['PositionOffsetX'].clearAnimated()\nnuke.thisNode()\['PositionOffsetY'].clearAnimated()\nnuke.thisNode()\['ScaleOffset'].clearAnimated()\n\n\n\nclearList = \[]\n\nfor i in nuke.allNodes('Crop'):\n    \n\tclearList.append(i.name())\n\n\ntry:\n\tclearList.append('Dot_Crop')\nexcept:\n\tpass\n\ntry:\n\tclearList_leng = len(clearList)\n\n\tfor i in range(0, int(clearList_leng)):\n\n\t\tx = nuke.toNode(clearList\[i])\n\t\tnuke.delete(x)\nexcept:\n\tpass\n\n\n\nnuke.thisNode().knob('Center_Pivot').setVisible(True)\nnuke.thisNode().knob('Clear_Pivot').setVisible(False)\nnuke.thisNode().knob('BottomPivot').setVisible(False)\nnuke.thisNode().knob('Center_Pivot_1').setVisible(False)\n\n\n" +STARTLINE}
+ addUserKnob {26 f_1 l "" +STARTLINE T "          "}
+ addUserKnob {26 MiguelTorija l "" +STARTLINE T "<span style=\"color:#665\"><br/><b>MT_Offset_Copies   Version 0</b> - <span style=\"color:#665\">Miguel Torija</a>\n"}
+ addUserKnob {20 Grade}
+ addUserKnob {41 disable_1 l "Disable Grades" T Grade_Dummy.disable}
+ addUserKnob {6 UnpremultPremult l Unpremult_Premult +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 blackpoint T Grade_Dummy.blackpoint}
+ addUserKnob {41 whitepoint T Grade_Dummy.whitepoint}
+ addUserKnob {41 black l lift T Grade_Dummy.black}
+ addUserKnob {41 white l gain T Grade_Dummy.white}
+ addUserKnob {41 multiply T Grade_Dummy.multiply}
+ addUserKnob {41 add l offset T Grade_Dummy.add}
+ addUserKnob {41 gamma T Grade_Dummy.gamma}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T Grade_Dummy.mix}
+ addUserKnob {20 Tracking}
+ addUserKnob {26 text l "" +STARTLINE T "Link the values of your trackers to the original and last copy to \nauto-update the position and scale of all copies."}
+ addUserKnob {26 rete l "" +STARTLINE T "         "}
+ addUserKnob {26 ""}
+ addUserKnob {6 Disable_Trackers l "Disable Trackers" +STARTLINE}
+ Disable_Trackers true
+ addUserKnob {26 ""}
+ addUserKnob {12 TranslateOriginal l "Translate Original"}
+ addUserKnob {7 RotateOriginal l "Rotate Original" R -180 180}
+ addUserKnob {16 SizeOriginal l "Scale Original"}
+ SizeOriginal 1
+ addUserKnob {26 ""}
+ addUserKnob {12 TranslateCopy l "Translate Copy"}
+ addUserKnob {7 RotateCopy l "Rotate Copy" R -180 180}
+ addUserKnob {16 SizeCopy l "Scale copy"}
+ SizeCopy 1
+ addUserKnob {26 ""}
+ addUserKnob {26 ""}
+ addUserKnob {22 ClearTrack l "Clear Track" T "\nnuke.thisNode()\['TranslateOriginal'].setValue(0)\nnuke.thisNode()\['RotateOriginal'].setValue(0)\nnuke.thisNode()\['SizeOriginal'].setValue(1)\n\nnuke.thisNode()\['TranslateCopy'].setValue(0)\nnuke.thisNode()\['RotateCopy'].setValue(0)\nnuke.thisNode()\['SizeCopy'].setValue(1)\n\n\nnuke.thisNode()\['TranslateOriginal'].clearAnimated()\nnuke.thisNode()\['RotateOriginal'].clearAnimated()\nnuke.thisNode()\['SizeOriginal'].clearAnimated()\n\nnuke.thisNode()\['TranslateCopy'].clearAnimated()\nnuke.thisNode()\['RotateCopy'].clearAnimated()\nnuke.thisNode()\['SizeCopy'].clearAnimated()" +STARTLINE}
+}
+ BackdropNode {
+  inputs 0
+  name Do_Not_Delete
+  tile_color 0x606060ff
+  label Do_Not_Delete
+  note_font_size 25
+  xpos -592
+  ypos 100
+  bdwidth 225
+  bdheight 382
+ }
+ Input {
+  inputs 0
+  name Element
+  xpos 3
+  ypos -355
+ }
+ Dot {
+  name Dummy
+  label Dummy
+  xpos 37
+  ypos -71
+ }
+set Naa70c000 [stack 0]
+ Dot {
+  name Dot_Dummy
+  label Dot_Dummy
+  xpos 37
+  ypos 97
+ }
+ Transform {
+  center {960 540}
+  shutteroffset centred
+  name TransformTS_first
+  gl_color 0x6aff55ff
+  xpos 3
+  ypos 194
+ }
+ Transform {
+  translate {{TranslateOriginal.x} {TranslateOriginal.y}}
+  rotate {{RotateOriginal}}
+  scale {{SizeOriginal}}
+  center {{"TransformTS_first.center.x + TransformTS_first.translate.x"} {"TransformTS_first.center.y + TransformTS_first.translate.y"}}
+  shutteroffset centred
+  name TransformTracker_first
+  xpos 3
+  ypos 328
+  disable {{parent.Disable_Trackers}}
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 943
+ }
+push $Naa70c000
+ Grade {
+  name Grade_Dummy
+  xpos -522
+  ypos 384
+  hide_input true
+  disable true
+ }
+push $Naa70c000
+ Transform {
+  center {960 540}
+  shutteroffset centred
+  name TransformTS_last
+  gl_color 0x55bfffff
+  xpos -527
+  ypos 189
+  hide_input true
+ }
+push $Naa70c000
+ Transform {
+  translate {{TranslateCopy.x} {TranslateCopy.y}}
+  rotate {{RotateCopy}}
+  scale {{SizeCopy}}
+  center {{TransformTS_last.center.x+TransformTS_last.translate.x} {TransformTS_last.center.y+TransformTS_last.translate.y}}
+  shutteroffset centred
+  name TransformTracker_last
+  xpos -525
+  ypos 247
+  hide_input true
+  disable {{parent.TransformTracker_first.disable}}
+ }
+ TimeOffset {
+  inputs 0
+  time_offset {{Time_Offset}}
+  time ""
+  name TimeOffset_Main
+  xpos -525
+  ypos 318
+  disable {{parent.DisableTimeOffset}}
+ }
+end_group

@@ -341,7 +341,7 @@ def render_node(node):
             end=endFrame
         )
 
-        # subprocess.Popen(cmd_str, shell=True)
+        subprocess.Popen(cmd_str, shell=True)
         _soloWrite(node, all_enabled_write, mode='reverse')
     else:
         print("user cancelled")

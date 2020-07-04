@@ -1,12 +1,31 @@
+'''
+nuke panel widget for testing modules with a click of button
+buit for ones whom use external IDE, saves time to copy and paste to nuke script editor
+
+@TianlunJiang2020
+https://www.linkedin.com/in/tianlunjiang/
+https://github.com/tianlunjiang
+'''
+
+
+
+
 import os
 import sys
 import nukescripts
 import nuke
 import json
 from Qt import QtWidgets, QtGui, QtCore
-import mod_StudioLoad
 import re
-from kputl import joinPath
+
+
+def joinPath(*paths):
+    '''joining path to fix windows and OSX symlink to '/' uniformly'''
+    try:
+        p = os.path.join(*paths).replace('\\', '/')
+        return p
+    except ValueError:
+        pass
 
 
 def _version_():
@@ -47,19 +66,11 @@ LOG_FILE = joinPath(USER_NUKE, 'TestFlight_log.json')
 
 
 
-def findDraftDir():
-    '''finds the mod_Draft dir as for default path'''
-    slate = mod_StudioLoad.LoadSlate()
-    path_draft = os.path.join(os.getenv('KU_PKG_PATH'), '_pkg_KuFunc/').replace('\\', '/')
-
-    return path_draft
-
-
 def listFiles(dirpath):
     '''list files in the given dir'''
 
     path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') and p.endswith('.py')]
+    ls_files = [p for p in os.listdir(path_draft) if p.endswith('.py')]
 
     return ls_files
 
@@ -114,7 +125,7 @@ class Core_TestFlight(QtWidgets.QWidget):
         self.master_layout.addStretch(1)
 
         self.setLayout(self.master_layout)
-        self.setWindowTitle("Test Flight (beta)")
+        self.setWindowTitle("Test Flight v2.0")
         self.setDefault()
 
     def setDefault(self):
@@ -160,10 +171,10 @@ class Core_TestFlight(QtWidgets.QWidget):
                 self.file.setCurrentIndex(self.file.findText(_recent[1]))
                 self.func.setText(_recent[2])
         else:
-            _recent = [USER_NUKE, "", "()"]
+            _recent = [USER_NUKE, "", "foo()"]
             with open(LOG_FILE,'w') as f:
                 f.write(json.dumps(_recent))
-            self.path.setText(findDraftDir())
+            self.path.setText(USER_NUKE)
             self.file.clear()
             self.file.addItems(listFiles(self.path.text()))
 
@@ -213,8 +224,6 @@ class Core_TestFlight(QtWidgets.QWidget):
         _thisCompleter = QtWidgets.QCompleter(ls_func)
         self.func.setCompleter(_thisCompleter)
         self.func.setToolTip("list of suggested functions:\n\n- "+'\n- '.join(ls_func))
-        # print(ls_func)
-
 
     def browseDir(self):
         '''open file browser for draft module location'''
@@ -232,14 +241,4 @@ class Core_TestFlight(QtWidgets.QWidget):
 
 
 
-
 nukescripts.registerWidgetAsPanel('mod_TestFlight.Core_TestFlight', 'Test Flight v1.0', 'kp.mod_TestFlight')
-
-# if 'upt_' in __file__:
-#     app = QtWidgets.QApplication(sys.argv)
-#     TestFlight = Core_TestFlight()
-#     TestFlight.run()
-#     app.exec_()
-# else:
-# TestFlight = Core_TestFlight()
-# TestFlight.run()

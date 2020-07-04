@@ -14,5 +14,8 @@ import os
 
 def joinPath(*paths):
     '''joining path to fix windows and OSX symlink to '/' uniformly'''
-    p = os.path.join(*paths).replace('\\', '/')
-    return p
+    try:
+        p = os.path.join(*paths).replace('\\', '/')
+        return p
+    except ValueError:
+        pass
