@@ -1,0 +1,210 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ selected true
+ xpos -288
+ ypos 7
+}
+Expression {
+ expr0 (x+.5)/width
+ expr1 (y+.5)/height
+ name UV
+ selected true
+ xpos -288
+ ypos 97
+}
+Expression {
+ expr0 (r*2*pi)
+ expr1 (g*pi)-(pi/2)
+ expr2 0
+ name UV_to_radian
+ selected true
+ xpos -288
+ ypos 139
+}
+Expression {
+ expr0 cos(g)*cos(r)
+ expr1 sin(g)
+ expr2 sin(r)*cos(g)
+ name radian_to_normal
+ selected true
+ xpos -288
+ ypos 179
+}
+Expression {
+ temp_name0 f1
+ temp_expr0 atan2(b,r)
+ temp_name1 f2
+ temp_expr1 asin(g)
+ expr0 "b > 0 ? f1 : (2*pi) + f1"
+ expr1 f2
+ expr2 0
+ name normal_to_radian
+ selected true
+ xpos -288
+ ypos 218
+}
+Expression {
+ expr0 r/(2*pi)
+ expr1 (g+(pi/2))/pi
+ expr2 0
+ name radian_to_UV
+ selected true
+ xpos -288
+ ypos 256
+}
+Read {
+ inputs 0
+ file_type jpeg
+ file D:/Dropbox/_Scripts/nuke/env_reflection/PANO_20191102_100244.jpg
+ format "7168 3242 0 0 7168 3242 1 "
+ origset true
+ name Read4
+ selected true
+ xpos 57
+ ypos -131
+}
+Read {
+ inputs 0
+ file_type exr
+ file D:/Dropbox/_Scripts/nuke/env_reflection/cloth.0050.exr
+ format "1280 720 0 0 1280 720 1 HD_720"
+ origset true
+ name Read1
+ selected true
+ xpos -97
+ ypos -132
+}
+add_layer {N N.X N.Y N.Z}
+Group {
+ inputs 2
+ name HDRIreflection
+ selected true
+ xpos -97
+ ypos 171
+ addUserKnob {20 tb_user l HDRIreflection}
+ addUserKnob {41 in l normal T _NORMAL_.in}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 tile l "hdri tile"}
+ tile 3
+ addUserKnob {7 x_offset l rotate R 0 360}
+}
+ Input {
+  inputs 0
+  name input
+  xpos -103
+  ypos 8
+ }
+set Na3530400 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name _ALPHA_
+  xpos -103
+  ypos 137
+ }
+ Dot {
+  name Dot1
+  xpos -72
+  ypos 332
+ }
+push $Na3530400
+ Shuffle {
+  in N
+  name _NORMAL_
+  xpos 26
+  ypos 107
+ }
+ Expression {
+  temp_name0 h
+  temp_expr0 -0.001
+  expr0 r+h
+  expr1 g+h
+  expr2 b+h
+  name add_blackEdge
+  xpos 26
+  ypos 153
+ }
+ Expression {
+  temp_name0 f1
+  temp_expr0 atan2(b,r)
+  temp_name1 f2
+  temp_expr1 asin(g)
+  expr0 "b > 0 ? f1 : (2*pi) + f1"
+  expr1 f2
+  expr2 0
+  name normal_to_radian1
+  xpos 26
+  ypos 186
+ }
+ Expression {
+  expr0 r/(2*pi)
+  expr1 (g+(pi/2))/pi
+  expr2 0
+  name radian_to_UV1
+  xpos 26
+  ypos 219
+ }
+ Input {
+  inputs 0
+  name hdri
+  xpos 243
+  ypos -6
+  number 1
+ }
+ Tile {
+  columns {{parent.tile}}
+  name _TILE_
+  xpos 243
+  ypos 90
+ }
+ Transform {
+  translate {{"((normalize*(center.x*2)) - center.x) % (center.x*2)+parent.x_offset"} {curve}}
+  scale {-3 1}
+  center {{input.width/2} {input.height/2}}
+  name _TILE_OFFSET_
+  xpos 243
+  ypos 116
+  addUserKnob {20 User}
+  addUserKnob {7 iRotation R -180 180}
+  iRotation 148
+  addUserKnob {7 normalize l Normalize}
+  normalize {{"(iRotation +180)/360"}}
+  addUserKnob {41 center_1 l center T _TILE_OFFSET_.center}
+  addUserKnob {41 translate_1 l translate T _TILE_OFFSET_.translate}
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name _STMAP_
+  xpos 243
+  ypos 213
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name _MASK_
+  xpos 243
+  ypos 331
+ }
+ Output {
+  name Output1
+  xpos 243
+  ypos 431
+ }
+end_group
+Read {
+ inputs 0
+ file_type png
+ file D:/Dropbox/_Scripts/nuke/env_reflection/cloth.png
+ format "1280 1280 0 0 1280 1280 1 "
+ origset true
+ name Read3
+ selected true
+ xpos 224
+ ypos -130
+}

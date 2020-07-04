@@ -1,0 +1,113 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name DotMatrix1
+ selected true
+ xpos 346
+ ypos -233
+ addUserKnob {20 dotMatrix l "Dot Matrix"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {12 translate t "offset for the tiled texture pattern"}
+ translate {-88 -152}
+ addUserKnob {14 gap t "gap between the tiled elements" R 0 100}
+ gap 78
+ addUserKnob {41 scale t "scale of the texture input" T Reformat2.scale}
+ addUserKnob {68 view_mode l view M {"final result" pixelate}}
+ addUserKnob {20 antialiasing n 1}
+ antialiasing 0
+ addUserKnob {41 DotMatrixDisplay_center_bias l "central weighting" t "The image is subsampled using the four corners and center point of each texture tile. Increasing the center bias can reduce the apparent blurriness introduced by subsampling." T BlinkScript1.DotMatrixDisplay_center_bias}
+ addUserKnob {41 DotMatrixDisplay_smoothSubsample l "subsample src image" -STARTLINE T BlinkScript1.DotMatrixDisplay_smoothSubsample}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 tag l "" +STARTLINE T "Mitchell Kehn - 4 August 2018"}
+}
+ Input {
+  inputs 0
+  name tex
+  xpos -315
+  ypos 72
+  number 1
+ }
+ Dot {
+  name Dot6
+  xpos -281
+  ypos 398
+ }
+ ColorWheel {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  edgeSaturation 0
+  gamma 0.45
+  name ColorWheel1
+  xpos -133
+  ypos 273
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1] ? 1 : 0"}}
+  name Switch1
+  xpos -133
+  ypos 394
+ }
+ Reformat {
+  type scale
+  scale 0.123
+  name Reformat2
+  xpos -133
+  ypos 441
+ }
+ Crop {
+  box {0 0 {input.format.w} {input.format.h}}
+  name Crop1
+  xpos -133
+  ypos 467
+ }
+ Dot {
+  name Dot1
+  xpos -99
+  ypos 583
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant1
+  xpos 143
+  ypos 264
+ }
+ Input {
+  inputs 0
+  name src
+  xpos 33
+  ypos 66
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input] ? 0 : 1"}}
+  name Switch2
+  xpos 33
+  ypos 287
+ }
+ BlinkScript {
+  inputs 2
+  ProgramGroup 1
+  KernelDescription "2 \"DotMatrixDisplay\" iterate pixelWise 326c60ddc10bf77fd3bdc3531074bb6222c42efb0ce68daa9ac4ddea88f53034 3 \"src\" Read Random \"tex\" Read Random \"dst\" Write Point 5 \"gap\" Float 2 AAAAAAAAAAA= \"translate\" Float 2 AAAAAAAAAAA= \"pixelateOnly\" Bool 1 AA== \"center_bias\" Int 1 AAAAAA== \"smoothSubsample\" Bool 1 AA== 5 \"gap\" 2 1 \"translate\" 2 1 \"pixelateOnly\" 1 1 \"center_bias\" 1 1 \"smoothSubsample\" 1 1 3 \"texSize\" Float 2 1 AAAAAAAAAAA= \"format\" Float 2 1 AAAAAAAAAAA= \"patternSize\" Float 2 1 AAAAAAAAAAA="
+  kernelSource "kernel DotMatrixDisplay : ImageComputationKernel <ePixelWise>\n\{\n    Image <eRead, eAccessRandom, eEdgeClamped> src;\n    Image <eRead, eAccessRandom, eEdgeNone> tex;\n    Image <eWrite> dst;\n\n    local:\n        float2 texSize;\n        float2 format;\n        float2 patternSize;\n\n    param:\n        float2 gap;\n        float2 translate;\n        bool pixelateOnly;\n        int center_bias;\n        bool smoothSubsample;\n\n    void init() \{\n        format = float2(src.bounds.x2, src.bounds.y2);\n        texSize = float2(tex.bounds.x2, tex.bounds.y2);\n        patternSize = texSize + gap;\n    \}\n\n    void define() \{\n        defineParam(translate, \"translate\", float2(0, 0));\n    \}\n\n    void process(int2 pos) \{\n        float2 pos2d = float2(pos.x, pos.y);\n\n        float2 texSamplePos = fmod(fmod((pos2d - translate), patternSize) + patternSize, patternSize);  // position within texture for sample\n\n        float2 srcSamplePos = pos2d - texSamplePos + texSize/2;\n\n        // sample the color behind this texture tile\n        float4 colorsample;\n        if (smoothSubsample) \{\n            colorsample = (bilinear(src, srcSamplePos.x, srcSamplePos.y) * (1 + center_bias)\n                              + bilinear(src, srcSamplePos.x - texSize.x/2, srcSamplePos.y - texSize.y/2)\n                              + bilinear(src, srcSamplePos.x - texSize.x/2, srcSamplePos.y + texSize.y/2)\n                              + bilinear(src, srcSamplePos.x + texSize.x/2, srcSamplePos.y - texSize.y/2)\n                              + bilinear(src, srcSamplePos.x + texSize.x/2, srcSamplePos.y + texSize.y/2)\n                          )/(5 + center_bias);\n\n        \}  else \{\n            colorsample = bilinear(src, srcSamplePos.x, srcSamplePos.y);\n        \}\n\n\n        if (pixelateOnly) \{  // only show the pixelated color\n            dst() = colorsample;\n\n        \}  else \{  // show texture multiplied by the pixelated color\n            if ((texSamplePos.x < texSize.x) && (texSamplePos.y < texSize.y)) \{\n                dst() = bilinear(tex, texSamplePos.x, texSamplePos.y) * colorsample;\n            \}  else \{dst() = 0;\}\n        \}\n    \}\n\};\n"
+  rebuild ""
+  DotMatrixDisplay_gap {{parent.gap.w x995 150} {parent.gap.h x995 98}}
+  DotMatrixDisplay_translate {{parent.translate.x} {parent.translate.y}}
+  DotMatrixDisplay_pixelateOnly {{parent.view_mode}}
+  DotMatrixDisplay_center_bias 2
+  rebuild_finalise ""
+  name BlinkScript1
+  selected true
+  xpos 33
+  ypos 576
+ }
+ Output {
+  name Output1
+  xpos 33
+  ypos 808
+ }
+end_group

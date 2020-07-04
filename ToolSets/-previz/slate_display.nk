@@ -1,0 +1,222 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push $cut_paste_input
+Group {
+ name slate_display1
+ autolabel "nuke.thisNode()\['slate'].value()"
+ selected true
+ xpos -17
+ ypos -394
+ addUserKnob {20 tb_user l slate_display}
+ addUserKnob {41 show T SLATE.show}
+ addUserKnob {41 slate T SLATE.slate}
+ addUserKnob {41 output.first l frameFirst T RETIME.output.first}
+ addUserKnob {3 extend l "frame extend" -STARTLINE}
+ extend 24
+}
+ Input {
+  inputs 0
+  name read
+  xpos -122
+  ypos -579
+ }
+ Retime {
+  input.first 1090
+  input.last 1124
+  output.first 1001
+  output.first_lock true
+  output.last 1035
+  time ""
+  name RETIME
+  xpos -122
+  ypos -553
+ }
+ FrameRange {
+  first_frame {{input.output.first}}
+  last_frame {{input.output.last+parent.extend}}
+  time ""
+  name FRAMERANGE
+  xpos -122
+  ypos -520
+  addUserKnob {20 User}
+  addUserKnob {3 length l "frame length"}
+  length {{input.output.last-input.output.first+parent.extend}}
+ }
+ NoOp {
+  name SLATE
+  xpos -122
+  ypos -490
+  addUserKnob {20 tb_user l slate}
+  addUserKnob {1 show}
+  show show
+  addUserKnob {1 slate}
+  slate shot####
+ }
+ Text2 {
+  font_size_toolbar 24
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "\[value input.show]:\[value input.slate]"
+  old_message {{103 100 109 58 99 97 107 48 48 50 48}
+    }
+  old_expression_markers {{0 2 4 10}
+    }
+  box {48 0 {root.width-box.x} {root.height/15}}
+  xjustify center
+  transforms {{0 2}
+    }
+  font_size_values {{4 24 5 24 6 24 7 24 8 24 9 24 10 24 4 48 5 48 6 48 0 24 1 24 2 24 3 24}
+    }
+  cursor_position 12
+  font {{ Consolas : Bold : consolab.ttf : 0 }}
+  font_size 24
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{897.5 83.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  enable_background true
+  background_opacity 0.5
+  name SLATE_LABEL
+  xpos -122
+  ypos -466
+ }
+ Text2 {
+  font_size_toolbar 24
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "x\[value \input.frame]"
+  old_message {{120 49 48 50 48}
+    }
+  old_expression_markers {{1 4}
+    }
+  box {48 0 {root.width/2} {root.height/15}}
+  transforms {{0 2}
+    }
+  font_size_values {{0 24 1 24 2 24 3 24 4 24 0 48 1 48 2 48 3 48 4 48}
+    }
+  font {{ Consolas : Bold : consolab.ttf : 0 }}
+  font_size 24
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{897.5 83.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  enable_background true
+  background_opacity 0.5
+  name CURFRAME_LABEL
+  xpos -122
+  ypos -438
+ }
+ Text2 {
+  font_size_toolbar 24
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "x\[value FRAMERANGE.first_frame]-x\[value FRAMERANGE.last_frame]"
+  old_message {{120 49 48 48 49 45 120 49 48 55 48}
+    }
+  old_expression_markers {{1 4 7 10}
+    }
+  box {48 0 {root.width-box.x} {root.height/15}}
+  xjustify right
+  transforms {{0 2}
+    }
+  font_size_values {{0 24 1 24 2 24 3 24 4 24 5 24 6 24 7 24 8 24 9 24 10 24 0 48 1 48 2 48 3 48 4 48}
+    }
+  font {{ Consolas : Bold : consolab.ttf : 0 }}
+  font_size 24
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{897.5 83.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  enable_background true
+  background_opacity 0.5
+  name FRAMERANGE_LABEL
+  xpos -122
+  ypos -412
+ }
+ Text2 {
+  font_size_toolbar 20
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "\[value parent.input.file]"
+  old_message {{75 58 47 80 82 79 74 69 67 84 83 47 80 101 114 115 111 110 97 108 47 103 100 109 95 112 114 101 118 105 122 47 115 104 111 116 115 47 103 100 109 95 112 114 101 118 105 122 95 48 48 50 48 95 118 48 48 50 47 109 97 115 116 101 114 76 97 121 101 114 47 112 114 101 118 105 122 47 112 114 101 118 105 122 95 48 48 50 48 95 49 46 49 48 50 48 46 116 105 102}
+    }
+  old_expression_markers {{0 99}
+    }
+  box {48 0 {root.width-box.x} {root.height/15/2}}
+  xjustify center
+  transforms {{0 2}
+    }
+  font_size_values {{0 20 1 20 2 20 3 20 4 20 5 20 6 20 7 20 8 20 9 20 10 20 11 20 12 20 13 20 14 20 15 20 16 20 17 20 18 20 19 20 20 20 21 20 22 20 23 20 24 20 25 20 26 20 27 20 28 20 29 20 30 20 31 20 32 20 33 20 34 20 35 20 36 20 37 20 38 20 39 20 40 20 41 20 42 20 43 20 44 20 45 20 46 20 47 20 48 20 49 20 50 20 51 20 52 20 53 20 54 20 55 20 56 20 57 20 58 20 59 20 60 20 61 20 62 20 63 20 64 20 65 20 66 20 67 20 68 20 69 20 70 20 71 20 72 20 73 20 74 20 75 20 76 20 77 20 78 20 79 20 80 20 81 20 82 20 83 20 84 20 85 20 86 20 87 20 88 20 89 20 90 20 91 20 92 20 93 20 94 20 95 20 96 20 97 20 98 20 99 20 0 48}
+    }
+  font {{ Consolas : Regular : consola.ttf : 0 }}
+  font_size 20
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{897.5 83.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  color 0.5
+  enable_background true
+  background_opacity 0.5
+  name FILE
+  xpos -122
+  ypos -352
+ }
+ Text2 {
+  font_size_toolbar 20
+  font_width_toolbar 100
+  font_height_toolbar 100
+  maskChannelMask none
+  message "(len:x\[value FRAMERANGE.length])"
+  old_message {{40 108 101 110 58 120 55 52 41}
+    }
+  old_expression_markers {{6 7}
+    }
+  box {48 0 {root.width-box.x} {root.height/15/2}}
+  xjustify right
+  transforms {{0 2}
+    }
+  font_size_values {{0 20 1 20 2 20 3 20 4 20 5 20 6 20 7 20 8 20}
+    }
+  cursor_position 6
+  font {{ Consolas : Regular : consola.ttf : 0 }}
+  font_size 20
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{897.5 83.5}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  color 0.5
+  enable_background true
+  background_opacity 0.5
+  name LENGTH_LABEL
+  xpos -122
+  ypos -328
+ }
+ Output {
+  name Output1
+  xpos -122
+  ypos -261
+ }
+end_group
