@@ -31,6 +31,8 @@ def LoadSlate():
             SHOW    = os.getenv(SLATE[STUDIO][1])
             SCENE   = os.getenv(SLATE[STUDIO][2])
             SHOT    = os.getenv(SLATE[STUDIO][3])
+        elif shell==None:
+            SHOW, SCENE, SHOT = 'SHOW', 'SCENE', 'SHOT'
         else:
             # Transfer enviroment variable from WSL to Win
             SHOW, SCENE, SHOT = os.getenv(SLATE[STUDIO][0]).split(':')
