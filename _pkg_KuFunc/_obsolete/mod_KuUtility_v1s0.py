@@ -38,6 +38,41 @@ def knobFlagClear(knob):
 	else:
 		return knob
 
+def tc2Frames(tc, fps, hh_l):
+
+	tc_int = [int(t) for t in tc.split(':')]
+
+	hh, mm, ss, ff = tc_int
+
+	#Drop Frame Err Difference
+	xErr = 0.0 #per Second
+
+	if fps < 30 and fps > 29:
+		xErr = 30/fps
+	elif fps < 24 and fps > 23:
+		xErr = 24/fps
+	else:
+		xErr = 0
+
+	#Convert
+	x = ((hh-hh_l)*3600 + mm*60 + ss)*xErr*fps + ff
+
+	x=int(x)
+	return x
+
+
+def imgSeqDir(path, upDir = -1):
+
+	"""
+
+	@path: Full path ie. /Volume/../EXPORT/TCC_002_020_v011/TCC_002_020_v011.%04d.dpx
+	@upDir: up directory
+	:return: a string of new directaries
+	"""
+
+	return os.path.dirname(os.path.dirname(path))
+	# return '/'.join(os.path.dirname(path).split('/')[:upDir])
+
 
 
 
@@ -51,6 +86,18 @@ def mask():
 		if n != 0:
 			mk = n.optionalInput()
 			n.setInput(mk, nuke.selectedNodes()[0])
+
+
+def labelChange():
+	prevLabel = nuke.selectedNode()['label'].getValue()
+
+	newLabel = nuke.getInput('Change Node Label', prevLabel)
+
+	# Change Values
+
+	for n in nuke.selectedNodes():
+		n['name'].getValue()
+		n['label'].setValue(newLabel)
 
 
 def reloadRead():
@@ -106,6 +153,19 @@ def resetNodeCol():
 			aNode.append(n.name())
 
 	nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
+
+
+def selectChildNodes():
+	sel = nuke.selectedNode()
+	childNodes = []
+
+	for n in nuke.selectedNode().dependent():
+		n['selected'].setValue(True)
+		childNodes.append(n.name())
+
+	sel['selected'].setValue(False)
+
+	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
 
 
 def groupConnect():
@@ -183,20 +243,6 @@ def alignNodes():
 				for n in nodes:
 					n.setYpos( int(avrg) )
 
-
-def selectChildNodes():
-	sel = nuke.selectedNode()
-	childNodes = []
-
-	for n in nuke.selectedNode().dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS):
-		n['selected'].setValue(True)
-		childNodes.append(n.name())
-
-	sel['selected'].setValue(False)
-
-	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
-
-
 def selConnected():
 
 	for n in nuke.selectedNodes():
@@ -257,6 +303,28 @@ def holdAtFrame():
 			node_held['label'].setValue("x" + str(nuke.frame()))
 
 
+def mergeOp():
+
+	op = ['over', 'under', 'multiply', 'divide', 'plus', 'minus', 'from', 'stencil', 'mask', 'screen']
+
+	if nuke.selectedNodes('Merge2'):
+
+		p = nuke.Panel('Operation')
+		p.addEnumerationPulldown('operation', ' '.join(op))
+
+		if p.show():
+			op_sel = p.value('operation')
+			for n in nuke.selectedNodes('Merge2'):
+				ku_knobCh(n,'operation',op_sel)
+			if op_sel == "Plus":
+				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue -rgba.alpha")
+			else:
+				ku_knobCh(n, 'Achannels', "rgba.red rgba.green rgba.blue rgba.alpha")
+	else:
+		nuke.message("Please select a Merge node")
+
+
+
 def stackIBK():
 	'''build IBK stack with one IBK master node selected'''
 
@@ -276,6 +344,44 @@ def stackIBK():
 				print k
 				node_slave[k].setValue(node_master[k].value())
 			node_slave.knob('multi').setValue(int(s))
+
+
+
+def cycleChannels(mode='rgba'):
+	'''cycle through channels nodes
+	@mode='rgba': 'rgb', 'rgba', 'alpha'
+	@mode='all': all channels in last selected node
+	'''
+
+	if not nuke.selectedNodes():
+		nuke.message('Select some nodes, Sil vous plait')
+	else:
+		ls_ch = []
+
+		if mode == 'rgba':
+			ls_ch = ['rgb', 'rgba', 'alpha','all']
+		elif mode == 'all':
+			ls_ch = nuke.layers(nuke.selectedNode())
+
+		print "\n====="
+
+		for n in nuke.selectedNodes():
+			try:
+				ch = n['channels']
+				ch_cur = ch.value()
+				ch_new = None
+				if ch_cur in ls_ch:
+					ch_count = ls_ch.index(ch_cur)
+					ch_new_idx = 0 if ch_count==len(ls_ch)-1 else ch_count+1
+					ch_new = ls_ch[int(ch_new_idx)]
+				else:
+					ch_new = ls_ch[0]
+
+				ch.setValue(ch_new)
+				print "%s set to %s" % (n.name(), ch_new)
+			except:
+				print "knob 'channels' not in %s" % n.name()
+
 
 
 def setSize(increment = 0.5):

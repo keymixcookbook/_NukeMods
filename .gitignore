@@ -22,6 +22,7 @@ tab_stats.dat
 *.ai
 .DS_Store
 */tab_stats.*
+__pycache__/
 
 
 ### OSX ###
