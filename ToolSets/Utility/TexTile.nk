@@ -1,0 +1,57 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name TexTile1
+ selected true
+ xpos -351
+ ypos 345
+ addUserKnob {20 TexTile}
+ addUserKnob {41 format l "output format" T TexTileFormat.format}
+ addUserKnob {26 ""}
+ addUserKnob {7 tiling t "How many repetitions of the texture should be used - 1 will tile the texture at it's given resolution." R 1 10}
+ tiling 1
+ addUserKnob {7 offset t "How far the texture should deviate from default tiling" R -2 2}
+ offset 0.8
+ addUserKnob {41 scale t "Adjusts variation in scale for each sampled cell / tile." T BlinkScript2.TexTile_scale}
+ addUserKnob {41 contrast t "By default, some contrast will be lost in between voronoi cells; increasing contrast will counter this and should be adjusted based on the input image." T BlinkScript2.TexTile_contrast}
+ addUserKnob {20 gpu l GPU}
+ addUserKnob {41 "Local GPU: " T BlinkScript2.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript2.useGPUIfAvailable}
+}
+ Input {
+  inputs 0
+  name Input
+  selected true
+  xpos -81
+  ypos -141
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "1 \"TexTile\" iterate pixelWise a835ac838bb293be4510cf5847dec90d8336ce555ff7fb19e89fc04cd1db7693 2 \"src\" Read Random \"dst\" Write Point 6 \"width\" Float 1 AAAAAA== \"height\" Float 1 AAAAAA== \"tiling\" Float 1 AAAAAA== \"offset\" Float 1 AAAAAA== \"scale\" Float 1 AAAAAA== \"contrast\" Float 1 AAAAAA=="
+  kernelSource "inline float4 mix(float4 a, float4 b, float t) \{\n  return (b - a) * clamp(t, 0.0f, 1.0f) + a;\n\}\n\nkernel TexTile: ImageComputationKernel<ePixelWise> \{\n\n    Image<eRead, eAccessRandom, eEdgeClamped> src;\n    Image<eWrite> dst;\n\n    param:\n        float width;\n        float height;\n        float tiling;\n        float offset;\n        float scale;\n        float contrast;\n\n    float4 hash4(float2 p) \{\n        float4 val =  sin(float4(1.0f + dot(p, float2(37.0f, 17.0f)), \n                                 2.0f + dot(p, float2(11.0f, 47.0f)),\n                                 3.0f + dot(p, float2(41.0f, 29.0f)),\n                                 4.0f + dot(p, float2(23.0f, 31.0f)))) * 103.0f;\n        for (int i = 0; i < 4; i++)\n            val\[i] = fmod(val\[i], 1.0f);\n        return (val + 1) * 0.5f;\n    \}\n\n    void process(int2 pos)\n    \{\n        float2 uv = float2(\n            (pos.x + 0.5f) / width,\n            (pos.y + 0.5f) / height\n        );\n\n        uv *= tiling;\n\n        float2 p = floor(uv);\n        float2 f = float2(fmod(uv.x, 1.0f), fmod(uv.y, 1.0f));\n        \n        float4 va = 0;\n        float w1 = 0;\n        float w2 = 0;\n        // Iterate over adjacent voronoi cells\n        for (int j = -1; j <= 1; j++)\n            for (int i = -1; i <= 1; i++)\n            \{\n                // Create a voronoi cell point\n                float2 g = float2(float(i), float(j));                 // Adjacent cell point\n                float4 o = hash4(p + g);                               // Random offset\n                float2 r = float2(g.x - f.x + o.x, g.y - f.y + o.y);   // Resulting co-ordinate\n\n                float d = dot(r, r);                                   // length of offset\n                float w = exp(-5.0f * d);                              // gaussian falloff\n                \n                // Use the offset to pick a pseudo-random point to sample\n                // Using r instead of uv offsets from center of cell, allowing us to scale each individually\n                float randf = (o.x - 0.5f) * scale + 1.0f;\n                float x = r.x * randf + o.z * offset;\n                float y = r.y * randf + o.w * offset;\n\n                // Wrap x and y around image and sample\n                x = fmod(fmod(x, 1.0f) + 1.0f, 1.0f) * width;\n                y = fmod(fmod(y, 1.0f) + 1.0f, 1.0f) * height;\n                float4 c = bilinear(src, x, y);\n                \n                // Accumulate weighted colour\n                va += w * c;\n                w1 += w;\n                w2 += w * w;\n            \}\n        \n        // normal averaging --> lowers contrasts\n        // float4 col = va / w1;\n\n        float4 res = contrast + (va - w1 * contrast) / sqrt(w2);\n        float4 col = mix(va / w1, res, offset);\n\n\n        for (int c = 0; c < 3; c++)\n            dst(c) = col\[c];\n        dst(3) = 1;\n\n    \}\n\};"
+  rebuild ""
+  TexTile_width {{width}}
+  TexTile_height {{height}}
+  TexTile_tiling {{parent.tiling}}
+  TexTile_offset {{parent.offset}}
+  TexTile_scale 0.5
+  TexTile_contrast 0.2
+  format {{{TexTileFormat.format}}}
+  specifiedFormat true
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos -81
+  ypos -66
+ }
+ Output {
+  name Output1
+  xpos -81
+  ypos -1
+ }
+ Reformat {
+  inputs 0
+  name TexTileFormat
+  xpos 42
+  ypos -60
+ }
+end_group

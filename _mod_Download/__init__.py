@@ -4,9 +4,5 @@ __all__ = [
 	'mod_ScaleTree',
 	'mod_Tabtabtab',
 	'knob_scripter',
-	'mod_TurboMerge',
-	'Cryptomatte'
-	]
-
-import nuke
-nuke.pluginAddPath('./Cryptomatte')
+	'mod_TurboMerge'
+]

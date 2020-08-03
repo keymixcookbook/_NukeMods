@@ -1,0 +1,646 @@
+#! /usr/local/Nuke11.3v6/libnuke-11.3.6.so -nx
+version 11.3 v6
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="1" y="1" w="3840" h="2160" maximized="1" fullscreen="1" screen="0">
+        <splitter orientation="2">
+            <split size="339"/>
+            <dock id=""/>
+            <split size="64"/>
+            <dock id="" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1703"/>
+            <splitter orientation="1">
+                <split size="1880"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="1199"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+                <split size="753"/>
+                <dock id="" activePageId="Properties.1">
+                    <page id="Properties.1"/>
+                    <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/run/media/rgray/My Book/Nuke/Nukepedia/AlexaGrain/AlexaGrain.nk"
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Group {
+ inputs 0
+ name AlexaGrain
+ label "ISO \[value ISO]\n\[value GrainSample]"
+ xpos -61
+ ypos -90
+ addUserKnob {20 Basic}
+ addUserKnob {4 GrainSample l "Grain Sample" t "Alexa 65:\n6560 x 3100 - 6.5k (65)\n\nAlexa LF:\n4480 x 3096 - 4.5k (LF)\n3840 x 2160 - UHD (LF)\n\nAlexa SXT:\n4096 x 2636 - 3.4k (XT)\n3840 x 2160 - 3.2k (XT)\n3424 x 2202 - 3.4k (XT)\n3200 x 1800 - 3.2k (XT)\n2880 x 1620 - 2.8k (XT)\n2048 x 1152 - 2.8k (XT)\n1920 x 1080 - 2.8k (XT)  " M {InputRes "6.5k (65)" "4.5k (LF)" "UHD (LF)" "3.4k (XT)" "3.2k (XT)" "2.8k (XT)" "" "" "" "" "" "" ""}}
+ GrainSample "3.2k (XT)"
+ addUserKnob {6 ResizetoInput l "Resize to input" -STARTLINE}
+ ResizetoInput true
+ addUserKnob {4 ISO l "ISO Sensitivity" M {160 200 250 320 400 500 640 "800 (native)" 1000 1280 1600 2000 2560 3200 "" "" "" "" "" "" "" ""}}
+ ISO "800 (native)"
+ addUserKnob {3 Seed l "Grain Seed"}
+ addUserKnob {26 ""}
+ addUserKnob {18 Overall_Amount l "Overall Amount"}
+ Overall_Amount {1 1 1}
+ addUserKnob {6 Overall_Amount_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Overall_Amount_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {18 DeepBlacks l "Deep Blacks"}
+ DeepBlacks {1 1 1}
+ addUserKnob {6 DeepBlacks_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 BlacksLow l "Blacks Low"}
+ BlacksLow 0.10022474
+ addUserKnob {7 BlacksHigh l "Blacks High"}
+ BlacksHigh 0.28105982
+ addUserKnob {6 DeepBlacks_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 ViewBlacks l "View Blacks" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {18 Whites}
+ Whites {1 1 1}
+ addUserKnob {6 Whites_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 WhitesLow l "Whites Low"}
+ WhitesLow 0.36362718
+ addUserKnob {7 WhitesHigh l "Whites High"}
+ WhitesHigh 0.58147438
+ addUserKnob {6 ViewWhites l "View Whites" +STARTLINE}
+ addUserKnob {6 Whites_panelDropped_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {20 Sharpness n 1}
+ addUserKnob {7 RSharp l "Red Sharpness"}
+ RSharp 0.25
+ addUserKnob {7 GSharp l "Green Sharpness"}
+ GSharp 0.25
+ addUserKnob {7 BSharp l "Blue Sharpness"}
+ BSharp 0.1
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 Softness n 1}
+ Softness 0
+ addUserKnob {7 RSoft l "Red Softness"}
+ addUserKnob {7 GSoft l "Green Softness"}
+ addUserKnob {7 BSoft l "Blue Softness"}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 Size n 1}
+ Size 0
+ addUserKnob {7 LSize l "Luma Size" R 0.5 1.5}
+ LSize 1
+ addUserKnob {7 RSize l "Red Size" R 0.5 1.5}
+ RSize 1
+ addUserKnob {7 GSize l "Green Size" R 0.5 1.5}
+ GSize 1
+ addUserKnob {7 BSize l "Blue SIze" R 0.5 1.5}
+ BSize 1
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 INFO l "" +STARTLINE T "(c) Riley Gray 2020 - v1.03"}
+ addUserKnob {20 Response}
+ addUserKnob {41 lut l "" -STARTLINE T Film_Response.lut}
+ addUserKnob {26 ResponseInfo l "" +STARTLINE T "\nThe above response curve was made at an iso setting of 800 (native). Changing the iso setting in this tool actually \nchanges the exposure of the plate up or down, then applies the response curve, then re applys the exposure \nchange to balance for middle grey (what the alexa actually does when you change iso). Therefore, if you wish to \nchange the response curve do it at iso 800 or look at the exposed up or down plate in the tool while sampling.  "}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x388e8e00
+  label "Sharpness\nSoftness"
+  note_font_size 42
+  xpos -527
+  ypos -419
+  bdwidth 572
+  bdheight 266
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x71c67100
+  label "Response \nISO"
+  note_font_size 42
+  xpos -527
+  ypos -134
+  bdwidth 577
+  bdheight 257
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x8e8e3800
+  label "Whites\nBlacks"
+  note_font_size 42
+  xpos -526
+  ypos 147
+  bdwidth 583
+  bdheight 313
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x7d7164ff
+  label VIEWS
+  note_font_size 42
+  xpos -39
+  ypos 647
+  bdwidth 326
+  bdheight 268
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 509
+  ypos -1177
+ }
+ Dot {
+  name Dot74
+  label PLATE
+  note_font_size 24
+  xpos 543
+  ypos -1006
+ }
+ Dot {
+  name Dot72
+  xpos 543
+  ypos -64
+ }
+set N9df76d0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 543
+  ypos 211
+ }
+set Na5f9e30 [stack 0]
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace1
+  xpos 295
+  ypos 208
+ }
+ Dot {
+  name Dot9
+  xpos 177
+  ypos 211
+ }
+set Na637240 [stack 0]
+ Dot {
+  name Dot2
+  xpos 177
+  ypos 374
+ }
+ Keyer {
+  invert true
+  operation "luminance key"
+  range {{parent.BlacksLow} {parent.BlacksHigh} 1 1}
+  name Keyer1
+  xpos -74
+  ypos 365
+ }
+set N8df50a0 [stack 0]
+ Dot {
+  name Dot5
+  xpos 115
+  ypos 727
+  hide_input true
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Whites
+  xpos 81
+  ypos 768
+ }
+set N7620250 [stack 0]
+ Dot {
+  name Dot8
+  xpos 5
+  ypos 771
+ }
+push $Na637240
+ Keyer {
+  operation "luminance key"
+  range {{parent.WhitesLow} {parent.WhitesHigh} 1 1}
+  name Keyer2
+  xpos -74
+  ypos 202
+ }
+set Na5b3150 [stack 0]
+ Dot {
+  name Dot4
+  xpos 231
+  ypos 728
+  hide_input true
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Blacks
+  xpos 197
+  ypos 767
+ }
+ Dot {
+  name Dot3
+  xpos 231
+  ypos 808
+ }
+set Na5d1ed0 [stack 0]
+ ContactSheet {
+  inputs 2
+  width {{Dot74.width}}
+  height {{Dot74.width/2}}
+  rows 1
+  columns 2
+  center true
+  name ContactSheet1
+  xpos -29
+  ypos 805
+ }
+ Dot {
+  name Dot6
+  xpos 5
+  ypos 890
+ }
+push $N7620250
+ Dot {
+  name Dot7
+  xpos 115
+  ypos 844
+ }
+push $Na5d1ed0
+ Switch {
+  inputs 2
+  which {{"parent.ViewBlacks == 1? 1:0"}}
+  name Switch2
+  xpos 197
+  ypos 841
+ }
+ Switch {
+  inputs 2
+  which {{"parent.ViewWhites + parent.ViewBlacks == 2? 1:0 "}}
+  name Switch3
+  xpos 197
+  ypos 887
+ }
+push $N8df50a0
+push $Na5b3150
+push $N9df76d0
+ EXPTool {
+  mode Stops
+  gang false
+  red {{(ISO==0?-2.333333333:ISO==1?-2:ISO==2?-1.6:ISO==3?-1.3:ISO==4?-1:ISO==5?-.6:ISO==6?-.3:ISO==7?0:ISO==8?.3:ISO==9?.6:ISO==10?1:ISO==11?1.3:ISO==12?1.6:2)/-1}}
+  green {{red}}
+  blue {{red}}
+  name Exposure
+  label Compensation
+  xpos -78
+  ypos -73
+ }
+ ColorLookup {
+  channels rgb
+  lut {master {}
+    red {curve C x0.002999480115 0.1362445652 x0.1373360008 0.4889034033 s2 v0.7107599974 x1 1.239727497 s0.4499999881}
+    green {curve C 0.110607639 x0.135157004 0.5191542506 s1.5 x1 1.144214392 s0.400000006}
+    blue {curve C 0.1032338738 x0.1281179935 0.3248756528 x1 1}
+    alpha {}}
+  name Film_Response
+  xpos -78
+  ypos -23
+ }
+ EXPTool {
+  mode Stops
+  gang false
+  red {{ISO==0?-2.333333333:ISO==1?-2:ISO==2?-1.6:ISO==3?-1.3:ISO==4?-1:ISO==5?-.6:ISO==6?-.3:ISO==7?0:ISO==8?.3:ISO==9?.6:ISO==10?1:ISO==11?1.3:ISO==12?1.6:2}}
+  green {{red}}
+  blue {{red}}
+  name ISO_Exposure
+  xpos -78
+  ypos 13
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{"GrainSample == 0? Dot74.width:GrainSample == 1?6560 : GrainSample == 2? 4448: GrainSample == 3? 3840: GrainSample == 4? 3424: GrainSample == 5? 3200: 2880"}}
+  box_height {{"(box_width/ (Dot74.width/Dot74.height))"}}
+  box_fixed true
+  name SensorSize
+  xpos -204
+  ypos -1016
+ }
+ Dot {
+  name Dot13
+  xpos -170
+  ypos -911
+ }
+set N75fee40 [stack 0]
+ Dot {
+  name Dot14
+  xpos -45
+  ypos -911
+ }
+set N76037d0 [stack 0]
+ Dot {
+  name Dot15
+  xpos 81
+  ypos -911
+ }
+set N7608350 [stack 0]
+ Dot {
+  name Dot16
+  xpos 214
+  ypos -911
+ }
+ Noise {
+  output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  size {{"parent.BSize *8"}}
+  zoffset {{"parent.LNoise2.zoffset +100"}}
+  gain 1
+  gamma 1
+  center {1024 778}
+  name bNoise3
+  xpos 180
+  ypos -863
+ }
+ Add {
+  channels rgb
+  value -0.5
+  name Add7
+  xpos 180
+  ypos -810
+ }
+ Multiply {
+  channels rgb
+  value 0.022
+  name Multiply8
+  xpos 180
+  ypos -786
+ }
+push $N7608350
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  size {{"parent.GSize *4"}}
+  zoffset {{"parent.LNoise2.zoffset +10"}}
+  gain 1
+  gamma 0.998
+  center {1024 778}
+  name gNoise1
+  xpos 47
+  ypos -861
+ }
+ Add {
+  channels rgb
+  value -0.5
+  name Add6
+  xpos 47
+  ypos -812
+ }
+ Multiply {
+  channels rgb
+  value 0.01
+  name Multiply7
+  xpos 47
+  ypos -788
+ }
+push 0
+push $N76037d0
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  size {{parent.RSize*6.5}}
+  zoffset {{parent.LNoise2.zoffset}}
+  gain 1
+  gamma 1
+  center {1024 778}
+  name rNoise2
+  xpos -79
+  ypos -862
+ }
+ Add {
+  channels rgb
+  value -0.5
+  name Add5
+  xpos -79
+  ypos -810
+ }
+ Multiply {
+  channels rgb
+  value 0.03
+  name Multiply6
+  xpos -79
+  ypos -786
+ }
+push $N75fee40
+ Noise {
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  size {{parent.LSize*2}}
+  zoffset {{parent.Seed}}
+  gain 1
+  gamma 0.998
+  center {1024 778}
+  name LNoise2
+  xpos -204
+  ypos -862
+ }
+ Add {
+  channels rgb
+  value -0.5
+  name Add4
+  xpos -204
+  ypos -811
+ }
+ Multiply {
+  channels rgb
+  value 0.035
+  name Multiply5
+  xpos -204
+  ypos -787
+ }
+ Merge2 {
+  inputs 4+1
+  operation plus
+  name Merge7
+  xpos -204
+  ypos -687
+ }
+ Multiply {
+  channels rgb
+  value {1.6 2 3 1}
+  name Multiply1
+  xpos -204
+  ypos -644
+ }
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace3
+  xpos -204
+  ypos -535
+ }
+ Reformat {
+  type "to box"
+  box_width {{Dot74.width}}
+  box_height {{Dot74.height}}
+  box_fixed true
+  filter Lanczos6
+  name Reformat1
+  xpos -204
+  ypos -511
+  disable {{1-parent.ResizetoInput}}
+ }
+ Colorspace {
+  colorspace_in AlexaV3LogC
+  name Colorspace2
+  xpos -204
+  ypos -487
+ }
+ Sharpen {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  amount {{parent.RSharp}}
+  name RedSharpen2
+  xpos -204
+  ypos -358
+ }
+ Sharpen {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  amount {{parent.GSharp}}
+  name GreenSharpen
+  xpos -204
+  ypos -334
+ }
+ Sharpen {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  amount {{parent.BSharp}}
+  name BlueSharpen
+  xpos -204
+  ypos -310
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.RSoft}}
+  name RedBlur
+  xpos -204
+  ypos -252
+ }
+ Blur {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{parent.GSoft}}
+  name GreenBlur
+  xpos -204
+  ypos -228
+ }
+ Blur {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  size {{parent.BSoft}}
+  name BlueBlur
+  xpos -204
+  ypos -204
+ }
+ Multiply {
+  channels rgb
+  value {{parent.Overall_Amount} {parent.Overall_Amount} {parent.Overall_Amount} {parent.Overall_Amount}}
+  name Overall
+  xpos -204
+  ypos -69
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output rgb
+  name Merge58
+  xpos -204
+  ypos 13
+ }
+ Multiply {
+  inputs 1+1
+  channels rgb
+  value {{parent.Whites.r} {parent.Whites.g} {parent.Whites.b} 1}
+  name WHITES
+  xpos -204
+  ypos 208
+ }
+ Multiply {
+  inputs 1+1
+  channels rgb
+  value {{parent.DeepBlacks} {parent.DeepBlacks} {parent.DeepBlacks} 1}
+  name BLACKS
+  xpos -204
+  ypos 371
+ }
+ Dot {
+  name Dot73
+  xpos -170
+  ypos 548
+ }
+push $Na5f9e30
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  output rgb
+  name Merge57
+  xpos 509
+  ypos 545
+ }
+ Switch {
+  inputs 2
+  which {{"clamp(parent.ViewWhites + parent.ViewBlacks) "}}
+  name Switch4
+  xpos 509
+  ypos 887
+ }
+ Output {
+  name Output1
+  xpos 509
+  ypos 998
+ }
+end_group

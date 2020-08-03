@@ -1,0 +1,564 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name fxT_chromaKeyer
+ help "Chroma / color keyer.\nUsful to isolate skin color for example.\n\nTool by Tor Andreassen - www.fxtor.net"
+ tile_color 0xf9ff00ff
+ selected true
+ xpos -423
+ ypos 272
+ addUserKnob {20 fxT_chromaKeyerTAB l fxT_chromaKeyer}
+ addUserKnob {26 ""}
+ addUserKnob {26 info l "" +STARTLINE T "<font color ='grey'>adjust the channels to isolate a specific color: <br />\n\n</font>"}
+ addUserKnob {41 gamma l "<font color='#de0000'>adjust red</font>" T gammaRED.gamma}
+ addUserKnob {41 gamma_1 l "<font color='#7ebd64'>adjust green</font>" T gammaGREEN.gamma}
+ addUserKnob {41 gamma_2 l "<font color='#2279c3'>adjust blue</font>" T gammaBLUE.gamma}
+ addUserKnob {26 alphaAdjust l "<font color='grey'>alpha adjustments</font>"}
+ addUserKnob {6 displayHelperAlpha l "display helper alpha (in alpha channel)" t "\nUse this to display the helper alpha, so you can adjust the 'fillAlpha' slider accordingly.\n\nPS: This is not the final alpha. just a helper to create the matte to grade the alpha with.\n\nUncheck this when you're happy with the grading matte, view the alpha channel and use gradeAlpha and alphaMult to adjust.\n\n\n___________________________________\nThis is not always needed, but can help fill in bright bits the keyer missed in some cases." +STARTLINE}
+ addUserKnob {7 fillAlpha t "Use this to fill holes in alpha if needed.\nThis alters the matte used to grade the alpha." R 0 5}
+ addUserKnob {7 gradeAlpha t "Use this to fill in alpha in problem areas.\nThis will grade though the matte you see when 'display helper alpha' is checked.\n\nIt's not always needed, but in some cases it can very helpful." -STARTLINE R 1 4}
+ gradeAlpha 1
+ addUserKnob {16 alphaMult t "Amplify alpha. Boost this as needed to get a usable alpha. Try and isolate the colors first before boosting this."}
+ alphaMult 1
+ addUserKnob {26 ""}
+ addUserKnob {6 mask l "mask rgb by alpha" t "If you generate a clean alpha channel with this node, you can mask the color adjustments done by this alpha.\n\nOnly useful if you are using the node by itself and not using it as an external matte." +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix t "Dissolve between input and adjustments made by this node (affects rgb only)"}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "<font color='#454545'>// fxT_chromaKeyer v1.1 © Tor Andreassen - www.fxtor.net</font>"}
+}
+ Input {
+  inputs 0
+  name mask
+  label "\[value number]"
+  xpos 638
+  ypos 603
+  number 1
+ }
+set N4c9c3800 [stack 0]
+ NoOp {
+  name autoAlphaCheck
+  xpos 788
+  ypos 657
+  addUserKnob {20 autoAlphaCheck}
+  addUserKnob {6 a +STARTLINE}
+  a {{"\[string first \".a\" \[channels \[input this 0]]]>-1\n\n"}}
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant1
+  xpos -174
+  ypos -668
+  postage_stamp false
+ }
+ Dot {
+  name Dot9
+  note_font_size 50
+  xpos -149
+  ypos -581
+ }
+set N4c9c2c00 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 50
+  xpos -149
+  ypos -490
+ }
+set N4c9c2800 [stack 0]
+ Dot {
+  name Dot21
+  note_font_size 50
+  xpos -149
+  ypos -423
+ }
+push $N4c9c2800
+push $N4c9c2c00
+ Input {
+  inputs 0
+  name rgb
+  label "\[value number]"
+  xpos 5
+  ypos -854
+ }
+set N4c9c2000 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy4
+  tile_color 0xff0000ff
+  xpos 5
+  ypos -579
+  disable {{autoRGBCheck.r}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  name Copy5
+  tile_color 0xff00ff
+  xpos 5
+  ypos -488
+  disable {{autoRGBCheck.g}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy6
+  tile_color 0xffff
+  xpos 5
+  ypos -421
+  disable {{autoRGBCheck.b}}
+ }
+ Dot {
+  name Dot19
+  note_font_size 50
+  xpos 30
+  ypos -249
+ }
+set N317d9000 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 50
+  xpos -474
+  ypos -249
+ }
+ Dot {
+  name Dot5
+  note_font_size 50
+  xpos -474
+  ypos 187
+ }
+set N317d8800 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 50
+  xpos -474
+  ypos 526
+ }
+set N317d8400 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 50
+  xpos -474
+  ypos 896
+ }
+set N317d8000 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 50
+  xpos -474
+  ypos 1040
+ }
+set N52e11c00 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 50
+  xpos -474
+  ypos 1132
+ }
+set N52e11800 [stack 0]
+ Dot {
+  name Dot18
+  note_font_size 50
+  xpos -474
+  ypos 1327
+ }
+push $N317d8800
+push $N317d9000
+ Saturation {
+  saturation 0
+  mode Average
+  name Saturation1
+  label "\n"
+  xpos 5
+  ypos -183
+ }
+set N52e11000 [stack 0]
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace1
+  label "\[value colorspace_in] --> \[value colorspace_out]"
+  xpos 799
+  ypos -187
+ }
+set N52e10c00 [stack 0]
+ Grade {
+  name gammaBLUE
+  xpos 892
+  ypos -18
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace4
+  label "\[value colorspace_in] --> \[value colorspace_out]"
+  xpos 892
+  ypos 8
+ }
+ Dot {
+  name Dot3
+  note_font_size 50
+  xpos 917
+  ypos 187
+ }
+push $N52e10c00
+ Grade {
+  name gammaGREEN
+  xpos 799
+  ypos -18
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace3
+  label "\[value colorspace_in] --> \[value colorspace_out]"
+  xpos 799
+  ypos 8
+ }
+ Dot {
+  name Dot2
+  note_font_size 50
+  xpos 824
+  ypos 138
+ }
+push $N52e10c00
+ Grade {
+  name gammaRED
+  xpos 699
+  ypos -19
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace2
+  label "\[value colorspace_in] --> \[value colorspace_out]"
+  xpos 699
+  ypos 7
+ }
+ Dot {
+  name Dot1
+  note_font_size 50
+  xpos 724
+  ypos 57
+ }
+push $N52e11000
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy1
+  tile_color 0xff0000ff
+  xpos 5
+  ypos 59
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  name Copy2
+  tile_color 0xff00ff
+  xpos 5
+  ypos 140
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy3
+  tile_color 0xffff
+  xpos 5
+  ypos 189
+ }
+set N4a7fdc00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos -143
+  ypos 193
+ }
+ Clamp {
+  channels rgb
+  name Clamp1
+  xpos -143
+  ypos 238
+ }
+ Expression {
+  temp_name0 mult
+  temp_expr0 parent.alphaMult
+  channel3 alpha
+  expr3 clamp(((r+g+b)/.33)*mult)
+  name Expression1
+  label generateAlpha
+  xpos -143
+  ypos 280
+ }
+ Group {
+  name Dilate_subpixel
+  help "Dilate that works on subpixel level"
+  xpos -143
+  ypos 359
+  addUserKnob {20 dilateSubPixel_simpleTAB l dilateSubPixel_simple}
+  addUserKnob {7 size R -100 100}
+  size {{parent.fillAlpha}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 91
+   ypos -214
+  }
+  Dot {
+   name Dot4
+   note_font_size 50
+   xpos 116
+   ypos -149
+  }
+set N4a7fc800 [stack 0]
+  Dilate {
+   size {{ceil(parent.size)} {ceil(parent.size)}}
+   name Dilate_Max
+   xpos 169
+   ypos -35
+  }
+push $N4a7fc800
+  Dilate {
+   size {{floor(parent.size)} {floor(parent.size)}}
+   name Dilate_Min
+   xpos 30
+   ypos -34
+  }
+  Dissolve {
+   inputs 2
+   which {{parent.size-floor(parent.size)}}
+   name Dissolve1
+   xpos 98
+   ypos 42
+  }
+  Matrix {
+   channels alpha
+   matrix {
+       {1 2 1}
+       {2 6 2}
+       {1 2 1}
+     }
+   normalize true
+   mix {{parent.parent.fillAlpha?1:0}}
+   name Matrix1
+   xpos 98
+   ypos 93
+  }
+  Output {
+   name Output1
+   xpos 98
+   ypos 154
+  }
+ end_group
+set N8f82cd00 [stack 0]
+ Dot {
+  name Dot13
+  note_font_size 50
+  xpos -118
+  ypos 1272
+ }
+push $N4c9c3800
+ Shuffle {
+  alpha white
+  name Shuffle3
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos 527
+  ypos 654
+ }
+push $N4c9c3800
+ Switch {
+  inputs 2
+  which {{!parent.autoAlphaCheck.a}}
+  name Switch1
+  label AutoMaskCheck
+  xpos 638
+  ypos 716
+ }
+set N42110800 [stack 0]
+ Dot {
+  name Dot14
+  note_font_size 50
+  xpos 759
+  ypos 774
+ }
+push $N317d8400
+push $N8f82cd00
+push $N4a7fdc00
+ Grade {
+  inputs 1+1
+  whitepoint {{parent.gradeAlpha}}
+  name Grade1
+  xpos 5
+  ypos 359
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  xpos 5
+  ypos 532
+ }
+ Clamp {
+  channels rgb
+  name Clamp2
+  xpos 5
+  ypos 778
+ }
+set Ncb37800 [stack 0]
+ Expression {
+  temp_name0 mult
+  temp_expr0 parent.alphaMult
+  channel3 alpha
+  expr3 clamp(((r+g+b)/.33)*mult)
+  name Expression2
+  label generateAlpha
+  xpos 283
+  ypos 774
+ }
+set Ncb37400 [stack 0]
+push $N42110800
+ Switch {
+  inputs 2
+  which {{parent.mask}}
+  name Switch2
+  label maskByAlpha
+  xpos 638
+  ypos 778
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge3
+  label "mix:\[value mix]"
+  xpos 638
+  ypos 852
+  disable {{!parent.autoAlphaCheck.a}}
+ }
+ Dot {
+  name Dot15
+  note_font_size 50
+  xpos 663
+  ypos 950
+ }
+set Ncb36800 [stack 0]
+push $Ncb37400
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge4
+  label "mix:\[value mix]"
+  xpos 283
+  ypos 952
+ }
+ Dot {
+  name Dot17
+  note_font_size 50
+  xpos 308
+  ypos 1227
+ }
+push $Ncb36800
+ Dot {
+  name Dot16
+  note_font_size 50
+  xpos 663
+  ypos 1132
+ }
+push $N317d8000
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace6
+  label "Lin --> YCbCr"
+  xpos -255
+  ypos 898
+ }
+push $Ncb37800
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace7
+  label "Lin --> YCbCr"
+  xpos 5
+  ypos 849
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy11
+  xpos 5
+  ypos 898
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace8
+  label "YCbCr --> Lin"
+  xpos 5
+  ypos 952
+ }
+push $N52e11c00
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.mix}}
+  name Dissolve2
+  label mix
+  xpos 5
+  ypos 1042
+ }
+push $N52e11800
+ Keymix {
+  inputs 3
+  channels rgb
+  name Keymix1
+  xpos 5
+  ypos 1138
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy7
+  xpos 5
+  ypos 1229
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy8
+  xpos 5
+  ypos 1274
+  disable {{!(parent.displayHelperAlpha)}}
+ }
+ Switch {
+  inputs 2
+  which {{"(gammaRED.gamma!=1 || gammaGREEN.gamma!=1 || gammaBLUE.gamma!=1)?0:1"}}
+  name Switch3
+  label "toggle tool when sliders change"
+  xpos 5
+  ypos 1329
+ }
+ Output {
+  name Output1
+  xpos 5
+  ypos 1411
+ }
+push $N4c9c2000
+ NoOp {
+  name autoRGBCheck
+  xpos -164
+  ypos -850
+  addUserKnob {20 autoRBGCheckTAB l autoRBGCheck}
+  addUserKnob {6 r +STARTLINE}
+  r {{"\[string first \"rgba.red\" \[channels \[input this 0]]]>-1"}}
+  addUserKnob {6 g +STARTLINE}
+  g {{"\[string first \"rgba.green\" \[channels \[input this 0]]]>-1"}}
+  addUserKnob {6 b +STARTLINE}
+  b {{"\[string first \"rgba.blue\" \[channels \[input this 0]]]>-1"}}
+ }
+end_group

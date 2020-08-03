@@ -23,7 +23,7 @@ kuPlugInPath=[
     './__icons',
 
     './_pkg_Studios/pkgStudio_%s' % STUDIO,
-    './_mod_Download/Cryptomatte',
+    './_mod_Download/'
     ]
 
 print "Adding kupipeline plugin path"

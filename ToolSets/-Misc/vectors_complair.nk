@@ -1,0 +1,766 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+version 10.5 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="1920" y="0" w="1920" h="1080" fullscreen="1" screen="1">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1326" stretch="1"/>
+            <splitter orientation="2">
+                <split size="1057"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="546"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+            </dock>
+        </splitter>
+    </window>
+    <window x="0" y="0" w="1920" h="1080" fullscreen="1" screen="0">
+        <splitter orientation="2">
+            <split size="1080"/>
+            <dock id="" activePageId="Viewer.1" focus="true">
+                <page id="Viewer.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name D:/2d_teaching/vectors/vectors_complair.nk
+ last_frame 200
+ format "4096 2160 0 0 4096 2160 1 4K_DCP"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+StickyNote {
+ inputs 0
+ name StickyNote4
+ label "   Sobel filter noise    "
+ note_font_size 20
+ xpos -518
+ ypos 834
+}
+StickyNote {
+ inputs 0
+ name StickyNote3
+ label "   Expression noise    "
+ note_font_size 20
+ xpos -523
+ ypos 642
+}
+NoOp {
+ inputs 0
+ name i
+ xpos -226
+ ypos 1297
+ addUserKnob {20 User}
+ addUserKnob {14 scale R 0 100}
+ scale 1
+ addUserKnob {7 angle}
+ angle {{frame/200}}
+}
+StickyNote {
+ inputs 0
+ name StickyNote6
+ label "   Polar to cartesian >>  "
+ note_font_size 20
+ xpos -626
+ ypos 210
+}
+StickyNote {
+ inputs 0
+ name StickyNote5
+ label "    Cartesian to polar coordinates >>     "
+ note_font_size 20
+ xpos -734
+ ypos 51
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Vector addition"
+ note_font_size 20
+ xpos -246
+ ypos 1114
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "Vector multiplication"
+ note_font_size 20
+ xpos -302
+ ypos 1352
+}
+StickyNote {
+ inputs 0
+ name StickyNote7
+ label "   Polar to cartesian >>  "
+ note_font_size 20
+ xpos -1909
+ ypos 1179
+}
+StickyNote {
+ inputs 0
+ name StickyNote8
+ label "    Cartesian to polar coordinates >>     "
+ note_font_size 20
+ xpos -2017
+ ypos 1020
+}
+Reformat {
+ inputs 0
+ type "to box"
+ box_width 21
+ box_height 21
+ box_fixed true
+ name Reformat1
+ xpos -323
+ ypos 790
+}
+Noise {
+ size 37
+ zoffset {{frame/50}}
+ octaves 2
+ center {2048 1080}
+ name Noise1
+ xpos -323
+ ypos 816
+}
+Matrix {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ matrix {
+     {-1 0 1}
+     {-2 0 2}
+     {-1 0 1}
+   }
+ name Matrix1
+ xpos -323
+ ypos 842
+}
+Matrix {
+ channels {-rgba.red rgba.green -rgba.blue none}
+ matrix {
+     {1 2 1}
+     {0 0 0}
+     {-1 -2 -1}
+   }
+ name Matrix2
+ xpos -323
+ ypos 880
+}
+Multiply {
+ value 4
+ name Multiply1
+ xpos -323
+ ypos 906
+}
+Group {
+ inputs 0
+ name Vectors
+ xpos 234
+ ypos -290
+ addUserKnob {20 User}
+ addUserKnob {18 dot l "Centre Dot Colour"}
+ dot {0 0 0}
+ addUserKnob {6 dot_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 21
+  box_height 21
+  box_fixed true
+  scale 0.01
+  name Reformat2
+  xpos 88
+  ypos 466
+ }
+ Expression {
+  expr0 ((x+.5)/width-.5)/.47619
+  expr1 ((y+.5)/height-.5)/.47619
+  name Expression3
+  xpos 88
+  ypos 510
+ }
+add_layer {p p.red p.green p.blue}
+ Shuffle {
+  out p
+  name Shuffle2
+  xpos 88
+  ypos 541
+ }
+ Expression {
+  expr0 .5-(hypot(r,g)/2)
+  expr1 .7
+  expr2 .7
+  name Expression6
+  xpos 88
+  ypos 567
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace2
+  xpos 88
+  ypos 601
+ }
+ Rectangle {
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  area {10 10 11 11}
+  color {{parent.dot} {parent.dot} {parent.dot} 0}
+  color_panelDropped true
+  name Rectangle1
+  selected true
+  xpos 88
+  ypos 641
+ }
+ Output {
+  name Output1
+  xpos 88
+  ypos 719
+ }
+end_group
+Dot {
+ name Dot4
+ xpos 268
+ ypos -96
+}
+set N6b47c00 [stack 0]
+Shuffle {
+ in p
+ blue black
+ alpha black
+ name Shuffle1
+ xpos -91
+ ypos -100
+}
+Dot {
+ name Dot5
+ xpos -57
+ ypos 59
+}
+set N5ac13c00 [stack 0]
+Dot {
+ name Dot3
+ xpos -217
+ ypos 59
+}
+set N5ac13800 [stack 0]
+Expression {
+ expr0 -r
+ expr1 -g
+ name invert
+ xpos -251
+ ypos 132
+}
+push 0
+push $N5ac13800
+Expression {
+ expr0 hypot(r,g)
+ expr1 atan(r,g)
+ name cartesian2polar
+ xpos -397
+ ypos 55
+}
+Add {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ value {{-pi/2} {-pi/2} 0 0}
+ name Add1
+ xpos -397
+ ypos 130
+}
+Expression {
+ expr0 r*sin(g)
+ expr1 r*cos(g)
+ name polar2cartesian_2
+ xpos -397
+ ypos 210
+}
+push $N5ac13c00
+Dissolve {
+ inputs 3+1
+ which {{frame/100}}
+ name Dissolve2
+ xpos -91
+ ypos 204
+}
+Dot {
+ name Dot1
+ xpos -57
+ ypos 378
+}
+set N5ac54000 [stack 0]
+Multiply {
+ channels rgb
+ value {{(pi/2)}}
+ name Multiply5
+ xpos -282
+ ypos 374
+}
+Expression {
+ expr0 r*sin(g)
+ expr1 r*cos(g)
+ name polar2cartesian_1
+ xpos -282
+ ypos 416
+}
+Multiply {
+ value 0.6
+ name Multiply3
+ xpos -282
+ ypos 464
+}
+push $N5ac54000
+Dissolve {
+ inputs 2
+ which 1
+ name Dissolve1
+ xpos -91
+ ypos 464
+}
+Dot {
+ name Dot2
+ xpos -57
+ ypos 612
+}
+set N5ac55400 [stack 0]
+Multiply {
+ value 0.18
+ name Multiply2
+ xpos -318
+ ypos 602
+}
+Expression {
+ temp_expr0 "fBm (x, y, z, octaves, lacunarity, gain)"
+ temp_name1 z
+ temp_expr1 frame/500
+ temp_name2 zoffset
+ temp_expr2 5
+ temp_name3 oct
+ temp_expr3 3
+ expr0 fBm(r,g,z,oct,5,.5)
+ expr1 fBm(r,g,z+zoffset,oct,5,.5)
+ name Expression3
+ xpos -318
+ ypos 685
+}
+push $N5ac55400
+Merge2 {
+ inputs 2
+ operation plus
+ mix 0.42
+ name Merge2
+ xpos -91
+ ypos 685
+ disable true
+}
+Merge2 {
+ inputs 2
+ operation plus
+ mix 0.38
+ name Merge1
+ xpos -91
+ ypos 912
+ disable true
+}
+Add {
+ channels rgb
+ value {0 1 0 0}
+ name Add2
+ xpos -91
+ ypos 1121
+ disable true
+}
+ColorMatrix {
+ matrix {
+     {{cos(i.angle*2*pi)} {-sin(i.angle*2*pi)} 0}
+     {{sin(i.angle*2*pi)} {cos(i.angle*2*pi)} 0}
+     {0 0 0}
+   }
+ name Rotate
+ xpos -91
+ ypos 1302
+ disable true
+}
+ColorMatrix {
+ matrix {
+     {{parent.i.scale.w} 0 0}
+     {0 {parent.i.scale.h} 0}
+     {0 0 0}
+   }
+ name Scale
+ xpos -91
+ ypos 1378
+ disable true
+}
+Dot {
+ name Dot6
+ xpos -57
+ ypos 1488
+}
+push $N6b47c00
+ShuffleCopy {
+ inputs 2
+ alpha black
+ black red
+ white green
+ red2 blue
+ out rgb
+ out2 p
+ name ShuffleCopy1
+ xpos 234
+ ypos 1484
+}
+Group {
+ name pointviewer2d
+ xpos 234
+ ypos 1636
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0.5 20}
+ size 2
+ addUserKnob {7 grid}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Constant3
+  xpos 189
+  ypos 473
+ }
+set N5ac90c00 [stack 0]
+ Grid {
+  number 22
+  color 0.18
+  name Grid1
+  xpos 189
+  ypos 564
+ }
+ Grid {
+  number 1
+  size 2
+  translate {511 511}
+  name Grid2
+  xpos 189
+  ypos 600
+ }
+ Camera2 {
+  inputs 0
+  translate {0 0 5}
+  focal 45.4
+  haperture 20
+  vaperture 20
+  name Camera2
+  xpos -60
+  ypos 476
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 63
+  ypos 231
+ }
+ Shuffle {
+  in p
+  blue black
+  out p
+  name Shuffle1
+  xpos 63
+  ypos 303
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode textured
+  P_channel p
+  detail 1
+  pointSize {{size}}
+  name PositionToPoints1
+  xpos 63
+  ypos 381
+ }
+push $N5ac90c00
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  shutteroffset centred
+  motion_vectors_type distance
+  name ScanlineRender2
+  xpos 63
+  ypos 496
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  mix {{grid}}
+  name Merge2
+  xpos 63
+  ypos 600
+ }
+ Output {
+  name Output1
+  xpos 63
+  ypos 700
+ }
+end_group
+Group {
+ inputs 0
+ name Vectors1
+ xpos -1049
+ ypos 679
+ addUserKnob {20 User}
+ addUserKnob {18 dot l "Centre Dot Colour"}
+ dot {0 0 0}
+ addUserKnob {6 dot_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 21
+  box_height 21
+  box_fixed true
+  scale 0.01
+  name Reformat2
+  xpos 88
+  ypos 466
+ }
+ Expression {
+  expr0 ((x+.5)/width-.5)/.47619
+  expr1 ((y+.5)/height-.5)/.47619
+  name Expression3
+  xpos 88
+  ypos 510
+ }
+ Shuffle {
+  out p
+  name Shuffle2
+  xpos 88
+  ypos 541
+ }
+ Expression {
+  expr0 .5-(hypot(r,g)/2)
+  expr1 .7
+  expr2 .7
+  name Expression6
+  xpos 88
+  ypos 567
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace2
+  xpos 88
+  ypos 601
+ }
+ Rectangle {
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  area {10 10 11 11}
+  color {{parent.dot} {parent.dot} {parent.dot} 0}
+  color_panelDropped true
+  name Rectangle1
+  selected true
+  xpos 88
+  ypos 641
+ }
+ Output {
+  name Output1
+  xpos 88
+  ypos 719
+ }
+end_group
+Dot {
+ name Dot8
+ xpos -1015
+ ypos 873
+}
+set N5abb4400 [stack 0]
+Shuffle {
+ in p
+ blue black
+ alpha black
+ name Shuffle2
+ xpos -1374
+ ypos 869
+}
+Dot {
+ name Dot9
+ xpos -1340
+ ypos 1028
+}
+set N5d24e000 [stack 0]
+Dot {
+ name Dot10
+ xpos -1500
+ ypos 1028
+}
+set N5d24e800 [stack 0]
+Expression {
+ expr0 -r
+ expr1 -g
+ name invert1
+ xpos -1534
+ ypos 1101
+}
+push 0
+push $N5d24e800
+Expression {
+ expr0 hypot(r,g)
+ expr1 atan(r,g)
+ name cartesian2polar1
+ xpos -1680
+ ypos 1024
+}
+Add {
+ channels {rgba.red rgba.green -rgba.blue none}
+ value {{-pi/2} {-pi/2} 0 0}
+ name Add3
+ xpos -1680
+ ypos 1099
+}
+Expression {
+ expr0 r*sin(g)
+ expr1 r*cos(g)
+ name polar2cartesian_3
+ xpos -1680
+ ypos 1179
+}
+push $N5d24e000
+Dissolve {
+ inputs 3+1
+ which {{frame/100}}
+ name Dissolve3
+ xpos -1374
+ ypos 1179
+}
+Dot {
+ name Dot7
+ xpos -1340
+ ypos 1349
+}
+push $N5abb4400
+ShuffleCopy {
+ inputs 2
+ alpha black
+ black red
+ white green
+ red2 blue
+ out rgb
+ out2 p
+ name ShuffleCopy2
+ xpos -1049
+ ypos 1345
+}
+Group {
+ name pointviewer2d1
+ xpos -1049
+ ypos 1497
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0.5 20}
+ size 2
+ addUserKnob {7 grid}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Constant3
+  xpos 189
+  ypos 473
+ }
+set N1e5d9000 [stack 0]
+ Grid {
+  number 22
+  color 0.18
+  name Grid1
+  xpos 189
+  ypos 564
+ }
+ Grid {
+  number 1
+  size 2
+  translate {511 511}
+  name Grid2
+  xpos 189
+  ypos 600
+ }
+ Camera2 {
+  inputs 0
+  translate {0 0 5}
+  focal 45.4
+  haperture 20
+  vaperture 20
+  name Camera2
+  xpos -60
+  ypos 476
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 63
+  ypos 231
+ }
+ Shuffle {
+  in p
+  blue black
+  out p
+  name Shuffle1
+  xpos 63
+  ypos 303
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode textured
+  P_channel p
+  detail 1
+  pointSize {{size}}
+  name PositionToPoints1
+  xpos 63
+  ypos 381
+ }
+push $N1e5d9000
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  shutteroffset centred
+  motion_vectors_type distance
+  name ScanlineRender2
+  xpos 63
+  ypos 496
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  mix {{grid}}
+  name Merge2
+  xpos 63
+  ypos 600
+ }
+ Output {
+  name Output1
+  xpos 63
+  ypos 700
+ }
+end_group
+Viewer {
+ inputs 2
+ frame 1
+ frame_range 1-200
+ colour_sample_bbox {1.421875 -0.0625 1.423828125 -0.060546875}
+ name Viewer1
+ selected true
+ xpos -1049
+ ypos 1959
+}
