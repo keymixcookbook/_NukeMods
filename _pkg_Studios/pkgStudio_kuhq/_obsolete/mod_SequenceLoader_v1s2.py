@@ -14,9 +14,6 @@ bpp_ism0010_lgt_v011/masterLayer/albeto/albeto.1001.exr
 def _version_():
 	'''
 
-	version 2.0
-	- adding string filter
-
 	version 1.2
 	- symlink fix to UNIX style
 	- fixing channel shuffle of crptomatte, Z matte
@@ -31,7 +28,6 @@ def _version_():
 	- import aovs exrs as image group
 
 	'''
-__VERSION__=2.0
 
 
 
@@ -55,10 +51,7 @@ from Qt import QtWidgets, QtGui, QtCore
 #-------------------------------------------------------------------------------
 
 
-
-
 DATA_AOV = ['P', 'N', 'Z', 'crypto_object', 'crypto_material','crypto_asset']
-
 
 
 
@@ -166,31 +159,15 @@ class Core_SequenceLoader(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_SequenceLoader, self).__init__()
 
-		# lgtPath
 		self.lgtPath_label = QtWidgets.QLabel('lighting dir: ')
 		self.lgtPath = QtWidgets.QLineEdit()
 		self.lgtPath.setMinimumWidth(500)
-		self.lgtPath.editingFinished.connect(self.getVersions)
-		# lgtPath_btn
 		self.lgtPath_btn = QtWidgets.QPushButton('Browse')
 		self.lgtPath_btn.clicked.connect(self.browse)
-		# renderVersion
 		self.renderVersion_label = QtWidgets.QLabel("lighting ver: ")
 		self.renderVersion_mu = QtWidgets.QComboBox()
 		self.renderVersion_mu.setMinimumWidth(250)
-		self.renderVersion_mu.setToolTip("look for dir with version number in name")
-		# renderVersion_Filter
-		self.renderVersion_filter_label = QtWidgets.QLabel("Filter: ")
-		self.renderVersion_filter = QtWidgets.QLineEdit()
-		_tip = "i.e. lgt, lookdev, anim. Seperated by commas"
-		self.renderVersion_filter.setPlaceholderText(_tip)
-		self.renderVersion_filter.setToolTip(_tip)
-		self.renderVersion_filter.setMinimumWidth(150)
-		self.renderVersion_filter.editingFinished.connect(self.getVersions)
-		_completer = QtWidgets.QCompleter(['lgt', 'lookdev', 'anim'])
-		self.renderVersion_filter.setCompleter(_completer)
-		# load_btn
-		self.load_btn = QtWidgets.QPushButton("Load Sequence")
+		self.load_btn = QtWidgets.QPushButton('Load Sequence')
 		self.load_btn.clicked.connect(self.SequenceLoader)
 
 		self.file_layout = QtWidgets.QHBoxLayout()
@@ -202,8 +179,6 @@ class Core_SequenceLoader(QtWidgets.QWidget):
 		self.file_layout.addWidget(self.lgtPath_btn)
 		self.combobox_layout.addWidget(self.renderVersion_label)
 		self.combobox_layout.addWidget(self.renderVersion_mu)
-		self.combobox_layout.addWidget(self.renderVersion_filter_label)
-		self.combobox_layout.addWidget(self.renderVersion_filter)
 		self.combobox_layout.addStretch(1)
 
 		self.master_layout.addLayout(self.file_layout)
@@ -226,7 +201,6 @@ class Core_SequenceLoader(QtWidgets.QWidget):
 		'''run panel instance'''
 		self.show()
 		self.raise_()
-		self.renderVersion_mu.setFocus()
 
 
 	def browse(self):
@@ -246,35 +220,17 @@ class Core_SequenceLoader(QtWidgets.QWidget):
 		'''get the render versions with given lighting dir and populate combox'''
 		dir_lgt = self.lgtPath.text()
 		ls_excute = ['tmp', '.DS_Store']
-		ls = [v for v in os.listdir(dir_lgt) if v not in ls_excute and '_v' in v]
-		_filter = [f.strip() for f in self.renderVersion_filter.text().split(',')]
-
-		# Filter function
-		ls_filtered = []
-		if len(_filter)>0:
-			for f in _filter:
-				for i in ls:
-					if f in i and i not in ls_filtered:
-						ls_filtered.append(i)
-		else:
-			ls_filtered = ls
-
+		ls = [v for v in os.listdir(dir_lgt) if v not in ls_excute]
 		self.renderVersion_mu.clear()
-		if len(ls_filtered)>0:
-			self.renderVersion_mu.setEnabled(True)
-			self.renderVersion_mu.addItems(ls_filtered)
+		if len(ls)>0:
+			self.renderVersion_mu.addItems(ls)
 			self.load_btn.setEnabled(True)
 			self.load_btn.setText("Load Sequence")
+			# print "render versions:\n-%s" % '\n-'.join(ls)
 		else:
-			self.renderVersion_mu.setEnabled(False)
 			self.load_btn.setEnabled(False)
-			self.load_btn.setText("NO RENDER VERSION FOUND")
-			if len(ls)<=0:
-				self.renderVersion_mu.addItem('NO RENDER VERSION FOUND IN DIR')
-				print "\n**********\nNO RENDER VERSION FOUND IN DIR:\n%s\n**********\n" % dir_lgt
-				# nuke.message("\n**********\nNO RENDER VERSION FOUND IN DIR:\n%s\n**********\n" % dir_lgt)
-			else:
-				self.renderVersion_mu.addItem("INVALID FILTER")
+			self.load_btn.setText("NO RENDER VERSION FOUND IN DIR")
+			print "\n**********\nNO RENDER VERSION FOUND IN DIR:\n%s\n**********\n" % dir_lgt
 
 
 	def SequenceLoader(self):
