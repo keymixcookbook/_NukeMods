@@ -44,12 +44,12 @@ from kputl import joinPath
 RENDER_TYPE = ['comp', 'precomp', 'lookdev', 'backplate', 'lgtSlap', 'delivery']
 NO_PASSNAME = ['comp', 'lookdev', 'backplate', 'lgtSlap', 'delivery']
 TYPE_CONFIG = {
-    'comp': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr'},
-    'precomp': {'DIR': slate.ELEMENTS_DIR, 'CH': 'all', 'EXT': 'exr'},
-    'lookdev': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr'},
-    'backplate': {'DIR': slate.ELEMENTS_DIR, 'CH': 'rgba', 'EXT': 'jpg'},
-    'lgtSlap': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr'},
-    'delivery': {'DIR': slate.DELIVERY_DIR, 'CH': 'rgb', 'EXT': 'exr'}
+    'comp': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr', 'CS': 0},
+    'precomp': {'DIR': slate.ELEMENTS_DIR, 'CH': 'all', 'EXT': 'exr', 'CS': 0},
+    'lookdev': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr', 'CS': 0},
+    'backplate': {'DIR': slate.ELEMENTS_DIR, 'CH': 'rgba', 'EXT': 'jpg', 'CS': 'Output - sRGB'},
+    'lgtSlap': {'DIR': slate.RENDER_DIR, 'CH': 'rgb', 'EXT': 'exr', 'CS': 0},
+    'delivery': {'DIR': slate.DELIVERY_DIR, 'CH': 'rgb', 'EXT': 'exr', 'CS': 'Output - sRGB'}
 }
 
 PADDING_VER, PADDING_FRAME = slate.SHOW_CONFIG['padding']
@@ -181,10 +181,22 @@ def set_file(node, out_type, ver):
     node['file'].setValue(out_file)
     node['tx_scriptcopy'].setValue(out_scriptcopy)
     node['channels'].setValue(TYPE_CONFIG[out_type.split('_')[0]]['CH'])
+    node['colorspace'].setValue(TYPE_CONFIG[out_type.split('_')[0]]['CS'])
 
     # print "==========\n\n%s\n\n%s-%s\n\n==========" % (
     # file, nuke.Root()['first_frame'].value(), nuke.Root()['last_frame'].value()
     # )
+
+
+def set_write(node):
+    '''sets settings for given node
+    @node: (node) Write node
+    '''
+    out_type = get_type(node)
+    set_versions(node, out_type)
+    verLatest = max(get_versions(node['mu_type'].value()))+1
+    node['mu_ver'].setValue(verLatest)
+    set_file(node, out_type, verLatest)
 
 
 
@@ -215,7 +227,7 @@ def KuWrite():
     k_latest = nuke.Text_Knob('tx_versionLabel', '', VERSION_LABEL['new_version'])
     k_div_title = nuke.Text_Knob('divider','')
     k_div = nuke.Text_Knob('divider',' ')
-    k_set = nuke.PyScript_Knob('bt_set', '<b>Set Write</b>', 'mod_KuWrite.set_settings(nuke.thisNode())')
+    k_set = nuke.PyScript_Knob('bt_set', '<b>&#11118; Check Versions</b>', 'mod_KuWrite.set_write(nuke.thisNode())')
     k_render = nuke.PyScript_Knob('bt_render', '<b>Render</b>', 'mod_KuWrite.render_node(nuke.thisNode())')
     k_scriptcopy = nuke.String_Knob('tx_scriptcopy', 'scriptcopy dir', '')
 
@@ -233,11 +245,7 @@ def KuWrite():
     mod = os.path.basename(__file__).split('.')[0]
     node['knobChanged'].setValue('%s.onChange()' % mod)
 
-    out_type = get_type(node)
-    set_versions(node, out_type)
-    verLatest = max(get_versions(node['mu_type'].value()))+1
-    node['mu_ver'].setValue(verLatest)
-    set_file(node, out_type, verLatest)
+    set_write(node)
 
 
 
