@@ -18,7 +18,7 @@ nuke.knobDefault('Blur.channels', 'alpha')
 nuke.knobDefault('FilterErode.channels', 'alpha')
 nuke.knobDefault('FilterErode.filter', 'gaussian')
 nuke.knobDefault('Dilate.channels', 'alpha')
-nuke.knobDefault('Defocus.channels', 'alpha')
+nuke.knobDefault('Defocus.channels', 'rgba')
 
 nuke.knobDefault('OFXuk.co.thefoundry.keylight.keylight_v201.show', 'Intermediate Result')
 
@@ -49,6 +49,7 @@ nuke.knobDefault('Roto.cliptype', 'no clip')
 nuke.knobDefault('Rotopaint.cliptype', 'no clip')
 nuke.knobDefault('Constant.channels', 'rgba')
 nuke.knobDefault('Constant.color', '0.18 0.18 0.18 1.0')
+nuke.knobDefault('Exposure.mode', 'Stops')
 
 ### Viewer Node ###
 nuke.knobDefault('Viewer.frame_increment', '8')
