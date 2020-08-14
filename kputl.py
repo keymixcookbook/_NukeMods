@@ -8,6 +8,21 @@ Function to use package-wise
 
 
 import os
+import inspect
+
+
+
+DEBUG_PRINT = True
+
+def dprint(p):
+	'''debug print
+	@p: what to ptint
+	'''
+
+	if DEBUG_PRINT:
+		cur_ln = inspect.currentframe().f_trace_lines
+		print('Ln'+str(cur_ln))
+		print(p)
 
 
 
