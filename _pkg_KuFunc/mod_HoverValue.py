@@ -48,14 +48,14 @@ from Qt import QtWidgets, QtGui, QtCore
 KNOBS_QT = {
 	'Array_Knob': 'Knob_Array',
 	'Boolean_Knob': 'Knob_Boolean',
-	'Channel_Knob': 'Knob_Channel',
+	'Channel_Knob': 'Knob_Enumeration',
 	'Enumeration_Knob': 'Knob_Enumeration',
 	'PyScript_Knob': 'Knob_PyScript',
 	'Int_Knob': 'Knob_Int',
 	'XY_Knob': 'Knob_XY',
 	'Double_Knob': 'Knob_Array',
-	'WH_Knob': 'Knob_Array',
-	'AColor_Knob': 'Knob_Array'
+	'WH_Knob': 'Knob_WH',
+	'AColor_Knob': 'Knob_AColour'
 }
 
 
@@ -72,6 +72,7 @@ KNOBS_NK = {
 	'OCIOColorSpace': ['in_colorspace', 'out_colorspace'],
 	'OCIOLogConvert': ['operation'],
 	'Log2Lin': ['operation'],
+	'Merge2': ['operation'],
 	'Transform': ['translate', 'rotate', 'scale', 'invert_matrix']
 }
 
@@ -83,6 +84,8 @@ USER_LABEL = {
 
 
 DIR_ICON = joinPath(os.path.dirname(nuke.EXE_PATH), 'plugins', 'icons')
+
+WIDGET_HEIGHT = 20
 
 
 
@@ -117,8 +120,8 @@ class Core_HoverValue(QtWidgets.QDialog):
 		self.layout_master = QtWidgets.QVBoxLayout()
 		self.layout_master.addLayout(self.layout_title)
 		self.layout_master.addWidget(self.group_knobs)
-		self.layout_master.addWidget(self.btn_showPanel)
 		self.layout_master.addStretch()
+		self.layout_master.addWidget(self.btn_showPanel)
 
 		self.setLayout(self.layout_master)
 		self.setWindowTitle('HoverValue v%s' % __VERSION__)
@@ -151,7 +154,7 @@ class Core_HoverValue(QtWidgets.QDialog):
 
 	def keyPressEvent(self, event):
 		'''override return key pressed'''
-
+		# super(Core_HoverValue, self).keyPressEvent(event)
 		if event.key() == QtCore.Qt.Key_Enter:
 			pass
 
@@ -178,7 +181,7 @@ class Core_HoverValue(QtWidgets.QDialog):
 				self.build_qt_knob(_sel_node, _ls_knobs)
 				self.set_qt_knob(_sel_node, _ls_knobs)
 
-				self.move(QtGui.QCursor.pos()+QtCore.QPoint(-200,-12))
+				self.move(QtGui.QCursor.pos()+QtCore.QPoint(0,0))
 				self.raise_()
 				self.show()
 		else:
@@ -186,7 +189,7 @@ class Core_HoverValue(QtWidgets.QDialog):
 
 	def closeEvent(self, event):
 		self.remove_widgets()
-		print "close"
+		# print "close"
 
 	def get_nuke_knobs(self):
 		'''get the selected node and its knobs
@@ -229,6 +232,7 @@ class Core_HoverValue(QtWidgets.QDialog):
 			exec(build_string_label.format(k=k,label=_this_knob_label,row=row))
 			exec(build_string_widgets.format(k=k, w=_this_qt_knob, row=row))
 		
+		knob_resize(self.group_knobs)
 
 
 	def set_qt_knob(self, node, ls_knobs):
@@ -359,7 +363,10 @@ def get_qt_knob(node, knob):
 
 def dynamic_decimals(v):
 	'''dynamically change decimals with given input'''
-	precision = len(str(v).split('.')[1].rstrip('0')) if v != 0.0 else 0
+	try:
+		precision = len(str(v).split('.')[1].rstrip('0')) if v != 0.0 else 0
+	except:
+		precision = 0
 	return int(precision)
 
 
@@ -372,6 +379,33 @@ def set_nuke_knob(qt_knob,k,v):
 
 	node = nuke.toNode(qt_knob.parent().title())
 	node[k].setValue(v)
+
+def get_nuke_value(qt_knob,k):
+	'''gets value of this nuke knob
+	@qt_knob: (obj) current qt_knob object
+	@k: (str) name of the knob
+	@v: value of the knob
+	return: knob value in its own value type
+	'''
+	node = nuke.toNode(qt_knob.parent().title())
+	return node[k].value()
+
+
+def knob_resize(w):
+	'''resize widget when knob_sets is swapped'''
+	# Only Height
+	w.setFixedHeight(w.minimumSizeHint().height())
+	w.topLevelWidget().setFixedHeight(w.topLevelWidget().minimumSizeHint().height())
+
+
+def rgb2luma(rgba):
+	'''convert rgba to luma with rec709 algorithem
+	@rgba: (list) list of rgba values
+	return: (float) lumanance value
+	'''
+	r, g, b, a = rgba
+	return float(0.2126*r + 0.7152*g + 0.0722*b)
+
 
 
 
@@ -462,10 +496,12 @@ class Knob_XY(QtWidgets.QWidget):
 		self.Class = 'Knob_XY'
 		
 		# Instance properties
-		self.knob_x = Knob_DoubleSpin(self.nuke_knob)
-		self.knob_x.editingFinished.connect(self.onChanged)
-		self.knob_y = Knob_DoubleSpin(self.nuke_knob)
-		self.knob_y.editingFinished.connect(self.onChanged)
+		self.knob_x = Knob_EditBox(self.nuke_knob)
+		# self.knob_x.editingFinished.connect(self.onChanged)
+		self.knob_x.valueChanged.connect(self.onChanged)
+		self.knob_y = Knob_EditBox(self.nuke_knob)
+		# self.knob_y.editingFinished.connect(self.onChanged)
+		self.knob_y.valueChanged.connect(self.onChanged)
 		self.layout = QtWidgets.QHBoxLayout()
 		self.layout.addWidget(QtWidgets.QLabel('x'))
 		self.layout.addWidget(self.knob_x)
@@ -478,22 +514,21 @@ class Knob_XY(QtWidgets.QWidget):
 	def set_value(self, v):
 		'''set value x and y'''
 		
-		self.knob_x.setDecimals(dynamic_decimals(v[0]))
-		self.knob_x.setValue(float(v[0]))
-		self.knob_y.setDecimals(dynamic_decimals(v[1]))
-		self.knob_y.setValue(float(v[1]))
+		# self.knob_x.setDecimals(dynamic_decimals(v[0]))
+		self.knob_x.set_value(float(v[0]))
+		# self.knob_y.setDecimals(dynamic_decimals(v[1]))
+		self.knob_y.set_value(float(v[1]))
 
 	def get_value(self):
 		'''set value x and y
 		return: (x,y)
 		'''
-
-		return self.knob_x, self.knob_y
-
+		return self.knob_x.get_value(), self.knob_y.get_value()
+	
 	def onChanged(self):
 		_sender = self.sender()
-		_v = _sender.get_value()
-		_sender.setDecimals(dynamic_decimals(_v))
+		_v = self.get_value()
+		# _sender.setDecimals(dynamic_decimals(_sender.get_value()))
 
 		# set nuke knob value
 		set_nuke_knob(self, self.nuke_knob, _v)
@@ -513,7 +548,7 @@ class Knob_Enumeration(QtWidgets.QWidget):
 		arrow = u'\u25b2' if 'out' in self.nuke_knob else u'\u25bc'
 
 		self.combobox = QtWidgets.QComboBox()
-		self.combobox.setMaximumWidth(200)
+		self.combobox.setMinimumWidth(150)
 		self.combobox.currentIndexChanged.connect(self.onChanged)
 		self.swap = QtWidgets.QPushButton(arrow)
 		self.swap.clicked.connect(self.set_swap)
@@ -579,9 +614,359 @@ class Knob_Boolean(QtWidgets.QCheckBox):
 	def onChanged(self):
 
 		# change nuke knob value
-		_state = sender().checkState()
+		_state = self.sender().checkState()
 		_v = True if _state is QtCore.Qt.Checked else False
 		set_nuke_knob(self, self.nuke_knob, _v)
+
+
+class Knob_AColour(QtWidgets.QWidget):
+	def __init__(self, nuke_knob=''):
+		super(Knob_AColour, self).__init__()
+
+		# Instance ID
+		self.nuke_knob = nuke_knob
+		self.Class = 'Knob_AColour'
+
+		# Instance properties
+
+		# widgets
+
+		# group slider
+		self.slider_box = Knob_EditBox(self.nuke_knob)
+		self.slider_slider = Knob_Slider(self.nuke_knob)
+
+		self.slider_box.valueChanged.connect(self.onChanged_slider)
+		self.slider_slider.valueChanged.connect(self.onChanged_slider)
+
+		self.sets_slider = Knob_Sets()
+		self.sets_slider.add_widgets(self.slider_box, self.slider_slider)
+
+		# group editbox
+
+		editbox_style = """
+			QDoubleSpinBox {
+				border-style: solid;
+				border-width: 1px;
+				border-color: black black %s black;
+				border-radius: 2px;
+			}"""
+
+		self.editbox_r = Knob_EditBox(self.nuke_knob)
+		self.editbox_r.setStyleSheet(editbox_style % 'red')
+		self.editbox_g = Knob_EditBox(self.nuke_knob)
+		self.editbox_g.setStyleSheet(editbox_style % 'green')
+		self.editbox_b = Knob_EditBox(self.nuke_knob)
+		self.editbox_b.setStyleSheet(editbox_style % 'blue')
+		self.editbox_a = Knob_EditBox(self.nuke_knob)
+		self.editbox_a.setStyleSheet(editbox_style % 'gray')
+
+		self.editbox_r.valueChanged.connect(self.onChanged_editboxes)
+		self.editbox_g.valueChanged.connect(self.onChanged_editboxes)
+		self.editbox_b.valueChanged.connect(self.onChanged_editboxes)
+		self.editbox_a.valueChanged.connect(self.onChanged_editboxes)
+
+		self.sets_editboxes = Knob_Sets()
+		self.sets_editboxes.add_widgets(self.editbox_r, self.editbox_g, self.editbox_b, self.editbox_a)
+
+		# swap button
+		self.btn_swap = QtWidgets.QPushButton('4')
+		self.btn_swap.setCheckable(True)
+		self.btn_swap.clicked.connect(self.onClicked)
+		self.btn_swap.toggled.connect(self.onToggle)
+		self.btn_swap.setFixedWidth(WIDGET_HEIGHT)
+
+
+		# layout
+		self.sets_swap = Knob_Sets()
+		self.sets_swap.add_widgets(self.sets_slider, self.sets_editboxes)
+
+		self.layout = QtWidgets.QHBoxLayout()
+		self.layout.setContentsMargins(0,0,0,0)
+		self.setLayout(self.layout)
+		self.layout.addWidget(self.sets_swap)
+		self.layout.addStretch()
+		self.layout.addWidget(self.btn_swap)
+
+		self.setDefaults()
+
+	def setDefaults(self):
+		'''both sets are hidden on instancing'''
+		self.sets_editboxes.hide()
+		# self.sets_slider.hide()
+		knob_resize(self)
+
+	def onToggle(self):
+		'''hide widget and value transfer between two sets of widgets'''
+		_sender = self.sender()
+		_state = _sender.isChecked()
+
+		if _state == True:
+			self.sets_slider.hide()
+			self.sets_editboxes.show()
+			knob_resize(self)
+		elif _state == False:
+			self.sets_editboxes.hide()
+			self.sets_slider.show()
+			knob_resize(self)
+		
+	def onClicked(self):
+		'''user clicked on the button'''
+		_sender = self.sender()
+		_state = _sender.isChecked()
+		_v_out = self.value_transfer(_state)
+		set_nuke_knob(self, self.nuke_knob, _v_out)
+
+	def set_range(self, min, max):
+		'''set range for slider'''
+		_precision = self.slider_slider.PRECISION
+		self.slider_slider.setRange(min*_precision, max*_precision)
+
+	def set_value(self, v):
+		'''called when instancing'''
+
+		print self.nuke_knob
+
+		if isinstance(v, list):
+			self.btn_swap.setChecked(True)
+			self.editbox_r.set_value(v[0])
+			self.editbox_g.set_value(v[1])
+			self.editbox_b.set_value(v[2])
+			self.editbox_a.set_value(v[3])
+			self.slider_slider.set_value(rgb2luma(v))
+		else:
+			self.btn_swap.setChecked(False)
+			self.slider_slider.set_value(v)
+			self.editbox_r.set_value(v)
+			self.editbox_g.set_value(v)
+			self.editbox_b.set_value(v)
+			self.editbox_a.set_value(v)
+			# slider_editbox change value when slider_slider changes value
+
+	def onChanged_slider(self):
+		'''when editbox or slider is edited and change each other values'''
+		_sender = self.sender()
+		_v = _sender.get_value()
+
+		if isinstance(_sender, Knob_Slider):
+			self.slider_box.set_value(_v)
+		elif isinstance(_sender, Knob_EditBox):
+			self.slider_slider.set_value(_v)
+
+		# double secure prevent recursion on instance
+		if self.btn_swap.isChecked() == False: # show slider
+			self.value_transfer(False)
+			set_nuke_knob(self, self.nuke_knob, _v)
+	
+	def onChanged_editboxes(self):
+		'''when editboxes value is cahnged'''
+		_nuke_value = get_nuke_value(self, self.nuke_knob)
+		_sender = self.sender()
+		global value_out
+
+		if not isinstance(_nuke_value, float):
+			if _sender is self.editbox_r:
+				_nuke_value[0] = _sender.get_value()
+				value_out = _nuke_value
+			elif _sender is self.editbox_g:
+				_nuke_value[1] = _sender.get_value()
+				value_out = _nuke_value
+			elif _sender is self.editbox_b:
+				_nuke_value[2] = _sender.get_value()
+				value_out = _nuke_value
+			elif _sender is self.editbox_a:
+				_nuke_value[3] = _sender.get_value()
+				value_out = _nuke_value
+		
+		# double secure prevent recursion on instance
+		if self.btn_swap.isChecked() == True: # show editboxes
+			self.value_transfer(True)
+			set_nuke_knob(self, self.nuke_knob, value_out)
+
+	def value_transfer(self, state):
+		'''transfer value when knobs are swapped
+		@state: (bool) state of the button, checked or not-checked
+		return: (float or list of float) value depends on checked state
+		'''
+
+		global value_out
+
+		if state == True:
+			_v = [self.editbox_r.get_value(),self.editbox_g.get_value(),self.editbox_b.get_value(),self.editbox_a.get_value()]
+			
+			self.slider_slider.set_value(rgb2luma(_v))
+
+			value_out = _v
+		
+		elif state == False:
+			_v = self.slider_box.get_value()
+
+			self.editbox_r.set_value(_v)
+			self.editbox_g.set_value(_v)
+			self.editbox_b.set_value(_v)
+			self.editbox_a.set_value(_v)
+			
+			value_out = _v
+
+		return value_out
+			
+
+class Knob_WH(QtWidgets.QWidget):
+	def __init__(self, nuke_knob=''):
+		super(Knob_WH, self).__init__()
+
+		# Instance ID
+		self.nuke_knob = nuke_knob
+		self.Class = 'Knob_WH'
+
+		# Instance properties
+
+		# widgets
+
+		# group slider
+		self.slider_box = Knob_EditBox(self.nuke_knob)
+		self.slider_slider = Knob_Slider(self.nuke_knob)
+
+		self.slider_box.valueChanged.connect(self.onChanged_slider)
+		self.slider_slider.valueChanged.connect(self.onChanged_slider)
+
+		self.sets_slider = Knob_Sets()
+		self.sets_slider.add_widgets(self.slider_box, self.slider_slider)
+
+		# group editbox
+		self.editbox_w_label = QtWidgets.QLabel('w')
+		self.editbox_w = Knob_EditBox(self.nuke_knob)
+		self.editbox_h_label = QtWidgets.QLabel('h')
+		self.editbox_h = Knob_EditBox(self.nuke_knob)
+
+		self.editbox_w.valueChanged.connect(self.onChanged_editboxes)
+		self.editbox_h.valueChanged.connect(self.onChanged_editboxes)
+
+		self.sets_editboxes = Knob_Sets()
+		self.sets_editboxes.add_widgets(self.editbox_w_label, self.editbox_w, self.editbox_h_label, self.editbox_h)
+
+		# swap button
+		self.btn_swap = QtWidgets.QPushButton('2')
+		self.btn_swap.setCheckable(True)
+		self.btn_swap.clicked.connect(self.onClicked)
+		self.btn_swap.toggled.connect(self.onToggle)
+		self.btn_swap.setFixedWidth(WIDGET_HEIGHT)
+
+
+		# layout
+		self.sets_swap = Knob_Sets()
+		self.sets_swap.add_widgets(self.sets_slider, self.sets_editboxes)
+
+		self.layout = QtWidgets.QHBoxLayout()
+		self.layout.setContentsMargins(0,0,0,0)
+		self.setLayout(self.layout)
+		self.layout.addWidget(self.sets_swap)
+		self.layout.addStretch()
+		self.layout.addWidget(self.btn_swap)
+
+		self.setDefaults()
+
+	def setDefaults(self):
+		'''both sets are hidden on instancing'''
+		self.sets_editboxes.hide()
+		# self.sets_slider.hide()
+		knob_resize(self)
+
+	def onToggle(self):
+		'''hide widget and value transfer between two sets of widgets'''
+		_sender = self.sender()
+		_state = _sender.isChecked()
+
+		if _state == True:
+			self.sets_slider.hide()
+			self.sets_editboxes.show()
+			knob_resize(self)
+		elif _state == False:
+			self.sets_editboxes.hide()
+			self.sets_slider.show()
+			knob_resize(self)
+		
+	def onClicked(self):
+		'''user clicked on the button'''
+		_sender = self.sender()
+		_state = _sender.isChecked()
+		_v_out = self.value_transfer(_state)
+		set_nuke_knob(self, self.nuke_knob, _v_out)
+
+	def set_range(self, min, max):
+		'''set range for slider'''
+		
+		_precision = self.slider_slider.PRECISION
+		self.slider_slider.setRange(min*_precision, max*_precision)
+
+	def set_value(self, v):
+		'''called when instancing'''
+
+		if isinstance(v, list):
+			self.btn_swap.setChecked(True)
+			self.editbox_w.set_value(v[0])
+			self.editbox_h.set_value(v[1])
+			self.slider_slider.set_value(v[0])
+		else:
+			self.btn_swap.setChecked(False)
+			self.slider_slider.set_value(v)
+			self.editbox_w.set_value(v)
+			self.editbox_h.set_value(v)
+			# slider_editbox change value when slider_slider changes value
+
+	def onChanged_slider(self):
+		'''when editbox or slider is edited and change each other values'''
+		_sender = self.sender()
+		_v = _sender.get_value()
+
+		if isinstance(_sender, Knob_Slider):
+			self.slider_box.set_value(_v)
+		elif isinstance(_sender, Knob_EditBox):
+			self.slider_slider.set_value(_v)
+
+		# double secure prevent recursion on instance
+		if self.btn_swap.isChecked() == False:
+			self.value_transfer(False)
+			set_nuke_knob(self, self.nuke_knob, _v)
+	
+	def onChanged_editboxes(self):
+		'''when editboxes value is cahnged'''
+		_nuke_value = get_nuke_value(self, self.nuke_knob)
+		_sender = self.sender()
+		global value_out
+
+		if not isinstance(_nuke_value, float):
+			if _sender is self.editbox_w:
+				value_out = (_sender.get_value(), _nuke_value[1])
+			elif _sender is self.editbox_h:
+				value_out = (_nuke_value[0],_sender.get_value())
+		
+		# double secure prevent recursion on instance
+		if self.btn_swap.isChecked() == True:
+			self.value_transfer(True)
+			set_nuke_knob(self, self.nuke_knob, value_out)
+
+	def value_transfer(self, state):
+		'''transfer value when knobs are swapped
+		@state: (bool) state of the button, checked or not-checked
+		return: (float or list of float) value depends on checked state
+		'''
+
+		global value_out
+
+		if state == True:
+			_v = self.editbox_w.get_value()
+			self.slider_slider.set_value(_v)
+
+			value_out = (self.editbox_w.get_value(),self.editbox_h.get_value())
+		
+		elif state == False:
+			_v = self.slider_box.get_value()
+			self.editbox_w.set_value(_v)
+			self.editbox_h.set_value(_v)
+			
+			value_out = _v
+		
+		return value_out
 
 
 class Knob_PyScript(QtWidgets.QPushButton):
@@ -617,17 +1002,6 @@ class Knob_Int(QtWidgets.QSpinBox):
 		# Instance properties
 
 
-class Knob_WH(QtWidgets.QSlider):
-	def __init__(self, nuke_knob=''):
-		super(Knob_WH, self).__init__()
-
-		# Instance ID
-		self.nuke_knob = nuke_knob
-		self.Class = 'Knob_WH'
-
-		# Instance properties
-
-
 
 
 #-------------------------------------------------------------------------------
@@ -647,7 +1021,8 @@ class Knob_Slider(QtWidgets.QSlider):
 
 		# Instance properties
 		self.setRange(-6*self.PRECISION,6*self.PRECISION)
-		self.setMinimumWidth(250)
+		self.setFixedSize(400,WIDGET_HEIGHT)
+		self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
 	def set_value(self, v):
 		'''sets value and convert to int'''
@@ -657,51 +1032,101 @@ class Knob_Slider(QtWidgets.QSlider):
 		'''get value and covert to float'''
 		_v = float(self.value()/self.PRECISION)
 		return _v
-		
+
 
 class Knob_EditBox(QtWidgets.QDoubleSpinBox):
 	def __init__(self, nuke_knob=''):
 		super(Knob_EditBox, self).__init__()
 
 		# Instance ID
-		self.nuke_knob = nuke_knob+"_editbox"
+		self.nuke_knob = nuke_knob+'_editbox'
 		self.Class = 'Knob_EditBox'
-
-		# Instance properties
+		
+		# Instance properties	
+		self.setFixedSize(72, WIDGET_HEIGHT)
 		self.setSingleStep(0.0001)
 		self.setDecimals(4)
-		self.setRange(-10000.0000, 10000.0000)
-		self.setFixedSize(72,20)
 		self.setButtonSymbols(self.NoButtons)
+		self.setRange(-10000000.0000,10000000.0000)
+		self.lineEdit().setValidator(QtGui.QDoubleValidator().setDecimals(4))
+		self.lineEdit().cursorPositionChanged.connect(self.onEdit)
+
+
+	def get_value(self):
+		return self.value()
 
 	def set_value(self, v):
-		'''sets value'''
+		self.setDecimals(dynamic_decimals(v))
 		self.setValue(float(v))
 
-	def get_value(self):
-		'''get value'''
-		return self.value()
-	
+	def onEdit(self, event):
+		_v = self.lineEdit().text()
+		# _v = self.value()
+		self.precision = dynamic_decimals(_v)
+		self.editText = _v
+
+	def keyPressEvent(self, event):
+
+		# When directly using up and down arrow key to change value (cursor pos not changed)
+		if not self.editText:
+			self.editText = self.lineEdit().text()
+		else:
+			self.editText
+
+		# Return, left and right key pressed
+		if event.key() in [QtCore.Qt.Key_Enter, QtCore.Qt.Key_Return, QtCore.Qt.Key_Left, QtCore.Qt.Key_Right]:
+			self.setDecimals(self.precision)
+			self.setValue(float(self.editText))
+
+		# Up and Down key pressed
+		if event.key() in [QtCore.Qt.Key_Up, QtCore.Qt.Key_Down]:
+			dec_pos = self.editText.index('.') if '.' in self.editText else len(self.editText)
+			cursor_pos = self.lineEdit().cursorPosition()
+
+			# step value
+			stepValue = 0
+			if cursor_pos < dec_pos:
+				stepValue = pow(10,(dec_pos - cursor_pos - 1))
+			elif cursor_pos > dec_pos:
+				stepValue = pow(0.1,(cursor_pos - dec_pos))
+				if cursor_pos > len(self.editText)-1:
+					self.setDecimals(self.precision+1)
+			elif cursor_pos == dec_pos:
+				stepValue = 1.1
+
+			# change value base on cursor position
+			if event.key() == QtCore.Qt.Key_Up:
+				self.setValue(float(self.editText)+stepValue)
+			elif event.key() == QtCore.Qt.Key_Down:
+				self.setValue(float(self.editText)-stepValue)
+			
+			# reset value for every key press
+			self.editText = str(self.value())
+			self.precision = dynamic_decimals(self.editText)
+
+		else:
+			super(Knob_EditBox, self).keyPressEvent(event)
 
 
-class Knob_DoubleSpin(QtWidgets.QDoubleSpinBox):
-	def __init__(self, nuke_knob=''):
-		super(Knob_DoubleSpin, self).__init__()
+class Knob_Sets(QtWidgets.QGroupBox):
+	'''Group box to hold group of qt_knobs, built for swaping'''
+	def __init__(self):
+		super(Knob_Sets, self).__init__()
 
-		# Instance ID
-		self.nuke_knob = nuke_knob+'doublespin'
-		self.Class = 'Knob_DoubleSpin'
-		
-		# Instance properties
-		self.setMaximumWidth(72)
-		self.setSingleStep(0.0001)
-		self.setDecimals(4)
-		self.setRange(-10000000,10000000)
+		# self.setFlat(True)
+		self.layout = QtWidgets.QHBoxLayout()
+		self.layout.setContentsMargins(0,0,0,0)
+		self.setLayout(self.layout)
+		self.setStyleSheet("QGroupBox {border: none;}")
 
-	def get_value(self):
-		return self.value()
+	def add_widgets(self, *widgets):
+		'''add widget to layout
+		@*widgets: (list of obj) list of widget obj
+		'''
+		for w in widgets:
+			self.layout.addWidget(w)
 
-
+		self.layout.addStretch()
 
 
 
@@ -781,6 +1206,7 @@ def get_knobInfo():
 
 
 
+
 '''
 
 NodeClass
@@ -852,29 +1278,52 @@ class TestClass(QtWidgets.QDialog):
 		super(TestClass, self).__init__()
 
 		# Widgets
-		self.testWidgetA = Knob_XY(nuke_knob='size')
-		self.testWidgetB = Knob_Array(nuke_knob='blackpoint')
-
+		self.nuke_knob = 'Test_Knob'
+		self.node_icon = QtWidgets.QLabel()
+		self.title = QtWidgets.QLabel('<b>HoverValue</b>')
+		self.btn_showPanel = QtWidgets.QPushButton('Edit in Properties Panel')
 
 		# Layout
+		self.layout_title = QtWidgets.QHBoxLayout()
+		self.layout_title.addWidget(self.node_icon)
+		self.layout_title.addWidget(self.title)
+		self.layout_title.addStretch()
+
+		self.group_knobs = QtWidgets.QGroupBox()
+		self.layout_knobs = QtWidgets.QGridLayout()
+		self.layout_knobs.setAlignment(QtCore.Qt.AlignTop)
+		self.group_knobs.setLayout(self.layout_knobs)
+		self.group_knobs.setTitle('Test1')
+		
 		self.layout_master = QtWidgets.QVBoxLayout()
-		self.layout_master.addWidget(self.testWidgetA)
-		self.layout_master.addWidget(self.testWidgetB)
+		self.layout_master.addLayout(self.layout_title)
+		self.layout_master.addWidget(self.group_knobs)
+		self.layout_master.addStretch()
+		self.layout_master.addWidget(self.btn_showPanel)
 
-
-		self.resize(500,100)
 		self.setLayout(self.layout_master)
+		self.setWindowTitle('HoverValue v%s' % __VERSION__)
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefaults()
+		self.TestAddWidget()
 
 
 	def setDefaults(self):
 		'''sets default values'''
-
 		pass
+
+	def TestAddWidget(self):
+
+		self.test = Knob_WH(self.nuke_knob)
+		self.layout_knobs.addWidget(self.test)
 
 	def run(self):
 		self.show()
+
+	def changeEvent(self, event):
+		self.resize(self.minimumSizeHint())
+		super(TestClass, self).changeEvent(event)
+		# print event
 
 TestWidget = TestClass()
