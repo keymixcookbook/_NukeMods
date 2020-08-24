@@ -1,0 +1,189 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push 0
+push 0
+push 0
+push $cut_paste_input
+Group {
+inputs 4
+name ku_RayRenderReflections
+autolabel "\n\nnuke.thisNode().name()+(\"\\n(grid overlay)\" if nuke.thisNode()\['grid'].value()==True else \"\")\n"
+selected true
+xpos 277
+ypos -186
+addUserKnob {20 tb_user l ku_RayRenderReflection}
+addUserKnob {3 grid_scale l "grid scale"}
+grid_scale 10
+addUserKnob {6 grid l "show alignment grid" +STARTLINE}
+addUserKnob {26 div l "" +STARTLINE}
+addUserKnob {26 copyright l " " T "\n    \n    <p style=\"color: gray\"><b>ku_RayRenderReflections</b> &#169; 2020 Tianlun Jiang - jiangovfx.com\n\n    "}
+addUserKnob {20 tb_help l help}
+addUserKnob {26 text l " " T "<p style=\"color: gray;\">\n<b>src</b>: map to reflect<br>\n<b>src_geo</b>: geo to project src<br>\n<b>cam</b>: camera for reflections<br>\n<b>geo_catcher</b>: geo for catching reflections<br>"}
+}
+Input {
+inputs 0
+name cam
+xpos -186
+ypos -141
+number 2
+}
+Dot {
+name Dot1
+xpos -155
+ypos -98
+}
+set N68c53c00 [stack 0]
+Input {
+inputs 0
+name geo_catcher
+xpos -297
+ypos -228
+number 1
+}
+set N6c846800 [stack 0]
+Dot {
+name Dot2
+xpos -266
+ypos 25
+}
+Constant {
+inputs 0
+name _BLACK_
+xpos -69
+ypos -27
+postage_stamp false
+}
+Reformat {
+name _FORMATE_
+xpos -69
+ypos -1
+}
+AdjBBox {
+numpixels 100
+name _OVERSCAN_
+xpos -69
+ypos 25
+}
+set N4bccd000 [stack 0]
+ScanlineRender {
+inputs 3
+conservative_shader_sampling false
+antialiasing high
+motion_vectors_type off
+MB_channel none
+name _SCANLINE_
+xpos -186
+ypos 24
+}
+Dot {
+name Dot3
+xpos -155
+ypos 179
+}
+push $N68c53c00
+Grid {
+inputs 0
+number {{root.width/(grid_scale*10)} {root.height/(grid_scale*10)}}
+name _GRID_A_
+xpos -133
+ypos -364
+disable {{!parent.grid}}
+}
+Grid {
+number {{root.width/(grid_scale/2*10)} {root.height/(grid_scale/2*10)}}
+size 0.25
+name GRID_B_
+xpos -133
+ypos -338
+disable {{!parent.grid}}
+}
+Reflection {
+name _MAT_REFLECTION_
+xpos -133
+ypos -294
+}
+push $N6c846800
+ApplyMaterial {
+inputs 2
+name _APPLY_MAT_REFLECTION_
+xpos -133
+ypos -229
+}
+Input {
+inputs 0
+name src
+xpos 25
+ypos -442
+}
+Input {
+inputs 0
+name src_geo
+xpos 168
+ypos -328
+number 3
+}
+ApplyMaterial {
+inputs 2
+name _APPLY_MAT_SRC_
+xpos 25
+ypos -328
+}
+Scene {
+inputs 2
+name _SCENE_
+xpos 35
+ypos -249
+}
+push $N4bccd000
+add_layer {P P.red P.green P.blue P.alpha}
+add_layer {N N.red N.green N.blue N.alpha}
+add_layer {reflection reflection.red reflection.green reflection.blue reflection.alpha}
+RayRender {
+inputs 3
+output_shader_vectors true
+AOV_Point P
+AOV_Normal N
+AOV_Reflection reflection
+name _RAYRENDER_
+xpos 25
+ypos -99
+}
+Expression {
+expr0 rgb.red+reflection.red
+expr1 rgb.green+reflection.green
+expr2 rgb.blue+reflection.blue
+name _RGB_W_REFLECTION_
+xpos 25
+ypos 68
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name _COPY_ALPHA_
+xpos 25
+ypos 172
+}
+Premult {
+channels rgba
+name _PREMULT_RGB_
+xpos 25
+ypos 225
+}
+set N5f48a400 [stack 0]
+Output {
+name Output1
+xpos 25
+ypos 353
+}
+push $N5f48a400
+Viewer {
+frame_range 995-1100
+frame_increment 8
+viewerProcess "sRGB (ACES)"
+name Viewer1
+xpos 620
+ypos -10
+hide_input true
+}
+end_group

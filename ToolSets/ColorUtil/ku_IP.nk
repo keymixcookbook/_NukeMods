@@ -1,34 +1,38 @@
 set cut_paste_input [stack 0]
-version 10.0 v4
 BackdropNode {
  inputs 0
+ name ip_backdrop
  tile_color 0x7f4523ff
  label <center>IP
- note_font "bold Bold Bold"
+ note_font "bold"
  note_font_size 48
  note_font_color 0xffad7fff
  selected true
- xpos -14941
- ypos -7714
+ xpos -807
+ ypos -265
  bdwidth 463
  bdheight 421
 }
 push $cut_paste_input
 Group {
  name VIEWER_INPUT
- autolabel "\n('exp: %s\\n' % nuke.thisNode()\['exposure'].value())+('gamma: %s\\n' % nuke.thisNode()\['y'].value())+('sat: %s\\n' % nuke.thisNode()\['saturation'].value())+('cc: %s\\n' % nuke.thisNode()\['gain'].value())\n"
+ autolabel "\n\n'exp: %s\\n' % nuke.thisNode()\['exposure'].value()+'gamma: %s\\n' % nuke.thisNode()\['y'].value()+'sat: %s\\n' % nuke.thisNode()\['saturation'].value()\n\n"
  tile_color 0x7f4523ff
- note_font "Bitstream Vera Sans Bold Bold Bold"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold"
  note_font_size 48
  note_font_color 0xffad7fff
  selected true
- xpos -14749
- ypos -7601
+ xpos -614
+ ypos -154
  hide_input true
  addUserKnob {20 tb_user l ku_IP}
+ addUserKnob {22 btn_cdl l "add cdl" T "n = nuke.thisNode()\n\nwith nuke.Root():\n    n_cdl = nuke.selectedNode()\n    n_cdl_name = n_cdl.name()\n    sel_n = nuke.nodeCopy('%clipboard%')\n\n\nif n_cdl is not n:\n    k_cdl = nuke.Boolean_Knob('cdl', 'Use CDL: %s' % n_cdl_name)\n    n.addKnob(k_cdl)\n    \n    with n:\n        nuke.toNode('Input')\['selected'].setValue(True)\n        nuke.nodePaste('%clipboard%')\n        c_cdl = nuke.toNode(n_cdl_name)\n        c_cdl\['disable'].setExpression('!parent.cdl')" +STARTLINE}
+ addUserKnob {26 cdl_tooltip l "" -STARTLINE T "<p style=\"color: gray\">- Deselect this node, then select the CDL node"}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {7 exposure}
  exposure 1
  addUserKnob {6 d_exp l disable -STARTLINE}
+ d_exp true
  addUserKnob {7 y l gamma R 1 4.4}
  y 2.2
  addUserKnob {6 d_y l disable -STARTLINE}
@@ -37,10 +41,14 @@ Group {
  saturation 2
  addUserKnob {6 d_sat l disable -STARTLINE}
  d_sat true
+ addUserKnob {26 ""}
+ addUserKnob {41 colorspace_out l colorspace T _COLORSPACE_.colorspace_out}
+ addUserKnob {6 use_solo l "solo channel -" -STARTLINE}
+ addUserKnob {4 solo l channel -STARTLINE M {first second third "" "" ""}}
+ solo third
+ addUserKnob {6 show_text l "show text" -STARTLINE}
+ show_text true
  addUserKnob {26 "" +STARTLINE}
- addUserKnob {41 gain T _CC_.gain}
- addUserKnob {6 dis_gain l disable -STARTLINE}
- dis_gain true
 }
  Input {
   inputs 0
@@ -73,15 +81,113 @@ Group {
   ypos -505
   disable {{parent.d_sat}}
  }
- ColorCorrect {
-  name _CC_
+ Dot {
+  name Dot1
+  xpos 559
+  ypos -437
+ }
+set N424e7c00 [stack 0]
+ Colorspace {
+  colorspace_out HSV
+  name _COLORSPACE_
+  label "\[value colorspace_out]"
+  xpos 647
+  ypos -444
+ }
+ Expression {
+  temp_name0 thisCh
+  temp_expr0 "ch == 0?r: ch ==1?g:ch ==2?b:0"
+  expr0 thisCh
+  expr1 thisCh
+  expr2 thisCh
+  name _SOLO_CHANNEL_
+  xpos 647
+  ypos -398
+  disable {{!parent.use_solo}}
+  addUserKnob {20 User}
+  addUserKnob {3 ch l "channel index"}
+  ch {{parent.solo x995 0}}
+ }
+ Text2 {
+  font_size_toolbar 96
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "\[value input.input.colorspace_out]"
+  old_message {{72 83 86}
+    }
+  old_expression_markers {{0 2}
+    }
+  box {48 0 {width} 96}
+  transforms {{0 2}
+    }
+  font_size_values {{0 96 1 96 2 96 0 45 1 45 2 45}
+    }
+  cursor_position 34
+  font {{ Courier : Regular : Courier.pfa : 0 }}
+  font_size 96
+  center {1024 778}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{0 1556}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+    }
+  enable_background true
+  background_opacity 0.5
+  background_border_y 10
+  name _COLORSPACE_TEXT_
+  xpos 647
+  ypos -374
+  disable {{!parent.show_text}}
+ }
+push $N424e7c00
+ Switch {
+  inputs 2
+  which {{parent.use_solo}}
+  name _SWITCH_
   xpos 528
-  ypos -452
-  disable {{parent.dis_gain}}
+  ypos -374
+ }
+ Text2 {
+  font_size_toolbar 36
+  font_width_toolbar 100
+  font_height_toolbar 100
+  opacity 0.25
+  message "exposure: \[value _EXPOSURE_.red]\ngamma: \[value _GAMMA_.value]\nsaturation: \[value _SATURATION_.saturation]"
+  old_message {{101 120 112 111 115 117 114 101 58 32 49 10 103 97 109 109 97 58 32 50 46 50 10 115 97 116 117 114 97 116 105 111 110 58 32 50}
+    }
+  old_expression_markers {{10 10 19 21 35 35}
+    }
+  box {48 0 {root.width-48} 108}
+  xjustify right
+  transforms {{0 2}
+    }
+  font_size_values {{0 36 1 36 2 36 3 36 4 36 5 36 6 36 7 36 8 36 9 36 10 36 11 36 12 36 13 36 14 36 15 36 16 36 17 36 18 36 19 36 20 36 21 36 22 36 23 36 24 36 25 36 26 36 27 36 28 36 29 36 30 36 31 36 32 36 33 36 34 36 35 36}
+    }
+  cursor_position 32
+  font {{ Courier : Regular : Courier.pfa : 0 }}
+  font_size 36
+  center {1024 778}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{0 1556}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+    }
+  enable_background true
+  background_opacity 0.5
+  background_border_y 10
+  name _TEXT_
+  selected true
+  xpos 528
+  ypos -332
+  disable {{!parent.show_text}}
  }
  Output {
   name Output1
   xpos 528
-  ypos -356
+  ypos -250
  }
 end_group

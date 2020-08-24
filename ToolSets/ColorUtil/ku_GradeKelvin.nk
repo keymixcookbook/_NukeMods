@@ -1,0 +1,114 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ku_GradeKelvin1
+ selected true
+ xpos 248
+ ypos -854
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 577
+  ypos -508
+ }
+ Dot {
+  name Dot1
+  xpos 608
+  ypos -445
+ }
+set N2cbe000 [stack 0]
+ OCIOLogConvert {
+  operation "lin to log"
+  name _TO_LOG_A_
+  label "\[value operation]"
+  xpos 577
+  ypos -323
+ }
+push $N2cbe000
+ FrameHold {
+  name _FRAME_
+  xpos 661
+  ypos -452
+ }
+ Matrix {
+  channels rgba
+  matrix {
+      {1 1 1}
+      {1 0 1}
+      {1 1 1}
+    }
+  normalize true
+  name _SOFTEN_
+  xpos 771
+  ypos -446
+ }
+ Expression {
+  temp_name0 sr
+  temp_expr0 kelvin_value.0
+  temp_name1 sg
+  temp_expr1 kelvin_value.1
+  temp_name2 sb
+  temp_expr2 kelvin_value.2
+  expr0 sr
+  expr1 sg
+  expr2 sb
+  name _SAMPLE_
+  label "\[value kelvin_value]"
+  xpos 771
+  ypos -395
+  addUserKnob {20 User}
+  addUserKnob {12 kelvin l sample}
+  kelvin {1053 241}
+  addUserKnob {18 kelvin_value l "sample value"}
+  kelvin_value {{"\[sample input red kelvin.x kelvin.y]"} {"\[sample input green kelvin.x kelvin.y]"} {"\[sample input blue kelvin.x kelvin.y]"}}
+  addUserKnob {6 kelvin_value_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ OCIOLogConvert {
+  operation "lin to log"
+  name _TO_LOG_B_
+  label "\[value operation]"
+  xpos 771
+  ypos -326
+ }
+ Colorspace {
+  colorspace_out CIE-Yxy
+  name _YXY_
+  xpos 771
+  ypos -259
+ }
+ Shuffle {
+  red white
+  name Shuffle1
+  label "\[value in]"
+  xpos 771
+  ypos -233
+ }
+ Colorspace {
+  colorspace_in CIE-Yxy
+  name _LIN_
+  xpos 771
+  ypos -195
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  bbox A
+  name _DIVIDE_
+  xpos 577
+  ypos -195
+ }
+ OCIOLogConvert {
+  operation "log to lin"
+  name _TO_LIN_
+  label "\[value operation]"
+  xpos 577
+  ypos -126
+ }
+ Output {
+  name Output1
+  xpos 577
+  ypos -26
+ }
+end_group

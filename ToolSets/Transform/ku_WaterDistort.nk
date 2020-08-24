@@ -1,0 +1,507 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push 0
+push 0
+push $cut_paste_input
+Group {
+ inputs 3
+ name ku_WaterDistortion
+ tile_color 0xa57aaaff
+ note_font "Verdana Bold"
+ selected true
+ xpos 219
+ ypos -214
+ addUserKnob {20 tb_user l ku_WaterDistort}
+ addUserKnob {3 overscan}
+ overscan 100
+ addUserKnob {41 disable_aa l "disable AA" -STARTLINE T _AA_.disable}
+ addUserKnob {41 blur_size l smooth T _SMOOTH_.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 persp l perspective M {"Scanline Render (use cam/geo inputs)" "Corner Pin (use 2D Persp tab)" "" "" "" ""}}
+ addUserKnob {7 strength l "map strength" R 0.01 1}
+ strength 1
+ addUserKnob {41 uv_scale l "distort scale" T _DISTORT_.uv_scale}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 output l ouput M {distorted stmap noise}}
+ addUserKnob {6 vector_aov l "export normal (N) and position (P)" -STARTLINE}
+ addUserKnob {26 div l "" +STARTLINE}
+ addUserKnob {26 copyright l " " T "\n    \n    <p style=\"color: gray\"><b>ku_WaterDistortion</b> &#169; 2020 Tianlun Jiang - jiangovfx.com\n\n    "}
+ addUserKnob {20 tb_persp l "2D Persp"}
+ addUserKnob {41 persp_top l top T _CORNER_PIN_.persp_top}
+ addUserKnob {41 persp_bottom l bottom T _CORNER_PIN_.persp_bottom}
+ addUserKnob {41 persp_left l left T _CORNER_PIN_.persp_left}
+ addUserKnob {41 persp_right l right T _CORNER_PIN_.persp_right}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 translate T _TRANSFORM_.translate}
+ addUserKnob {41 rotate T _TRANSFORM_.rotate}
+ addUserKnob {41 scale T _TRANSFORM_.scale}
+ addUserKnob {20 tb_noise l Noise}
+ addUserKnob {7 speed l "flow speed"}
+ addUserKnob {30 vector l "flow direction"}
+ addUserKnob {7 noise_z l "turbulance speed" R 0 2}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 disable_noise l "low freq noise only" T _NOISE_COMBINE_.disable}
+ addUserKnob {20 group_noiseLow l "Low Freq Noise" n 1}
+ addUserKnob {41 type T _NOISE_LOW_.type}
+ addUserKnob {41 size l x/ysize T _NOISE_LOW_.size}
+ addUserKnob {41 octaves T _NOISE_LOW_.octaves}
+ addUserKnob {41 lacunarity T _NOISE_LOW_.lacunarity}
+ addUserKnob {41 gain T _NOISE_LOW_.gain}
+ addUserKnob {41 gamma T _NOISE_LOW_.gamma}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 group_noiseHigh l "High Freq Noise" n 1}
+ addUserKnob {41 type_1 l type T _NOISE_HIGH_.type}
+ addUserKnob {41 factor t "Low Freq Noise / high freq factor" T _NOISE_HIGH_.factor}
+ addUserKnob {41 octaves_1 l octaves T _NOISE_HIGH_.octaves}
+ addUserKnob {41 lacunarity_1 l lacunarity T _NOISE_HIGH_.lacunarity}
+ addUserKnob {41 gain_1 l gain T _NOISE_HIGH_.gain}
+ addUserKnob {41 gamma_1 l gamma T _NOISE_HIGH_.gamma}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 277
+  ypos -223
+ }
+ Dot {
+  name Dot2
+  xpos 308
+  ypos -145
+ }
+set N44d8dc00 [stack 0]
+ Remove {
+  operation keep
+  channels none
+  name _FORMATE_
+  label "\[value channels]"
+  xpos 984
+  ypos -159
+ }
+ AdjBBox {
+  numpixels {{parent.overscan}}
+  name _OVERSCAN_
+  xpos 984
+  ypos -107
+ }
+ Dot {
+  name Dot1
+  xpos 1015
+  ypos -60
+ }
+set N44d8d000 [stack 0]
+ Dot {
+  name Dot3
+  xpos 739
+  ypos -60
+ }
+ Dot {
+  name Dot8
+  xpos 739
+  ypos 549
+ }
+set N561ee000 [stack 0]
+ Dot {
+  name Dot13
+  xpos 739
+  ypos 681
+ }
+push $N44d8d000
+ Noise {
+  cliptype none
+  type turbulence
+  size {{_NOISE_LOW_.size/2}}
+  zoffset {{frame*noise_z}}
+  translate {{frame*(vector.u)*speed} {frame*(vector.v)*speed}}
+  center {1024 778}
+  name _NOISE_HIGH_
+  xpos 1074
+  ypos -3
+  addUserKnob {20 User}
+  addUserKnob {7 factor l "high freq factor" R 1 6}
+  factor 4
+ }
+push $N44d8d000
+ Noise {
+  cliptype none
+  type turbulence
+  size 600
+  zoffset {{frame*noise_z}}
+  translate {{frame*(vector.u)*speed} {frame*(vector.v)*speed}}
+  center {1024 778}
+  name _NOISE_LOW_
+  xpos 897
+  ypos -3
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name _NOISE_COMBINE_
+  xpos 981
+  ypos 117
+ }
+set N44d8c400 [stack 0]
+push $N44d8c400
+ Dot {
+  name Dot15
+  xpos 1138
+  ypos 118
+ }
+set N846aec00 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 1 0}
+      {0 -1 0}
+      {0 0 0}
+    }
+  name _Y_
+  xpos 1041
+  ypos 188
+ }
+push $N846aec00
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 -1 1}
+      {0 0 0}
+    }
+  name _X_
+  xpos 1171
+  ypos 190
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  blue black
+  alpha black
+  black white
+  out motion
+  out2 alpha
+  name _MOTION_
+  xpos 1108
+  ypos 219
+ }
+ Matrix {
+  channels motion
+  matrix {
+      {0 1 0}
+      {1 2 1}
+      {0 1 0}
+    }
+  normalize true
+  name _AA_
+  xpos 1108
+  ypos 283
+ }
+ Multiply {
+  channels motion
+  value {{strength==0?1:strength*100}}
+  name _BOOST_
+  xpos 1108
+  ypos 321
+ }
+ Blur {
+  channels motion
+  size 2
+  name _SMOOTH_
+  xpos 1108
+  ypos 359
+ }
+ Switch {
+  inputs 2
+  which {{_OUTPUT_.which==2?1:0}}
+  name _NOISE_OUT_
+  xpos 980
+  ypos 365
+ }
+ Dot {
+  name Dot12
+  xpos 1011
+  ypos 423
+ }
+set N56180800 [stack 0]
+ Dot {
+  name Dot11
+  xpos 880
+  ypos 423
+ }
+ CornerPin2D {
+  to1 {{input.bbox.x-persp_bottom} {input.bbox.y-persp_left}}
+  to2 {{input.bbox.width+persp_bottom} {input.bbox.y-persp_right}}
+  to3 {{input.bbox.width+persp_top} {input.bbox.height+persp_right}}
+  to4 {{input.bbox.x-persp_top} {input.bbox.width+persp_left}}
+  invert false
+  from1 {{input.bbox.x} {input.bbox.x}}
+  from2 {{input.bbox.width} {input.bbox.x}}
+  from3 {{input.bbox.width} {input.bbox.height}}
+  from4 {{input.bbox.x} {input.bbox.height}}
+  name _CORNER_PIN_
+  xpos 849
+  ypos 622
+  addUserKnob {20 tb_prep l Perspective}
+  addUserKnob {7 persp_top l top R -1000 1000}
+  addUserKnob {7 persp_bottom l bottom R -1000 1000}
+  addUserKnob {7 persp_left l left R -1000 1000}
+  addUserKnob {7 persp_right l right R -1000 1000}
+ }
+ Transform {
+  center {{input.width/2} {input.height/2}}
+  name _TRANSFORM_
+  xpos 849
+  ypos 648
+ }
+ CopyBBox {
+  inputs 2
+  name COPY_BBOX_
+  xpos 849
+  ypos 680
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos 1145
+  ypos 548
+  number 1
+ }
+push $N56180800
+ Input {
+  inputs 0
+  name geo
+  xpos 1148
+  ypos 480
+  number 2
+ }
+ ApplyMaterial {
+  inputs 2
+  name _APPLY_MAT_
+  xpos 980
+  ypos 480
+ }
+push $N561ee000
+add_layer {P P.red P.green P.blue P.alpha}
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing medium
+  motion_vectors_type off
+  MB_channel none
+  output_shader_vectors {{parent.vector_aov}}
+  P_channel P
+  name _SCANLINE_
+  xpos 980
+  ypos 548
+ }
+ Switch {
+  inputs 2
+  which {{persp}}
+  name _PERSPECTIVE_
+  xpos 980
+  ypos 680
+ }
+add_layer {N N.red N.green N.blue N.alpha}
+ Expression {
+  channel0 {N.red -N.green -N.blue -N.alpha}
+  expr0 forward.u
+  channel1 {-N.red N.green -N.blue -N.alpha}
+  expr1 forward.v
+  channel2 {-N.red -N.green N.blue -N.alpha}
+  expr2 sqrt(pow2(forward.u)+pow2(forward.v))
+  name _NORMAL_
+  xpos 980
+  ypos 765
+  disable {{!parent.vector_aov}}
+ }
+ Expression {
+  channel0 {P.red -P.green -P.blue -P.alpha}
+  channel1 {-P.red P.green -P.blue -P.alpha}
+  expr1 N.blue
+  channel2 {-P.red -P.green P.blue -P.alpha}
+  name _POSITION_
+  xpos 980
+  ypos 791
+  disable {{!parent.vector_aov}}
+ }
+ Dot {
+  name Dot16
+  xpos 1011
+  ypos 852
+ }
+set N5f5df000 [stack 0]
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+0.5)/height
+  expr2 0
+  name _STMAP_
+  xpos 980
+  ypos 899
+ }
+ IDistort {
+  channels rgb
+  uv motion
+  uv_scale 20
+  name _DISTORT_
+  xpos 980
+  ypos 925
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 N
+  channels3 P
+  name _KEEP_RGBA_
+  label "\[value channels]"
+  xpos 980
+  ypos 951
+ }
+set N847d6400 [stack 0]
+ Remove {
+  channels rgba
+  name _KEEP_NP_
+  label "\[value channels]"
+  xpos 980
+  ypos 1444
+ }
+push $N5f5df000
+ Dot {
+  name Dot17
+  xpos 705
+  ypos 852
+ }
+ Dot {
+  name Dot14
+  xpos 705
+  ypos 1352
+ }
+push $N847d6400
+ Dot {
+  name Dot9
+  xpos 459
+  ypos 958
+ }
+set N96ed3400 [stack 0]
+ Dot {
+  name Dot10
+  xpos 459
+  ypos 1073
+ }
+set N96deb400 [stack 0]
+ Dot {
+  name Dot7
+  xpos 459
+  ypos 1352
+ }
+push $N44d8dc00
+ Dot {
+  name Dot4
+  xpos 308
+  ypos 648
+ }
+set N5c245c00 [stack 0]
+ Dot {
+  name Dot6
+  xpos 194
+  ypos 648
+ }
+ Dot {
+  name Dot5
+  xpos 194
+  ypos 1189
+ }
+push $N96deb400
+push $N96ed3400
+push $N5c245c00
+ Unpremult {
+  name _UNPREMULT_
+  xpos 277
+  ypos 905
+ }
+ Log2Lin {
+  operation lin2log
+  name _TO_LOG_
+  xpos 277
+  ypos 931
+ }
+ STMap {
+  inputs 2
+  channels rgba
+  uv rgb
+  name _ST_
+  xpos 277
+  ypos 957
+ }
+ Log2Lin {
+  name _TO_LIN_
+  xpos 277
+  ypos 983
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name _MASK_ALPHA_
+  note_font "Verdana Bold Bold"
+  note_font_color 0xffffffff
+  xpos 277
+  ypos 1067
+ }
+ Premult {
+  name _PREMULT_
+  xpos 277
+  ypos 1103
+ }
+set N96dba400 [stack 0]
+ CopyBBox {
+  inputs 2
+  name _INPUT_BBOX_
+  xpos 277
+  ypos 1189
+ }
+ Switch {
+  inputs 3
+  which {{output}}
+  name _OUTPUT_
+  xpos 277
+  ypos 1351
+ }
+ Copy {
+  inputs 2
+  from0 -rgba.alpha
+  to0 -rgba.alpha
+  channels all
+  name _COPY_NP_
+  xpos 277
+  ypos 1437
+  disable {{!parent.vector_aov}}
+ }
+set N6866ac00 [stack 0]
+ Remove {
+  channels motion
+  name _REMOVE_MOTION_
+  selected true
+  xpos 277
+  ypos 1506
+ }
+ Output {
+  name Output1
+  xpos 277
+  ypos 1589
+ }
+push $N96dba400
+push $N6866ac00
+ Viewer {
+  inputs 2
+  frame 1013
+  frame_range 995-1100
+  frame_increment 8
+  viewerProcess "sRGB (ACES)"
+  name Viewer1
+  xpos 1764
+  ypos 1132
+  hide_input true
+ }
+end_group

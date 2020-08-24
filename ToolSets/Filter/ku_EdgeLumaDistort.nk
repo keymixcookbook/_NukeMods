@@ -1,0 +1,273 @@
+set cut_paste_input [stack 0]
+push 0
+push $cut_paste_input
+Group {
+inputs 2
+name ku_EdgeLumaDistort
+tile_color 0xcc804eff
+note_font "Bold"
+selected true
+xpos -177
+ypos -142
+addUserKnob {20 tb_user l ku_EdgeLumaDistort}
+addUserKnob {41 channels T _ST_.channels}
+addUserKnob {41 overscan T _OVERSCAN_.numpixels}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {41 distort_scale l distort T _DISTORT_.uv_scale}
+addUserKnob {41 strength T _BOOST_.value}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {41 smooth T _SMOOTH_.size}
+addUserKnob {41 edge_smooth l "edge smooth" T _EDGE_SMOOTH_.size}
+addUserKnob {41 smoth_shift l "shooth edge shift" T _EDGE_SMOOTH_.dof}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {4 output M {distorted stmap}}
+addUserKnob {26 div l "" +STARTLINE}
+addUserKnob {26 copyright l " " T "\n    \n    <p style=\"color: gray\"><b>ku_EdgeLumaDistort</b> &#169; 2020 Tianlun Jiang - jiangovfx.com\n\n    "}
+}
+Input {
+inputs 0
+name Input
+xpos -452
+ypos 37
+}
+Dot {
+name Dot2
+xpos -421
+ypos 107
+}
+set N6bb4f800 [stack 0]
+Remove {
+operation keep
+channels rgba
+name _KEEP_RGB_
+xpos -129
+ypos 106
+}
+set N7439f800 [stack 0]
+Shuffle {
+in alpha
+name _ALPHA_
+xpos 5
+ypos 106
+}
+Dot {
+name Dot5
+xpos 36
+ypos 288
+}
+set N6fbce000 [stack 0]
+Invert {
+channels rgba
+name _INVERT_
+xpos 5
+ypos 448
+}
+Blur {
+channels rgb
+name _ALPHA_SMOOTH_
+xpos 5
+ypos 474
+}
+Dot {
+name Dot4
+xpos 36
+ypos 557
+}
+push $N7439f800
+AdjBBox {
+numpixels 50
+name _OVERSCAN_
+xpos -129
+ypos 327
+}
+set N57a07c00 [stack 0]
+Dot {
+name Dot7
+xpos -183
+ypos 328
+}
+Dot {
+name Dot6
+xpos -183
+ypos 468
+}
+push $N6fbce000
+Input {
+inputs 0
+name filter
+xpos 183
+ypos -25
+number 1
+}
+Dot {
+name Dot1
+xpos 214
+ypos 34
+}
+set N5ed7d000 [stack 0]
+Matrix {
+channels rgba
+matrix {
+    {0 0 0}
+    {0 -1 1}
+    {0 0 0}
+  }
+name _X_
+xpos 242
+ypos 83
+}
+push $N5ed7d000
+Matrix {
+channels rgba
+matrix {
+    {0 1 0}
+    {0 -1 0}
+    {0 0 0}
+  }
+name _Y_
+xpos 127
+ypos 83
+}
+ShuffleCopy {
+inputs 2
+red red
+blue black
+alpha black
+out rgb
+name _MOTION_
+xpos 180
+ypos 139
+}
+Expression {
+expr2 sqrt(pow2(r)+pow2(g))
+name _VECTOR_
+xpos 180
+ypos 165
+}
+Matrix {
+channels rgb
+matrix {
+    {0 1 0}
+    {1 2 1}
+    {0 1 0}
+  }
+normalize true
+name _AA_
+xpos 180
+ypos 187
+}
+Multiply {
+channels rgb
+value 100
+name _BOOST_
+xpos 180
+ypos 213
+}
+Blur {
+channels rgb
+name _SMOOTH_
+xpos 180
+ypos 239
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name _COPY_ALPHA_
+xpos 180
+ypos 281
+}
+ZDefocus2 {
+z_channel rgba.alpha
+math far=1
+dof 0.5
+size 10
+max_size 100
+legacy_resize_mode false
+show_legacy_resize_mode false
+name _EDGE_SMOOTH_
+xpos 180
+ypos 348
+}
+Dot {
+name Dot3
+xpos 211
+ypos 406
+}
+push $N57a07c00
+Expression {
+expr0 (x+0.5)/width
+expr1 (y+0.5)/height
+expr2 0
+expr3 a
+name _STMAP_
+xpos -129
+ypos 353
+}
+ShuffleCopy {
+inputs 2
+red red
+green green
+blue red
+alpha green
+out motion
+name _SHUFFLE_MOTION_
+xpos -129
+ypos 405
+}
+CopyBBox {
+inputs 2
+name COPY_OVERSCAN_
+xpos -129
+ypos 467
+}
+IDistort {
+inputs 1+1
+channels rgb
+uv motion
+uv_scale 20
+name _DISTORT_
+xpos -129
+ypos 556
+}
+Remove {
+channels motion
+name _REMOVE_MOTION_
+xpos -129
+ypos 615
+}
+set N45f0d400 [stack 0]
+push $N45f0d400
+push $N6bb4f800
+STMap {
+inputs 2
+channels rgba
+uv rgba
+name _ST_
+xpos -452
+ypos 621
+}
+Switch {
+inputs 2
+which {{parent.output}}
+name Switch1
+xpos -452
+ypos 709
+}
+Output {
+name Output1
+xpos -452
+ypos 796
+}
+push $N6bb4f800
+Viewer {
+frame_range 995-1100
+frame_increment 8
+viewerProcess "sRGB (ACES)"
+name Viewer1
+selected true
+xpos 290
+ypos -10
+hide_input true
+}
+end_group

@@ -1,0 +1,36 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ku_LayerContact
+ selected true
+ xpos 361
+ ypos -261
+ addUserKnob {20 tb_user l ku_LayerContact}
+ addUserKnob {26 text l "" +STARTLINE T "Layer contact sheets with bbox crop"}
+}
+ Input {
+  inputs 0
+  name Input
+  selected true
+  xpos 69
+  ypos 43
+ }
+ Crop {
+  box {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+  reformat true
+  name Crop1
+  xpos 69
+  ypos 83
+ }
+ LayerContactSheet {
+  showLayerNames true
+  name LayerContactSheet1
+  xpos 69
+  ypos 107
+ }
+ Output {
+  name Output1
+  xpos 69
+  ypos 207
+ }
+end_group

@@ -1,0 +1,261 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+name ku_Colourama1
+selected true
+xpos 280
+ypos -175
+addUserKnob {20 tb_user l ku_Colorama}
+addUserKnob {4 src_luma l "use luminance" M {source gradient ""}}
+addUserKnob {41 mode l "src luma math" T _LUMA_.mode}
+addUserKnob {6 map l "use gradient map input" +STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {6 invert_y l "invert highlight shadow" +STARTLINE}
+addUserKnob {6 invert_gradient l "invert colour gradient" -STARTLINE}
+addUserKnob {41 blackpoint T _GRADE_.blackpoint}
+addUserKnob {41 whitepoint T _GRADE_.whitepoint}
+addUserKnob {41 add l offset T _GRADE_.add}
+addUserKnob {41 gamma T _GRADE_.gamma}
+addUserKnob {41 bl_saturation l "toe saturation" T _BLACKLEVEL_SAT_.saturation}
+addUserKnob {41 which l mix T _MIX_.which}
+addUserKnob {26 div l "" +STARTLINE}
+addUserKnob {26 copyright l " " T "\n    \n    <p style=\"color: gray\"><b>ku_Colorama</b> &#169; 2020 Tianlun Jiang - jiangovfx.com\n<br>(based on nColorama)\n\n    "}
+addUserKnob {20 tb_ramp l ramp}
+addUserKnob {18 ramp_whitepoint l whitepoint}
+ramp_whitepoint {1 0.5 0}
+addUserKnob {6 ramp_whitepoint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {18 ramp_blackpoint l blackpoint}
+ramp_blackpoint {0 0.5 1}
+addUserKnob {6 ramp_blackpoint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Input {
+inputs 0
+name Input
+xpos -342
+ypos -137
+}
+Unpremult {
+name _UNPREMULT_
+xpos -342
+ypos -90
+}
+Dot {
+name Dot3
+xpos -311
+ypos -3
+}
+set N87ab4800 [stack 0]
+Dot {
+name Dot4
+xpos -579
+ypos -3
+}
+set N90a08c00 [stack 0]
+Expression {
+temp_name0 bl
+temp_expr0 blacklevel
+expr3 clamp((bl/(0.2126*r+0.7152*g+0.0722*b))*a)
+name _BLACKLEVEL_
+xpos -610
+ypos 477
+addUserKnob {20 User}
+addUserKnob {7 blacklevel R 0 0.18}
+blacklevel 0.018
+}
+push $N87ab4800
+Saturation {
+saturation 0
+name _LUMA_
+xpos -189
+ypos -4
+}
+Grade {
+gamma 2.2
+white_clamp true
+name _GRADE_
+xpos -189
+ypos 22
+}
+Invert {
+channels rgba
+name _INVERT_
+xpos -189
+ypos 73
+disable {{!parent.invert_y}}
+}
+Input {
+inputs 0
+name gradient
+xpos -60
+ypos -95
+number 1
+}
+Constant {
+inputs 0
+color {0.18 0.18 0.18 1}
+name _BASE_
+xpos 153
+ypos -157
+disable true
+postage_stamp false
+}
+set N9ff94400 [stack 0]
+Ramp {
+invert {{parent.invert_gradient}}
+p0 {0 0}
+p1 {{root.width} {root.height}}
+type smooth0
+color {{parent.ramp_whitepoint} {parent.ramp_whitepoint} {parent.ramp_whitepoint} 0}
+name _RAMP_HIGH_
+xpos 89
+ypos -108
+}
+push $N9ff94400
+Ramp {
+invert {{!parent.invert_gradient}}
+p0 {0 0}
+p1 {{root.width} {root.height}}
+type smooth1
+color {{parent.ramp_blackpoint} {parent.ramp_blackpoint} {parent.ramp_blackpoint} 0}
+name _RAMP_LOW_
+xpos 214
+ypos -109
+}
+Merge2 {
+inputs 2
+operation hypot
+output rgb
+name _RAMP_MERGE_
+xpos 155
+ypos -7
+}
+Switch {
+inputs 2
+which 1
+name _USE_MAP_
+xpos -60
+ypos -7
+disable {{!parent.map x1013 1}}
+}
+STMap {
+inputs 2
+channels rgba
+uv rgb
+name _STMAP_
+xpos -60
+ypos 73
+}
+Dot {
+name Dot1
+xpos -29
+ypos 113
+}
+push $N87ab4800
+ShuffleCopy {
+inputs 2
+red red
+green green
+blue blue
+alpha alpha2
+name _COPY_RGB_
+xpos -342
+ypos 112
+}
+set N4906c800 [stack 0]
+Dot {
+name Dot5
+xpos -173
+ypos 179
+}
+Dot {
+name Dot2
+xpos -173
+ypos 379
+}
+push $N90a08c00
+Colorspace {
+colorspace_out CIE-Lab
+name _SRC_TO_LAB_
+selected true
+xpos -610
+ypos 195
+}
+set N97d8d800 [stack 0]
+push $N4906c800
+Colorspace {
+colorspace_out CIE-Lab
+name _TO_LAB_
+xpos -342
+ypos 163
+}
+Copy {
+inputs 2
+from0 rgba.red
+to0 rgba.red
+name _COPY_L_
+xpos -342
+ypos 189
+}
+push $N97d8d800
+Dissolve {
+inputs 2
+channels rgba
+which 1
+name _MIX_
+xpos -342
+ypos 267
+}
+Colorspace {
+colorspace_in CIE-Lab
+name _TO_RGB_
+xpos -342
+ypos 326
+}
+Clamp {
+channels rgba
+maximum_enable false
+MinClampTo_enable true
+name _CLAMP_NEG_
+xpos -342
+ypos 352
+}
+Switch {
+inputs 2
+which {{src_luma}}
+name _SRC_LUMA_
+note_font_color 0xffffffff
+xpos -342
+ypos 378
+}
+Log2Lin {
+operation lin2log
+name _TO_LOG_
+xpos -342
+ypos 451
+}
+Saturation {
+inputs 1+1
+saturation 0.5
+mix {{parent._MIX_.which}}
+name _BLACKLEVEL_SAT_
+xpos -342
+ypos 477
+}
+Log2Lin {
+name _TO_LIN_
+xpos -342
+ypos 503
+}
+Premult {
+name PREMULT
+xpos -342
+ypos 552
+}
+Output {
+name Output1
+xpos -342
+ypos 678
+}
+end_group

@@ -1,0 +1,172 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Dehaze
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3458
+ disable {{Dehaze==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Dehaze R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 795
+  ypos -428
+ }
+ Dot {
+  name Dot5
+  xpos 829
+  ypos -388
+ }
+set Nb7be9800 [stack 0]
+ Dot {
+  name Dot7
+  xpos 483
+  ypos -388
+ }
+ Dot {
+  name Dot1
+  xpos 483
+  ypos 188
+ }
+set Nb7be9000 [stack 0]
+ Dot {
+  name Dot11
+  xpos 483
+  ypos 235
+ }
+push $Nb7be9000
+ Input {
+  inputs 0
+  name Mask
+  xpos 704
+  ypos 79
+  number 1
+ }
+ Dot {
+  name Dot12
+  xpos 738
+  ypos 129
+ }
+push $Nb7be9800
+ Dot {
+  name Dot6
+  xpos 924
+  ypos -388
+ }
+set Nb7be8000 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1063
+  ypos -388
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 0.8676402381 1 1}
+  name Keyer2
+  xpos 1029
+  ypos -332
+ }
+ Invert {
+  name Invert2
+  xpos 1029
+  ypos -294
+ }
+ Grade {
+  channels alpha
+  gamma 0.08
+  name Grade1
+  xpos 1029
+  ypos -256
+ }
+push $Nb7be8000
+ Keyer {
+  operation "saturation key"
+  name Keyer1
+  xpos 890
+  ypos -251
+ }
+ Invert {
+  name Invert1
+  xpos 890
+  ypos -189
+ }
+ Blur {
+  size {{(input.width+input.height)/2/7}}
+  name Blur1
+  xpos 890
+  ypos -119
+ }
+ Dot {
+  name Dot3
+  xpos 924
+  ypos -65
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  mix 0.59
+  name Merge7
+  xpos 1029
+  ypos -69
+ }
+ Dot {
+  name Dot2
+  xpos 1063
+  ypos -4
+ }
+push $Nb7be9800
+ ColorCorrect {
+  inputs 1+1
+  gamma {{1-Dehaze/115*(1+(-Dehaze>0)*-Dehaze/100*6)}}
+  name ColorCorrect1
+  xpos 795
+  ypos -8
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 795
+  ypos 18
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  selected true
+  xpos 795
+  ypos 56
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 795
+  ypos 125
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 795
+  ypos 184
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 795
+  ypos 231
+ }
+ Output {
+  name Output1
+  xpos 795
+  ypos 309
+ }
+end_group

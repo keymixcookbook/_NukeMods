@@ -1,0 +1,360 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Sharpen
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -2897
+ disable {{SharpenAmount==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 SharpenAmount l Amount R 0 150}
+ addUserKnob {7 ShapenRadius l Radius R 0.5 3}
+ ShapenRadius 2
+ addUserKnob {7 SharpenDetail l Detail R 0 100}
+ SharpenDetail 50
+ addUserKnob {7 SharpenMasking l Masking R 0 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 561
+  ypos -542
+ }
+ Dot {
+  name Dot6
+  xpos 595
+  ypos -462
+ }
+set Nc6940000 [stack 0]
+ Dot {
+  name Dot10
+  xpos 246
+  ypos -462
+ }
+set Nc0defc00 [stack 0]
+ Blur {
+  size {{ShapenRadius+0.5}}
+  name Blur1
+  label "\[value size]"
+  xpos 212
+  ypos -333
+ }
+ Dot {
+  name Dot4
+  xpos 246
+  ypos -242
+ }
+set Nc0def400 [stack 0]
+ Dot {
+  name Dot15
+  xpos 246
+  ypos -186
+ }
+set Nc0def000 [stack 0]
+ Dot {
+  name Dot14
+  xpos 70
+  ypos -186
+ }
+push $Nc0def000
+ Blur {
+  size {{Blur1.size*3}}
+  name Blur2
+  label "\[value size]"
+  xpos 212
+  ypos -150
+ }
+set Nc0dee800 [stack 0]
+ Dot {
+  name Dot9
+  xpos 246
+  ypos -35
+ }
+set Nc0dee400 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge3
+  xpos 36
+  ypos -39
+ }
+ Dot {
+  name Dot17
+  label "mid range detail"
+  note_font_size 20
+  xpos 70
+  ypos 26
+ }
+set Nc0e13c00 [stack 0]
+ Dot {
+  name Dot3
+  xpos 341
+  ypos 78
+ }
+set Nc0e13800 [stack 0]
+ Expression {
+  expr0 -r
+  expr1 -g
+  expr2 -b
+  name Expression1
+  xpos 307
+  ypos 131
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 307
+  ypos 157
+ }
+ Dot {
+  name Dot7
+  xpos 341
+  ypos 217
+ }
+push $Nc0e13800
+ Clamp {
+  maximum_enable false
+  name Clamp2
+  xpos 409
+  ypos 68
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge1
+  xpos 409
+  ypos 213
+ }
+ ColorCorrect {
+  gain 50.3
+  name ColorCorrect3
+  xpos 409
+  ypos 239
+ }
+ Blur {
+  size 10
+  name Blur3
+  xpos 409
+  ypos 265
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 {SharpenMasking/100 x407 0.08055358161} 1 1}
+  name Keyer2
+  xpos 409
+  ypos 303
+ }
+ Grade {
+  channels alpha
+  gamma 0.5
+  mix {{SharpenMasking/100}}
+  name Grade1
+  xpos 409
+  ypos 341
+ }
+push $Nc0defc00
+ Dot {
+  name Dot2
+  xpos -153
+  ypos -462
+ }
+set Ncc265000 [stack 0]
+push $Nc0def400
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  xpos -187
+  ypos -246
+ }
+ Dot {
+  name Dot5
+  label "high frequency detail"
+  note_font_size 20
+  xpos -153
+  ypos 23
+ }
+ ColorCorrect {
+  gain {{1+SharpenDetail/100*6}}
+  name ColorCorrect2
+  xpos -187
+  ypos 170
+ }
+ Dot {
+  name Dot13
+  xpos -153
+  ypos 359
+ }
+push $Nc0dee800
+ Keyer {
+  operation "luminance key"
+  range {0 0.1301352996 0.5437595424 1}
+  name Keyer1
+  xpos 133
+  ypos 109
+ }
+ FilterErode {
+  size 10
+  filter gaussian
+  name FilterErode1
+  xpos 133
+  ypos 147
+ }
+push $Nc0e13c00
+ ColorCorrect {
+  inputs 1+1
+  gain 2
+  name ColorCorrect1
+  xpos 36
+  ypos 153
+ }
+ Dot {
+  name Dot12
+  xpos 70
+  ypos 257
+ }
+push $Nc0dee400
+ Dot {
+  name Dot1
+  label "Low frequency Color"
+  note_font_size 20
+  xpos 246
+  ypos 19
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus
+  xpos 212
+  ypos 253
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus1
+  xpos 212
+  ypos 355
+ }
+ Dot {
+  name Dot11
+  xpos 246
+  ypos 408
+ }
+ Colorspace {
+  colorspace_in sRGB
+  colorspace_out HSV
+  name Colorspace1
+  xpos 212
+  ypos 467
+ }
+push $Nc6940000
+ Colorspace {
+  colorspace_in sRGB
+  colorspace_out HSV
+  name Colorspace2
+  xpos 561
+  ypos 404
+ }
+ Copy {
+  inputs 2+1
+  from0 rgba.blue
+  to0 rgba.blue
+  mix {{SharpenAmount/150}}
+  name Copy1
+  xpos 561
+  ypos 461
+ }
+ Colorspace {
+  colorspace_in HSV
+  colorspace_out sRGB
+  name Colorspace3
+  xpos 561
+  ypos 499
+ }
+set Nc9ed3000 [stack 0]
+ Viewer {
+  frame_range 1-4320
+  name Viewer1
+  xpos 212
+  ypos -281
+ }
+push $Ncc265000
+ Dot {
+  name Dot16
+  xpos -345
+  ypos -462
+ }
+ Dot {
+  name Dot18
+  xpos -345
+  ypos 684
+ }
+ Dot {
+  name Dot8
+  xpos 451
+  ypos 684
+ }
+set Nc9ed2400 [stack 0]
+ Dot {
+  name Dot21
+  xpos 451
+  ypos 731
+ }
+push $Nc9ed2400
+ Input {
+  inputs 0
+  name Mask
+  xpos 460
+  ypos 599
+  number 1
+ }
+ Dot {
+  name Dot22
+  xpos 494
+  ypos 625
+ }
+push $Nc9ed3000
+ Clamp {
+  maximum_enable false
+  name Clamp3
+  xpos 561
+  ypos 525
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 561
+  ypos 563
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 561
+  ypos 621
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  xpos 561
+  ypos 680
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 561
+  ypos 727
+ }
+ Output {
+  name Output1
+  xpos 561
+  ypos 1050
+ }
+end_group

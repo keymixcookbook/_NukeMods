@@ -1,0 +1,125 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name DistortMap1
+ autolabel "\n\nnuke.thisNode().name()+ '\\n(rgb > motion)' if nuke.thisNode()\['shuffle_motion'].value()==True else ''\n"
+ note_font "Bold"
+ selected true
+  addUserKnob {20 tb_user l DistortMap}
+ addUserKnob {41 in l "channel in" T _CHANNEL_.in}
+ addUserKnob {41 aa_disable l "disable AA" -STARTLINE T _AA_.disable}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {7 multiply l strength R 0.01 1}
+ multiply 1
+ addUserKnob {7 smooth R 0 12}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 shuffle_motion l "shuffle ouput to motion channel" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 1
+  ypos -125
+ }
+ Shuffle {
+  name _CHANNEL_
+  label "\[value in]"
+  xpos 1
+  ypos -52
+ }
+ Dot {
+  name Dot1
+  xpos 32
+  ypos 8
+ }
+set N2361e000 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 -1 1}
+      {0 0 0}
+    }
+  name _X_
+  xpos 64
+  ypos 59
+ }
+push $N2361e000
+ Matrix {
+  channels rgba
+  matrix {
+      {0 1 0}
+      {0 -1 0}
+      {0 0 0}
+    }
+  name _Y_
+  xpos -67
+  ypos 57
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  blue black
+  alpha black
+  out rgb
+  name _MOTION_
+  xpos 2
+  ypos 115
+ }
+ Expression {
+  expr2 sqrt(pow2(r)+pow2(g))
+  name _VECTOR_
+  xpos 2
+  ypos 141
+ }
+ Matrix {
+  channels rgb
+  matrix {
+      {0 1 0}
+      {1 2 1}
+      {0 1 0}
+    }
+  normalize true
+  name _AA_
+  xpos 2
+  ypos 163
+ }
+ Multiply {
+  channels rgb
+  value {{"parent.multiply == 0?1:parent.multiply*100"}}
+  name _BOOST_
+  xpos 2
+  ypos 187
+ }
+ Blur {
+  channels rgb
+  name _SMOOTH_
+  xpos 2
+  ypos 211
+ }
+ Shuffle {
+  blue red
+  alpha green
+  out motion
+  name _TO_MOTION_
+  xpos 2
+  ypos 235
+  disable {{!parent.shuffle_motion}}
+ }
+set N750d0c00 [stack 0]
+ Output {
+  name Output1
+  xpos 2
+  ypos 335
+ }
+push $N750d0c00
+ Viewer {
+  frame_range 995-1100
+  frame_increment 8
+  viewerProcess "sRGB (ACES)"
+  name Viewer1
+  xpos 290
+  ypos -10
+  hide_input true
+ }
+end_group

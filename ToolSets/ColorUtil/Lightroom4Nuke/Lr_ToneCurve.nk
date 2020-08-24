@@ -1,0 +1,237 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_ToneCurve
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3201
+ disable {{Highlight==0&&Light==0&&Dark==0&&Shadow==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {22 ResetToneCurve l Reset T "nuke.thisNode().knob('Highlight').setValue(0);\nnuke.thisNode().knob('Light').setValue(0);\nnuke.thisNode().knob('Dark').setValue(0);\nnuke.thisNode().knob('Shadow').setValue(0);\nnuke.thisNode().knob('HighlightRange').setValue(0);\nnuke.thisNode().knob('LightRange').setValue(0);\nnuke.thisNode().knob('DarkRange').setValue(0);\nnuke.thisNode().knob('ShadowRange').setValue(0);" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 Highlight R -100 100}
+ addUserKnob {7 Light R -100 100}
+ addUserKnob {7 Dark R -100 100}
+ addUserKnob {7 Shadow R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {7 HighlightRange R -5 5}
+ addUserKnob {7 LightRange R -5 5}
+ addUserKnob {7 DarkRange R -5 5}
+ addUserKnob {7 ShadowRange R -5 5}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 237
+  ypos 162
+ }
+ Dot {
+  name Dot6
+  xpos 271
+  ypos 188
+ }
+set Nc8918400 [stack 0]
+ Dot {
+  name Dot5
+  xpos -168
+  ypos 188
+ }
+ Dot {
+  name Dot3
+  xpos -168
+  ypos 761
+ }
+set Nae21bc00 [stack 0]
+ Dot {
+  name Dot10
+  xpos -168
+  ypos 808
+ }
+push $Nae21bc00
+ Input {
+  inputs 0
+  name Mask
+  xpos 146
+  ypos 676
+  number 1
+ }
+ Dot {
+  name Dot11
+  xpos 180
+  ypos 702
+ }
+push $Nc8918400
+ Grade {
+  gamma {{1+HighlightRange/8}}
+  black_clamp false
+  name Grade2
+  xpos 237
+  ypos 206
+ }
+ ColorCorrect {
+  master 0
+  shadows 0
+  midtones 0
+  highlights.gain {{1+Highlight/100/2}}
+  lookup {shadow {curve 1 s0 x0.1459435523 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve x0.08698111773 0 s0 x1 1 s0}}
+  name Highlight1
+  xpos 237
+  ypos 232
+ }
+ Grade {
+  gamma {{parent.Grade2.gamma}}
+  reverse true
+  black_clamp false
+  name Grade6
+  xpos 237
+  ypos 258
+ }
+ Dot {
+  name Dot1
+  xpos 271
+  ypos 284
+ }
+ Grade {
+  gamma {{1+LightRange/8}}
+  black_clamp false
+  name Grade7
+  xpos 237
+  ypos 302
+ }
+ ColorCorrect {
+  master 0
+  shadows 0
+  midtones.gain {{1+Light/100/2}}
+  highlights 0
+  lookup {shadow {curve 1 s0 x1.010807633 0 s1.450000048 u1.477248669}
+    midtone {1-shadow-highlight}
+    highlight {curve x0.004921976477 -0.05908799171 s-0.8500000238 v1.108218312 x1 1 s0}}
+  name Light
+  xpos 237
+  ypos 328
+ }
+set Nae1df800 [stack 0]
+ Grade {
+  gamma {{parent.Grade7.gamma}}
+  reverse true
+  black_clamp false
+  name Grade8
+  xpos 237
+  ypos 354
+ }
+ Dot {
+  name Dot2
+  xpos 271
+  ypos 380
+ }
+ Grade {
+  gamma {{1-DarkRange/8}}
+  black_clamp false
+  name Grade4
+  xpos 237
+  ypos 398
+ }
+ ColorCorrect {
+  master 0
+  shadows.gain {{1+Dark/100}}
+  midtones 0
+  highlights 0
+  lookup {shadow {curve x0.007482178509 1 s-0.1000000015 x1.008194804 0 s-0 u1.733967543}
+    midtone {1-shadow-highlight}
+    highlight {}}
+  name Dark
+  xpos 237
+  ypos 424
+ }
+ Grade {
+  gamma {{parent.Grade4.gamma}}
+  reverse true
+  black_clamp false
+  name Grade5
+  xpos 237
+  ypos 450
+ }
+ Dot {
+  name Dot4
+  xpos 271
+  ypos 476
+ }
+ Grade {
+  gamma {{1-ShadowRange/8}}
+  black_clamp false
+  name Grade1
+  xpos 237
+  ypos 494
+ }
+ ColorCorrect {
+  master 0
+  shadows.gain {{1+Shadow/100}}
+  midtones 0
+  highlights 0
+  lookup {shadow {curve 1 s0 x0.09370546043 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {}}
+  name ShadowCC
+  xpos 237
+  ypos 520
+ }
+ Grade {
+  gamma {{parent.Grade1.gamma}}
+  reverse true
+  black_clamp false
+  name Grade3
+  xpos 237
+  ypos 546
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 237
+  ypos 572
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 237
+  ypos 634
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 237
+  ypos 698
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 237
+  ypos 757
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 237
+  ypos 804
+ }
+ Output {
+  name Output1
+  xpos 237
+  ypos 830
+ }
+push $Nae1df800
+ Viewer {
+  frame_range 1-4320
+  name Viewer1
+  xpos 347
+  ypos 354
+ }
+end_group

@@ -1,0 +1,238 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Vibrance
+ tile_color 0x8effffff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3400
+ disable {{Vib==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Vib l Vibrance R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos -124
+  ypos -467
+ }
+ Dot {
+  name Dot3
+  xpos -90
+  ypos -368
+ }
+set Nc99b3400 [stack 0]
+ Dot {
+  name Dot4
+  xpos -633
+  ypos -368
+ }
+ Dot {
+  name Dot13
+  xpos -633
+  ypos -311
+ }
+set Nc99b2c00 [stack 0]
+ Dot {
+  name Dot14
+  xpos -633
+  ypos -208
+ }
+set Nc99b2800 [stack 0]
+ Dot {
+  name Dot5
+  xpos -633
+  ypos -94
+ }
+set Nc99b2400 [stack 0]
+ Dot {
+  name Dot11
+  xpos -633
+  ypos -65
+ }
+set Nc99b2000 [stack 0]
+ Dot {
+  name Dot9
+  xpos -633
+  ypos 5
+ }
+set Nc13edc00 [stack 0]
+ Dot {
+  name Dot2
+  xpos -633
+  ypos 377
+ }
+set Nc13ed800 [stack 0]
+ Dot {
+  name Dot15
+  xpos -633
+  ypos 424
+ }
+push $Nc13ed800
+ Input {
+  inputs 0
+  name Mask
+  selected true
+  xpos -215
+  ypos 271
+  number 1
+ }
+ Dot {
+  name Dot16
+  xpos -181
+  ypos 318
+ }
+push $Nc13edc00
+ Keyer {
+  operation "saturation key"
+  range {0.2678972753 1 1 1}
+  name Keyer1
+  xpos -495
+  ypos -5
+ }
+push $Nc99b2000
+ HueKeyer {
+  lut {amount {curve 0 x0.2420749068 0 x1.174063444 0.5985074639 x1.478386164 0.5985074639 x3.066570759 0 x6 0}
+    sat_thrsh {}}
+  name HueKeyer3
+  xpos -385
+  ypos -75
+ }
+ Invert {
+  name Invert1
+  xpos -385
+  ypos -37
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge7
+  xpos -385
+  ypos 1
+ }
+ Dot {
+  name Dot10
+  xpos -351
+  ypos 52
+ }
+push $Nc99b2400
+ HueKeyer {
+  lut {amount {curve 0 x0.1564841568 0 x1.278674364 0.1962686777 x1.554466963 0.1962686777 x2.923919678 0 x6 0}
+    sat_thrsh {}}
+  name HueKeyer2
+  xpos -279
+  ypos -104
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos -279
+  ypos 48
+ }
+ Grade {
+  channels alpha
+  black 0.3
+  name Grade2
+  xpos -279
+  ypos 78
+ }
+ Dot {
+  name Dot12
+  xpos -245
+  ypos 124
+ }
+push $Nc99b2800
+ HueKeyer {
+  lut {amount {curve 0 x0.1564841568 0 x1.506916523 0.847512424 x1.782709122 0.847512424 x2.923919678 0 x6 0}
+    sat_thrsh {}}
+  name HueKeyer1
+  xpos -377
+  ypos -218
+ }
+push $Nc99b2c00
+ Keyer {
+  operation "saturation key"
+  range {0 0 0 1}
+  name Keyer2
+  xpos -281
+  ypos -321
+ }
+ Grade {
+  channels alpha
+  gamma 1.56
+  name Grade1
+  xpos -281
+  ypos -283
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge9
+  xpos -281
+  ypos -212
+ }
+ Dot {
+  name Dot1
+  xpos -247
+  ypos -171
+ }
+push $Nc99b3400
+ Saturation {
+  inputs 1+1
+  saturation {{1+Vib/100*(Vib>0)*3}}
+  name Saturation1
+  xpos -124
+  ypos -175
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+Vib/100*(Vib<0)}}
+  name Saturation2
+  xpos -124
+  ypos 120
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos -124
+  ypos 219
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos -124
+  ypos 257
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos -124
+  ypos 314
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge3
+  xpos -124
+  ypos 373
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos -124
+  ypos 420
+ }
+ Output {
+  name Output1
+  xpos -124
+  ypos 476
+ }
+end_group

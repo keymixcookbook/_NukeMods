@@ -1,0 +1,405 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Shadow
+ tile_color 0x666666ff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3725
+ disable {{Shadow==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Shadow R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos -450
+  ypos 159
+ }
+ Dot {
+  name Dot44
+  xpos -416
+  ypos 341
+ }
+set Nb63f2800 [stack 0]
+ Dot {
+  name Dot41
+  xpos -603
+  ypos 341
+ }
+set Nb63f2400 [stack 0]
+ Dot {
+  name Dot21
+  xpos -603
+  ypos 402
+ }
+set Nb63f2000 [stack 0]
+ Dot {
+  name Dot37
+  xpos -825
+  ypos 402
+ }
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect10
+  xpos -859
+  ypos 420
+ }
+ Dot {
+  name Dot27
+  xpos -825
+  ypos 474
+ }
+set Nb7b59400 [stack 0]
+ Dot {
+  name Dot33
+  xpos -991
+  ypos 474
+ }
+ Clamp {
+  minimum 0.0001
+  maximum_enable false
+  name Clamp1
+  xpos -1025
+  ypos 500
+ }
+ Keyer {
+  operation "luminance key"
+  range {4.994443681e-05 4.994443681e-05 4.994443681e-05 1}
+  name Keyer6
+  xpos -1025
+  ypos 596
+ }
+set Nb7b58800 [stack 0]
+push $Nb7b59400
+ ColorCorrect {
+  shadows.gamma 1.5
+  lookup {shadow {curve 1 s0 x0.2654716372 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve x0.9084724784 0 s0 L x1 1 s0}}
+  name ColorCorrect12
+  xpos -962
+  ypos 537
+ }
+push $Nb7b59400
+ Dot {
+  name Dot1
+  xpos -825
+  ypos 492
+ }
+ ColorCorrect {
+  shadows.gamma 1.8
+  lookup {shadow {curve L 1 x1.004339576 0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect13
+  xpos -856
+  ypos 536
+ }
+ ColorCorrect {
+  shadows.gamma 1.8
+  lookup {shadow {curve L 1 x1.004339576 0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect14
+  xpos -856
+  ypos 562
+ }
+ Merge2 {
+  inputs 2+1
+  operation min
+  name Merge10
+  xpos -856
+  ypos 602
+ }
+ Dot {
+  name Dot22
+  xpos -822
+  ypos 643
+ }
+set Nad0b1000 [stack 0]
+push $Nb7b58800
+ Viewer {
+  inputs 2
+  frame_range 1-4320
+  name Viewer1
+  xpos -527
+  ypos 665
+ }
+push $Nb63f2400
+ Dot {
+  name Dot7
+  xpos -1342
+  ypos 341
+ }
+ Dot {
+  name Dot16
+  xpos -1342
+  ypos 1443
+ }
+ Dot {
+  name Dot9
+  xpos -255
+  ypos 1443
+ }
+set Nad0b0400 [stack 0]
+ Dot {
+  name Dot14
+  xpos -255
+  ypos 1490
+ }
+push $Nad0b0400
+ Input {
+  inputs 0
+  name Mask
+  xpos -289
+  ypos 1391
+  number 1
+ }
+ Dot {
+  name Dot15
+  xpos -255
+  ypos 1417
+ }
+push $Nb63f2800
+ Dot {
+  name Dot5
+  xpos 110
+  ypos 339
+ }
+ Dot {
+  name Dot2
+  xpos 110
+  ypos 551
+ }
+set Nc50c1000 [stack 0]
+ Dot {
+  name Dot3
+  xpos -77
+  ypos 551
+ }
+ Dot {
+  name Dot4
+  xpos -77
+  ypos 612
+ }
+set Nc50c0800 [stack 0]
+ Dot {
+  name Dot6
+  xpos -187
+  ypos 612
+ }
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect1
+  xpos -221
+  ypos 658
+ }
+ Dot {
+  name Dot8
+  xpos -187
+  ypos 684
+ }
+set Ncc791c00 [stack 0]
+ ColorCorrect {
+  shadows.gamma 0.7
+  shadows.gain 0.7
+  lookup {shadow {curve L 1 x1.008493543 0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect2
+  xpos -221
+  ypos 734
+ }
+ Dot {
+  name Dot10
+  xpos -187
+  ypos 760
+ }
+push $Nc50c0800
+push $Ncc791c00
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge2
+  xpos -111
+  ypos 680
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos -111
+  ypos 756
+ }
+ Dot {
+  name Dot51
+  xpos -77
+  ypos 894
+ }
+push $Nc50c1000
+ Dot {
+  name Dot52
+  xpos 110
+  ypos 780
+ }
+set Ncc790400 [stack 0]
+ Dot {
+  name Dot53
+  xpos 34
+  ypos 780
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge18
+  xpos 0
+  ypos 890
+ }
+ Grade {
+  white {{-Shadow/100}}
+  black_clamp false
+  name Grade2
+  xpos 0
+  ypos 946
+ }
+ Dot {
+  name Dot54
+  xpos 34
+  ypos 1007
+ }
+push $Ncc790400
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus4
+  xpos 76
+  ypos 1003
+ }
+push $Nad0b1000
+push $Nb63f2000
+push $Nb7b59400
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge4
+  xpos -637
+  ypos 470
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge9
+  xpos -637
+  ypos 639
+ }
+ Dot {
+  name Dot24
+  xpos -603
+  ypos 665
+ }
+ Dot {
+  name Dot45
+  xpos -603
+  ypos 936
+ }
+push $Nb63f2800
+ Dot {
+  name Dot43
+  xpos -416
+  ypos 879
+ }
+set Ncc5c9c00 [stack 0]
+ Dot {
+  name Dot46
+  xpos -492
+  ypos 879
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge16
+  xpos -526
+  ypos 1017
+ }
+ Expression {
+  expr0 r<0?0:r
+  expr1 g<0?0:g
+  expr2 b<0?0:b
+  name Expression1
+  xpos -526
+  ypos 1043
+ }
+ Grade {
+  white {{Shadow/100}}
+  black_clamp false
+  name Grade1
+  xpos -526
+  ypos 1088
+ }
+ Dot {
+  name Dot42
+  xpos -492
+  ypos 1161
+ }
+push $Ncc5c9c00
+ Merge2 {
+  inputs 2
+  operation plus
+  mix 0.7
+  name Plus2
+  xpos -450
+  ypos 1157
+ }
+push $Nb63f2800
+ Switch {
+  inputs 3
+  which {{"Shadow==0?0:\nShadow>0?1:\n2"}}
+  name Switch1
+  xpos -145
+  ypos 1253
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp2
+  xpos -145
+  ypos 1279
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos -145
+  ypos 1339
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos -145
+  ypos 1413
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  xpos -145
+  ypos 1439
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos -145
+  ypos 1486
+ }
+ Output {
+  name Output1
+  xpos -145
+  ypos 1652
+ }
+end_group

@@ -1,0 +1,426 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name LightRoom_Grain
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -2892
+ disable {{GrainAmount==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {41 GrainRoughness l Roughness T GrainGlobalCtrl.GrainRoughness}
+ addUserKnob {41 GrainSizeCtrl l Size T GrainGlobalCtrl.GrainSizeCtrl}
+ addUserKnob {41 GrainAmount l Amount T GrainGlobalCtrl.GrainAmount}
+}
+ NoOp {
+  inputs 0
+  name GrainCtrl1
+  xpos 248
+  ypos -464
+  addUserKnob {20 User}
+  addUserKnob {7 GrainSize R 0 10}
+  GrainSize {{GrainGlobalCtrl.GrainSizeCtrl/100*10+3}}
+ }
+ NoOp {
+  inputs 0
+  name GrainCtrl
+  xpos 539
+  ypos -457
+  addUserKnob {20 User}
+  addUserKnob {7 GrainSize R 0 10}
+  GrainSize {{GrainGlobalCtrl.GrainSizeCtrl/100*5.5+1}}
+ }
+ NoOp {
+  inputs 0
+  name GrainGlobalCtrl
+  xpos 244
+  ypos -729
+  addUserKnob {20 User}
+  addUserKnob {7 GrainRoughness l Roughness R 0 100}
+  addUserKnob {7 GrainSizeCtrl l Size R 0 100}
+  GrainSizeCtrl 30
+  addUserKnob {7 GrainAmount l Amount R 0 100}
+ }
+ Input {
+  inputs 0
+  name Scn
+  xpos -193
+  ypos -755
+ }
+ Dot {
+  name Dot3
+  xpos -159
+  ypos -609
+ }
+set Ncbf70c00 [stack 0]
+ Dot {
+  name Dot19
+  xpos -159
+  ypos 236
+ }
+ Dot {
+  name Dot13
+  xpos 974
+  ypos 236
+ }
+set Ncbf70400 [stack 0]
+ Dot {
+  name Dot14
+  xpos 974
+  ypos 283
+ }
+push $Ncbf70400
+ Input {
+  inputs 0
+  name Mask
+  xpos 993
+  ypos 151
+  number 1
+ }
+ Dot {
+  name Dot15
+  xpos 1027
+  ypos 177
+ }
+push $Ncbf70c00
+ Dot {
+  name Dot4
+  xpos 17
+  ypos -609
+ }
+set Ncbf89400 [stack 0]
+ Keyer {
+  operation "luminance key"
+  name Keyer1
+  xpos -17
+  ypos -518
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos -17
+  ypos -480
+ }
+ Invert {
+  name Invert1
+  xpos -17
+  ypos -454
+ }
+ Dot {
+  name Dot2
+  xpos 17
+  ypos -311
+ }
+set Ncbf88400 [stack 0]
+ Dot {
+  name Dot1
+  xpos 17
+  ypos -270
+ }
+push $Ncbf89400
+ Dot {
+  name Dot8
+  xpos 414
+  ypos -609
+ }
+set Ncbfa7c00 [stack 0]
+ ColorCorrect {
+  gain 0
+  name ColorCorrect2
+  xpos 380
+  ypos -567
+ }
+ Shuffle {
+  alpha white
+  name Shuffle4
+  xpos 380
+  ypos -541
+ }
+ Dot {
+  name Dot11
+  xpos 414
+  ypos -485
+ }
+set Ncbfa7000 [stack 0]
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl1.GrainSize} {parent.GrainCtrl1.GrainSize}}
+  zoffset {{frame*4.65+1658}}
+  octaves 4
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainR1
+  xpos 380
+  ypos -443
+ }
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl1.GrainSize} {parent.GrainCtrl1.GrainSize}}
+  zoffset {{frame*15.1-1000}}
+  octaves 4
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainG1
+  xpos 380
+  ypos -417
+ }
+ Noise {
+  output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl1.GrainSize} {parent.GrainCtrl1.GrainSize}}
+  zoffset {{frame*24-15312}}
+  octaves 4
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainB1
+  xpos 380
+  ypos -391
+ }
+ Saturation {
+  saturation 0
+  name Saturation2
+  xpos 380
+  ypos -365
+ }
+ Grade {
+  add -0.5
+  black_clamp false
+  name Grade4
+  xpos 380
+  ypos -339
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge4
+  xpos 380
+  ypos -274
+ }
+ Grade {
+  white 1.7
+  add 1
+  black_clamp false
+  name Grade6
+  xpos 380
+  ypos -239
+ }
+ Dot {
+  name Dot6
+  xpos 414
+  ypos -134
+ }
+push $Ncbf88400
+push $Ncbfa7000
+ Dot {
+  name Dot12
+  xpos 728
+  ypos -485
+ }
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl.GrainSize} {parent.GrainCtrl.GrainSize}}
+  zoffset {{frame*6.78+5}}
+  octaves 2
+  lacunarity 7
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainR
+  xpos 694
+  ypos -445
+ }
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl.GrainSize} {parent.GrainCtrl.GrainSize}}
+  zoffset {{frame*3.145+235}}
+  octaves 2
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainG
+  xpos 694
+  ypos -419
+ }
+ Noise {
+  output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.GrainCtrl.GrainSize} {parent.GrainCtrl.GrainSize}}
+  zoffset {{frame*12.4+351}}
+  octaves 2
+  gamma 1
+  xrotate 0
+  yrotate 0
+  name GrainB
+  xpos 694
+  ypos -393
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 694
+  ypos -367
+ }
+ Grade {
+  add -0.5
+  black_clamp false
+  name Grade2
+  xpos 694
+  ypos -341
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge2
+  xpos 694
+  ypos -315
+ }
+ Grade {
+  white {{parent.GrainGlobalCtrl.GrainAmount/100}}
+  black_clamp false
+  name Grade7
+  xpos 694
+  ypos -258
+ }
+ Grade {
+  white 2
+  add 1
+  black_clamp false
+  name Grade3
+  xpos 694
+  ypos -209
+ }
+ Dissolve {
+  inputs 2
+  which {{GrainGlobalCtrl.GrainRoughness/100}}
+  name Dissolve1
+  xpos 694
+  ypos -144
+ }
+ Blur {
+  size {{GrainGlobalCtrl.GrainAmount*GrainGlobalCtrl.GrainSizeCtrl/10000*4}}
+  name Blur2
+  xpos 694
+  ypos -71
+ }
+push $Ncbfa7c00
+ Dot {
+  name Dot5
+  xpos 1118
+  ypos -609
+ }
+ Blur {
+  size {{GrainGlobalCtrl.GrainSizeCtrl*GrainGlobalCtrl.GrainAmount/1000/1.5}}
+  name Blur1
+  xpos 1084
+  ypos -296
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace1
+  xpos 1084
+  ypos -258
+ }
+ Dot {
+  name Dot9
+  xpos 1118
+  ypos -129
+ }
+set Nc2465400 [stack 0]
+ Dot {
+  name Dot10
+  xpos 875
+  ypos -129
+ }
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle3
+  xpos 841
+  ypos -91
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge1
+  xpos 841
+  ypos -65
+ }
+ Dot {
+  name Dot7
+  xpos 875
+  ypos 4
+ }
+push $Nc2465400
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy1
+  xpos 1084
+  ypos -6
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace2
+  xpos 1084
+  ypos 32
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 1084
+  ypos 58
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 1084
+  ypos 96
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 1084
+  ypos 173
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  xpos 1084
+  ypos 232
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 1084
+  ypos 279
+ }
+ Output {
+  name Output1
+  xpos 1084
+  ypos 376
+ }
+end_group

@@ -1,0 +1,107 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Black
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3632
+ disable {{BLK==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 BLK l Black R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 42
+  ypos -547
+ }
+ Dot {
+  name Dot2
+  xpos 76
+  ypos -491
+ }
+set Nadac8800 [stack 0]
+ Dot {
+  name Dot1
+  xpos -355
+  ypos -491
+ }
+ Dot {
+  name Dot7
+  xpos -355
+  ypos -211
+ }
+set Nadac8000 [stack 0]
+ Dot {
+  name Dot3
+  xpos -355
+  ypos -164
+ }
+push $Nadac8000
+ Input {
+  inputs 0
+  name Mask
+  selected true
+  xpos -49
+  ypos -316
+  number 1
+ }
+ Dot {
+  name Dot8
+  xpos -15
+  ypos -270
+ }
+push $Nadac8800
+ ColorCorrect {
+  shadows.gamma {{1+BLK/100/2}}
+  lookup {shadow {curve L 1 S x1.000450373 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {}}
+  name ColorCorrect2
+  xpos 42
+  ypos -406
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 42
+  ypos -380
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 42
+  ypos -330
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 42
+  ypos -274
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 42
+  ypos -215
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 42
+  ypos -168
+ }
+ Output {
+  name Output1
+  xpos 42
+  ypos -107
+ }
+end_group

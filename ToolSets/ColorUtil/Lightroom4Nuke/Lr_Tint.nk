@@ -1,0 +1,113 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Tint
+ tile_color 0xed70f4ff
+ note_font_size 15
+ note_font_color 0xff
+ selected true
+ xpos 2051
+ ypos -3999
+ disable {{TT==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 TT l "<h3><b><font color='green'>--</font><font color='#67876b'>-T</font><font color='#8f8f8f'>in</font><font color='#856684'>t-</font><font color='Magenta'>--</font></b></h3>" R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 180
+  ypos -570
+ }
+ Dot {
+  name Dot2
+  xpos 214
+  ypos -486
+ }
+set Nb78c6800 [stack 0]
+ Dot {
+  name Dot1
+  xpos 70
+  ypos -486
+ }
+ Dot {
+  name Dot7
+  selected true
+  xpos 70
+  ypos -237
+ }
+set Nb78c6000 [stack 0]
+ Dot {
+  name Dot3
+  selected true
+  xpos 70
+  ypos -190
+ }
+push $Nb78c6000
+ Input {
+  inputs 0
+  name Mask
+  xpos 89
+  ypos -322
+  number 1
+ }
+ Dot {
+  name Dot8
+  selected true
+  xpos 123
+  ypos -296
+ }
+push $Nb78c6800
+ Grade {
+  white {{1+TT/100*(TT>0)} {1-TT/100*2*(TT<0)} {1+TT/100*(TT>0)} 1}
+  white_panelDropped true
+  black_clamp false
+  name Grade1
+  xpos 180
+  ypos -416
+ }
+ Grade {
+  white {{1/(Grade1.white.r+Grade1.white.g+Grade1.white.b)*3}}
+  name Grade2
+  xpos 180
+  ypos -390
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 180
+  ypos -364
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  selected true
+  xpos 180
+  ypos -300
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  selected true
+  xpos 180
+  ypos -241
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  selected true
+  xpos 180
+  ypos -194
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos -89
+ }
+end_group

@@ -1,0 +1,116 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Temperature
+ tile_color 0xa54200ff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -4074
+ disable {{Temp==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Temp l "<h3><b><font color='blue'>--</font><font color='#667699'>-T</font><font color='#8f8f8f'>em</font><font color='#8a8a5b'>p-</font><font color='Yellow'>--</font></b></h3>" R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 70
+  ypos -293
+ }
+ Dot {
+  name Dot2
+  xpos 104
+  ypos -241
+ }
+set Nb7b00000 [stack 0]
+ Dot {
+  name Dot1
+  xpos -242
+  ypos -241
+ }
+ Dot {
+  name Dot5
+  xpos -242
+  ypos -33
+ }
+set Nb63d1800 [stack 0]
+ Dot {
+  name Dot6
+  xpos -242
+  ypos 38
+ }
+push $Nb63d1800
+ Input {
+  inputs 0
+  name Mask
+  selected true
+  xpos -47
+  ypos -99
+  number 1
+ }
+ Dot {
+  name Dot3
+  selected true
+  xpos -13
+  ypos -59
+ }
+push $Nb7b00000
+ Grade {
+  white {{1+Temp/100*4*(Temp>0)} {1+abs(Temp/100*2)} {1-Temp/100*4*(Temp<0)} 1}
+  white_panelDropped true
+  black_clamp false
+  name Grade2
+  xpos 70
+  ypos -200
+ }
+ Grade {
+  white {{1/(Grade2.white.b+Grade2.white.r+Grade2.white.b)*3}}
+  name Grade1
+  xpos 70
+  ypos -174
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 70
+  ypos -123
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 70
+  ypos -63
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 70
+  ypos -37
+ }
+set Nb78c7800 [stack 0]
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 70
+  ypos 34
+ }
+ Output {
+  name Output1
+  xpos 70
+  ypos 95
+ }
+push $Nb78c7800
+ Viewer {
+  frame_range 1-4320
+  name Viewer1
+  xpos 322
+  ypos 91
+ }
+end_group

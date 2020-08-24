@@ -1,0 +1,175 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_SplitTone
+ tile_color 0xbcffbcff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -2993
+ disable {{HighS==0&ShadowS==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {41 shadows.gain_1 l Highlight T HighLightColor2.shadows.gain}
+ addUserKnob {7 HighS l Saturation R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {7 Balance R -100 100}
+ Balance 75
+ addUserKnob {26 ""}
+ addUserKnob {41 shadows.gain l Shadow T ShadowColor.shadows.gain}
+ addUserKnob {7 ShadowS l Saturation R 0 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 795
+  ypos -602
+ }
+ Dot {
+  name Dot1
+  xpos 829
+  ypos -388
+ }
+set Nca6bf400 [stack 0]
+ Dot {
+  name Dot5
+  xpos 375
+  ypos -388
+ }
+ Dot {
+  name Dot7
+  xpos 375
+  ypos 86
+ }
+set Nca6bec00 [stack 0]
+ Dot {
+  name Dot4
+  xpos 375
+  ypos 133
+ }
+push $Nca6bec00
+ Input {
+  inputs 0
+  name Mask
+  xpos 704
+  ypos 1
+  number 1
+ }
+ Dot {
+  name Dot6
+  xpos 738
+  ypos 27
+ }
+push $Nca6bf400
+ Dot {
+  name Dot2
+  xpos 939
+  ypos -388
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 0 0 1}
+  name Keyer1
+  xpos 905
+  ypos -323
+ }
+ Grade {
+  channels alpha
+  gamma {{1+Balance*Balance/100*(-Balance>0)+(-Balance<0)*(-Balance)/100}}
+  name Grade1
+  xpos 905
+  ypos -285
+ }
+ Dot {
+  name Dot3
+  xpos 939
+  ypos -229
+ }
+set Nc68ff000 [stack 0]
+ Invert {
+  name Invert2
+  xpos 905
+  ypos -191
+ }
+ Grade {
+  channels alpha
+  gamma 1.42
+  name Grade4
+  xpos 905
+  ypos -153
+ }
+push $Nc68ff000
+push $Nca6bf400
+ ColorCorrect {
+  inputs 1+1
+  master 0
+  gain {1 1 1 1}
+  gain_panelDropped true
+  shadows.gain {1.25 0.05 1.3 1}
+  shadows.gain_panelDropped true
+  midtones 0
+  highlights 0
+  highlights.gain {1 1 1 1}
+  highlights.gain_panelDropped true
+  lookup {shadow {curve L 1 x0.9969890714 0.00198495388}
+    midtone {1-shadow-highlight}
+    highlight {curve x0.003092002124 0 s0 x1 1 s0}}
+  mix {{ShadowS/100}}
+  name ShadowColor
+  xpos 795
+  ypos -233
+ }
+ ColorCorrect {
+  inputs 1+1
+  shadows.gain {1.15 1.15 0.02 1}
+  shadows.gain_panelDropped true
+  lookup {shadow {curve L 1 x1.01357615 0.00198495388}
+    midtone {1-shadow-highlight}
+    highlight {}}
+  mix {{HighS/100}}
+  name HighLightColor2
+  xpos 795
+  ypos -147
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 795
+  ypos -121
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 795
+  ypos -46
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 795
+  ypos 23
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 795
+  ypos 82
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 795
+  ypos 129
+ }
+ Output {
+  name Output1
+  xpos 795
+  ypos 178
+ }
+end_group

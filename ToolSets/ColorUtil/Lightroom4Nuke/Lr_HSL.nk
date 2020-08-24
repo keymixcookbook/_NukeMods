@@ -1,0 +1,1626 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name LightRoom_HSL
+ tile_color 0x68c9ff
+ gl_color 0xff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3089
+ disable {{"RedH==0&&RedS==0&&RedL==0&&\nOrangeH==0&&OrangeS==0&&OrangeL==0&&\nYellowH==0&&YellowS==0&&YellowL==0&&\nGreenH==0&&GreenS==0&&GreenL==0&&\nAquaH==0&&AquaS==0&&AquaL==0&&\nBlueH==0&&BlueS==0&&BlueL==0&&\nPurpleH==0&&PurpleS==0&&PurpleL==0&&\nMagentaH==0&&MagentaS==0&&MagentaL==0"}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {22 Reset T "nuke.thisNode().knob('RedH').setValue(0);\nnuke.thisNode().knob('RedS').setValue(0);\nnuke.thisNode().knob('RedL').setValue(0);\nnuke.thisNode().knob('OrangeH').setValue(0);\nnuke.thisNode().knob('OrangeS').setValue(0);\nnuke.thisNode().knob('OrangeL').setValue(0);\nnuke.thisNode().knob('YellowH').setValue(0);\nnuke.thisNode().knob('YellowS').setValue(0);\nnuke.thisNode().knob('YellowL').setValue(0);\nnuke.thisNode().knob('GreenH').setValue(0);\nnuke.thisNode().knob('GreenS').setValue(0);\nnuke.thisNode().knob('GreenL').setValue(0);\nnuke.thisNode().knob('AquaH').setValue(0);\nnuke.thisNode().knob('AquaS').setValue(0);\nnuke.thisNode().knob('AquaL').setValue(0);\nnuke.thisNode().knob('BlueH').setValue(0);\nnuke.thisNode().knob('BlueS').setValue(0);\nnuke.thisNode().knob('BlueL').setValue(0);\nnuke.thisNode().knob('PurpleH').setValue(0);\nnuke.thisNode().knob('PurpleS').setValue(0);\nnuke.thisNode().knob('PurpleL').setValue(0);\nnuke.thisNode().knob('MagentaH').setValue(0);\nnuke.thisNode().knob('MagentaS').setValue(0);\nnuke.thisNode().knob('MagentaL').setValue(0);\n\n\n" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 Hue n 1}
+ addUserKnob {7 RedH l "<h3><b><font color='#ff52ff'>--</font><font color='#ff52ab'>--</font><font color='#fa6464'>Red</font><font color='#ff7a52'>--</font><font color='#ff9a52'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 OrangeH l "<h3><b><font color='#fa6464'>--</font><font color='#ff7a52'>--</font><font color='#ff9a52'>Orange</font><font color='#ffbd52'>--</font><font color='#ffff52'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 YellowH l "<h3><b><font color='#ff9a52'>--</font><font color='#ffbd52'>--</font><font color='#ffff52'>Yellow</font><font color='#e2ff52'>--</font><font color='#80ff52'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 GreenH l "<h3><b><font color='#ffff52'>--</font><font color='#e2ff52'>--</font><font color='#80ff52'>Green</font><font color='#52ffa0'>--</font><font color='#52ffee'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 AquaH l "<h3><b><font color='#80ff52'>--</font><font color='#52ffa0'>--</font><font color='#52ffee'>Aqua</font><font color='#52ceff'>--</font><font color='#5252ff'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 BlueH l "<h3><b><font color='#52ffee'>--</font><font color='#52ceff'>--</font><font color='#5252ff'>Blue</font><font color='#7252ff'>--</font><font color='#9d52ff'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 PurpleH l "<h3><b><font color='#5252ff'>--</font><font color='#7252ff'>--</font><font color='#9d52ff'>Purple</font><font color='#c852ff'>--</font><font color='#ff52ff'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 MagentaH l "<h3><b><font color='#9d52ff'>--</font><font color='#c852ff'>--</font><font color='#ff52ff'>Magenta</font><font color='#ff52ab'>--</font><font color='#fa6464'>--</font></b></h3>" R -100 100}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 Saturation n 1}
+ addUserKnob {7 RedS l "<h3><b><font color='#fa6464'>Red</font></b></h3>" R -100 100}
+ addUserKnob {7 OrangeS l "<h3><b><font color='#ff9a52'>Orange</font></b></h3>" R -100 100}
+ addUserKnob {7 YellowS l "<h3><b><font color='#ffff52'>Yellow</font></b></h3>" R -100 100}
+ addUserKnob {7 GreenS l "<h3><b><font color='#80ff52'>Green</font></b></h3>" R -100 100}
+ addUserKnob {7 AquaS l "<h3><b><font color='#52ffee'>Aqua</font></b></h3>" R -100 100}
+ addUserKnob {7 BlueS l "<h3><b><font color='#5252ff'>Blue</font></b></h3>" R -100 100}
+ addUserKnob {7 PurpleS l "<h3><b><font color='#9d52ff'>Purple</font></b></h3>" R -100 100}
+ addUserKnob {7 MagentaS l "<h3><b><font color='#ff52ff'>Magenta</font></b></h3>" R -100 100}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 Luminance n 1}
+ addUserKnob {7 RedL l "<h3><b><font color='#fa6464'>Red</font></b></h3>" R -100 100}
+ addUserKnob {7 OrangeL l "<h3><b><font color='#ff9a52'>Orange</font></b></h3>" R -100 100}
+ addUserKnob {7 YellowL l "<h3><b><font color='#ffff52'>Yellow</font></b></h3>" R -100 100}
+ addUserKnob {7 GreenL l "<h3><b><font color='#80ff52'>Green</font></b></h3>" R -100 100}
+ addUserKnob {7 AquaL l "<h3><b><font color='#52ffee'>Aqua</font></b></h3>" R -100 100}
+ addUserKnob {7 BlueL l "<h3><b><font color='#5252ff'>Blue</font></b></h3>" R -100 100}
+ addUserKnob {7 PurpleL l "<h3><b><font color='#9d52ff'>Purple</font></b></h3>" R -100 100}
+ addUserKnob {7 MagentaL l "<h3><b><font color='#ff52ff'>Magenta</font></b></h3>" R -100 100}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 805
+  ypos -443
+ }
+ Dot {
+  name Dot2
+  xpos 839
+  ypos -389
+ }
+set Nc894d400 [stack 0]
+ Dot {
+  name Dot1
+  xpos 493
+  ypos -389
+ }
+set Nc894d000 [stack 0]
+ Viewer {
+  frame_range 1-4320
+  name Viewer1
+  xpos 1041
+  ypos -29
+ }
+push $Nc894d000
+ Dot {
+  name Dot3
+  xpos 493
+  ypos -135
+ }
+set Nc894cc00 [stack 0]
+ Dot {
+  name Dot4
+  xpos 493
+  ypos -88
+ }
+push $Nc894cc00
+ Input {
+  inputs 0
+  name Mask
+  xpos 714
+  ypos -241
+  number 1
+ }
+ Dot {
+  name Dot5
+  xpos 748
+  ypos -194
+ }
+push $Nc894d400
+ Group {
+  name HSL
+  tile_color 0x96d6ff
+  note_font_size 21
+  xpos 805
+  ypos -354
+  addUserKnob {20 User}
+  addUserKnob {20 Hue n 1}
+  addUserKnob {41 RedHue l Red T Main_Ctrl.RedHue}
+  addUserKnob {41 OrangeHue l Orange T Main_Ctrl.OrangeHue}
+  addUserKnob {41 YellowHue l Yellow T Main_Ctrl.YellowHue}
+  addUserKnob {41 GreenHue l Green T Main_Ctrl.GreenHue}
+  addUserKnob {41 AquaHue l Aqua T Main_Ctrl.AquaHue}
+  addUserKnob {41 BlueHue l Blue T Main_Ctrl.BlueHue}
+  addUserKnob {41 PurpleHue l Purple T Main_Ctrl.PurpleHue}
+  addUserKnob {41 MagentaHue l Magenta T Main_Ctrl.MagentaHue}
+  addUserKnob {20 HueEndGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 Saturation n 1}
+  addUserKnob {41 RedSaturation l Red T Main_Ctrl.RedSaturation}
+  addUserKnob {41 OrangeSaturation l Orange T Main_Ctrl.OrangeSaturation}
+  addUserKnob {41 YellowSaturation l Yellow T Main_Ctrl.YellowSaturation}
+  addUserKnob {41 GreenSaturation l Green T Main_Ctrl.GreenSaturation}
+  addUserKnob {41 AquaSaturation l Aqua T Main_Ctrl.AquaSaturation}
+  addUserKnob {41 BlueSaturation l Blue T Main_Ctrl.BlueSaturation}
+  addUserKnob {41 PurpleSaturation l Purple T Main_Ctrl.PurpleSaturation}
+  addUserKnob {41 MagentaSaturation l Magenta T Main_Ctrl.MagentaSaturation}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 Luminance n 1}
+  addUserKnob {41 RedL l Red T Main_Ctrl.RedL}
+  addUserKnob {41 OrangeL l Orange T Main_Ctrl.OrangeL}
+  addUserKnob {41 YellowL l Yellow T Main_Ctrl.YellowL}
+  addUserKnob {41 GreenL l Green T Main_Ctrl.GreenL}
+  addUserKnob {41 AquaL l Aqua T Main_Ctrl.AquaL}
+  addUserKnob {41 BlueL l Blue T Main_Ctrl.BlueL}
+  addUserKnob {41 PurpleL l Purple T Main_Ctrl.PurpleL}
+  addUserKnob {41 MagentaL l Magenta T Main_Ctrl.MagentaL}
+  addUserKnob {20 Lumiendgroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 HueSplit n 1}
+  HueSplit 0
+  addUserKnob {41 Center1 l Red T Main_Ctrl.Center1}
+  addUserKnob {41 Center2 l Orange T Main_Ctrl.Center2}
+  addUserKnob {41 Center3 l Yellow T Main_Ctrl.Center3}
+  addUserKnob {41 Center4 l Green T Main_Ctrl.Center4}
+  addUserKnob {41 Center5 l Aqua T Main_Ctrl.Center5}
+  addUserKnob {41 Center6 l Blue T Main_Ctrl.Center6}
+  addUserKnob {41 Center7 l Purple T Main_Ctrl.Center7}
+  addUserKnob {41 Center8 l Magenta T Main_Ctrl.Center8}
+  addUserKnob {20 HueSplitEndGroup n -1}
+ }
+  BackdropNode {
+   inputs 0
+   name BackdropNode1
+   tile_color 0x7171c600
+   label Hue
+   note_font_size 100
+   xpos -1055
+   ypos -145
+   bdwidth 1229
+   bdheight 430
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode2
+   tile_color 0x7171c600
+   label Saturation
+   note_font_size 100
+   xpos -1057
+   ypos 343
+   bdwidth 1239
+   bdheight 1601
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode5
+   tile_color 0x7171c600
+   label Key
+   note_font_size 100
+   xpos -1053
+   ypos -1449
+   bdwidth 1227
+   bdheight 1251
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode6
+   tile_color 0x8e388e00
+   label Luminance
+   note_font_size 100
+   xpos -1054
+   ypos 1997
+   bdwidth 1232
+   bdheight 1209
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode3
+   tile_color 0xaaaaaa00
+   label "DeSaturate S<1"
+   note_font_size 42
+   xpos -953
+   ypos 486
+   bdwidth 1053
+   bdheight 817
+   z_order 1
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode4
+   tile_color 0x388e8e00
+   label "Add Saturate S>1"
+   note_font_size 42
+   xpos -937
+   ypos 1414
+   bdwidth 969
+   bdheight 392
+   z_order 1
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos -99
+   ypos -1601
+  }
+  Dot {
+   name Dot17
+   xpos -65
+   ypos -1321
+  }
+set Nccd2c000 [stack 0]
+  Dot {
+   name Dot13
+   xpos -887
+   ypos -1321
+  }
+  Dot {
+   name Dot23
+   xpos -887
+   ypos -1265
+  }
+set Nc13a7800 [stack 0]
+  Dot {
+   name Dot1
+   xpos -887
+   ypos -1137
+  }
+set Nc13a7400 [stack 0]
+  Dot {
+   name Dot19
+   xpos -887
+   ypos 2189
+  }
+set Nc13a7000 [stack 0]
+  Dot {
+   name Dot78
+   xpos -887
+   ypos 2335
+  }
+  Keyer {
+   operation "saturation key"
+   range {0 0 0.4 {range.C*1.45}}
+   name Keyer10
+   xpos -602
+   ypos 2325
+  }
+  Dot {
+   name Dot80
+   xpos -568
+   ypos 2368
+  }
+set Nc13a6400 [stack 0]
+  Dot {
+   name Dot79
+   xpos -568
+   ypos 2527
+  }
+set Nc13a6000 [stack 0]
+  Dot {
+   name Dot81
+   xpos -568
+   ypos 2635
+  }
+set Nc13bdc00 [stack 0]
+  Dot {
+   name Dot82
+   xpos -568
+   ypos 2731
+  }
+set Nc13bd800 [stack 0]
+  Dot {
+   name Dot83
+   xpos -568
+   ypos 2827
+  }
+set Nc13bd400 [stack 0]
+  Dot {
+   name Dot84
+   xpos -568
+   ypos 2926
+  }
+set Nc13bd000 [stack 0]
+  Dot {
+   name Dot85
+   xpos -567
+   ypos 3022
+  }
+set Nc13bcc00 [stack 0]
+  Dot {
+   name Dot86
+   xpos -567
+   ypos 3131
+  }
+push $Nc13a7000
+  Colorspace {
+   colorspace_in sRGB
+   colorspace_out HSV
+   name Colorspace2
+   xpos -472
+   ypos 2185
+  }
+  Shuffle {
+   red white
+   green white
+   blue white
+   alpha blue
+   name Shuffle4
+   xpos -472
+   ypos 2211
+  }
+  Dot {
+   name Dot15
+   xpos -438
+   ypos 2326
+  }
+set Ncc1f1c00 [stack 0]
+  Dot {
+   name Dot4
+   xpos -438
+   ypos 2471
+  }
+set Ncc1f1800 [stack 0]
+  Dot {
+   name Dot10
+   xpos -438
+   ypos 2609
+  }
+set Ncc1f1400 [stack 0]
+  Dot {
+   name Dot64
+   xpos -438
+   ypos 2705
+  }
+set Ncc1f1000 [stack 0]
+  Dot {
+   name Dot65
+   xpos -438
+   ypos 2801
+  }
+set Ncc1f0c00 [stack 0]
+  Dot {
+   name Dot66
+   xpos -438
+   ypos 2897
+  }
+set Ncc1f0800 [stack 0]
+  Dot {
+   name Dot7
+   xpos -438
+   ypos 2996
+  }
+set Ncc1f0400 [stack 0]
+  Dot {
+   name Dot75
+   xpos -438
+   ypos 3105
+  }
+push $Nc13bcc00
+push $Ncc1f0400
+push $Nc13bd000
+push $Ncc1f0800
+push $Nc13bd400
+push $Ncc1f0c00
+push $Nc13bd800
+push $Ncc1f1000
+push $Nc13bdc00
+push $Ncc1f1400
+push $Nc13a6000
+push $Ncc1f1800
+push $Nc13a6400
+push $Ncc1f1c00
+push $Nc13a7400
+  Colorspace {
+   colorspace_out HSV
+   name Colorspace14
+   xpos -642
+   ypos -1141
+  }
+  Shuffle {
+   red white
+   green white
+   blue white
+   alpha green
+   name Shuffle3
+   xpos -642
+   ypos -1115
+  }
+  Dot {
+   name Dot3
+   xpos -608
+   ypos -1025
+  }
+set Ncc209400 [stack 0]
+  Dot {
+   name Dot9
+   xpos -608
+   ypos -886
+  }
+set Ncc209000 [stack 0]
+  Dot {
+   name Dot11
+   xpos -608
+   ypos -803
+  }
+set Ncc208c00 [stack 0]
+  Dot {
+   name Dot18
+   xpos -608
+   ypos -718
+  }
+set Ncc208800 [stack 0]
+  Dot {
+   name Dot21
+   xpos -608
+   ypos -648
+  }
+set Ncc208400 [stack 0]
+  Dot {
+   name Dot56
+   xpos -608
+   ypos -540
+  }
+set Ncc208000 [stack 0]
+  Dot {
+   name Dot25
+   xpos -608
+   ypos -454
+  }
+set Nc4375c00 [stack 0]
+  Dot {
+   name Dot60
+   xpos -608
+   ypos -328
+  }
+push $Nc13a7800
+  Dot {
+   name Dot29
+   xpos -379
+   ypos -1265
+  }
+  Colorspace {
+   colorspace_out HSL
+   name Colorspace7
+   xpos -413
+   ypos -1200
+  }
+  Shuffle {
+   green red
+   blue red
+   alpha red
+   name Shuffle10
+   xpos -413
+   ypos -1174
+  }
+  Dot {
+   name Dot5
+   xpos -379
+   ypos -1148
+  }
+set Nc4374800 [stack 0]
+  Dot {
+   name Dot6
+   xpos -379
+   ypos -932
+  }
+set Nc4374400 [stack 0]
+  Dot {
+   name Dot8
+   xpos -379
+   ypos -848
+  }
+set Nc4374000 [stack 0]
+  Dot {
+   name Dot12
+   xpos -379
+   ypos -765
+  }
+set Nc4395c00 [stack 0]
+  Dot {
+   name Dot22
+   xpos -379
+   ypos -680
+  }
+set Nc4395800 [stack 0]
+  Dot {
+   name Dot26
+   xpos -379
+   ypos -602
+  }
+set Nc4395400 [stack 0]
+  Dot {
+   name Dot27
+   xpos -379
+   ypos -502
+  }
+set Nc4395000 [stack 0]
+  Dot {
+   name Dot28
+   xpos -379
+   ypos -388
+  }
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center7/360} {Main_Ctrl.Center8/360} {Main_Ctrl.Center8/360} {Main_Ctrl.Center1/360+1}}
+   name Keyer1
+   xpos -253
+   ypos -398
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply7
+   xpos -253
+   ypos -332
+  }
+push $Nc4375c00
+push $Nc4395000
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center6/360} {Main_Ctrl.Center7/360} {Main_Ctrl.Center7/360} {Main_Ctrl.Center8/360}}
+   name Keyer2
+   xpos -255
+   ypos -512
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply6
+   xpos -255
+   ypos -458
+  }
+push $Ncc208000
+push $Nc4395400
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center5/360} {Main_Ctrl.Center6/360} {Main_Ctrl.Center6/360} {Main_Ctrl.Center7/360}}
+   name Keyer3
+   xpos -243
+   ypos -612
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply5
+   xpos -243
+   ypos -544
+  }
+push $Ncc208400
+push $Nc4395800
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center4/360} {Main_Ctrl.Center5/360} {Main_Ctrl.Center5/360} {Main_Ctrl.Center6/360}}
+   name Keyer4
+   xpos -253
+   ypos -690
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply4
+   xpos -253
+   ypos -652
+  }
+push $Ncc208800
+push $Nc4395c00
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center3/360} {Main_Ctrl.Center4/360} {Main_Ctrl.Center4/360} {Main_Ctrl.Center5/360}}
+   name Keyer5
+   xpos -253
+   ypos -775
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply3
+   xpos -253
+   ypos -722
+  }
+push $Ncc208c00
+push $Nc4374000
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center2/360} {Main_Ctrl.Center3/360} {Main_Ctrl.Center3/360} {Main_Ctrl.Center4/360}}
+   name Keyer6
+   xpos -253
+   ypos -858
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply2
+   xpos -253
+   ypos -807
+  }
+push $Ncc209000
+push $Nc4374400
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center1/360} {Main_Ctrl.Center2/360} {Main_Ctrl.Center2/360} {Main_Ctrl.Center3/360}}
+   name Keyer7
+   xpos -253
+   ypos -942
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply1
+   xpos -253
+   ypos -890
+  }
+push $Ncc209400
+push $Nc4374800
+  Dot {
+   name Dot30
+   xpos -319
+   ypos -1148
+  }
+set Nc1173000 [stack 0]
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center8/360-1} {Main_Ctrl.Center1/360} {Main_Ctrl.Center1/360} {Main_Ctrl.Center2/360}}
+   name Keyer8
+   xpos -353
+   ypos -1116
+  }
+  Dot {
+   name Dot87
+   xpos -319
+   ypos -1051
+  }
+push $Nc1173000
+  Dot {
+   name Dot32
+   xpos -209
+   ypos -1148
+  }
+  Keyer {
+   operation "red keyer"
+   range {{Main_Ctrl.Center8/360} {Main_Ctrl.Center1/360+1} {Main_Ctrl.Center1/360+1} {Main_Ctrl.Center2/360+1}}
+   name Keyer9
+   xpos -243
+   ypos -1130
+  }
+  Merge2 {
+   inputs 2
+   operation max
+   name Plus2
+   xpos -243
+   ypos -1055
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Multiply8
+   xpos -243
+   ypos -1029
+  }
+  Dot {
+   name Dot33
+   xpos -209
+   ypos -970
+  }
+push $Nccd2c000
+add_layer {RedMask RedMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 RedMask.alpha
+   name Copy1
+   xpos -99
+   ypos -980
+  }
+add_layer {OrangeMask OrangeMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 OrangeMask.alpha
+   name Copy2
+   xpos -99
+   ypos -896
+  }
+add_layer {YellowMask YellowMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 YellowMask.alpha
+   name Copy4
+   xpos -99
+   ypos -813
+  }
+add_layer {GreenMask GreenMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 GreenMask.alpha
+   name Copy5
+   xpos -99
+   ypos -728
+  }
+add_layer {AquaMask AquaMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 AquaMask.alpha
+   name Copy6
+   xpos -99
+   ypos -658
+  }
+add_layer {BlueMask BlueMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 BlueMask.alpha
+   name Copy7
+   xpos -99
+   ypos -550
+  }
+add_layer {PupleMask PupleMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 PupleMask.alpha
+   name Copy8
+   xpos -99
+   ypos -464
+  }
+add_layer {MagentaMask MagentaMask.alpha}
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 MagentaMask.alpha
+   name Copy9
+   xpos -99
+   ypos -338
+  }
+  Dot {
+   name Dot34
+   xpos -65
+   ypos -177
+  }
+  Grade {
+   white 0.01
+   name Grade5
+   xpos -99
+   ypos -97
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.RedHue}}
+   HMask RedMask.alpha
+   name RedH
+   xpos -99
+   ypos -71
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.OrangeHue}}
+   HMask OrangeMask.alpha
+   name OrangeH
+   xpos -99
+   ypos -33
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.YellowHue}}
+   HMask YellowMask.alpha
+   name YellowH
+   xpos -99
+   ypos 5
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.GreenHue}}
+   HMask GreenMask.alpha
+   name GreenH
+   xpos -99
+   ypos 43
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.AquaHue}}
+   HMask AquaMask.alpha
+   name AquaH
+   xpos -99
+   ypos 81
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.BlueHue}}
+   HMask BlueMask.alpha
+   name BlueH
+   xpos -99
+   ypos 119
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.PurpleHue}}
+   HMask PupleMask.alpha
+   name PurpleH
+   xpos -99
+   ypos 157
+  }
+  HSVTool {
+   huerotation {{parent.Main_Ctrl.MagentaHue}}
+   HMask MagentaMask.alpha
+   name MagentaH
+   xpos -99
+   ypos 195
+  }
+  Grade {
+   white 0.01
+   reverse true
+   name Grade7
+   xpos -99
+   ypos 233
+  }
+  Dot {
+   name Dot61
+   xpos -65
+   ypos 519
+  }
+set Nc11e6400 [stack 0]
+  Colorspace {
+   colorspace_out HSV
+   name Colorspace10
+   xpos -99
+   ypos 537
+  }
+  Dot {
+   name Dot88
+   xpos -65
+   ypos 563
+  }
+set Ncc333c00 [stack 0]
+  Dot {
+   name Dot97
+   xpos -220
+   ypos 563
+  }
+  Shuffle {
+   red green
+   blue green
+   alpha green
+   name Shuffle18
+   xpos -254
+   ypos 695
+  }
+  Dot {
+   name Dot93
+   xpos -220
+   ypos 1007
+  }
+set Ncc333000 [stack 0]
+push $Ncc333c00
+  Grade {
+   add {0 {Main_Ctrl.RedSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput RedMask.alpha
+   name RedS
+   xpos -99
+   ypos 627
+   disable {{Main_Ctrl.RedSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.OrangeSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput OrangeMask.alpha
+   name OrangeS
+   xpos -99
+   ypos 665
+   disable {{Main_Ctrl.OrangeSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.YellowSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput YellowMask.alpha
+   name YellowS
+   xpos -99
+   ypos 703
+   disable {{Main_Ctrl.YellowSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.GreenSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput GreenMask.alpha
+   name GreenS
+   xpos -99
+   ypos 741
+   disable {{Main_Ctrl.GreenSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.AquaSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput AquaMask.alpha
+   name AquaS
+   xpos -99
+   ypos 779
+   disable {{Main_Ctrl.AquaSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.BlueSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput BlueMask.alpha
+   name AquaS1
+   xpos -95
+   ypos 813
+   disable {{Main_Ctrl.BlueSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.PurpleSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput PupleMask.alpha
+   name PurpleS
+   xpos -99
+   ypos 855
+   disable {{Main_Ctrl.PurpleSaturation>=1}}
+  }
+  Grade {
+   add {0 {Main_Ctrl.MagentaSaturation-1} 0 0}
+   add_panelDropped true
+   black_clamp false
+   maskChannelMask OrangeMask.alpha
+   maskChannelInput MagentaMask.alpha
+   name MagentaS
+   xpos -99
+   ypos 893
+   disable {{Main_Ctrl.MagentaSaturation>=1}}
+  }
+  Dot {
+   name Dot55
+   xpos -65
+   ypos 931
+  }
+set Nc899ac00 [stack 0]
+  Dot {
+   name Dot54
+   xpos -161
+   ypos 931
+  }
+  Dot {
+   name Dot14
+   xpos -161
+   ypos 1008
+  }
+push $Nc899ac00
+  Clamp {
+   name Clamp1
+   xpos -99
+   ypos 949
+  }
+  Copy {
+   inputs 2
+   from0 rgba.blue
+   to0 rgba.blue
+   from1 rgba.red
+   to1 rgba.red
+   name Copy3
+   xpos -99
+   ypos 991
+  }
+  Dot {
+   name Dot89
+   xpos -64
+   ypos 1053
+  }
+set Nc10e1800 [stack 0]
+  Merge2 {
+   inputs 2
+   operation minus
+   name Merge23
+   xpos -254
+   ypos 1049
+  }
+push $Ncc333000
+  Dot {
+   name Dot94
+   xpos -327
+   ypos 1007
+  }
+  Dot {
+   name Dot95
+   xpos -327
+   ypos 1079
+  }
+  Merge2 {
+   inputs 2
+   operation divide
+   name Merge24
+   xpos -254
+   ypos 1075
+  }
+  Shuffle {
+   alpha green
+   name Shuffle16
+   xpos -254
+   ypos 1101
+  }
+  Dot {
+   name Dot91
+   xpos -220
+   ypos 1143
+  }
+  Dot {
+   name Dot92
+   xpos -110
+   ypos 1143
+  }
+push $Nc11e6400
+  Dot {
+   name Dot90
+   xpos -474
+   ypos 519
+  }
+  Dot {
+   name Dot96
+   xpos -474
+   ypos 1178
+  }
+  Colorspace {
+   colorspace_out HSL
+   name Colorspace3
+   xpos -240
+   ypos 1174
+  }
+push $Nc10e1800
+  Copy {
+   inputs 2+1
+   from0 rgba.blue
+   to0 rgba.blue
+   name Copy19
+   xpos -98
+   ypos 1168
+  }
+  Colorspace {
+   colorspace_in HSV
+   name Colorspace11
+   xpos -98
+   ypos 1244
+  }
+set Nc110a800 [stack 0]
+  Dot {
+   name Dot20
+   xpos -64
+   ypos 1449
+  }
+  Saturation {
+   saturation {{Main_Ctrl.RedSaturation}}
+   maskChannelInput RedMask.alpha
+   name RedS1
+   xpos -98
+   ypos 1467
+   disable {{Main_Ctrl.RedSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.OrangeSaturation}}
+   maskChannelInput OrangeMask.alpha
+   name OrangeS1
+   xpos -98
+   ypos 1505
+   disable {{Main_Ctrl.OrangeSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.YellowSaturation}}
+   maskChannelInput YellowMask.alpha
+   name YellowS1
+   xpos -98
+   ypos 1543
+   disable {{Main_Ctrl.YellowSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.GreenSaturation}}
+   maskChannelInput GreenMask.alpha
+   name GreenS1
+   xpos -98
+   ypos 1581
+   disable {{Main_Ctrl.GreenSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.AquaSaturation}}
+   maskChannelInput AquaMask.alpha
+   name AquaS3
+   xpos -98
+   ypos 1619
+   disable {{Main_Ctrl.AquaSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.BlueSaturation}}
+   maskChannelInput BlueMask.alpha
+   name BlueS1
+   xpos -98
+   ypos 1657
+   disable {{Main_Ctrl.BlueSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.PurpleSaturation}}
+   maskChannelInput PupleMask.alpha
+   name PurpleS1
+   xpos -98
+   ypos 1695
+   disable {{Main_Ctrl.PurpleSaturation<=1}}
+  }
+  Saturation {
+   saturation {{parent.Main_Ctrl.MagentaSaturation}}
+   maskChannelInput MagentaMask.alpha
+   name PurpleS3
+   xpos -98
+   ypos 1733
+   disable {{Main_Ctrl.MagentaSaturation<=1}}
+  }
+  Colorspace {
+   colorspace_in sRGB
+   colorspace_out HSV
+   name Colorspace1
+   xpos -98
+   ypos 2233
+  }
+  Dot {
+   name Dot31
+   xpos -64
+   ypos 2277
+  }
+set Nc9f31c00 [stack 0]
+  Shuffle {
+   in RedMask
+   name Shuffle5
+   xpos -329
+   ypos 2273
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge3
+   xpos -329
+   ypos 2322
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge4
+   xpos -329
+   ypos 2364
+  }
+  Dot {
+   name Dot16
+   xpos -295
+   ypos 2423
+  }
+push $Nc9f31c00
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.RedL} 1}
+   white_panelDropped true
+   black_clamp false
+   name RedL
+   xpos -98
+   ypos 2419
+   disable {{Main_Ctrl.RedL==1}}
+  }
+  Dot {
+   name Dot2
+   xpos -64
+   ypos 2445
+  }
+set Nc9f30400 [stack 0]
+  Shuffle {
+   in OrangeMask
+   name Shuffle6
+   xpos -328
+   ypos 2441
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge2
+   xpos -328
+   ypos 2467
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge14
+   xpos -328
+   ypos 2523
+  }
+  Dot {
+   name Dot24
+   xpos -295
+   ypos 2561
+  }
+push $Nc9f30400
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.OrangeL} 1}
+   white_panelDropped true
+   black_clamp false
+   name OrangeL
+   xpos -98
+   ypos 2557
+   disable {{Main_Ctrl.OrangeL==1}}
+  }
+  Dot {
+   name Dot62
+   xpos -64
+   ypos 2583
+  }
+set Nc9f5ec00 [stack 0]
+  Shuffle {
+   in YellowMask
+   name Shuffle1
+   xpos -328
+   ypos 2579
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge1
+   xpos -328
+   ypos 2605
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge15
+   xpos -329
+   ypos 2631
+  }
+  Dot {
+   name Dot63
+   xpos -295
+   ypos 2657
+  }
+push $Nc9f5ec00
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.YellowL} 1}
+   white_panelDropped true
+   black_clamp false
+   name YellowL
+   xpos -98
+   ypos 2653
+   disable {{Main_Ctrl.YellowL==1}}
+  }
+  Dot {
+   name Dot67
+   xpos -64
+   ypos 2679
+  }
+set Ncc569400 [stack 0]
+  Shuffle {
+   in GreenMask
+   name Shuffle2
+   xpos -329
+   ypos 2675
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge6
+   xpos -329
+   ypos 2701
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge17
+   xpos -329
+   ypos 2727
+  }
+  Dot {
+   name Dot69
+   xpos -295
+   ypos 2753
+  }
+push $Ncc569400
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.GreenL} 1}
+   white_panelDropped true
+   black_clamp false
+   name GreenL
+   xpos -98
+   ypos 2749
+   disable {{Main_Ctrl.GreenL==1}}
+  }
+  Dot {
+   name Dot70
+   xpos -64
+   ypos 2775
+  }
+set Nc9fa5c00 [stack 0]
+  Shuffle {
+   in AquaMask
+   name Shuffle9
+   xpos -328
+   ypos 2771
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge8
+   xpos -328
+   ypos 2797
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge18
+   xpos -328
+   ypos 2823
+  }
+  Dot {
+   name Dot71
+   xpos -294
+   ypos 2849
+  }
+push $Nc9fa5c00
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.AquaL} 1}
+   white_panelDropped true
+   black_clamp false
+   name AquaL
+   xpos -98
+   ypos 2845
+   disable {{Main_Ctrl.AquaL==1}}
+  }
+  Dot {
+   name Dot72
+   xpos -64
+   ypos 2871
+  }
+set Nc9fa4400 [stack 0]
+  Shuffle {
+   in BlueMask
+   name Shuffle11
+   xpos -328
+   ypos 2867
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge9
+   xpos -328
+   ypos 2893
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge19
+   xpos -329
+   ypos 2922
+  }
+  Dot {
+   name Dot73
+   xpos -295
+   ypos 2948
+  }
+push $Nc9fa4400
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.BlueL} 1}
+   white_panelDropped true
+   black_clamp false
+   name BlueL
+   xpos -98
+   ypos 2944
+   disable {{Main_Ctrl.BlueL==1}}
+  }
+  Dot {
+   name Dot68
+   xpos -64
+   ypos 2970
+  }
+set Nc9fd2c00 [stack 0]
+  Shuffle {
+   in PupleMask
+   name Shuffle12
+   xpos -328
+   ypos 2966
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge10
+   xpos -328
+   ypos 2992
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge20
+   xpos -328
+   ypos 3018
+  }
+  Dot {
+   name Dot74
+   xpos -295
+   ypos 3057
+  }
+push $Nc9fd2c00
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.PurpleL} 1}
+   white_panelDropped true
+   black_clamp false
+   name PurpleL
+   xpos -98
+   ypos 3053
+   disable {{Main_Ctrl.PurpleL==1}}
+  }
+  Dot {
+   name Dot76
+   xpos -64
+   ypos 3079
+  }
+set Nad761400 [stack 0]
+  Shuffle {
+   in MagentaMask
+   name Shuffle13
+   xpos -328
+   ypos 3075
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   name Merge13
+   xpos -328
+   ypos 3101
+  }
+  Merge2 {
+   inputs 2
+   operation stencil
+   name Merge21
+   xpos -329
+   ypos 3127
+  }
+  Dot {
+   name Dot77
+   xpos -295
+   ypos 3153
+  }
+push $Nad761400
+  Grade {
+   inputs 1+1
+   white {1 1 {Main_Ctrl.MagentaL} 1}
+   white_panelDropped true
+   black_clamp false
+   name MagentaL
+   xpos -98
+   ypos 3149
+   disable {{Main_Ctrl.MagentaL==1}}
+  }
+  Colorspace {
+   colorspace_in HSV
+   colorspace_out sRGB
+   invert_mask true
+   name Colorspace4
+   xpos -98
+   ypos 3175
+  }
+  Output {
+   name Output1
+   xpos -98
+   ypos 3437
+  }
+  NoOp {
+   inputs 0
+   name Main_Ctrl
+   note_font_size 50
+   xpos -1245
+   ypos -675
+   addUserKnob {20 User}
+   addUserKnob {20 Hue n 1}
+   Hue 0
+   addUserKnob {7 RedHue l Red R -20 20}
+   RedHue {{"parent.parent.RedH/5+\n(parent.parent.OrangeH/5*0.1+parent.parent.MagentaH/5*0.05)*(100-abs(parent.parent.RedH))/100"}}
+   addUserKnob {7 OrangeHue l Orange R -20 20}
+   OrangeHue {{"parent.parent.OrangeH/5+\n(parent.parent.YellowH/5*0.1+parent.parent.RedH/5*0.1)*(100-abs(parent.parent.OrangeH))/100"}}
+   addUserKnob {7 YellowHue l Yellow R -20 20}
+   YellowHue {{"parent.parent.YellowH/2+\n(parent.parent.GreenH/5*0.1+parent.parent.OrangeH/5*0.1)*(100-abs(parent.parent.YellowH))/100"}}
+   addUserKnob {7 GreenHue l Green R -20 20}
+   GreenHue {{"parent.parent.GreenH/1.3+\n(parent.parent.AquaH/5*0.05+parent.parent.YellowH/5*0.05)*(100-abs(parent.parent.GreenH))/100"}}
+   addUserKnob {7 AquaHue l Aqua R -20 20}
+   AquaHue {{"parent.parent.AquaH/3+\n(parent.parent.BlueH/5*0.25+parent.parent.GreenH/5*0.05)*(100-abs(parent.parent.AquaH))/100"}}
+   addUserKnob {7 BlueHue l Blue R -20 20}
+   BlueHue {{"parent.parent.BlueH/1.3+\n(parent.parent.PurpleH/5*0.1+parent.parent.AquaH/5*0.05)*(100-abs(parent.parent.BlueH))/100"}}
+   addUserKnob {7 PurpleHue l Purple R -20 20}
+   PurpleHue {{"parent.parent.PurpleH/3.5+\n(parent.parent.MagentaH/5*0.1+parent.parent.BlueH/5*0.1)*(100-abs(parent.parent.PurpleH))/100"}}
+   addUserKnob {7 MagentaHue l Magenta R -20 20}
+   MagentaHue {{"parent.parent.MagentaH/3+\n(parent.parent.RedH/5*0.1+parent.parent.PurpleH/5*0.1)*(100-abs(parent.parent.MagentaH))/100"}}
+   addUserKnob {20 HueEndGroup n -1}
+   addUserKnob {26 ""}
+   addUserKnob {20 Saturation n 1}
+   addUserKnob {7 RedSaturation l Red R 0 4}
+   RedSaturation {{"(parent.parent.RedS<0)*(1+(parent.parent.RedS/100))+(parent.parent.RedS>=0)*((parent.parent.RedS/100)*3+1)+\n(\n(parent.parent.OrangeS<0)*(parent.parent.OrangeS*0.1/100)*(100-abs(parent.parent.RedS))/100+((parent.parent.OrangeS>0)*parent.parent.OrangeS*0.05/100*4)*(100-abs(parent.parent.RedS))/100+\n(parent.parent.MagentaS<0)*(parent.parent.MagentaS*0/100)*(100-abs(parent.parent.RedS))/100+((parent.parent.MagentaS>0)*parent.parent.MagentaS*0/100*4)*(100-abs(parent.parent.RedS))/100\n)\n"}}
+   addUserKnob {7 OrangeSaturation l Orange R 0 4}
+   OrangeSaturation {{"((parent.parent.OrangeS)<0)*(1+(parent.parent.OrangeS/100))+(parent.parent.OrangeS>=0)*((parent.parent.OrangeS/100)*3+1)+\n(\n((parent.parent.YellowS)<0)*(parent.parent.YellowS*0.25/100)*(100-abs(parent.parent.OrangeS))/100+((parent.parent.YellowS>0)*parent.parent.YellowS*0.1/100*4)*(100-abs(parent.parent.OrangeS))/100+\n((parent.parent.RedS)<0)*(parent.parent.RedS*0.15/100)*(100-abs(parent.parent.OrangeS))/100+((parent.parent.RedS>0)*parent.parent.RedS*0.01/100*4)*(100-abs(parent.parent.OrangeS))/100\n)"}}
+   addUserKnob {7 YellowSaturation l Yellow R 0 4}
+   YellowSaturation {{"(parent.parent.YellowS<0)*(1+(parent.parent.YellowS/100))+(parent.parent.YellowS>=0)*((parent.parent.YellowS/100)*3+1)+\n(parent.parent.GreenS<0)*(parent.parent.GreenS*0.25/100)*(100-abs(parent.parent.YellowS))/100+((parent.parent.GreenS>0)*parent.parent.GreenS*0.05/100*4)*(100-abs(parent.parent.YellowS))/100+\n(parent.parent.OrangeS<0)*(parent.parent.OrangeS*0.25/100)*(100-abs(parent.parent.YellowS))/100+((parent.parent.OrangeS>0)*parent.parent.OrangeS*0.1/100*4)*(100-abs(parent.parent.YellowS))/100"}}
+   addUserKnob {7 GreenSaturation l Green R 0 4}
+   GreenSaturation {{"(parent.parent.GreenS<0)*(1+(parent.parent.GreenS/100))+(parent.parent.GreenS>=0)*((parent.parent.GreenS/100)*3+1)+\n(parent.parent.AquaS<0)*(parent.parent.AquaS*0/100)*(100-abs(parent.parent.GreenS))/100+((parent.parent.AquaS>0)*parent.parent.AquaS*0/100*4)*(100-abs(parent.parent.GreenS))/100+\n(parent.parent.YellowS<0)*(parent.parent.YellowS*0.15/100)*(100-abs(parent.parent.GreenS))/100+((parent.parent.YellowS>0)*parent.parent.YellowS*0.1/100*4)*(100-abs(parent.parent.GreenS))/100"}}
+   addUserKnob {7 AquaSaturation l Aqua R 0 4}
+   AquaSaturation {{"(parent.parent.AquaS<0)*(1+(parent.parent.AquaS/100))+(parent.parent.AquaS>=0)*((parent.parent.AquaS/100)*3+1)+\n(parent.parent.BlueS<0)*(parent.parent.BlueS*0.35/100)*(100-abs(parent.parent.AquaS))/100+((parent.parent.BlueS>0)*parent.parent.BlueS*0.25/100*4)*(100-abs(parent.parent.AquaS))/100+\n(parent.parent.GreenS<0)*(parent.parent.GreenS*0.1/100)*(100-abs(parent.parent.AquaS))/100+((parent.parent.GreenS>0)*parent.parent.GreenS*0.05/100*4)*(100-abs(parent.parent.AquaS))/100"}}
+   addUserKnob {7 BlueSaturation l Blue R 0 4}
+   BlueSaturation {{"(parent.parent.BlueS<0)*(1+(parent.parent.BlueS/100))+(parent.parent.BlueS>=0)*((parent.parent.BlueS/100)*3+1)+\n(parent.parent.PurpleS<0)*(parent.parent.PurpleS*0.1/100)*(100-abs(parent.parent.BlueS))/100+((parent.parent.PurpleS>0)*parent.parent.PurpleS*0.05/100*4)*(100-abs(parent.parent.BlueS))/100+\n(parent.parent.AquaS<0)*(parent.parent.AquaS*0.15/100)*(100-abs(parent.parent.BlueS))/100+((parent.parent.AquaS>0)*parent.parent.AquaS*0.05/100*4)*(100-abs(parent.parent.BlueS))/100"}}
+   addUserKnob {7 PurpleSaturation l Purple R 0 4}
+   PurpleSaturation {{"(parent.parent.PurpleS<0)*(1+(parent.parent.PurpleS/100))+(parent.parent.PurpleS>=0)*((parent.parent.PurpleS/100)*3+1)+\n(parent.parent.MagentaS<0)*(parent.parent.MagentaS*0.25/100)*(100-abs(parent.parent.PurpleS))/100+((parent.parent.MagentaS>0)*parent.parent.MagentaS*0.1/100*4)*(100-abs(parent.parent.PurpleS))/100+\n(parent.parent.BlueS<0)*(parent.parent.BlueS*0.25/100)*(100-abs(parent.parent.PurpleS))/100+((parent.parent.BlueS>0)*parent.parent.BlueS*0.1/100*4)*(100-abs(parent.parent.PurpleS))/100"}}
+   addUserKnob {7 MagentaSaturation l Magenta R 0 4}
+   MagentaSaturation {{"(parent.parent.MagentaS<0)*(1+(parent.parent.MagentaS/100))+(parent.parent.MagentaS>=0)*((parent.parent.MagentaS/100)*3+1)+\n(parent.parent.RedS<0)*(parent.parent.RedS*0.25/100)*(100-abs(parent.parent.MagentaS))/100+((parent.parent.RedS>0)*parent.parent.RedS*0.1/100*4)*(100-abs(parent.parent.MagentaS))/100+\n(parent.parent.PurpleS<0)*(parent.parent.PurpleS*0.25/100)*(100-abs(parent.parent.MagentaS))/100+((parent.parent.PurpleS>0)*parent.parent.PurpleS*0.1/100*4)*(100-abs(parent.parent.MagentaS))/100"}}
+   addUserKnob {20 endGroup n -1}
+   addUserKnob {26 ""}
+   addUserKnob {20 Luminance n 1}
+   addUserKnob {7 RedL l Red R 0 4}
+   RedL {{"(parent.parent.RedL<0)*(1+(parent.parent.RedL/100))+(parent.parent.RedL>=0)*((parent.parent.RedL/100)*3+1)+\n(\n(parent.parent.OrangeL<0)*(parent.parent.OrangeL*0.1/100)*(100-abs(parent.parent.RedL))/100+((parent.parent.OrangeL>0)*parent.parent.OrangeL*0.05/100*4)*(100-abs(parent.parent.RedL))/100+\n(parent.parent.MagentaL<0)*(parent.parent.MagentaL*0/100)*(100-abs(parent.parent.RedL))/100+((parent.parent.MagentaL>0)*parent.parent.MagentaL*0/100*4)*(100-abs(parent.parent.RedL))/100\n)\n"}}
+   addUserKnob {7 OrangeL l Orange R 0 4}
+   OrangeL {{"((parent.parent.OrangeL)<0)*(1+(parent.parent.OrangeL/100))+(parent.parent.OrangeL>=0)*((parent.parent.OrangeL/100)*3+1)+\n(\n((parent.parent.YellowL)<0)*(parent.parent.YellowL*0.25/100)*(100-abs(parent.parent.OrangeL))/100+((parent.parent.YellowL>0)*parent.parent.YellowL*0.1/100*4)*(100-abs(parent.parent.OrangeL))/100+\n((parent.parent.RedL)<0)*(parent.parent.RedL*0.15/100)*(100-abs(parent.parent.OrangeL))/100+((parent.parent.RedL>0)*parent.parent.RedL*0.01/100*4)*(100-abs(parent.parent.OrangeL))/100\n)"}}
+   addUserKnob {7 YellowL l Yellow R 0 4}
+   YellowL {{"(parent.parent.YellowL<0)*(1+(parent.parent.YellowL/100))+(parent.parent.YellowL>=0)*((parent.parent.YellowL/100)*3+1)+\n(parent.parent.GreenL<0)*(parent.parent.GreenL*0.25/100)*(100-abs(parent.parent.YellowL))/100+((parent.parent.GreenL>0)*parent.parent.GreenL*0.05/100*4)*(100-abs(parent.parent.YellowL))/100+\n(parent.parent.OrangeL<0)*(parent.parent.OrangeL*0.25/100)*(100-abs(parent.parent.YellowL))/100+((parent.parent.OrangeL>0)*parent.parent.OrangeL*0.1/100*4)*(100-abs(parent.parent.YellowL))/100"}}
+   addUserKnob {7 GreenL l Green R 0 4}
+   GreenL {{"(parent.parent.GreenL<0)*(1+(parent.parent.GreenL/100))+(parent.parent.GreenL>=0)*((parent.parent.GreenL/100)*3+1)+\n(parent.parent.AquaL<0)*(parent.parent.AquaL*0/100)*(100-abs(parent.parent.GreenL))/100+((parent.parent.AquaL>0)*parent.parent.AquaL*0/100*4)*(100-abs(parent.parent.GreenL))/100+\n(parent.parent.YellowL<0)*(parent.parent.YellowL*0.15/100)*(100-abs(parent.parent.GreenL))/100+((parent.parent.YellowL>0)*parent.parent.YellowL*0.1/100*4)*(100-abs(parent.parent.GreenL))/100"}}
+   addUserKnob {7 AquaL l Aqua R 0 4}
+   AquaL {{"(parent.parent.AquaL<0)*(1+(parent.parent.AquaL/100))+(parent.parent.AquaL>=0)*((parent.parent.AquaL/100)*3+1)+\n(parent.parent.BlueL<0)*(parent.parent.BlueL*0.35/100)*(100-abs(parent.parent.AquaL))/100+((parent.parent.BlueL>0)*parent.parent.BlueL*0.25/100*4)*(100-abs(parent.parent.AquaL))/100+\n(parent.parent.GreenL<0)*(parent.parent.GreenL*0.1/100)*(100-abs(parent.parent.AquaL))/100+((parent.parent.GreenL>0)*parent.parent.GreenL*0.05/100*4)*(100-abs(parent.parent.AquaL))/100"}}
+   addUserKnob {7 BlueL l Blue R 0 4}
+   BlueL {{"(parent.parent.BlueL<0)*(1+(parent.parent.BlueL/100))+(parent.parent.BlueL>=0)*((parent.parent.BlueL/100)*3+1)+\n(parent.parent.PurpleL<0)*(parent.parent.PurpleL*0.1/100)*(100-abs(parent.parent.BlueL))/100+((parent.parent.PurpleL>0)*parent.parent.PurpleL*0.05/100*4)*(100-abs(parent.parent.BlueL))/100+\n(parent.parent.AquaL<0)*(parent.parent.AquaL*0.15/100)*(100-abs(parent.parent.BlueL))/100+((parent.parent.AquaL>0)*parent.parent.AquaL*0.05/100*4)*(100-abs(parent.parent.BlueL))/100"}}
+   addUserKnob {7 PurpleL l Purple R 0 4}
+   PurpleL {{"(parent.parent.PurpleL<0)*(1+(parent.parent.PurpleL/100))+(parent.parent.PurpleL>=0)*((parent.parent.PurpleL/100)*3+1)+\n(parent.parent.MagentaL<0)*(parent.parent.MagentaL*0.25/100)*(100-abs(parent.parent.PurpleL))/100+((parent.parent.MagentaL>0)*parent.parent.MagentaL*0.1/100*4)*(100-abs(parent.parent.PurpleL))/100+\n(parent.parent.BlueL<0)*(parent.parent.BlueL*0.25/100)*(100-abs(parent.parent.PurpleL))/100+((parent.parent.BlueL>0)*parent.parent.BlueL*0.1/100*4)*(100-abs(parent.parent.PurpleL))/100"}}
+   addUserKnob {7 MagentaL l Magenta R 0 4}
+   MagentaL {{"(parent.parent.MagentaL<0)*(1+(parent.parent.MagentaL/100))+(parent.parent.MagentaL>=0)*((parent.parent.MagentaL/100)*3+1)+\n(parent.parent.RedL<0)*(parent.parent.RedL*0.25/100)*(100-abs(parent.parent.MagentaL))/100+((parent.parent.RedL>0)*parent.parent.RedL*0.1/100*4)*(100-abs(parent.parent.MagentaL))/100+\n(parent.parent.PurpleL<0)*(parent.parent.PurpleL*0.25/100)*(100-abs(parent.parent.MagentaL))/100+((parent.parent.PurpleL>0)*parent.parent.PurpleL*0.1/100*4)*(100-abs(parent.parent.MagentaL))/100"}}
+   addUserKnob {20 Lumiendgroup n -1}
+   addUserKnob {26 ""}
+   addUserKnob {20 HueSplit n 1}
+   HueSplit 0
+   addUserKnob {7 Center1 l Red R 0 360}
+   addUserKnob {7 Center2 l Orange R 0 360}
+   Center2 26
+   addUserKnob {7 Center3 l Yellow R 0 360}
+   Center3 58
+   addUserKnob {7 Center4 l Green R 0 360}
+   Center4 96
+   addUserKnob {7 Center5 l Aqua R 0 360}
+   Center5 178
+   addUserKnob {7 Center6 l Blue R 0 360}
+   Center6 245
+   addUserKnob {7 Center7 l Purple R 0 360}
+   Center7 279
+   addUserKnob {7 Center8 l Magenta R 0 360}
+   Center8 321
+   addUserKnob {20 HueSplitEndGroup n -1}
+  }
+push $Nc110a800
+  Viewer {
+   frame_range 1-4320
+   name Viewer1
+   selected true
+   xpos -99
+   ypos 259
+  }
+ end_group
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 805
+  ypos -286
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 805
+  ypos -246
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 805
+  ypos -198
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 805
+  ypos -139
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 805
+  ypos -92
+ }
+ Output {
+  name Output1
+  xpos 805
+  ypos 269
+ }
+end_group

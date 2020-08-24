@@ -1,0 +1,392 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Vignette
+ tile_color 0x3a3a3aff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -2797
+ disable {{Amount==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {22 ResetVignette T "nuke.thisNode().knob('Amount').setValue(0);\nnuke.thisNode().knob('Midpoint').setValue(0);\nnuke.thisNode().knob('Round').setValue(0);\nnuke.thisNode().knob('Feather').setValue(50);\nnuke.thisNode().knob('Highlight').setValue(0);" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 Amount R -100 100}
+ addUserKnob {7 Midpoint R -100 100}
+ addUserKnob {7 Round l Roundness R -100 100}
+ addUserKnob {7 Feather R 0 100}
+ Feather 50
+ addUserKnob {7 Highlight R 0 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  selected true
+  xpos 814
+  ypos -439
+ }
+ Dot {
+  name Dot1
+  xpos 848
+  ypos -357
+ }
+set Nca625c00 [stack 0]
+ NoOp {
+  name ShapeCtrl
+  xpos 958
+  ypos -361
+  addUserKnob {20 User}
+  addUserKnob {7 longshortratio R 0 5}
+  longshortratio {{(Size.x/Size.y>1)?Size.x/Size.y:(Size.y/Size.x)}}
+  addUserKnob {12 Size}
+  Size {{input.width} {input.height}}
+  addUserKnob {3 LongEdge}
+  LongEdge {{(Size.x>Size.y)*Size.x+(Size.x<=Size.y)*Size.y}}
+  addUserKnob {7 EverageEdge R 0 5000}
+  EverageEdge {{(Size.x+Size.y)/2}}
+  addUserKnob {7 Roundness}
+  Roundness {{(Round<0)*(1+Round/110)+(Round>=0)}}
+  addUserKnob {12 Center}
+  Center {{Size.x/2} {Size.y/2}}
+  addUserKnob {12 MidPointScaleMinRound}
+  MidPointScaleMinRound {-0.08 0.009}
+  addUserKnob {12 MidPointScaleMidRound}
+  MidPointScaleMidRound {-0.3 0.35}
+  addUserKnob {12 MidPointScaleMaxRound}
+  MidPointScaleMaxRound {-0.3 {(ShapeCtrl.LongEdge/((ShapeCtrl.Size.x+ShapeCtrl.Size.y)/2)+0.13-1)*(longshortratio-1)*3*(longshortratio<=1.333)+(ShapeCtrl.LongEdge/((ShapeCtrl.Size.x+ShapeCtrl.Size.y)/2)+0.13-1)*(longshortratio>1.333)+0.35*(1.333-longshortratio)*3*(longshortratio<1.33)}}
+  addUserKnob {12 MidPointScale}
+  MidPointScale {{"(100-abs(Round))/100*MidPointScaleMidRound.x+\n(Round<0)*(-Round)/100*MidPointScaleMinRound.x+\n(Round>0)*Round/100*MidPointScaleMaxRound.x"} {"(100-abs(Round))/100*MidPointScaleMidRound.y+\n(Round<0)*(-Round)/100*MidPointScaleMinRound.y+\n(Round>0)*Round/100*MidPointScaleMaxRound.y"}}
+  addUserKnob {26 ""}
+  addUserKnob {20 Points n 1}
+  Points 0
+  addUserKnob {12 P1Main}
+  P1Main {{((LongEdge/2*Roundness)<(Size.x/2))?(LongEdge/2*Roundness):(Size.x/2)} {Size.y}}
+  addUserKnob {12 P2Main}
+  P2Main {{((Size.x-LongEdge/2*Roundness)>(Size.x/2))?(Size.x-LongEdge/2*Roundness):Size.x/2} {Size.y}}
+  addUserKnob {12 P3Main}
+  P3Main {{Size.x} {(Size.y-LongEdge/2*Roundness)>(Size.y/2)?(Size.y-LongEdge/2*Roundness):(Size.y/2)}}
+  addUserKnob {12 P4Main}
+  P4Main {{Size.x} {((LongEdge/2*Roundness)<(Size.y/2))?(LongEdge/2*Roundness):(Size.y/2)}}
+  addUserKnob {12 P5Main}
+  P5Main {{P2Main.x} 0}
+  addUserKnob {12 P6Main}
+  P6Main {{P1Main.x} 0}
+  addUserKnob {12 P7Main}
+  P7Main {0 {P4Main.y}}
+  addUserKnob {12 P8Main}
+  P8Main {0 {P3Main.y}}
+  addUserKnob {20 endGroup n -1}
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{ShapeCtrl.Size.x}}
+  box_height {{ShapeCtrl.Size.y}}
+  box_fixed true
+  name Reformat1
+  xpos 1144
+  ypos -454
+ }
+ Roto {
+  output alpha
+  cliptype none
+  curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44700000 x44070000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Rectangle1 512 bezier
+     {{cc
+       {f 8192}
+       {px x43ce8000
+        {{=-ShapeCtrl.P1Main.x*0.553 xc3b53332}
+	 {=0 0}}
+        {{=ShapeCtrl.P1Main.x x44353332}
+	 {=ShapeCtrl.P1Main.y x44870000}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=ShapeCtrl.P2Main.x x44956666}
+	 {=ShapeCtrl.P2Main.y x44870000}}
+        {{=(ShapeCtrl.Size.x-ShapeCtrl.P2Main.x)*0.553 x43b53334}
+	 {=0 0}}
+        {{=0 0}
+      {=(ShapeCtrl.Size.y-ShapeCtrl.P3Main.y)*0.553 x43870000}}
+        {{=ShapeCtrl.P3Main.x x44f00000}
+	 {=ShapeCtrl.P3Main.y x44070000}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=ShapeCtrl.P4Main.x x44f00000}
+	 {=ShapeCtrl.P4Main.y x44070000}}
+        {{=0 0}
+	 {=-ShapeCtrl.P4Main.y*0.553 xc386ffff}}
+        {{=(ShapeCtrl.Size.x-ShapeCtrl.P5Main.x)*0.553 x426fffe0}
+      {=0 x3f4cce00}}
+        {{=ShapeCtrl.P5Main.x x449d0001}
+      {=ShapeCtrl.P5Main.y x434d3332}}
+        {{=0 xc2b20010}
+      {=0 xbe4cc800}}
+        {{=0 x42d6ccc8} 
+      {=0 xbfcccc00}}
+        {{=ShapeCtrl.P6Main.x x441c6667}
+      {=ShapeCtrl.P6Main.y x434f9998}}
+        {{=-ShapeCtrl.P6Main.x*0.553 xc1bac9a0} 
+      {=0 x3dd61800}}
+        {{=0 xbe40a000}
+	 {=-ShapeCtrl.P7Main.y*0.553 xc256ead8}}
+        {{=ShapeCtrl.P7Main.x x440fe966}
+      {=ShapeCtrl.P7Main.y x4393aa1e}}
+        {{=0 x3eb4d000}
+      {=0 x42b15788}}
+        {{=0 xbf87fe00}
+	 {=0 xc28de8c8}}
+        {{=ShapeCtrl.P8Main.x x441003ff}
+	 {=ShapeCtrl.P8Main.y x4430fd19}}
+        {{=0 x3f4c9000}
+      {=(ShapeCtrl.Size.y-ShapeCtrl.P8Main.y)*0.553 x425577c0}}}}
+      {cc
+       {f 8192}
+       {px x43ce8000
+        {{=-ShapeCtrl.P1Main.x*0.553 xc3b53332}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=(ShapeCtrl.Size.x-ShapeCtrl.P2Main.x)*0.553 x43b53334}
+	 {=0 0}}
+        {{=0 0}
+      {=(ShapeCtrl.Size.y-ShapeCtrl.P3Main.y)*0.553 x43870000}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 0}
+	 {=-ShapeCtrl.P4Main.y*0.553 xc386ffff}}
+        {{=(ShapeCtrl.Size.x-ShapeCtrl.P5Main.x)*0.553 x426fffe0}
+      {=0 x3f4cce00}}
+        {{=0 0}
+      {=0 0}}
+        {{=0 xc2b20010}
+      {=0 xbe4cc800}}
+        {{=0 x42d6ccc8} 
+      {=0 xbfcccc00}}
+        {{=0 0}
+      {=0 0}}
+        {{=-ShapeCtrl.P6Main.x*0.553 xc1bac9a0} 
+      {=0 x3dd61800}}
+        {{=0 xbe40a000}
+	 {=-ShapeCtrl.P7Main.y*0.553 xc256ead8}}
+        {{=0 0}
+      {=0 0}}
+        {{=0 x3eb4d000}
+      {=0 x42b15788}}
+        {{=0 xbf87fe00}
+	 {=0 xc28de8c8}}
+        {{=0 0}
+	 {=0 0}}
+        {{=0 x3f4c9000}
+      {=(ShapeCtrl.Size.y-ShapeCtrl.P8Main.y)*0.553 x425577c0}}}}}
+     {t
+   {{x43ce8000 x446e8000}}
+   {{x43ce8000 x43fa0000}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 1 -}}  1
+   {{x43ce8000 1}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 1}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 1}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 1}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 0}}
+   {{x43ce8000 1}}}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 ltn x43ce8000 ltm x43ce8000 tt x41000000}}}}}}
+  toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 tt 7 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 tt 8 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { addPoints str 1 ssx 1 ssy 1 sf 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+  toolbar_brush_hardness 0.200000003
+  toolbar_source_transform_scale {1 1}
+  toolbar_source_transform_center {960 540}
+  colorOverlay {0 0 0 0}
+  lifetime_type "all frames"
+  lifetime_start 413
+  lifetime_end 413
+  motionblur_shutter_offset_type centred
+  source_black_outside true
+  name Roto1
+  xpos 1144
+  ypos -428
+ }
+ Transform {
+  scale {{(1/ShapeCtrl.Size.x*(ShapeCtrl.Size.x+ShapeCtrl.Size.y)/2-1)*(Round>0)*(Round/100)+1} {((ShapeCtrl.Size.x+ShapeCtrl.Size.y)/2/ShapeCtrl.Size.y-1)*(Round>0)*(Round/100)+1}}
+  center {{ShapeCtrl.Center.x} {ShapeCtrl.Center.y}}
+  black_outside false
+  name Transform1
+  xpos 1144
+  ypos -384
+ }
+ Transform {
+  scale {{"1+(Midpoint<0)*ShapeCtrl.MidPointScale.x*(-Midpoint/100)+\n(Midpoint>0)*ShapeCtrl.MidPointScale.y*(Midpoint/100)\n" x413 0}}
+  center {{parent.Transform1.center.x x413 0} {parent.Transform1.center.y x413 0}}
+  black_outside false
+  name Transform2
+  xpos 1144
+  ypos -358
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 1144
+  ypos -332
+ }
+ Blur {
+  channels alpha
+  size {{"Feather*ShapeCtrl.EverageEdge/250*(Round>0)+\nFeather*ShapeCtrl.EverageEdge/250*(Round<=0)*((100+Round)/100)+\n(Round<=0)*Feather*ShapeCtrl.EverageEdge/250*(-Round/100)*.1"}}
+  name Blur1
+  xpos 1144
+  ypos -294
+ }
+ Crop {
+  box {0 0 {parent.ShapeCtrl.Size.x} {parent.ShapeCtrl.Size.y}}
+  name Crop1
+  xpos 1144
+  ypos -256
+ }
+ Dot {
+  name Dot4
+  xpos 1178
+  ypos -230
+ }
+set Nae255400 [stack 0]
+ Dot {
+  name Dot2
+  xpos 1178
+  ypos 18
+ }
+push $Nca625c00
+ Dot {
+  name Dot7
+  xpos 848
+  ypos -168
+ }
+set Nae254c00 [stack 0]
+ Keyer {
+  operation "luminance key"
+  name Keyer1
+  xpos 932
+  ypos -178
+ }
+push $Nae255400
+ Dot {
+  name Dot6
+  xpos 1076
+  ypos -230
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  mix {{Highlight/100*0.8}}
+  name Merge7
+  xpos 1042
+  ypos -172
+ }
+ Dot {
+  name Dot3
+  xpos 1076
+  ypos -88
+ }
+push $Nae254c00
+ Invert {
+  name Invert2
+  xpos 814
+  ypos -130
+  disable {{Amount<0}}
+ }
+ ColorCorrect {
+  inputs 1+1
+  gain {{1-abs(Amount)/100}}
+  name ColorCorrect1
+  xpos 814
+  ypos -92
+ }
+ Invert {
+  name Invert3
+  xpos 814
+  ypos -66
+  disable {{Amount<0}}
+ }
+add_layer {Vignette Vignette.A}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 Vignette.A
+  name Copy1
+  xpos 814
+  ypos 8
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 814
+  ypos 46
+ }
+ Output {
+  name Output1
+  xpos 814
+  ypos 343
+ }
+end_group

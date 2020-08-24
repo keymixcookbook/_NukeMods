@@ -1,0 +1,150 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_WhiteBalance
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -4180
+ disable {{1-EnableWB}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {41 WhiteBalancePicker T Piker_Ctrl.WhiteBalancePicker}
+ addUserKnob {6 EnableWB l Enable -STARTLINE}
+ addUserKnob {3 PickFrameHold}
+ PickFrameHold 502
+ addUserKnob {22 SettoCurrentFrame l "Set to Current Frame" -STARTLINE T nuke.thisNode().knob('PickFrameHold').setValue(nuke.frame())}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 795
+  ypos -485
+ }
+ Dot {
+  name Dot1
+  xpos 829
+  ypos -413
+ }
+set Na8f74400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 447
+  ypos -413
+ }
+ Dot {
+  name Dot7
+  xpos 447
+  ypos -49
+ }
+set Nc0e49c00 [stack 0]
+ Dot {
+  name Dot6
+  xpos 447
+  ypos -2
+ }
+push $Nc0e49c00
+ Input {
+  inputs 0
+  name Mask
+  xpos 613
+  ypos -162
+  number 1
+ }
+ Dot {
+  name Dot4
+  xpos 647
+  ypos -108
+ }
+push $Na8f74400
+ Dot {
+  name Dot2
+  xpos 829
+  ypos -346
+ }
+set Nc0e48c00 [stack 0]
+ Expression {
+  expr0 r*((Piker_Ctrl.positionpicker.r+Piker_Ctrl.positionpicker.g+Piker_Ctrl.positionpicker.b)/3)/Piker_Ctrl.positionpicker.r
+  expr1 g*((Piker_Ctrl.positionpicker.r+Piker_Ctrl.positionpicker.g+Piker_Ctrl.positionpicker.b)/3)/Piker_Ctrl.positionpicker.g
+  expr2 b*((Piker_Ctrl.positionpicker.r+Piker_Ctrl.positionpicker.g+Piker_Ctrl.positionpicker.b)/3)/Piker_Ctrl.positionpicker.b
+  name Expression1
+  xpos 795
+  ypos -299
+ }
+set Nc0e48800 [stack 0]
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 795
+  ypos -273
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 795
+  ypos -235
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 795
+  ypos -112
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 795
+  ypos -53
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 795
+  ypos -6
+ }
+ Output {
+  name Output1
+  xpos 795
+  ypos 161
+ }
+push $Nc0e48800
+ Viewer {
+  frame_range 1-4320
+  name Viewer1
+  xpos 920
+  ypos -278
+ }
+push $Nc0e48c00
+ Blur {
+  size 5
+  name Blur1
+  xpos 696
+  ypos -356
+ }
+ FrameHold {
+  first_frame {{PickFrameHold}}
+  name FrameHold1
+  xpos 696
+  ypos -318
+ }
+ NoOp {
+  name Piker_Ctrl
+  selected true
+  xpos 696
+  ypos -252
+  addUserKnob {20 User}
+  addUserKnob {12 WhiteBalancePicker}
+  WhiteBalancePicker {2058 276}
+  addUserKnob {18 positionpicker}
+  positionpicker {{"\[sample input r WhiteBalancePicker.x WhiteBalancePicker.y]"} {"\[sample input g WhiteBalancePicker.x WhiteBalancePicker.y]"} {"\[sample input b WhiteBalancePicker.x WhiteBalancePicker.y]"}}
+  addUserKnob {6 positionpicker_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 positionpicker_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 positionpicker_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+end_group

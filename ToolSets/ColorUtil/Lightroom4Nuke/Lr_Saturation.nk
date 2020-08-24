@@ -1,0 +1,132 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Saturation
+ tile_color 0xedafb2ff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3350
+ disable {{Sat==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Sat l Saturation R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos -124
+  ypos -425
+ }
+ Dot {
+  name Dot3
+  xpos -90
+  ypos -350
+ }
+set Ncc8c2c00 [stack 0]
+ Dot {
+  name Dot2
+  xpos -200
+  ypos -350
+ }
+set Ncc8c2800 [stack 0]
+ Dot {
+  name Dot5
+  xpos -342
+  ypos -350
+ }
+ Dot {
+  name Dot1
+  xpos -342
+  ypos -29
+ }
+set Ncc8c2000 [stack 0]
+ Dot {
+  name Dot4
+  xpos -342
+  ypos 18
+ }
+push $Ncc8c2000
+ Input {
+  inputs 0
+  name Mask
+  xpos -207
+  ypos -159
+  number 1
+ }
+ Dot {
+  name Dot9
+  xpos -173
+  ypos -88
+ }
+push $Ncc8c2800
+ Keyer {
+  operation "saturation key"
+  range {0 0 0 1}
+  name Keyer2
+  xpos -234
+  ypos -321
+ }
+ Grade {
+  channels alpha
+  gamma 1.4
+  name Grade1
+  xpos -234
+  ypos -283
+ }
+push $Ncc8c2c00
+ Saturation {
+  inputs 1+1
+  saturation {{1+Sat/100*(Sat>0)*1.8}}
+  name Saturation1
+  xpos -124
+  ypos -277
+ }
+ Saturation {
+  saturation {{1+Sat/100*(Sat<0)}}
+  name Saturation2
+  xpos -124
+  ypos -251
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos -124
+  ypos -225
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos -124
+  ypos -187
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos -124
+  ypos -92
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos -124
+  ypos -33
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos -124
+  ypos 14
+ }
+ Output {
+  name Output1
+  xpos -124
+  ypos 107
+ }
+end_group

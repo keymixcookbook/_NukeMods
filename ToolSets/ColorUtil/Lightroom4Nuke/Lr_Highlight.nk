@@ -1,0 +1,568 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Highlight
+ tile_color 0xffbc5bff
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3768
+ disable {{Highlight==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Highlight R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos -91
+  ypos -176
+ }
+ Dot {
+  name Dot44
+  xpos -57
+  ypos -88
+ }
+set Nc0e3bc00 [stack 0]
+ Dot {
+  name Dot41
+  xpos -244
+  ypos -88
+ }
+set Nc0e3b800 [stack 0]
+ Dot {
+  name Dot7
+  xpos -1236
+  ypos -88
+ }
+ Dot {
+  name Dot15
+  xpos -1236
+  ypos 1692
+ }
+ Dot {
+  name Dot6
+  xpos -55
+  ypos 1692
+ }
+set Nc0e3ac00 [stack 0]
+ Dot {
+  name Dot13
+  xpos -55
+  ypos 1739
+ }
+push $Nc0e3ac00
+ Input {
+  inputs 0
+  name Mask
+  xpos -36
+  ypos 1567
+  number 1
+ }
+ Dot {
+  name Dot14
+  xpos -2
+  ypos 1633
+ }
+push $Nc0e3bc00
+ Dot {
+  name Dot5
+  xpos 310
+  ypos -88
+ }
+ Dot {
+  name Dot1
+  xpos 310
+  ypos 716
+ }
+set Nccc75800 [stack 0]
+ Dot {
+  name Dot2
+  xpos 123
+  ypos 716
+ }
+ Dot {
+  name Dot3
+  xpos 123
+  ypos 777
+ }
+set Nccc75000 [stack 0]
+ Dot {
+  name Dot4
+  xpos 13
+  ypos 777
+ }
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect1
+  xpos -21
+  ypos 823
+ }
+ Dot {
+  name Dot8
+  xpos 13
+  ypos 849
+ }
+set Nccc74400 [stack 0]
+ ColorCorrect {
+  highlights.gamma 2
+  highlights.gain 2
+  lookup {shadow {curve 1 s0 x0 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect2
+  xpos -21
+  ypos 899
+ }
+ Dot {
+  name Dot10
+  xpos 13
+  ypos 925
+ }
+push $Nccc75000
+push $Nccc74400
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge2
+  xpos 89
+  ypos 845
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos 89
+  ypos 921
+ }
+ Dot {
+  name Dot51
+  xpos 123
+  ypos 1059
+ }
+push $Nccc75800
+ Dot {
+  name Dot52
+  xpos 310
+  ypos 945
+ }
+set Nc1df8c00 [stack 0]
+ Dot {
+  name Dot53
+  xpos 234
+  ypos 945
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge18
+  xpos 200
+  ypos 1055
+ }
+ Grade {
+  white {{(Highlight/100)*(Highlight>0)}}
+  black_clamp false
+  name Grade2
+  xpos 200
+  ypos 1111
+ }
+ Dot {
+  name Dot54
+  xpos 234
+  ypos 1172
+ }
+push $Nc1df8c00
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus4
+  xpos 276
+  ypos 1168
+ }
+push $Nc0e3b800
+ Dot {
+  name Dot21
+  xpos -244
+  ypos -27
+ }
+set Nb7993400 [stack 0]
+ Dot {
+  name Dot37
+  xpos -466
+  ypos -27
+ }
+set Nb7993000 [stack 0]
+ Dot {
+  name Dot35
+  xpos -902
+  ypos -27
+ }
+ Dot {
+  name Dot36
+  xpos -902
+  ypos 432
+ }
+set Nb7992800 [stack 0]
+ Dot {
+  name Dot39
+  xpos -902
+  ypos 478
+ }
+set Nb7992400 [stack 0]
+ Keyer {
+  operation "luminance key"
+  range {0.01997777473 0.2698123338 0.2698123338 0.799223364}
+  name Keyer9
+  xpos -666
+  ypos 468
+ }
+ Blur {
+  size 8.5
+  name Blur7
+  xpos -666
+  ypos 506
+ }
+push $Nb7992800
+push $Nb7993000
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect10
+  xpos -500
+  ypos 19
+ }
+ Dot {
+  name Dot27
+  xpos -466
+  ypos 45
+ }
+set Nb7a43400 [stack 0]
+ Dot {
+  name Dot33
+  xpos -632
+  ypos 45
+ }
+ Keyer {
+  operation "luminance key"
+  range {4.994443681e-05 1 1 1}
+  name Keyer6
+  xpos -666
+  ypos 167
+ }
+push $Nb7a43400
+ ColorCorrect {
+  highlights.gamma 0.4
+  lookup {shadow {curve 1 s0 x0 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect13
+  xpos -500
+  ypos 95
+ }
+ ColorCorrect {
+  highlights.gamma 0.4
+  lookup {shadow {curve 1 s0 x0 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve L x-0.0003601647913 0 x1 1}}
+  name ColorCorrect14
+  xpos -500
+  ypos 121
+ }
+push $Nb7a43400
+ ColorCorrect {
+  highlights.gamma 0.35
+  lookup {shadow {curve 1 s0 x0 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve x0.9084724784 0 s0 L x1 1 s0}}
+  name ColorCorrect12
+  xpos -603
+  ypos 108
+ }
+ Merge2 {
+  inputs 2+1
+  operation min
+  name Merge10
+  xpos -497
+  ypos 173
+ }
+ Dot {
+  name Dot22
+  xpos -463
+  ypos 366
+ }
+push $Nb7a43400
+ Keyer {
+  operation "luminance key"
+  range {0.786637366 1 1 1}
+  name Keyer7
+  xpos -408
+  ypos 129
+ }
+push $Nb7993400
+push $Nb7a43400
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge4
+  xpos -278
+  ypos 41
+ }
+ ColorCorrect {
+  inputs 1+1
+  saturation 2.4
+  name ColorCorrect15
+  xpos -278
+  ypos 135
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge9
+  xpos -278
+  ypos 362
+ }
+ Dot {
+  name Dot24
+  xpos -244
+  ypos 388
+ }
+ Dot {
+  name Dot23
+  xpos -244
+  ypos 432
+ }
+set Nb7dc6000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge11
+  xpos -556
+  ypos 428
+ }
+ Keyer {
+  operation "luminance key"
+  name Keyer8
+  xpos -556
+  ypos 454
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge13
+  xpos -556
+  ypos 512
+ }
+ Dot {
+  name Dot38
+  xpos -522
+  ypos 1004
+ }
+push $Nb7992400
+ Dot {
+  name Dot47
+  xpos -902
+  ypos 687
+ }
+ Dot {
+  name Dot25
+  xpos -784
+  ypos 687
+ }
+set Nb7daa800 [stack 0]
+ Dot {
+  name Dot31
+  xpos -640
+  ypos 687
+ }
+push $Nb7daa800
+ Blur {
+  size 20
+  name Blur6
+  label "\[value size]"
+  xpos -818
+  ypos 734
+ }
+ set Cb7daa000 [stack 0]
+ Dot {
+  name Dot26
+  xpos -784
+  ypos 825
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge12
+  xpos -674
+  ypos 821
+ }
+ Dot {
+  name Dot32
+  label "high frequency detail"
+  note_font_size 20
+  xpos -640
+  ypos 847
+ }
+ ColorCorrect {
+  gain 6
+  name ColorCorrect16
+  xpos -674
+  ypos 1003
+ }
+ Dot {
+  name Dot40
+  xpos -640
+  ypos 1061
+ }
+push $Nb7dc6000
+ Dot {
+  name Dot29
+  xpos -244
+  ypos 754
+ }
+set Nc1d12800 [stack 0]
+ Dot {
+  name Dot34
+  xpos -388
+  ypos 754
+ }
+push $Nc1d12800
+clone $Cb7daa000 {
+  xpos -278
+  ypos 772
+  selected false
+ }
+ Dot {
+  name Dot28
+  xpos -244
+  ypos 903
+ }
+set Ncc407c00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge14
+  xpos -422
+  ypos 899
+ }
+ Merge2 {
+  inputs 2+1
+  operation plus
+  name Merge15
+  xpos -422
+  ypos 1057
+ }
+ Dot {
+  name Dot30
+  xpos -388
+  ypos 1190
+ }
+push $Ncc407c00
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus3
+  xpos -278
+  ypos 1186
+ }
+ Dot {
+  name Dot45
+  xpos -244
+  ypos 1259
+ }
+push $Nc0e3bc00
+ Dot {
+  name Dot43
+  xpos -57
+  ypos 1145
+ }
+set Ncc406400 [stack 0]
+ Dot {
+  name Dot46
+  xpos -133
+  ypos 1145
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge16
+  xpos -167
+  ypos 1255
+ }
+ Expression {
+  expr0 r>0?0:r
+  expr1 g>0?0:g
+  expr2 b>0?0:b
+  name Expression1
+  xpos -167
+  ypos 1281
+ }
+ Grade {
+  white {{-Highlight/100}}
+  black_clamp false
+  name Grade1
+  xpos -167
+  ypos 1307
+ }
+ Dot {
+  name Dot42
+  xpos -133
+  ypos 1399
+ }
+push $Ncc406400
+ Merge2 {
+  inputs 2
+  operation plus
+  name Plus2
+  xpos -91
+  ypos 1395
+ }
+push $Nc0e3bc00
+ Switch {
+  inputs 3
+  which {{"Highlight==0?0:\nHighlight<0?1:\n2"}}
+  name Switch1
+  xpos 55
+  ypos 1431
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 55
+  ypos 1457
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 55
+  ypos 1495
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 55
+  ypos 1629
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  xpos 55
+  ypos 1688
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  selected true
+  xpos 55
+  ypos 1735
+ }
+ Output {
+  name Output1
+  xpos 55
+  ypos 1992
+ }
+end_group

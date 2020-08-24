@@ -1,0 +1,123 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Contrast
+ note_font_size 15
+ selected true
+ xpos 2051
+ ypos -3814
+ disable {{Con==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {26 ""}
+ addUserKnob {7 Con l Contrast R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 307
+  ypos -493
+ }
+ Dot {
+  name Dot2
+  xpos 341
+  ypos -436
+ }
+set Ncc51fc00 [stack 0]
+ Dot {
+  name Dot3
+  xpos 205
+  ypos -436
+ }
+ Dot {
+  name Dot7
+  xpos 205
+  ypos -134
+ }
+set Ncc51f400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 205
+  ypos -87
+ }
+push $Ncc51f400
+ Input {
+  inputs 0
+  name Mask
+  xpos 224
+  ypos -244
+  number 1
+ }
+ Dot {
+  name Dot9
+  xpos 258
+  ypos -193
+ }
+push $Ncc51fc00
+ ColorCorrect {
+  midtones.contrast {{1+parent.Con/100*0.5}}
+  lookup {shadow {curve L 0.4325538874 s0 S x0.2469582558 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve x-0.0004504546523 0 s0 L x0.9994456768 0.7875461578 s0.8000000119 t0}}
+  name ColorCorrect1
+  xpos 364
+  ypos -387
+ }
+push $Ncc51fc00
+ ColorCorrect {
+  midtones.contrast {{1+parent.Con/100*0.6}}
+  lookup {shadow {curve L 0.4325538874 s0 S x0.2469582558 0 s0}
+    midtone {1-shadow-highlight}
+    highlight {curve x-0.0004504546523 0 s0 L x0.9994456768 1.004698277 s0}}
+  name ColorCorrect2
+  xpos 258
+  ypos -389
+ }
+ Switch {
+  inputs 2
+  which {{parent.Con<0}}
+  name Switch1
+  xpos 315
+  ypos -346
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 315
+  ypos -320
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 315
+  ypos -282
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  xpos 315
+  ypos -197
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos 315
+  ypos -138
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  xpos 315
+  ypos -91
+ }
+ Output {
+  name Output1
+  xpos 315
+  ypos -3
+ }
+end_group

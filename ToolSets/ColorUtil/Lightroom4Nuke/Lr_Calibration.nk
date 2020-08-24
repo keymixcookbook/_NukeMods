@@ -1,0 +1,630 @@
+set cut_paste_input [stack 0]
+version 12.0 v1
+push $cut_paste_input
+Group {
+ name Lightroom_Calibration
+ tile_color 0x6693f4ff
+ note_font_size 15
+ note_font_color 0xff
+ selected true
+ xpos 2051
+ ypos -2687
+ disable {{ShadowTint==0&&RedHue==0&&RedSat==0&&GreenHue==0&&GreenSat==0&&BlueHue==0&&BlueSat==0}}
+ addUserKnob {20 User}
+ addUserKnob {26 Title l "" +STARTLINE T "<b><font color=\"#3b79c4\" face=\"Arial\" size=\"150\">LightRoom</font></b> <b><font color=\"#3b79c4\" face=\"Arial\" size=\"5\">4nuke</font></b>"}
+ addUserKnob {26 Credit l "" +STARTLINE T "by Han Cao"}
+ addUserKnob {22 ResetCalibration l "<b><h3>Reset Calibration</h3></b>" T "nuke.thisNode().knob('ShadowTint').setValue(0);\nnuke.thisNode().knob('RedHue').setValue(0);\nnuke.thisNode().knob('RedSat').setValue(0);\nnuke.thisNode().knob('GreenHue').setValue(0);\nnuke.thisNode().knob('GreenSat').setValue(0);\nnuke.thisNode().knob('BlueHue').setValue(0);\nnuke.thisNode().knob('BlueSat').setValue(0);" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 _4 l "" +STARTLINE T Shadow}
+ addUserKnob {7 ShadowTint l "<h3><b><font color='green'>--</font><font color='#67876b'>-T</font><font color='#8f8f8f'>in</font><font color='#856684'>t-</font><font color='Magenta'>--</font></b></h3>" R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "Red Primary" T RedPrimary}
+ addUserKnob {7 RedHue l "<h3><b><font color='#ff52ff'>--</font><font color='#ff52ab'>--</font><font color='#fa6464'>Red</font><font color='#ff7a52'>--</font><font color='#ff9a52'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 RedSat l "<h3><b><font color='#fa6464'>Red</font></b></h3>" R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {26 _2 l "" +STARTLINE T "Green Primary"}
+ addUserKnob {7 GreenHue l "<h3><b><font color='#ffff52'>--</font><font color='#e2ff52'>--</font><font color='#80ff52'>Green</font><font color='#52ffa0'>--</font><font color='#52ffee'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 GreenSat l "<h3><b><font color='#80ff52'>Green</font></b></h3>" R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {26 _3 l "" +STARTLINE T "Blue Primary"}
+ addUserKnob {7 BlueHue l "<h3><b><font color='#52ffee'>--</font><font color='#52ceff'>--</font><font color='#5252ff'>Blue</font><font color='#7252ff'>--</font><font color='#9d52ff'>--</font></b></h3>" R -100 100}
+ addUserKnob {7 BlueSat l "<h3><b><font color='#5252ff'>Blue</font></b></h3>" R -100 100}
+}
+ Input {
+  inputs 0
+  name Scn
+  xpos 180
+  ypos -719
+ }
+ Dot {
+  name Dot22
+  xpos 214
+  ypos -607
+ }
+set Nae2b5c00 [stack 0]
+ Dot {
+  name Dot35
+  xpos -1063
+  ypos -607
+ }
+ Dot {
+  name Dot33
+  xpos -1063
+  ypos 1290
+ }
+ Dot {
+  name Dot36
+  selected true
+  xpos 70
+  ypos 1290
+ }
+set Nae2b5000 [stack 0]
+ Dot {
+  name Dot37
+  selected true
+  xpos 70
+  ypos 1337
+ }
+push $Nae2b5000
+ Input {
+  inputs 0
+  name Mask
+  xpos 89
+  ypos 1205
+  number 1
+ }
+ Dot {
+  name Dot38
+  selected true
+  xpos 123
+  ypos 1231
+ }
+push $Nae2b5c00
+ Dot {
+  name Dot23
+  xpos 377
+  ypos -607
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 0 0 1}
+  name Keyer1
+  xpos 343
+  ypos -581
+ }
+ Grade {
+  channels alpha
+  gamma 0.4
+  name Grade3
+  xpos 343
+  ypos -543
+ }
+ Dot {
+  name Dot25
+  xpos 377
+  ypos -505
+ }
+set Nae2cb400 [stack 0]
+ Dot {
+  name Dot24
+  xpos 377
+  ypos -477
+ }
+push $Nae2cb400
+push $Nae2b5c00
+ Grade {
+  inputs 1+1
+  white {{1+ShadowTint/100*(ShadowTint>0)} {1-ShadowTint/100*2*(ShadowTint<0)} {1+ShadowTint/100*(ShadowTint>0)} {curve}}
+  white_panelDropped true
+  black_clamp false
+  name Grade1
+  xpos 180
+  ypos -509
+ }
+ Grade {
+  inputs 1+1
+  white {{1/(Grade1.white.r+Grade1.white.g+Grade1.white.b)*3}}
+  name Grade2
+  xpos 180
+  ypos -483
+ }
+ Dot {
+  name Dot1
+  xpos 214
+  ypos -364
+ }
+set Nae2ca400 [stack 0]
+ Dot {
+  name Dot5
+  xpos -350
+  ypos -364
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace1
+  xpos -384
+  ypos -331
+ }
+ Dot {
+  name Dot3
+  xpos -350
+  ypos -252
+ }
+set Nc7ff5800 [stack 0]
+ Dot {
+  name Dot8
+  xpos -350
+  ypos -184
+ }
+set Nc7ff5400 [stack 0]
+ Keyer {
+  operation "green keyer"
+  name Keyer2
+  xpos -307
+  ypos -194
+ }
+ Dot {
+  name Dot10
+  xpos -273
+  ypos -156
+ }
+set Nc7ff4c00 [stack 0]
+ Dot {
+  name Dot11
+  xpos -273
+  ypos 262
+ }
+set Nc7ff4800 [stack 0]
+ Dot {
+  name Dot15
+  xpos -273
+  ypos 734
+ }
+push $Nc7ff5400
+ Dot {
+  name Dot9
+  xpos -350
+  ypos 118
+ }
+set Nc7ff4000 [stack 0]
+ Dot {
+  name Dot16
+  xpos -350
+  ypos 554
+ }
+ Dot {
+  name Dot31
+  xpos -129
+  ypos 554
+ }
+set Nc8011800 [stack 0]
+ Expression {
+  expr0 1-((1-(r-2/3))>1?(-(r-2/3)):(1-(r-2/3)))
+  name Expression5
+  xpos -163
+  ypos 629
+ }
+ Expression {
+  expr3 2*(r<0.5?(0.5-r):(r-0.5))
+  name Expression6
+  xpos -163
+  ypos 655
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge2
+  xpos -163
+  ypos 730
+ }
+ Dot {
+  name Dot17
+  xpos -129
+  ypos 798
+ }
+set Nc8010800 [stack 0]
+ Dot {
+  name Dot18
+  xpos -129
+  ypos 892
+ }
+set Nc8010400 [stack 0]
+ Dot {
+  name Dot19
+  xpos -129
+  ypos 985
+ }
+ Grade {
+  channels alpha
+  gamma 2.2
+  name Grade9
+  xpos 70
+  ypos 975
+ }
+ set Cc8039c00 [stack 0]
+push $Nc8010400
+push $Nc8010800
+push $Nc8011800
+ Dot {
+  name Dot29
+  xpos 3
+  ypos 554
+ }
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle3
+  xpos -31
+  ypos 606
+ }
+ Invert {
+  name Invert3
+  xpos -31
+  ypos 632
+ }
+ Grade {
+  channels alpha
+  gamma 0.81
+  name Grade8
+  xpos -31
+  ypos 670
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge4
+  xpos -31
+  ypos 794
+ }
+ Dot {
+  name Dot30
+  xpos 3
+  ypos 866
+ }
+push $Nc7ff4800
+push $Nc7ff4000
+ Dot {
+  name Dot26
+  xpos -129
+  ypos 118
+ }
+set Nc8038000 [stack 0]
+ Expression {
+  expr0 1-((1-(r-1/3))>1?(-(r-1/3)):(1-(r-1/3)))
+  name Expression3
+  xpos -163
+  ypos 172
+ }
+ Expression {
+  expr3 2*(r<0.5?(0.5-r):(r-0.5))
+  name Expression4
+  xpos -163
+  ypos 198
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge1
+  xpos -163
+  ypos 258
+ }
+ Dot {
+  name Dot7
+  xpos -129
+  ypos 284
+ }
+set Nc67a5000 [stack 0]
+ Dot {
+  name Dot12
+  xpos -129
+  ypos 378
+ }
+set Nc67a4c00 [stack 0]
+ Dot {
+  name Dot13
+  xpos -129
+  ypos 471
+ }
+clone $Cc8039c00 {
+  xpos 7
+  ypos 461
+  selected false
+ }
+push $Nc67a4c00
+push $Nc67a5000
+push $Nc8038000
+ Dot {
+  name Dot14
+  xpos 15
+  ypos 118
+ }
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle2
+  xpos -19
+  ypos 151
+ }
+ Invert {
+  name Invert2
+  xpos -19
+  ypos 177
+ }
+ Grade {
+  channels alpha
+  gamma 0.81
+  name Grade6
+  xpos -19
+  ypos 215
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge3
+  xpos -19
+  ypos 280
+ }
+ Dot {
+  name Dot20
+  xpos 15
+  ypos 352
+ }
+push $Nc7ff4c00
+push $Nc7ff5800
+ Dot {
+  name Dot4
+  xpos -99
+  ypos -252
+ }
+set Nc67ce800 [stack 0]
+ Expression {
+  expr3 2*(r<0.5?(0.5-r):(r-0.5))
+  name Expression1
+  xpos -133
+  ypos -186
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge7
+  xpos -133
+  ypos -160
+ }
+ Dot {
+  name Dot2
+  xpos -99
+  ypos -101
+ }
+set Nc6809c00 [stack 0]
+ Dot {
+  name Dot28
+  xpos -99
+  ypos -7
+ }
+set Nc6809800 [stack 0]
+ Dot {
+  name Dot6
+  xpos -99
+  ypos 84
+ }
+clone $Cc8039c00 {
+  xpos -6
+  ypos 74
+  selected false
+ }
+push $Nc6809800
+push $Nc67ce800
+ Dot {
+  name Dot21
+  xpos 45
+  ypos -252
+ }
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle1
+  xpos 11
+  ypos -234
+ }
+ Invert {
+  name Invert1
+  xpos 11
+  ypos -208
+ }
+ Grade {
+  channels alpha
+  gamma 0.81
+  name Grade4
+  xpos 11
+  ypos -170
+ }
+push $Nc6809c00
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge9
+  xpos 11
+  ypos -105
+ }
+ Dot {
+  name Dot27
+  xpos 45
+  ypos -33
+ }
+push $Nae2ca400
+ Grade {
+  white 0.01
+  black_clamp false
+  name Grade5
+  xpos 180
+  ypos -346
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+RedSat/100*(RedSat>0)*2.5+RedSat/100*(RedSat<0)}}
+  name Saturation1
+  xpos 180
+  ypos -37
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+RedSat/100*(RedSat<0)}}
+  name Saturation2
+  xpos 180
+  ypos -11
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 180
+  ypos 15
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 180
+  ypos 76
+ }
+ HSVTool {
+  huerotation {{RedHue/100*30}}
+  HMask rgba.alpha
+  name HSVTool1
+  xpos 180
+  ypos 160
+ }
+set Ncb1ac000 [stack 0]
+ Saturation {
+  inputs 1+1
+  saturation {{1+GreenSat/100*(GreenSat>0)*2.5+GreenSat/100*(GreenSat<0)}}
+  name Saturation3
+  xpos 180
+  ypos 348
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+GreenSat/100*(GreenSat<0)}}
+  name Saturation4
+  xpos 180
+  ypos 374
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp2
+  xpos 180
+  ypos 400
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 180
+  ypos 461
+ }
+ HSVTool {
+  huerotation {{GreenHue/100*30}}
+  HMask rgba.alpha
+  name HSVTool2
+  xpos 180
+  ypos 499
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+BlueSat/100*(BlueSat>0)*2.5+BlueSat/100*(BlueSat<0)}}
+  name Saturation5
+  xpos 180
+  ypos 862
+ }
+ Saturation {
+  inputs 1+1
+  saturation {{1+BlueSat/100*(BlueSat<0)}}
+  name Saturation6
+  xpos 180
+  ypos 888
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp3
+  xpos 180
+  ypos 914
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos 180
+  ypos 975
+ }
+ HSVTool {
+  huerotation {{BlueHue/100*30}}
+  HMask rgba.alpha
+  name HSVTool3
+  xpos 180
+  ypos 1013
+ }
+ Grade {
+  white 0.01
+  reverse true
+  black_clamp false
+  name Grade7
+  xpos 180
+  ypos 1051
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp4
+  xpos 180
+  ypos 1077
+ }
+ Shuffle {
+  alpha white
+  name Shuffle4
+  xpos 180
+  ypos 1156
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Mask2
+  selected true
+  xpos 180
+  ypos 1227
+  disable {{"1-\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  selected true
+  xpos 180
+  ypos 1286
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  selected true
+  xpos 180
+  ypos 1333
+ }
+set Nc4e90000 [stack 0]
+ Output {
+  name Output1
+  xpos 180
+  ypos 1454
+ }
+push $Ncb1ac000
+push $Nc4e90000
+ Viewer {
+  inputs 2
+  frame_range 1-4320
+  name Viewer1
+  xpos 462
+  ypos -305
+ }
+end_group
