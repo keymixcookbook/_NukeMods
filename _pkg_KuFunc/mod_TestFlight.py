@@ -59,7 +59,7 @@ def listFiles(dirpath):
     '''list files in the given dir'''
 
     path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') and p.endswith('.py')]
+    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') or p.startswith('dft') and p.endswith('.py')]
 
     return ls_files
 
