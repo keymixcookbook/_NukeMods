@@ -12,136 +12,113 @@
 
 '''
 
-import nuke
-import collections
-import math
+import nuke, nukescripts
+import re
 
-
-
-
-
-########## Supporting Function ###########
-
-
-
-
-def listRemove(ls_main, ls_remove):
-
-	for n in ls_remove:
-		if n in ls_main:
-			ls_main.remove(n)
-
-	return ls_main
-
-
-
-def applyAOVGroup(node, num_remove, aovs_remove):
-
-	'''
-	built for works in a group
-	'''
-
-	remove_nodes = []
-
-	# Create Remove node in a chain
-	for n in range(num_remove):
-		r = nuke.createNode('Remove')
-		r['operation'].setValue('remove')
-		if n == 0: # first node
-			r.setInput(0, node)
-		node_remove.append(r)
-
-	# Set Remove node channels
-	node_counter = 1
-	node_knob_counter = 0
-
-	for nr in node_remove: # cycle Remove nodes
-		print nr.name()
-
-		for k in range(4): # cycle Knobs
-			if len(aovs_remove)<=0:
-				break
-			else:
-				if node_knob_counter == 0:
-					cur_k = 'channels'
-				else:
-					cur_k = 'channels%s' % node_knob_counter
-
-				nr[cur_k].setValue(aovs_remove[0])
-				print "%s <- %s" % (cur_k, aovs_remove[0])
-				del aovs_remove[0]
-
-				node_knob_counter += 1
-
-	# Create Crop and LayerContactSheet node
-	node_crop = nuke.createNode('Crop')
-	nuke.createNode('LayerContactSheet')
-
-	node_crop['box'].setExpression('input.bbox.x', 0)
-	node_crop['box'].setExpression('input.bbox.y', 1)
-	node_crop['box'].setExpression('input.bbox.r', 2)
-	node_crop['box'].setExpression('input.bbox.t', 3)
-
-
-
-
-
-########## Main Function ###########
 
 
 
 
 def AOVContactSheet():
+    '''main function'''
 
-	node_sel = nuke.selectedNode()
+    if not nuke.selectedNode():
+        try:
+            node = nuke.thisNode()
+        except:
+            nuke.message("Select a node")
+    else:
+        node = nuke.selectedNode()
 
-	if node_sel:
+    if node is not nuke.thisNode():
+        node = create_group()
+        node.setInput(0, nuke.selectedNode())
+    
+    layers_all = nuke.layers(node.dependencies(nuke.INPUTS)[0])
 
-		# Collecting Data
-		aovs_all = [l for l in nuke.layers(node_sel)]
-		mu_sel = ['multi', 'diffMulti', 'specMulti', 'Shading', 'spec', 'diff', 'Data', 'id', 'all']
-		ls_shading = ['diffDir', 'diffInd', 'specDir', 'specInd', 'emission', 'emission', 'subsurface']
-		ls_data = ['depth', 'norm', 'postion', 'refPosition', 'uv']
+    layers_filtered = filter_layers(layers_all, node['keywords'].value())
+    build_remove(layers_filtered, node)
 
-		# Select AOVs
-		p = nuke.Panel('SelLayerContact')
-		p.addEnumerationPulldown('AOV Group', ' '.join(aovs_all))
 
-		if p.show():
-			aovs_group = p.value('AOV Group')
-		else:
-			print "Operation Cancelled"
-			break
+def filter_layers(layers_all, search_str):
+    '''filter layers with user input string
+    @layers_all: (list of str) list of all layers
+    @search_str: (str) string to filter layers
+    return: (dict of str, int: [str,...]) filtered dict of layers'''
 
-		# Find Matching AOVs
-		aovs_sel = []
+    _layers_keep = [s for s in layers_all if re.search(search_str, s)]
+    _layers_remove = list(set(layers_all)-set(_layers_keep))
 
-		for l in aovs_all:
-			if aovs_group in l: # diff, spec, multiLights, id
-				aovs_sel.append(l)
-			elif aovs_group == 'Shading' and l in ls_shading:
-				aovs_sel.append(l)
-			elif aovs_group == 'Data' and l in ls_data:
-				aovs_sel.append(l)
-			elif aovs_group == 'all':
-				aovs_sel = aovs_all
+    counter = 0
+    dict_remove={}
+    _thisList = list()
+    for idx, l in enumerate(_layers_remove, 1):
 
-		# Filter aovs_sel
-		## for Remove node, with operation set to 'remove'
-		aovs_remove = ls_remove(aovs_all, aovs_sel)
+        _thisList.append(l)
+        if idx % 4 == 0:
+            dict_remove[counter]=_thisList
+            _thisList=[]
+            counter += 1
+    del _thisList
+    
+    return dict_remove
+    
 
-		# Find how many remove nodes needed
-		num_remove = int(math.ceil(len(aovs_remove)/4.0))
+def build_remove(dict_remove, node):
+    '''rebuild Remove node everytime it's called
+    @dict_remove: (dict of str, int: [str,...]) filtered dict of layers
+    @node: (obj) node object to build
+    '''
 
-		# Removing unwanted layers
-		g_aov = nuke.node.Group(name='AOVContactSheet')
+    CH = ['channels', 'channels2', 'channels3', 'channels4']
 
-		k_tab = nuke.Tab_Knob('tb_user', 'AOVContactSheet')
-		k_mu = nuke.Enumeration_Knob('mu_aovs', "AOV Groups", ' '.join(mu_sel))
-		k_apply = nuke.PyScript_Knob('bt_apply', "Apply", 'mod_AOVContactSheet.applyAOVGroup(nuke.thisNode().toNode('input'), )')
+    with node:
+        for r in nuke.allNodes('Remove'):
+            nuke.delete(r)
 
-		k_apply.clearFlag(nuke.STARTLINE)
+        nukescripts.clear_selection_recursive()
+        nuke.toNode('Input').setSelected(True)
+        
+        for k in dict_remove:
+            node_remove = nuke.createNode('Remove', 'operation remove', inpanel=False)
+            thisGroup = dict_remove[k]
+            node_remove['label'].setValue(', '.join(thisGroup))
+            for idx, l in enumerate(thisGroup):
+                node_remove[CH[idx]].setValue(l)
 
-		g_aov.addKnob(k_tab)
-		g_aov.addKnob(k_mu)
-		g_aov.addKnob(k_apply)
+
+def create_group():
+    '''create a group node with proper nodes
+    return: (obj) group node object'''
+
+    user_keyword = nuke.getInput("keyword to filter", "*")
+
+    if user_keyword:
+        node = nuke.nodes.Group()
+        node.setName('AOVContactSheet')
+
+        k_tab = nuke.Tab_Knob('tb_user', 'ku_AOVContactsheet')
+        k_key = nuke.String_Knob('keywords', "keywords", user_keyword)
+        k_filter = nuke.PyScript_Knob('bt_filter', "Filter", 'mod_AOVContactSheet.AOVContactSheet()')
+
+        node.addKnob(k_tab)
+        node.addKnob(k_key)
+        node.addKnob(k_filter)
+        node['label'].setValue('filtering: [value keywords]')
+
+        with node:
+            node_input = nuke.createNode('Input', 'name Input', inpanel=False)
+            node_crop = nuke.createNode('Crop', inpanel=False)
+            node_contact = nuke.createNode('LayerContactSheet', inpanel=False)
+            node_output = nuke.createNode('Output', 'name Output', inpanel=False)
+
+            node_crop['box'].setExpression('input.bbox.x', 0)
+            node_crop['box'].setExpression('input.bbox.y', 1)
+            node_crop['box'].setExpression('input.bbox.r', 2)
+            node_crop['box'].setExpression('input.bbox.t', 3)
+            node_contact['showLayerNames'].setValue(True)
+            node_crop['reformat'].setValue(True)
+
+        return node
+
+
