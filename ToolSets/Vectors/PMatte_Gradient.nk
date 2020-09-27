@@ -1,0 +1,155 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+add_layer {P P.red P.green P.blue P.alpha}
+Group {
+ name PMatte_Gradient
+ help "Mask3DGradient creates a gradient mate betveen two point in 3D space based on a World position pass. Also may be useful in work with Object Position and similar data passes which contains position cordinate. Feed it as input.\nAvoid using same values for 'From' and 'To'!\n------\nv002\nIvan Kokov. Pixomondo Shanghai. 2012\nbutafor@inbox.ru\nivan.kokov@sha.pixomondo.com"
+ tile_color 0x9900ff
+ selected true
+ xpos -232
+ ypos 40
+ addUserKnob {20 tb_user l PMatte_Gradient}
+ addUserKnob {41 in l channel T _SHUFFLE_.in}
+ addUserKnob {41 From T Mask3DGradient_ik.From}
+ addUserKnob {41 To T Mask3DGradient_ik.To}
+ addUserKnob {41 ReplaceRGB l "Replace RGB / Keep original (generate matte in alpha only)" T Mask3DGradient_ik.ReplaceRGB}
+ addUserKnob {41 IgnoreByAlpha l "Ignore outside by alpha" T Mask3DGradient_ik.IgnoreByAlpha}
+ addUserKnob {26 ""}
+ addUserKnob {32 axis_x l x T "knob From.1 0\nknob From.2 0\nknob To.1 0\nknob To.2 0" +STARTLINE}
+ addUserKnob {32 axis_y l y -STARTLINE T "knob From.0 0\nknob From.2 0\nknob To.0 0\nknob To.2 0"}
+ addUserKnob {32 axis_z l z -STARTLINE T "knob From.0 0\nknob From.1 0\nknob To.0 0\nknob To.1 0"}
+ addUserKnob {6 aa l "Anti Aliasing" +STARTLINE}
+ aa true
+ addUserKnob {26 div l "" +STARTLINE}
+ addUserKnob {26 copyright l " " T "\n    \n    <p style=\"color: gray\"><b>PMatte_Gradient</b> &#169; 2020 Tianlun Jiang - jiangovfx.com\n- based on WPTK by Ivan Lokov\n\n    "}
+}
+ Constant {
+  inputs 0
+  color {0 1 0 1}
+  name Constant1
+  selected true
+  xpos 119
+  ypos 4
+  postage_stamp false
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -77
+  ypos -383
+ }
+set Nbbb3c000 [stack 0]
+ Dot {
+  name Dot2
+  xpos -196
+  ypos -382
+ }
+ Dot {
+  name Dot1
+  xpos -196
+  ypos -195
+ }
+set Ncc3f2000 [stack 0]
+ Expression {
+  expr0 a>0
+  expr1 a>0
+  expr2 a>0
+  expr3 a>0
+  name _MATTE_MASK_
+  label "a::\[value expr3]"
+  xpos -227
+  ypos -136
+ }
+ Dilate {
+  channels alpha
+  size -1
+  name _AA_MASK_
+  xpos -227
+  ypos -98
+ }
+push $Ncc3f2000
+push $Nbbb3c000
+ Shuffle {
+  in P
+  in2 rgba
+  name _SHUFFLE_
+  label "\[value in]"
+  xpos -77
+  ypos -351
+ }
+ Expression {
+  temp_name0 DistF
+  temp_expr0 "sqrt(pow2(From.r - r) + pow2(From.g - g) + pow2(From.b - b))"
+  temp_name1 DistT
+  temp_expr1 "sqrt(pow2(To.r - r) + pow2(To.g - g) + pow2(To.b - b))"
+  temp_name2 DistFT
+  temp_expr2 "sqrt(pow2(From.r - To.r) + pow2(From.g - To.g) + pow2(From.b - To.b))"
+  temp_name3 F
+  temp_expr3 "acos(clamp((pow2(DistF) + pow2(DistFT) - pow2(DistT))/(2 * DistF * DistFT), -1, 1))"
+  expr0 "ReplaceRGB ? (IgnoreByAlpha ? (clamp( (DistF * cos(F)) / DistFT)*a) : clamp( (DistF * cos(F)) / DistFT) ) : r"
+  expr1 "ReplaceRGB ? (IgnoreByAlpha ? (clamp( (DistF * cos(F)) / DistFT)*a) : clamp( (DistF * cos(F)) / DistFT) ) : g"
+  expr2 "ReplaceRGB ? (IgnoreByAlpha ? (clamp( (DistF * cos(F)) / DistFT)*a) : clamp( (DistF * cos(F)) / DistFT) ) : b"
+  expr3 "IgnoreByAlpha ? (clamp( (DistF * cos(F)) / DistFT)*a) : clamp( (DistF * cos(F)) / DistFT)"
+  name Mask3DGradient_ik
+  xpos -77
+  ypos -273
+  addUserKnob {20 User}
+  addUserKnob {18 From}
+  From {0 158.6982727 0}
+  addUserKnob {6 From_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 To}
+  To {0 0.2416992188 0}
+  addUserKnob {6 To_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 ReplaceRGB l "Replace RGB / Keep original (generate matte in alpha only)" +STARTLINE}
+  addUserKnob {6 IgnoreByAlpha l "Ignore outside by alpha" +STARTLINE}
+  IgnoreByAlpha true
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  name _RGBA_
+  xpos -77
+  ypos -196
+ }
+ Matrix {
+  inputs 1+1
+  channels alpha
+  matrix {
+      {0 1 0}
+      {1 4 1}
+      {0 1 0}
+    }
+  normalize true
+  name _AA_
+  xpos -77
+  ypos -98
+  disable {{!parent.aa}}
+ }
+ Merge2 {
+  inputs 2
+  maskChannelInput rgba.alpha
+  mix 0.5
+  name Merge1
+  xpos -77
+  ypos -2
+ }
+set Nee97d000 [stack 0]
+ Output {
+  name Output1
+  xpos -77
+  ypos 117
+ }
+push $Nee97d000
+ Viewer {
+  frame_range 995-1100
+  frame_increment 8
+  viewerProcess "sRGB (ACES)"
+  name Viewer1
+  xpos 290
+  ypos -10
+  hide_input true
+ }
+end_group
