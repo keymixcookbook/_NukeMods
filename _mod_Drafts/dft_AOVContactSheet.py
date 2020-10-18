@@ -1,46 +1,79 @@
 '''
 
-- Show the type of channels selected
-- ie. only "id", "spec", "multi", "multiSpecs", or "data"
-
-- Renderman Light: multi[0-9], diffMulti[0-9], specMulti[0-9]. id[0-10], diffCol, diffDir, diffInd, specDir, specInd, emission, subserface
-- Renderman Data: depth2, norm, position2, refPosition2, uv2, vel, shadow
-
-- Have Options to view: single layer OR group of layers with a given type[multiLights, diffMulti, specMulti, diff, spec, shading, data]
-- Only keep selected layer/layer groups
-- Output with LayerContactSheet
+- Filtering chanel layers with keywords
 
 '''
+
+import platform
+
+
+__VERSION__='0.0'
+__OS__=platform.system()
+__AUTHOR__="Tianlun Jiang"
+__COPYRIGHT__="copyright %s" % __AUTHOR__
+
+__TITLE__=__file__.split('_')[1].split('.')[0]
+
+
+def _version_():
+	ver='''
+
+	version 0.0
+    - if a node is selected, prompt for keyword create a contactsheet group node
+
+	'''
+	return ver
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
 
 import nuke, nukescripts
 import re
 
 
 
-
-
 def AOVContactSheet():
     '''main function'''
-
     if not nuke.selectedNode():
-        try:
-            node = nuke.thisNode()
-        except:
-            nuke.message("Select a node")
+        nuke.message("Select a node")
     else:
-        node = nuke.selectedNode()
-
-    if node is not nuke.thisNode():
+        node_xpos = nuke.selectedNode().xpos()+nuke.selectedNode().screenWidth()
         node = create_group()
+        node.setXpos(node_xpos)
         node.setInput(0, nuke.selectedNode())
     
-    layers_all = nuke.layers(node.dependencies(nuke.INPUTS)[0])
 
-    layers_filtered = filter_layers(layers_all, node['keywords'].value())
+def button_filter():
+    '''filter with keywords with button pressed'''
+    node = nuke.thisNode()
+    filtering(node)
+
+
+
+
+#------------------------------------------------------------------------------
+#-Supporting Function
+#------------------------------------------------------------------------------
+
+
+
+
+def filtering(node):
+    '''main filtering function'''
+
+    layers_all = nuke.layers(node.dependencies(nuke.INPUTS)[0])
+    layers_filtered = filter_core(layers_all, node['keywords'].value())
     build_remove(layers_filtered, node)
 
 
-def filter_layers(layers_all, search_str):
+def filter_core(layers_all, search_str):
     '''filter layers with user input string
     @layers_all: (list of str) list of all layers
     @search_str: (str) string to filter layers
@@ -99,12 +132,12 @@ def create_group():
 
         k_tab = nuke.Tab_Knob('tb_user', 'ku_AOVContactsheet')
         k_key = nuke.String_Knob('keywords', "keywords", user_keyword)
-        k_filter = nuke.PyScript_Knob('bt_filter', "Filter", 'mod_AOVContactSheet.AOVContactSheet()')
+        k_filter = nuke.PyScript_Knob('bt_filter', "Filter", 'mod_AOVContactSheet.button_filter()')
 
         node.addKnob(k_tab)
         node.addKnob(k_key)
         node.addKnob(k_filter)
-        node['label'].setValue('filtering: [value keywords]')
+        node['label'].setValue('filtering: <b>[value keywords]</b>')
 
         with node:
             node_input = nuke.createNode('Input', 'name Input', inpanel=False)
