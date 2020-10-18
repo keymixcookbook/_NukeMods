@@ -1,0 +1,269 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ae_BrokenEdges
+ tile_color 0xcc804eff
+ selected true
+ xpos -408
+ ypos 57
+ addUserKnob {20 ae_BrokenEdges}
+ addUserKnob {4 broken M {Smart Simple "" ""}}
+ addUserKnob {4 method l "        method" -STARTLINE M {Luminance Darkness ""}}
+ addUserKnob {41 channels T Saturation2.channels}
+ addUserKnob {26 ""}
+ addUserKnob {7 size t "Strength of the distortion." R 0 200}
+ addUserKnob {7 tolerance R -1 1}
+ addUserKnob {26 ""}
+ addUserKnob {7 multiply R 0 4}
+ multiply 1
+ addUserKnob {7 erode R -100 100}
+ addUserKnob {7 blur R 0 10}
+ blur 5
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T ChannelMerge1.maskChannelMask}
+ addUserKnob {41 invert_mask l invert -STARTLINE T ChannelMerge1.invert_mask}
+ addUserKnob {41 matte T Copy2.from0}
+ addUserKnob {6 invert_matte l invert -STARTLINE}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>ae_BrokenEdges v1.0</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>, 2020</span>"}
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1_1 l "" +STARTLINE T "<br>\n<b>Aitor Echeveste © 2020</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste</span></a>"}
+}
+ Input {
+  inputs 0
+  name matte
+  xpos 924
+  ypos 74
+  number 1
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 958
+  ypos 203
+ }
+set N9b488400 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 958
+  ypos 1182
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 623
+  ypos 1085
+  number 2
+ }
+ Shuffle {
+  inputs 0
+  alpha black
+  name Shuffle1
+  label "\[value in]"
+  xpos 864
+  ypos 1078
+  hide_input true
+ }
+ Noise {
+  inputs 0
+  size {{parent.size/10}}
+  zoffset 6
+  octaves 5
+  center {1024 778}
+  name Noise1
+  xpos 407
+  ypos 180
+  hide_input true
+ }
+ Multiply {
+  channels alpha
+  value {{parent.multiply x1 0.0075}}
+  name Multiply1
+  label "\[value value]"
+  xpos 407
+  ypos 206
+ }
+ Grade {
+  channels alpha
+  black {{parent.tolerance}}
+  name Grade1
+  xpos 407
+  ypos 260
+ }
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 441
+  ypos 354
+ }
+set Nd2079000 [stack 0]
+ Input {
+  inputs 0
+  name img
+  xpos 544
+  ypos 83
+ }
+ Shuffle {
+  name Shuffle
+  xpos 544
+  ypos 199
+ }
+set Nd2078800 [stack 0]
+ Switch {
+  inputs 2
+  which 1
+  name Switch2
+  xpos 544
+  ypos 350
+  disable {{"\[exists parent.input0]"}}
+ }
+ Saturation {
+  saturation 0
+  name Saturation2
+  xpos 544
+  ypos 394
+ }
+ Grade {
+  multiply {{parent.multiply}}
+  add {{parent.tolerance x1 0.405}}
+  name Grade2
+  xpos 544
+  ypos 420
+ }
+ Shuffle {
+  alpha red
+  name Shuffle2
+  label "\[value in]"
+  xpos 544
+  ypos 499
+ }
+ Invert {
+  channels alpha
+  name Invert2
+  xpos 544
+  ypos 537
+  disable {{method x1 1}}
+ }
+push $Nd2079000
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 441
+  ypos 672
+ }
+ Switch {
+  inputs 2
+  which {{!broken}}
+  name Switch1
+  xpos 544
+  ypos 668
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 578
+  ypos 937
+ }
+push $N9b488400
+push $Nd2078800
+ Remove {
+  operation keep
+  channels alpha
+  name Remove2
+  xpos 652
+  ypos 192
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 762
+  ypos 294
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Invert {
+  channels alpha
+  name InvertAlpha
+  xpos 762
+  ypos 332
+  disable {{!parent.invert_matte}}
+ }
+ FilterErode {
+  size {{parent.erode}}
+  name FilterErode1
+  xpos 762
+  ypos 493
+ }
+ Blur {
+  channels rgba
+  size {{parent.size}}
+  name Blur3
+  label "\[value size]"
+  xpos 762
+  ypos 531
+ }
+ MergeExpression {
+  inputs 2
+  expr3 A.a<B.a?1:0
+  name MergeExpression2
+  xpos 762
+  ypos 933
+ }
+ Blur {
+  channels rgba
+  size {{parent.blur}}
+  name Blur1
+  label "\[value size]"
+  xpos 762
+  ypos 959
+ }
+set Nd20d2c00 [stack 0]
+ ChannelMerge {
+  inputs 2+1
+  operation multiply
+  name ChannelMerge1
+  xpos 762
+  ypos 1071
+  disable {{"!\[exists parent.input2]" x1 1}}
+ }
+ Dissolve {
+  inputs 2
+  which {{1-parent.mix}}
+  name Dissolve1
+  xpos 762
+  ypos 1171
+  disable {{parent.mix==1}}
+ }
+ Output {
+  name Output1
+  xpos 762
+  ypos 1268
+ }
+ ChannelMerge {
+  inputs 0
+  operation multiply
+  maskChannelMask -rgba.alpha
+  name ChannelMerge2
+  xpos 1128
+  ypos 949
+  disable {{"!\[exists parent.input2]" x1 1}}
+ }
+push $Nd20d2c00
+ Viewer {
+  frame_range 995-1100
+  frame_increment 8
+  viewerProcess "sRGB (ACES)"
+  name Viewer1
+  selected true
+  xpos 1060
+  ypos -10
+  hide_input true
+ }
+end_group
