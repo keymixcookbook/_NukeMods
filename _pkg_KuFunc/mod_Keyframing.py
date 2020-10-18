@@ -8,7 +8,7 @@ sets keyframes in one go for a knob
 import platform, os
 
 
-__VERSION__='0.0'
+__VERSION__='1.0'
 __OS__=platform.system()
 __AUTHOR__="Tianlun Jiang"
 __COPYRIGHT__="copyright %s" % __AUTHOR__
@@ -19,7 +19,7 @@ __TITLE__=os.path.basename(__file__).split('_')[1].split('.')[0]
 def _version_():
 	ver='''
 
-	version 0.0
+	version 1.0
 	- sets keyframes in one go for a knob
 
 	'''
@@ -113,8 +113,10 @@ class Core_Keyframing(QtWidgets.QWidget):
 
 			self.knob_pick.clear()
 			self.knob_pick.addItems(getKeyableKnobs(nuke.toNode(node_name)))
+			self.keylist.clear()
 			self.keylist.setItem(0,0, QtWidgets.QTableWidgetItem(str(nuke.frame())))
 			# self.get_existingKeys()
+			centerWindow(self)
 			self.show()
 			self.raise_()
 	
@@ -137,7 +139,9 @@ class Core_Keyframing(QtWidgets.QWidget):
 		return _keyframes
 
 	def get_existingKeys(self):
-		'''get the exist keyframes and sets keylist on run'''
+		'''get the exist keyframes and sets keylist on run
+        (currently for debuging process)
+        '''
 
 		# node = nuke.toNode(self.node_name.text())
 		# knob = node.knob(self.knob_pick.currentText())
@@ -222,7 +226,7 @@ def getKeyableKnobs(n):
 	return: (list) list of keyable knobs
 	'''
 	_knobs_all =set([k for k in n.knobs()])
-	_knobs_remove = set(['layer', 'invert_mask', 'help', 'dope_sheet', 'hide_input', 'xpos', 'crop', 'channels', 'note_font_color', 'onCreate', 'quality', 'updateUI', 'knobChanged', 'note_font', 'tile_color', 'bookmark', 'selected', 'autolabel', 'process_mask', 'label', 'mix', 'onDestroy', 'inject', 'indicators', 'icon', 'channel', 'maskFrom', 'maskChannelMask', 'enable', 'maskChannelInput', 'Mask', 'ypos', 'postage_stamp_frame', 'postage_stamp', 'lifetimeStart', 'maskChannel', 'panel', 'lifetimeEnd', 'maskFromFlag', 'name', 'cached', 'fringe', 'mask', 'note_font_size', 'filter', 'useLifetime', 'gl_color']) 
+	_knobs_remove = set(['layer', 'invert_mask', 'help', 'dope_sheet', 'hide_input', 'xpos', 'crop', 'channels', 'note_font_color', 'onCreate', 'quality', 'updateUI', 'knobChanged', 'note_font', 'tile_color', 'bookmark', 'selected', 'autolabel', 'process_mask', 'label', 'onDestroy', 'inject', 'indicators', 'icon', 'channel', 'maskFrom', 'maskChannelMask', 'enable', 'maskChannelInput', 'Mask', 'ypos', 'postage_stamp_frame', 'postage_stamp', 'lifetimeStart', 'maskChannel', 'panel', 'lifetimeEnd', 'maskFromFlag', 'name', 'cached', 'fringe', 'mask', 'note_font_size', 'filter', 'useLifetime', 'gl_color']) 
 	_knobs_filter = ['_panelDropped', 'enable', 'unpremult', 'clamp']
 	_knobs_filtered = sorted(list(_knobs_all - _knobs_remove), reverse=True)
 
@@ -233,6 +237,14 @@ def getKeyableKnobs(n):
 
 	return _knobs_filtered
 
+
+def centerWindow(widget):
+    frameGeo = widget.frameGeometry()
+    thisDesktop = QtWidgets.QApplication.desktop()
+    screen =thisDesktop.screenNumber(thisDesktop.cursor().pos())
+    center =thisDesktop.screenGeometry(screen).center()
+    frameGeo.moveCenter(center)
+    widget.move(frameGeo.topLeft())
 
 
 
