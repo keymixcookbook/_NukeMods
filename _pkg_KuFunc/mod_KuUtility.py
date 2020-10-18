@@ -369,15 +369,14 @@ def copyMasterNodeStyle():
 		d['note_font_color'].setValue(n['note_font_color'].value())
 
 
-def add_gizmo_copyright():
+def add_gizmo_copyright(n):
     '''add gizmo copyright'''
-    n = nuke.selectedNode()
 
     c_str = """
     
     <p style="color: gray"><b>%s</b> &#169; 2020 Tianlun Jiang - jiangovfx.com
 
-    """ % nuke.selectedNode().name()
+    """ % n.name()
     k_div = nuke.Text_Knob('div','','')
     k_copyright = nuke.Text_Knob('copyright', ' ',c_str)
 

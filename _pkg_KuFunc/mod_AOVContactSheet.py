@@ -7,7 +7,7 @@
 import platform
 
 
-__VERSION__='0.0'
+__VERSION__='1.0'
 __OS__=platform.system()
 __AUTHOR__="Tianlun Jiang"
 __COPYRIGHT__="copyright %s" % __AUTHOR__
@@ -18,7 +18,7 @@ __TITLE__=__file__.split('_')[1].split('.')[0]
 def _version_():
 	ver='''
 
-	version 0.0
+	version 1.0
     - if a node is selected, prompt for keyword create a contactsheet group node
 
 	'''
@@ -46,8 +46,11 @@ def AOVContactSheet():
     else:
         node_xpos = nuke.selectedNode().xpos()+nuke.selectedNode().screenWidth()
         node = create_group()
-        node.setXpos(node_xpos)
-        node.setInput(0, nuke.selectedNode())
+        if node:
+            node.setXpos(node_xpos)
+            node.setInput(0, nuke.selectedNode())
+            filtering(node)
+
     
 
 def button_filter():
@@ -126,7 +129,7 @@ def create_group():
 
     user_keyword = nuke.getInput("keyword to filter", "*")
 
-    if user_keyword:
+    if user_keyword is not None:
         node = nuke.nodes.Group()
         node.setName('AOVContactSheet')
 
@@ -137,7 +140,11 @@ def create_group():
         node.addKnob(k_tab)
         node.addKnob(k_key)
         node.addKnob(k_filter)
-        node['label'].setValue('filtering: <b>[value keywords]</b>')
+        node['label'].setValue('filtering: [value keywords]')
+        node['note_font'].setValue('Bold')
+
+        # Adding Copyright info
+        add_gizmo_copyright(node)
 
         with node:
             node_input = nuke.createNode('Input', 'name Input', inpanel=False)
