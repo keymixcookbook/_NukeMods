@@ -344,9 +344,9 @@ def swapColorspace():
 		nuke.message('Select OCIOColorSpace node')
 
 
-
 def showIPPanel(panelfloat=True):
 	'''Show viewer input control panel'''
+
 	try:
 		node_ip = nuke.activeViewer().node()['input_process_node'].value()
 		nuke.toNode(node_ip).showControlPanel(forceFloat=panelfloat)
