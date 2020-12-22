@@ -48,7 +48,7 @@ from Qt import QtWidgets, QtGui, QtCore
 KNOBS_QT = {
 	'Array_Knob': 'Knob_Array',
 	'Boolean_Knob': 'Knob_Boolean',
-	'Channel_Knob': 'Knob_Enumeration',
+	'ChannelMask_Knob': 'Knob_Enumeration',
 	'Enumeration_Knob': 'Knob_Enumeration',
 	'PyScript_Knob': 'Knob_PyScript',
 	'Int_Knob': 'Knob_Int',
@@ -62,12 +62,11 @@ KNOBS_QT = {
 KNOBS_NK = {
 	'Blur': ['size', 'filter'],
 	'Grade': ['blackpoint', 'whitepoint', 'black', 'white', 'multiply', 'add', 'gamma'],
-	'Dilate': ['size'],
+	'Dilate': ['channels','size'],
 	'Saturation': ['saturation', 'mode'],
 	'Defocus': ['defocus', 'ratio'],
 	'ZDefocus2': ['center', 'dof', 'size', 'max_size'],
 	'Multiply': ['value'],
-	'EXPTool': ['red'],
 	'Colorspace': ['colorspace_in', 'colorspace_out'],
 	'OCIOColorSpace': ['in_colorspace', 'out_colorspace'],
 	'OCIOLogConvert': ['operation'],
@@ -75,6 +74,10 @@ KNOBS_NK = {
 	'Merge2': ['operation'],
 	'ChannelMerge': ['operation'],
 	'Mirror2': ['flip', 'flop'],
+	'Shuffle': ['channels'],
+	'FrameHold': ['first_frame'],
+	'Dissolve': ['which'],
+	'Switch': ['which'],
 	'Transform': ['translate', 'rotate', 'scale', 'invert_matrix']
 }
 
@@ -171,10 +174,9 @@ class Core_HoverValue(QtWidgets.QDialog):
 	def run(self):
 		'''run instant'''
 
-
 		if len(nuke.selectedNodes())>0:
 			if nuke.selectedNode().Class() not in KNOBS_NK.keys():
-				nuke.selectedNode().showControlPanel()
+				nuke.selectedNode().showControlPanel(forceFloat = True)
 				print("Selected node not in database, show control panel instead")
 			else:
 				_sel_node, _ls_knobs = self.get_nuke_knobs()
@@ -183,7 +185,9 @@ class Core_HoverValue(QtWidgets.QDialog):
 				self.build_qt_knob(_sel_node, _ls_knobs)
 				self.set_qt_knob(_sel_node, _ls_knobs)
 
-				self.move(QtGui.QCursor.pos()+QtCore.QPoint(0,0))
+				self.move(QtGui.QCursor.pos()+QtCore.QPoint(self.frameGeometry().width()/-2,self.frameGeometry().height()/-2))
+				self.setFocus()
+				self.activateWindow()
 				self.raise_()
 				self.show()
 		else:
@@ -275,9 +279,9 @@ class Core_HoverValue(QtWidgets.QDialog):
 					w.set_range(val_min, val_max)
 					w.set_value(val_knob)
 
-			elif _this_knob_class in ['Enumeration_Knob']:
+			elif _this_knob_class in ['Enumeration_Knob', 'ChannelMask_Knob']:
 				val_knob = node[k].value()
-				val_list = node[k].values()
+				val_list = node[k].values() if _this_knob_class == 'Enumeration_Knob' else nuke.layers(node)
 				
 				val_list = [v.split('\t')[0] for v in val_list]
 				val_list = [v.split('/')[-1] for v in val_list]
@@ -593,6 +597,46 @@ class Knob_Enumeration(QtWidgets.QWidget):
 		# set nuke_knob value
 		_v = self.sender().currentText()
 		set_nuke_knob(self, self.nuke_knob, str(_v))
+
+
+class Knob_Channel(QtWidgets.QComboBox):
+	def __init__(self, nuke_knob=''):
+		super(Knob_Channel, self).__init__()
+		
+		# Instance ID
+		self.nuke_knob = nuke_knob
+		self.Class = 'Knob_Channel'
+
+		# Instance properties
+		self.combobox = QtWidgets.QComboBox()
+		self.combobox.setMinimumWidth(150)
+		self.combobox.currentIndexChanged.connect(self.onChanged)
+		self.swap = QtWidgets.QPushButton(arrow)
+		self.swap.clicked.connect(self.set_swap)
+		self.swap.setMaximumWidth(32)
+
+		self.layout = QtWidgets.QHBoxLayout()
+		self.setLayout(self.layout)
+		self.layout.setContentsMargins(0, 0, 0, 0)
+
+		self.layout.addWidget(self.combobox)
+		
+	def set_list(self, ls):
+		'''sets dropdown list'''
+		self.combobox.clear()
+		self.combobox.addItems(ls)
+
+	def set_value(self, i):
+		'''set current item'''
+		_idx = self.combobox.findText(i)
+		self.combobox.setCurrentIndex(_idx)
+
+	def onChanged(self):
+		# set nuke_knob value
+		_v = self.sender().currentText()
+		set_nuke_knob(self, self.nuke_knob, str(_v))
+
+		self.layout.addStretch()
 
 
 class Knob_Boolean(QtWidgets.QCheckBox):
@@ -982,20 +1026,10 @@ class Knob_PyScript(QtWidgets.QPushButton):
 		# Instance properties
 
 
-class Knob_Channel(QtWidgets.QComboBox):
-	def __init__(self, nuke_knob=''):
-		super(Knob_Channel, self).__init__()
-		
-		# Instance ID
-		self.nuke_knob = nuke_knob
-		self.Class = 'Knob_Channel'
-
-		# Instance properties
-
 
 class Knob_Int(QtWidgets.QSpinBox):
 	def __init__(self, nuke_knob=''):
-		super(Knob_Enumeration, self).__init__()
+		super(Knob_Int, self).__init__()
 		
 		# Instance ID
 		self.nuke_knob = nuke_knob
