@@ -1,0 +1,16 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+DeepExpression {
+ chans1 deep
+ rgba.alpha "rgba.alpha*\[value falloff]"
+ deep.front "deep.front - \[value soft_front]"
+ deep.back "deep.back - \[value soft_back]"
+ name DeepSoften
+ selected true
+ xpos 289
+ ypos -511
+ addUserKnob {20 User}
+ addUserKnob {7 falloff}
+ addUserKnob {7 soft_front l "soft front"}
+ addUserKnob {7 soft_back l "soft back"}
+}
