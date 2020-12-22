@@ -35,7 +35,8 @@ def _version_():
 
 
 
-import nuke, nukescripts	
+import nuke, nukescripts
+from Qt import QtWidgets, QtGui, QtCore
 
 
 
