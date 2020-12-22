@@ -1,0 +1,8 @@
+DeepSoften
+
+knobs: falloff, soft_front, soft_back
+
+chans1 = 'deep'
+rgba.alpha = 'rgba.alpha*[value falloff]'
+deep.front = 'deep.front - [values soft_front]'
+deep.back = 'deep.back + [value soft_back]'
