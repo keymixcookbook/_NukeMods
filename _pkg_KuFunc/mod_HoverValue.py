@@ -73,6 +73,8 @@ KNOBS_NK = {
 	'OCIOLogConvert': ['operation'],
 	'Log2Lin': ['operation'],
 	'Merge2': ['operation'],
+	'ChannelMerge': ['operation'],
+	'Mirror2': ['flip', 'flop'],
 	'Transform': ['translate', 'rotate', 'scale', 'invert_matrix']
 }
 
