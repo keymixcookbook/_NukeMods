@@ -155,7 +155,7 @@ def ColorCode():
 
 			# Execute a button on default
 			if bd_type == '*Random':
-				import random, math
+				import random
 
 				rand_h = random.randrange(0,360,10)
 				rand_r, rand_g, rand_b = hsv2rgb(rand_h,.25,.36)

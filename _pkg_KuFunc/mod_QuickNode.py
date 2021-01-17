@@ -50,11 +50,13 @@ from Qt import QtWidgets, QtGui, QtCore
 NODES = {
 	'Union': ['ChannelMerge','AlphaMerge', 'operation union'],
 	'Stencil': ['ChannelMerge','AlphaMerge', 'operation stencil'],
-	'Mask': ['ChannelMerge','AlphaMerge', 'operation mask'],
+	'Mask': ['Merge2','AlphaMerge', 'operation mask Achannels alpha Bchannels alpha output alpha'],
 	'Max': ['ChannelMerge','AlphaMerge', 'operation max'],
 	'Keymix': ['Keymix','AlphaKeymix', 'channels alpha'],
 	'Grade': ['Grade','AlphaGrade', 'channels alpha'],
-	'Curve': ['ColorLookup','AlphaCurve', 'channels alpha']
+	'Curve': ['ColorLookup','AlphaCurve', 'channels alpha'],
+	'Unpremult': ['Unpremult','Unpremult', 'channels all'],
+	'Premult': ['Premult','Premult', 'channels rgba']
 	}
 
 TITLE = "QuickNode v%s" % __VERSION__
@@ -107,11 +109,11 @@ class Core_QuickNode(QtWidgets.QWidget):
 		'''create the node when button pushed'''
 		bt = self.sender().text()
 		thisKey = NODES[bt]
-		thisKnob = NODES[bt][2].split(' ')
+		thisKnob = NODES[bt][2]
 		
-		thisNode = nuke.createNode(thisKey[0], inpanel=False)
+		thisNode = nuke.createNode(thisKey[0], thisKnob, inpanel=False)
 		thisNode.setName(thisKey[1])
-		thisNode[thisKnob[0]].setValue(thisKnob[1])
+		# thisNode[thisKnob[0]].setValue(thisKnob[1])
 		thisNode['note_font'].setValue('bold')
 		thisNode['note_font_color'].setValue(4294967295)
 

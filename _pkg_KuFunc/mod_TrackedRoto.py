@@ -58,17 +58,34 @@ def findElements(sel):
 				op_cancel = True
 
 		# b. Selected Transform, prompt Roto, Curve layer set to rootLayer
+		# b. Rename transform node
 		elif sel[0].Class() in type_transform:
-			print "Selected Transform"
-			node_trans = sel[0]
-			all_roto = [n.name() for n in nuke.allNodes() if n.Class() in type_roto]
-			all_roto.insert(0, 'new')
-			p = nuke.Panel("Select Roto node")
-			p.addEnumerationPulldown('Roto', ' '.join(all_roto))
+
+			# # Create Roto node from Transform
+			# print "Selected Transform"
+			# node_trans = sel[0]
+			# all_roto = [n.name() for n in nuke.allNodes() if n.Class() in type_roto]
+			# all_roto.insert(0, 'new')
+			# p = nuke.Panel("Select Roto node")
+			# p.addEnumerationPulldown('Roto', ' '.join(all_roto))
+			# if p.show():
+			# 	sel_roto = p.value('Roto')
+			# 	node_roto =  nuke.toNode(sel_roto) if sel_roto != 'new' else nuke.nodes.Roto(output='alpha', cliptype='no clip')
+			# 	roto_curve = node_roto['curves'].rootLayer
+			# else:
+			# 	op_cancel = True
+
+			# Rename Transform Node
+			ls_transform_type = ['MatchMove', 'Stabalize']
+			node_transform = sel[0]
+			p = nuke.Panel("Rename Transform Node")
+			p.addEnumerationPulldown('type: ', ' '.join(ls_transform_type))
+			p.addSingleLineInput('rename: ')
 			if p.show():
-				sel_roto = p.value('Roto')
-				node_roto =  nuke.toNode(sel_roto) if sel_roto != 'new' else nuke.nodes.Roto(output='alpha', cliptype='no clip')
-				roto_curve = node_roto['curves'].rootLayer
+				sel_type = p.value('type: ')
+				sel_rename = p.value('rename: ')
+
+				node_transform.setName('%s_%s' % (sel_rename, sel_type))
 			else:
 				op_cancel = True
 
