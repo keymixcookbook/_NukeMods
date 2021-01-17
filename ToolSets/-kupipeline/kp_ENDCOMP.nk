@@ -7,11 +7,39 @@ BackdropNode {
  note_font_size 42
  note_font_color 0xff
  selected true
- xpos 225
- ypos 3072
- bdwidth 742
- bdheight 388
+ xpos -924
+ ypos -805
+ bdwidth 811
+ bdheight 723
  z_order -1
+}
+BackdropNode {
+ inputs 0
+ name PLATE_drop
+ tile_color 0x3f707fff
+ label <center>PLATE
+ note_font "Verdana Bold Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xff
+ selected true
+ xpos -510
+ ypos -1195
+ bdwidth 340
+ bdheight 298
+}
+BackdropNode {
+ inputs 0
+ name dailied_drop
+ tile_color 0x3f707fff
+ label <center>DAILIED
+ note_font "Verdana Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xff
+ selected true
+ xpos -502
+ ypos -747
+ bdwidth 340
+ bdheight 298
 }
 BackdropNode {
  inputs 0
@@ -20,8 +48,22 @@ BackdropNode {
  note_font_size 42
  note_font_color 0xff
  selected true
- xpos -202
- ypos 2697
+ xpos -1321
+ ypos -1202
+ bdwidth 340
+ bdheight 298
+}
+BackdropNode {
+ inputs 0
+ name final_drop
+ tile_color 0x3f707fff
+ label <center>FINAL
+ note_font "Verdana Bold Bold Bold"
+ note_font_size 42
+ note_font_color 0xff
+ selected true
+ xpos -883
+ ypos -414
  bdwidth 340
  bdheight 298
 }
@@ -30,26 +72,26 @@ BackdropNode {
  name latest_drop
  tile_color 0x3f707fff
  label <center>LATEST
- note_font "Verdana Bold"
+ note_font "Verdana Bold Bold"
  note_font_size 42
  note_font_color 0xff
  selected true
- xpos 235
- ypos 3152
+ xpos -884
+ ypos -747
  bdwidth 340
  bdheight 298
 }
 BackdropNode {
  inputs 0
- name previous_drop
+ name sent_drop
  tile_color 0x3f707fff
- label <center>PREVIOUS
- note_font "Verdana Bold Bold"
+ label <center>SENT
+ note_font "Verdana Bold Bold Bold Bold"
  note_font_size 42
  note_font_color 0xff
  selected true
- xpos 617
- ypos 3152
+ xpos -501
+ ypos -414
  bdwidth 340
  bdheight 298
 }
@@ -58,12 +100,12 @@ BackdropNode {
  name viewer_drop
  tile_color 0x3f707fff
  label <center>VIEWER
- note_font "Verdana Bold Bold"
+ note_font "Verdana Bold Bold Bold"
  note_font_size 42
  note_font_color 0xff
  selected true
- xpos 236
- ypos 2705
+ xpos -883
+ ypos -1195
  bdwidth 340
  bdheight 298
 }
@@ -71,10 +113,10 @@ push $cut_paste_input
 NoOp {
  name END_COMP
  tile_color 0xddddddff
- note_font "bold Bold"
+ note_font "bold Bold Bold"
  note_font_size 48
  note_font_color 0xff
  selected true
- xpos -72
- ypos 2847
+ xpos -1191
+ ypos -1052
 }
