@@ -81,23 +81,33 @@ def DotCamConnect():
 	# If there isn't a camera selected
 	else:
 
-		p = nuke.Panel('Select A Camera Node to Connect')
-		p.addEnumerationPulldown('Cam to Connect', ' '.join(node_ls_cam))
-		p.addButton('Cancel')
-		p.addButton('Connect!')
+		if len(node_ls_cam) > 1:
+		'''prompt to select which camera to connect'''
 
-		if p.show():
+			p = nuke.Panel('Select A Camera Node to Connect')
+			p.addEnumerationPulldown('Cam to Connect', ' '.join(node_ls_cam))
+			p.addButton('Cancel')
+			p.addButton('Connect!')
 
-			node_sel_cam = p.value('Cam to Connect')
+			if p.show():
 
-			# Detect if it's a selection or just create a Dot
-			if len(nuke.selectedNodes('Dot'))>0:
-				node_ls_dot = nuke.selectedNodes('Dot')
+				node_sel_cam = p.value('Cam to Connect')
 
-				for d in node_ls_dot:
-					setDotNode(d,node_sel_cam)
+				# Detect if it's a selection or just create a Dot
+				if len(nuke.selectedNodes('Dot'))>0:
+					node_ls_dot = nuke.selectedNodes('Dot')
 
-			else:
-				node_create_dot = nuke.createNode('Dot', inpanel=False)
+					for d in node_ls_dot:
+						setDotNode(d,node_sel_cam)
 
-				setDotNode(node_create_dot, node_sel_cam)
+				else:
+					node_create_dot = nuke.createNode('Dot', inpanel=False)
+
+					setDotNode(node_create_dot, node_sel_cam)
+		
+		elif len(node_ls_cam) == 0:
+		'''connect the only camera in the script'''
+
+			node_create_dot = nuke.createNode('Dot', inpanel=False)
+			setDotNode(node_create_dot, node_ls_cam[0])
+
