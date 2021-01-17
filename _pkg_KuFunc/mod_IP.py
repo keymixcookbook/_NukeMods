@@ -209,3 +209,23 @@ def remove_preset():
     if p.showModalDialog():
         knob_delete = node.knob(pk_knoblist.value().split(' | ')[0])
         node.removeKnob(knob_delete)
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+#- Main Callable=
+#-------------------------------------------------------------------------------
+
+
+
+
+def IP():
+    '''main callable function'''
+
+    if 'VIEWER_INPUT' not in [n.name() for n in nuke.allNodes('Group')]:
+        build_IP()
+    else:
+        nuke.message("VIEWER_INPUT already exist")
