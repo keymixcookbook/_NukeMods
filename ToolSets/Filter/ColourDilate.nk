@@ -1,0 +1,451 @@
+#! /builds/nuke/9.0v7/fe3d649516/priv/libnuke-9.0.7.so -nx
+Group {
+name ColorDilatePF
+ inputs 2
+ knobChanged "\ntn = nuke.thisNode()\ntk = nuke.thisKnob()\n\nfullList =  tn\['fullList'].value().strip(\"\[']\").split(\"', '\")\nnodeList = fullList\[0], fullList\[1], fullList\[2], fullList\[3], fullList\[4], fullList\[5], fullList\[6]\npreviousLoopNum = tn\['previousLoopNum'].getValue()\n\ngrowTexture = tn\['growTexture'].getValue()\nqualityVal = int( tn\['quality'].getValue() )\n\n\n##### DEFINE VALUE CHANGES ##################\n\ndef valChange():\n    qualityBias = tn\['qualityBias'].getValue()\n    blurCenter = tn\['blurCenter'].getValue()\n    bcDistribution = tn\['bcDistribution'].getValue()\n    for i in range (0, qualityVal):\n        blurVal = nuke.toNode(fullList\[i*len(nodeList)])\n        erodeVal = nuke.toNode(fullList\[i*len(nodeList)+3])\n        blurCenterVal = nuke.toNode(fullList\[i*len(nodeList)+5])\n        if isinstance(growTexture, float) == True:\n            blurValSize = (growTexture/qualityVal*(i+1)*(1-qualityBias)) + (growTexture/qualityVal*(i+1)) * (qualityBias*(pow(i+1, 2)/pow(qualityVal, 2)))\n            blurVal\['size'].setValue( blurValSize )\n            erodeVal\['size'].setValue(blurVal\['size'].getValue()/2)\n            blurCenterVal\['size'].setValue( ( blurValSize*(1-bcDistribution) +  (blurValSize*(bcDistribution*(pow(i+1, 2)/pow(qualityVal, 2)))) ) * blurCenter )\n        else:\n            blurVal\['size'].setValue(\[ (growTexture\[0]/qualityVal*(i+1)*(1-qualityBias)) + (growTexture\[0]/qualityVal*(i+1)) * (qualityBias*(pow(i+1, 2)/pow(qualityVal, 2))) , (growTexture\[1]/qualityVal*(i+1)*(1-qualityBias)) + (growTexture\[1]/qualityVal*(i+1)) * (qualityBias*(pow(i+1, 2)/pow(qualityVal, 2))) ])\n            erodeVal\['size'].setValue(\[blurVal\['size'].getValue()\[0]/2,blurVal\['size'].getValue()\[1]/2])\n            blurCenterVal\['size'].setValue(\[ (growTexture\[0]/qualityVal*(i+1)*(1-qualityBias)) + (growTexture\[0]/qualityVal*(i+1)) * (qualityBias*(pow(i+1, 2)/pow(qualityVal, 2))) , (growTexture\[1]/qualityVal*(i+1)*(1-qualityBias)) + (growTexture\[1]/qualityVal*(i+1)) * (qualityBias*(pow(i+1, 2)/pow(qualityVal, 2))) ])\n\ndef filterChange():\n    filters = int( tn\['filter'].getValue() )\n    filterQuality = int( tn\['filterQuality'].getValue() )\n    crop = int( tn\['crop'].getValue() )\n    for i in range (0, qualityVal):\n        blurVal = nuke.toNode(fullList\[i*len(nodeList)])\n        blurVal\['filter'].setValue( filters )\n        blurVal\['quality'].setValue( filterQuality )\n        blurVal\['crop'].setValue( crop )\n        blurCenterVal = nuke.toNode(fullList\[i*len(nodeList)])\n        blurCenterVal\['filter'].setValue( filters )\n        blurCenterVal\['quality'].setValue( filterQuality )\n        blurCenterVal\['crop'].setValue( crop )\n\n\n##### CREATE THE NODES ###################\n\nif tk.name()=='quality':\n    if qualityVal < 1:\n        qualityVal = 1\n    elif qualityVal >100:\n        qualityVal = 100\n    tn\['quality'].setValue( qualityVal )\n    \n\n    if qualityVal != previousLoopNum:\n\n\n        inputDep = nuke.dependencies(\[nuke.toNode('Unpremult1')], nuke.INPUTS)\n        resultOver = nuke.toNode( inputDep\[0].name() )\n\n        difference = qualityVal-previousLoopNum\n        if difference > 0:\n            for i in range (1, int(difference+1)):\n                \n                blur = nuke.nodes.Blur ()\n                blur\['channels'].setValue('rgba')\n                blur\['maskChannelInput'].setValue('none')\n                blur.setInput (0, nuke.toNode('Switch2'))\n                \n                unpremult = nuke.nodes.Unpremult ()\n                unpremult\['channels'].setValue('rgb')\n                unpremult\['alpha'].setValue('rgba.alpha')\n                unpremult\['invert'].setValue(0)\n                unpremult.setInput (0, blur)\n                \n                expression = nuke.nodes.Expression(expr3 = 'a==0?0:1')\n                expression.setInput (0, unpremult)\n                \n                erode = nuke.nodes.FilterErode ()\n                erode\['channels'].setValue( 'rgba.alpha' )\n                erode\['filter'].setValue( 'gaussian' )\n                erode.setInput (0, expression)\n                \n                premult = nuke.nodes.Premult ()\n                premult\['channels'].setValue( 'rgb' )\n                premult\['alpha'].setValue( 'rgba.alpha' )\n                premult.setInput (0, erode)\n\n                blurCenter = nuke.nodes.Blur ()\n                blurCenter\['channels'].setValue('rgba')\n                blurCenter\['maskChannelInput'].setValue('none')\n                blurCenter.setInput (0, premult)\n\n                mergeOver = nuke.nodes.Merge2 ()\n                mergeOver\['operation'].setValue( 'over' )\n                mergeOver\['sRGB'].setValue( 0 )\n                mergeOver\['screen_alpha'].setValue( 0 )\n                mergeOver\['bbox'].setValue( 'union' )\n                mergeOver\['Achannels'].setValue( 'rgba' )\n                mergeOver\['Bchannels'].setValue( 'rgba' )\n                mergeOver\['output'].setValue( 'rgba' )\n                mergeOver\['also_merge'].setValue( 'none' )\n                mergeOver.setInput (0, blurCenter)\n                mergeOver.setInput (1, resultOver)\n                \n                \n                resultOver = mergeOver\n                \n                \n                nodeList = blur.name(), unpremult.name(), expression.name(), erode.name(), premult.name(), blurCenter.name(), resultOver.name()\n                fullList.extend(nodeList)\n\n\n##### DELETE THE NODES ##################################\n\n        else:\n            fullList.reverse()\n            for i in range (int(qualityVal), int(previousLoopNum)):\n                for i in range (0, len(nodeList)):\n                    nuke.delete(nuke.toNode(fullList\[0]))\n                    del fullList\[0]\n                resultOver = nuke.toNode(fullList\[0])\n                resultExpression = nuke.toNode(fullList\[3])\n            fullList.reverse()\n\n        nuke.toNode('Unpremult1').setInput(0, resultOver)\n        valChange()\n        filterChange()\n                \n        previousLoopNum = qualityVal\n        \n        tn\['previousLoopNum'].setValue( int(previousLoopNum) )\n        tn\['fullList'].setValue( str(fullList) )\n\n\n\n##### CHANGE EXISTING VALUES #####################\n\nif tk.name()=='growTexture':\n    valChange()\n    \nif tk.name()=='qualityBias':\n    valChange()\n\nif tk.name()=='blurCenter':\n    valChange()\n\nif tk.name()=='bcDistribution':\n    valChange()\n    \nif tk.name()=='filter':\n    filterChange()\n    \nif tk.name()=='filterQuality':\n    filterChange()\n    \nif tk.name()=='crop':\n    filterChange()\n\n\n"
+ note_font "Bitstream Vera Sans"
+ addUserKnob {20 User l fColourDilate}
+ addUserKnob {14 growTexture l "Grow Texture" R 0 100}
+ addUserKnob {14 erodeMatte l "Erode Matte" t "Dilate or erode the matte to adjust the grow start paint" R -100 100}
+ addUserKnob {7 expandMatte l "Expand Matte" t "Expand or compress the matte to adjust the grow start point" R -0.99999 0.99999}
+ addUserKnob {7 quality l Iterations t "The number of iterations Colour Dilate will go through.  More is slower.  Max steps is 100" R 1 20}
+ quality 1
+ addUserKnob {7 qualityBias l Distribution t "0 is a linear distribution.  1 is exponential distribution.\nExponential is smoother with low quality.\nLinear is better with high quality."}
+ qualityBias 1
+ addUserKnob {26 ""}
+ addUserKnob {7 blurCenter l "Blur Center" t "Soften central area where opposite dilates meet creating a hard line.  Is a multiple of Grow Texture." R 0 5}
+ blurCenter 5
+ addUserKnob {7 bcDistribution l "BC Distribution" t "0 blurs a direct multiple of Grow Texture. 1 blurs exponentially more towards the center."}
+ addUserKnob {26 ""}
+ addUserKnob {4 filter l Filter t "filter\n" M {box triangle quadratic gaussian ""}}
+ filter gaussian
+ addUserKnob {3 filterQuality l " " -STARTLINE}
+ filterQuality 15
+ addUserKnob {6 crop l "crop to format" -STARTLINE}
+ crop true
+ addUserKnob {4 matteOutput l "Matte Output" M {rgb.alpha matte "dilated matte" "dilated area" "grain matte" ""}}
+ matteOutput "dilated area"
+ addUserKnob {26 blank l "" -STARTLINE T "      "}
+ addUserKnob {6 invertMatte l "invert Matte" -STARTLINE}
+ addUserKnob {26 blank2 l "" -STARTLINE T "      "}
+ addUserKnob {6 rgbIsPremult l "RGB is Premult?" -STARTLINE}
+ addUserKnob {1 colorDilate l INVISIBLE t "Keep me hidden" +INVISIBLE}
+ addUserKnob {3 previousLoopNum l INVISIBLE +INVISIBLE}
+ previousLoopNum 1
+ addUserKnob {1 fullList l INVISIBLE +INVISIBLE}
+ fullList "\['Blur1', 'Unpremult2', 'Expression1', 'FilterErode2', 'Premult1', 'BlurCenter', 'Merge2']"
+}
+ Input {
+  inputs 0
+  name InputMask
+  note_font "Bitstream Vera Sans"
+  xpos 461
+  ypos -775
+  number 1
+ }
+ Dot {
+  name Dot24
+  tile_color 0xff
+  xpos 495
+  ypos -671
+ }
+set N136a3290 [stack 0]
+ Dot {
+  name Dot17
+  tile_color 0xff
+  xpos 343
+  ypos -673
+ }
+ AddChannels {
+  channels alpha
+  name AddChannels2
+  note_font "Bitstream Vera Sans"
+  xpos 289
+  ypos 784
+ }
+ Dot {
+  name Dot3
+  note_font "Bitstream Vera Sans"
+  xpos 323
+  ypos 876
+ }
+ Input {
+  inputs 0
+  name InputRGB
+  note_font "Bitstream Vera Sans"
+  xpos 905
+  ypos -789
+ }
+ Dot {
+  name Dot16
+  tile_color 0xff
+  xpos 939
+  ypos -666
+ }
+set N13590930 [stack 0]
+ Dot {
+  name Dot22
+  tile_color 0xff
+  xpos 854
+  ypos -666
+ }
+set N13607fe0 [stack 0]
+ Dot {
+  name Dot18
+  tile_color 0xff
+  xpos 735
+  ypos -666
+ }
+ AddChannels {
+  channels alpha
+  name AddChannels1
+  note_font "Bitstream Vera Sans"
+  xpos 671
+  ypos 552
+ }
+ Dot {
+  name Dot2
+  note_font "Bitstream Vera Sans"
+  xpos 705
+  ypos 747
+ }
+push $N136a3290
+ FilterErode {
+  channels alpha
+  size {{invertMatte==0?erodeMatte.w:-erodeMatte.w i} {invertMatte==0?erodeMatte.h:-erodeMatte.h i}}
+  name FilterErode1
+  note_font "Bitstream Vera Sans"
+  xpos 461
+  ypos -619
+ }
+ Invert {
+  channels alpha
+  mix {{invertMatte i}}
+  name Invert2
+  note_font "Bitstream Vera Sans"
+  xpos 461
+  ypos -537
+ }
+ Grade {
+  channels alpha
+  blackpoint {{"clamp(expandMatte, 0, 1)" i}}
+  whitepoint {{"clamp(1+expandMatte, 0, 1)" i}}
+  white_clamp true
+  name Grade1
+  note_font "Bitstream Vera Sans"
+  xpos 461
+  ypos -450
+ }
+ Grade {
+  channels alpha
+  whitepoint 0.5
+  black_clamp false
+  white_clamp true
+  name Grade6
+  note_font "Bitstream Vera Sans"
+  xpos 461
+  ypos -356
+ }
+ Dot {
+  name Dot1
+  note_font "Bitstream Vera Sans"
+  xpos 495
+  ypos -253
+ }
+set N11257100 [stack 0]
+push $N13590930
+ Dot {
+  name Dot23
+  tile_color 0xff
+  xpos 1270
+  ypos -666
+ }
+set N1360e1b0 [stack 0]
+ Dot {
+  name Dot15
+  tile_color 0xff
+  xpos 1473
+  ypos -671
+ }
+ AddChannels {
+  channels alpha
+  name AddChannels3
+  note_font "Bitstream Vera Sans"
+  xpos 1434
+  ypos -425
+ }
+push $N1360e1b0
+ Shuffle {
+  alpha white
+  name Shuffle1
+  note_font "Bitstream Vera Sans"
+  xpos 1236
+  ypos -578
+ }
+ Crop {
+  box {{InputRGB.bbox.x i x1001 542} {InputRGB.bbox.y i} {InputRGB.bbox.r i} {InputRGB.bbox.t i}}
+  name Crop3
+  note_font "Bitstream Vera Sans"
+  xpos 1236
+  ypos -507
+ }
+ Switch {
+  inputs 2
+  which {{rgbIsPremult i}}
+  name Switch1
+  note_font "Bitstream Vera Sans"
+  xpos 1236
+  ypos -419
+ }
+ Dot {
+  name Dot5
+  note_font "Bitstream Vera Sans"
+  xpos 1270
+  ypos -326
+ }
+set N11286b70 [stack 0]
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox intersection
+  name Merge1
+  note_font "Bitstream Vera Sans"
+  xpos 1245
+  ypos -245
+ }
+push $N11257100
+ Dot {
+  name Dot4
+  note_font "Bitstream Vera Sans"
+  xpos 495
+  ypos -186
+ }
+push $N11286b70
+ Dot {
+  name Dot6
+  note_font "Bitstream Vera Sans"
+  xpos 1088
+  ypos -326
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox B
+  name Merge3
+  note_font "Bitstream Vera Sans"
+  xpos 1054
+  ypos -180
+ }
+ Dot {
+  name Dot7
+  note_font "Bitstream Vera Sans"
+  xpos 1088
+  ypos -93
+ }
+ Switch {
+  inputs 2
+  which {{invertMatte i}}
+  name Switch2
+  note_font "Bitstream Vera Sans"
+  xpos 1236
+  ypos -96
+ }
+set N112b8590 [stack 0]
+ Dot {
+  name Dot19
+  tile_color 0xff
+  xpos 1277
+  ypos 286
+ }
+push $N112b8590
+ Blur {
+  channels rgba
+  name Blur1
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos -96
+ }
+ Unpremult {
+  name Unpremult2
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos -25
+ }
+ Expression {
+  expr3 a==0?0:1
+  name Expression1
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos 19
+ }
+ FilterErode {
+  channels alpha
+  size 0
+  filter gaussian
+  name FilterErode2
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos 63
+ }
+ Premult {
+  name Premult1
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos 121
+ }
+ Blur {
+  channels rgba
+  name BlurCenter
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos 179
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  note_font "Bitstream Vera Sans"
+  xpos 1590
+  ypos 271
+ }
+ Dot {
+  name Dot21
+  tile_color 0xff
+  xpos 1624
+  ypos 424
+ }
+ Dot {
+  name Dot20
+  tile_color 0xff
+  xpos 96
+  ypos 424
+ }
+ Unpremult {
+  name Unpremult1
+  note_font "Bitstream Vera Sans"
+  xpos 62
+  ypos 558
+ }
+ Dot {
+  name Dot11
+  xpos 96
+  ypos 680
+ }
+set N1131d7a0 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  mix {{matteOutput==0?1:0 i}}
+  name Copy2
+  note_font "Bitstream Vera Sans"
+  xpos 62
+  ypos 738
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  mix {{matteOutput==1?1:0}}
+  name Copy1
+  note_font "Bitstream Vera Sans"
+  xpos 62
+  ypos 867
+ }
+ Dot {
+  name Dot8
+  xpos 96
+  ypos 959
+ }
+set N1133ea50 [stack 0]
+ Dot {
+  name Dot9
+  xpos 453
+  ypos 959
+ }
+ Expression {
+  expr3 a<=0.000001?0:1
+  name Expression12
+  note_font "Bitstream Vera Sans"
+  xpos 419
+  ypos 1054
+ }
+ Dot {
+  name Dot10
+  xpos 453
+  ypos 1115
+ }
+push $N1131d7a0
+ Dot {
+  name Dot13
+  xpos 521
+  ypos 680
+ }
+ Dot {
+  name Dot12
+  xpos 521
+  ypos 966
+ }
+push $N13607fe0
+ Merge2 {
+  inputs 2
+  operation difference
+  bbox B
+  name Merge14
+  xpos 808
+  ypos 962
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 1e-05 1 1}
+  name Keyer1
+  xpos 808
+  ypos 1045
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge15
+  xpos 808
+  ypos 1111
+ }
+ Dot {
+  name Dot14
+  xpos 850
+  ypos 1189
+ }
+push $N1133ea50
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  mix {{matteOutput==4?1:0}}
+  name Copy3
+  note_font "Bitstream Vera Sans"
+  xpos 62
+  ypos 1179
+ }
+ Expression {
+  expr3 a<=0.000001?0:1
+  mix {{matteOutput==3?1:0}}
+  name Expression8
+  note_font "Bitstream Vera Sans"
+  xpos 62
+  ypos 1303
+ }
+push $N13590930
+ Merge2 {
+  inputs 2
+  operation copy
+  bbox B
+  name Merge4
+  xpos 940
+  ypos 1302
+ }
+ Output {
+  name Output1
+  note_font "Bitstream Vera Sans"
+  xpos 940
+  ypos 1427
+ }
+end_group
