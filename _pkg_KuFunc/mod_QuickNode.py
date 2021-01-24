@@ -50,10 +50,10 @@ from Qt import QtWidgets, QtGui, QtCore
 NODES = {
 	'Union': ['ChannelMerge','AlphaMerge', 'operation union'],
 	'Stencil': ['ChannelMerge','AlphaMerge', 'operation stencil'],
-	'Mask': ['Merge2','AlphaMerge', 'operation mask Achannels alpha Bchannels alpha output alpha'],
+	'Mask': ['ChannelMerge','AlphaMerge', 'operation in'],
 	'Max': ['ChannelMerge','AlphaMerge', 'operation max'],
 	'Keymix': ['Keymix','AlphaKeymix', 'channels alpha'],
-	'Grade': ['Grade','AlphaGrade', 'channels alpha'],
+	'Grade': ['Grade','AlphaGrade', 'channels alpha '],
 	'Curve': ['ColorLookup','AlphaCurve', 'channels alpha'],
 	'Unpremult': ['Unpremult','Unpremult', 'channels all'],
 	'Premult': ['Premult','Premult', 'channels rgba']

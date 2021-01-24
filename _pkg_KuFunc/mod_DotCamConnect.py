@@ -82,7 +82,7 @@ def DotCamConnect():
 	else:
 
 		if len(node_ls_cam) > 1:
-		'''prompt to select which camera to connect'''
+			'''prompt to select which camera to connect'''
 
 			p = nuke.Panel('Select A Camera Node to Connect')
 			p.addEnumerationPulldown('Cam to Connect', ' '.join(node_ls_cam))
@@ -105,8 +105,8 @@ def DotCamConnect():
 
 					setDotNode(node_create_dot, node_sel_cam)
 		
-		elif len(node_ls_cam) == 0:
-		'''connect the only camera in the script'''
+		elif len(node_ls_cam) == 1:
+			'''connect the only camera in the script'''
 
 			node_create_dot = nuke.createNode('Dot', inpanel=False)
 			setDotNode(node_create_dot, node_ls_cam[0])

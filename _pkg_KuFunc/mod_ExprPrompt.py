@@ -50,9 +50,8 @@ PRESET_BTN = {
 		('expr0','(x+0.5)/width'),
 		('expr1','(y+0.5)/height')
 		],
-	'Luma-Rec709': [
-		('expr0', 'r*0.2126+g*0.7152+b*0.0722'),
-		('channel0','rgb')
+	'Unpremult Alpha': [
+		('expr3', 'Ba/Aa'),
 		],
 	'Raw Lighting': [
 		('expr0', 'rgba.red/<albeto>.red'),

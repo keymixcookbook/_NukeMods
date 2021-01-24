@@ -44,10 +44,12 @@ def AOVContactSheet():
     if not nuke.selectedNode():
         nuke.message("Select a node")
     else:
-        node_xpos = nuke.selectedNode().xpos()+nuke.selectedNode().screenWidth()
+        node_xpos = nuke.selectedNode().xpos() + nuke.selectedNode().screenWidth()
+        node_ypos = nuke.selectedNode().ypos() + nuke.selectedNode().screenHeight()
         node = create_group()
         if node:
             node.setXpos(node_xpos)
+            node.setYpos(node_ypos)
             node.setInput(0, nuke.selectedNode())
             filtering(node)
 
