@@ -103,6 +103,19 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
+
+########## Context Menus ###########
+
+
+
+
+nuke.menu('Viewer').addCommand('Viewer Restore', "mod_KuUtility.set_viewer(mode='restore')", "alt+v", index=0, shortcutContext=0)
+nuke.menu('Viewer').addCommand('Viewer Set', "mod_KuUtility.set_viewer(mode='set')", index=1, shortcutContext=0)
+
+
+
+
+
 ########## 3rd Party Menus ###########
 
 
@@ -120,14 +133,14 @@ tN.addCommand('Turbo/TurboMerge', 'mod_TurboMerge.turboMerge.open()', 'alt+m', s
 
 mvs = nuke.menu('Viewer').addMenu("QuickCreate", icon="ROI.png") # <--- BUG HERE FOUNDRY!, this icon will be replaced by the first in the sub menu
 mvs.addCommand( '-> ROI', 'mod_ViewerShortcuts.CreateOnSelection("ROI")',icon='ROI.png') #Luckily we have added the same icon for the first item =)
-mvs.addCommand( '-> Cornerpin (From)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinFrom")',icon='CornerPin.png')
-mvs.addCommand( '-> Cornerpin (To)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinTo")',icon='CornerPin.png')
-mvs.addCommand( '-> Cornerpin (From and To)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinFromTo")',icon='CornerPin.png')
-mvs.addCommand( '-> Crop', 'mod_ViewerShortcuts.CreateOnSelection("Crop")',icon='Crop.png')
-mvs.addCommand( '-> GridWarp', 'mod_ViewerShortcuts.CreateOnSelection("GridWarp")',icon='GridWarp.png')
-mvs.addCommand( '-> Keylight', 'mod_ViewerShortcuts.CreateOnSelection("Keylight")',icon='Keylight.png')
-mvs.addCommand( '-> Radial', 'mod_ViewerShortcuts.CreateOnSelection("Radial")',icon='Radial.png')
-mvs.addCommand( '-> Text', 'mod_ViewerShortcuts.CreateOnSelection("Text")',icon='Text.png')
+# mvs.addCommand( '-> Cornerpin (From)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinFrom")',icon='CornerPin.png')
+# mvs.addCommand( '-> Cornerpin (To)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinTo")',icon='CornerPin.png')
+# mvs.addCommand( '-> Cornerpin (From and To)', 'mod_ViewerShortcuts.CreateOnSelection("CornerpinFromTo")',icon='CornerPin.png')
+# mvs.addCommand( '-> Crop', 'mod_ViewerShortcuts.CreateOnSelection("Crop")',icon='Crop.png')
+# mvs.addCommand( '-> GridWarp', 'mod_ViewerShortcuts.CreateOnSelection("GridWarp")',icon='GridWarp.png')
+# mvs.addCommand( '-> Keylight', 'mod_ViewerShortcuts.CreateOnSelection("Keylight")',icon='Keylight.png')
+# mvs.addCommand( '-> Radial', 'mod_ViewerShortcuts.CreateOnSelection("Radial")',icon='Radial.png')
+# mvs.addCommand( '-> Text', 'mod_ViewerShortcuts.CreateOnSelection("Text")',icon='Text.png')
 mvs.addCommand( '-> Tracker', 'mod_ViewerShortcuts.CreateOnSelection("Tracker")',icon='Tracker.png')
-mvs.addCommand( '-> Transform', 'mod_ViewerShortcuts.CreateOnSelection("Transform")',icon='2D.png')
+# mvs.addCommand( '-> Transform', 'mod_ViewerShortcuts.CreateOnSelection("Transform")',icon='2D.png')
 mvs.addCommand( '-> Constent', 'mod_ViewerShortcuts.CreateOnSelection("Constant")',icon='Sampler.png')

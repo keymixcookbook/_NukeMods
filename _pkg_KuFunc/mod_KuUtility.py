@@ -383,3 +383,31 @@ def add_gizmo_copyright(n):
     n.addKnob(k_div)
     n.addKnob(k_copyright)
 
+
+def set_viewer(mode='restore'):
+    '''set and restore viewer input pipes
+    mode='restore': restore set inputs
+    mode='set': record exsisting inputs
+    '''
+
+    node_viewer = nuke.activeViewer().node()
+
+    if mode == 'set':
+        label = ''
+        num_inputs = node_viewer.inputs()
+        
+        for i in range( num_inputs ):
+            node_thisInput = node_viewer.input(i).name() if node_viewer.input(i) else None
+            label += "%s:%s\n" % (i+1, node_thisInput)
+        node_viewer['label'].setValue(label)
+        print( label )
+
+    if mode == 'restore':
+        label = node_viewer['label'].value()
+        ls_restore = [i.split(':') for i in label.split('\n')[:-1]]
+
+        for n in ls_restore:
+            node_viewer.setInput(int(n[0])-1, nuke.toNode(n[1]))
+            print("%s:%s" % (n[0], n[1]))
+            
+
