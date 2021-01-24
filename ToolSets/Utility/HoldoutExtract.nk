@@ -1,58 +1,40 @@
 set cut_paste_input [stack 0]
-version 10.5 v7
+version 11.3 v6
 push $cut_paste_input
 Group {
  name HoldoutExtract
- tile_color 0x3f7f00ff
- note_font_color 0xffffffff
+ tile_color 0x1c1c60ff
+ note_font "Verdana Bold"
  selected true
- xpos -231
- ypos -230
+ xpos -179
+ ypos -297
 }
  Input {
   inputs 0
-  name img
-  label "\[value number]"
-  xpos -357
-  ypos -355
+  name noHoldout
+  xpos -35
+  ypos -248
   number 1
  }
- Dot {
-  name Dot1
-  xpos -326
-  ypos -272
- }
-set N2fa5c970 [stack 0]
  Input {
   inputs 0
-  name wHoldout
-  label "\[value number]"
-  xpos -484
-  ypos -355
+  name input
+  xpos -165
+  ypos -245
  }
- Merge2 {
+ MergeExpression {
   inputs 2
-  operation difference
-  name Merge1
-  xpos -484
-  ypos -272
- }
-push $N2fa5c970
- Dot {
-  name Dot2
-  xpos -326
-  ypos -207
- }
- Merge2 {
-  inputs 2
-  operation divide
-  name Merge2
-  xpos -484
-  ypos -207
+  temp_name0 diff
+  temp_expr0 abs(Aa-Ba)
+  expr3 "Aa>0 && Ba>0 ? diff/Aa : 0"
+  name _HOLDOUT_EXTRACT_
+  selected true
+  xpos -104
+  ypos -178
  }
  Output {
   name Output1
-  xpos -484
+  xpos -104
   ypos -107
  }
 end_group
