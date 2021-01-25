@@ -13,8 +13,9 @@ A General scripting format and structure guide
   - `./_mod_Drafts`
   - `./_mod_Download`
   - `menu.py`
-  - `menuItems.py`
-  - `menuDefaults.py`
+  - `menu_items.py`
+  - `menu_defaults.py`
+  - `kputil.py`
   - `init.py`
   - `Qt.py`
 
@@ -29,15 +30,38 @@ A General scripting format and structure guide
   - **Update Board** linked with [Trello](https://trello.com/b/4FR8ZOcZ)
   - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
   - **New Versions** of exsisting modules:
-    - Duplicate the module and **rename**: `Upd.mod_ThisMod.v#.#`
+    - Duplicate the module and **rename**: `Upd_mod_ThisMod.v#s#.py`
     - Create a **Trello Card** with same name
     - must indicate version number, and what's new
 
 ### IDE
-  - Atom desktop
+  - VSCode desktop
   - [Gitpod web-IDE](https://gitpod.io/workspaces/)
 
-###### Version Control
+### Title
+section includes description, author, copyright, current os, etc
+```python
+'''
+
+Oneline description of the module
+
+'''
+
+
+import platform
+
+
+__VERSION__='1.0'
+__OS__=platform.system()
+__AUTHOR__="Tianlun Jiang"
+__COPYRIGHT__="copyright %s" % __AUTHOR__
+
+__TITLE__=__file__.split('_')[1].split('.')[0]
+
+...
+```
+
+### Version Control
 Defined at the beginning of the module, at module level
 ``` python
 def _version_():
@@ -63,31 +87,60 @@ Following briefly with Python PEP 8 guidelines, except:
 
 - **Utility Function**
   - `utilityFunction()` - **lowerCamelCase**
-- **Module as Function**
+- **Methods and Regular Functions**
+  - `function_and_methods()` - **lower_case**
+- **Module's main function**
   - `mod_ThisModule.ThisModule()` - **UpperCamelCase**
   - module name keeps the same
-- **Module as Class**
+- **Module with Class when instance**
   - `mod_ClassModule.ClassModule.run()` - **UpperCamelCase**
     - `ClassModule = Core_ClassModule()`
-  - `getMethod()`, `setMethod()` - **lowerCamelCase**
+  - `get_thisMethod()`, `set_thisMethod()` - **lower_lowerCamelCase**
 
 
 
-also includes:
+**also includes:**
 - `<>` for variable in comments:
   - `<var>`
 - `_` for space in **filenames** and **variables**, or **Folders** (if as prefix):
   - `this_file.ext`, `this_var`, `./this_folder`
 - `__` for **other Folders** that is not part of the package:
   - `./__misc`
-- `"s"` for multiword strings, `'s'` for keywords or attributes,`'''str'''` for function description:
+- `"s"` for multiword strings, `'s'` for keywords or attributes,`'''str'''` for doc string:
   - `string = 'word'`, `nuke.thisNode()['attributes'].value()`, `ThisFunction(argument='keywords')`
   - `"More than one word"`
   - `'''for one/more line function description'''`
 
 
+**doc strings**
+```python
+def func(args, kargs):
+  '''oneline description of the function
+  @args: (type) description of this arg
+  @kargs='value': descripon of this karg's value
+  return: (type) description of what is returned
+  '''
+```
+
 ### Script General Format
 ```python
+'''
+
+Oneline description of the module
+
+'''
+
+
+import platform
+
+
+__VERSION__='1.0'
+__OS__=platform.system()
+__AUTHOR__="Tianlun Jiang"
+__COPYRIGHT__="copyright %s" % __AUTHOR__
+
+__TITLE__=__file__.split('_')[1].split('.')[0]
+
 def _version_():
     ver='''
 
@@ -100,18 +153,19 @@ def _version_():
 
 
 
-########## Section Title 4 Space up and Down (Capital Letters) ##########
+#------------------------------------------------------------------------------
+#-Section Title 4 Space up and Down (Capital Letters) 
+#-( '#' x 1, '-' x 78 )
+#------------------------------------------------------------------------------
 
 
 
 
-
-def ThisFunction(arg='keywords', quote='singleQuotes'):
-
-  '''Function description
-  @args: description (type)
-  @kargs: description (type, <default value>)
-  return: variables (type)
+def this_function(args, kargs):
+  '''oneline description of the function
+  @args: (type) description of this arg
+  @kargs='value': descripon of this karg's value
+  return: (type) description of what is returned
   '''
 
   # What does the lines below do
@@ -124,45 +178,49 @@ def ThisFunction(arg='keywords', quote='singleQuotes'):
   else:
     print 'properties' ## use single quote
 
+  
+  def another_function():
+    print("2 spaces between functions and classes")
+
+
+this_function( one_space_margin )
+
 
 class Core_ThisClass(Inheritance):
   '''Class Object contain core functions'''
   def __init__(self):
     super(ThisClass, self).__int__()
 
-    self.setDefault()
+    self.set_default()
 
-  def setDefault(self):
+  def set_default(self):
     '''set default values when initializing'''
 
-
-  def itsMethod(self):
-    print "2 spaces between Functions..."
+  def its_method(self):
+    print "1 space between Methods..."
     print "...from last line of the previous"
-
 
   def run(self):
     '''Main method for running the class'''
     self.show()
 
-class Main_ThisClass:
+
+class Core_ThisClass:
   '''Class Object as a container for core class'''
   def __init__(self):
-      super(Main_ThisClass, self).__init__()
+      super(Core_ThisClass, self).__init__()
 
       self.core = Core_ThisClass()
 
 
-# create instance when script is loaded
+
+
+#------------------------------------------------------------------------------
+#-Section Title 4 Space up and Down (Capital Letters)
+#------------------------------------------------------------------------------
+
+
+
+
 ThisClass = Core_ThisClass()
-
-
-
-
-########## Section Title 4 Space from the last line, start on the 5th line ##########
-
-
-
-
-
 ```
