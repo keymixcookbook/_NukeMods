@@ -1,8 +1,10 @@
 '''
 
-UI elements for MODNAME
+UI elements for MODNAME (Replace MODNAME for actual name)
 
 '''
+
+
 
 
 #------------------------------------------------------------------------------
@@ -14,7 +16,6 @@ UI elements for MODNAME
 
 import sys
 from Qt import QtWidgets, QtCore, QtGui
-import platform
 
 
 
@@ -42,19 +43,50 @@ class Ui_MODNAME(object):
     '''UI elements'''
 
     def setupUi(self,core):
-        '''ui setup'''
+        '''ui setup
+        @core: (object) Input object for setting up
+        '''
+
+        # Define Widgets and Properties
+
+        # Define Layouts
+
+        # Assign Widgets to Layouts
 
         # Window
+        core.setLayout(self.layout_master)
         core.setWindowTitle()
         core.setWindowFlags()
+
+    def run(self):
+        '''main run function'''
+        
+        core.show()
+        core.raise_()
+
+
+
+
+#------------------------------------------------------------------------------
+#-Run Instance
+#------------------------------------------------------------------------------
+
 
 
 
 if __name__ == '__main__':
+    print("="*10)
+    print("\nTest UI for MODNAME\n")
+    print("="*10)
+
     app = QtWidgets.QApplication(sys.argv)
+    
+    # Test Widgets
     core=QtWidgets.QWidget()
+    # Test Mod
     Ui_MODNAME = Ui_MODNAME()
     Ui_MODNAME.setupUi(core)
-    core.show()
-    core.raise_()
+    # Test Run
+    Ui_MODNAME.run()
+    
     app.exec_()
