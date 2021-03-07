@@ -89,6 +89,7 @@ addMenuItem('m', tBar, 'Align Nodes/left', "AlignNodes('left')", icon="align_L.p
 addMenuItem('m', tBar, 'Align Nodes/right', "AlignNodes('right')", icon="align_R.png")
 addMenuItem('f', tBar, 'Filter Selection', "filterSelection()", icon="NoOp.png")
 addMenuItem('m', tBar, 'Backdrop Resize', "BackdropResize()", icon="BackdropResize.png")
+addMenuItem('c', tBar, 'Keyframing', "Keyframing", icon="Paint.png")
 addMenuItem('m', tBar, 'KuDrop', "ColorCode()", icon="Backdrop.png")
 addMenuItem('m', tBar, 'Dot Cam Connect', "DotCamConnect()", icon="Camera.png")
 addMenuItem('m', tBar, 'Roto AutoLife', "autolife()", icon="Roto.png")
