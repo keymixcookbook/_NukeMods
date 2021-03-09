@@ -41,7 +41,7 @@ def nukeColor(r,g,b):
 	'''convert rgb to nuke 16 bit value
 	return: 8-bit ints
 	'''
-	return int('%02x%02x%02x%02x' % (r,g,b,0), 16)
+	return int('%02x%02x%02x%02x' % (r,g,b,1), 16)
 
 
 def hsv2rgb(h, s, v):
