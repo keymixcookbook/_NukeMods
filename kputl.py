@@ -13,21 +13,6 @@ import math
 
 
 
-DEBUG_PRINT = True
-
-def dprint(p):
-	'''debug print
-	@p: what to ptint
-	'''
-
-	if DEBUG_PRINT:
-		cur_ln = inspect.currentframe().f_trace_lines
-		print('Ln'+str(cur_ln))
-		print(p)
-
-
-
-
 def joinPath(*paths):
     '''joining path to fix windows and OSX symlink to '/' uniformly'''
     try:

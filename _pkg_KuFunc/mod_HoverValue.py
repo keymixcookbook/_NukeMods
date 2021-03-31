@@ -31,7 +31,7 @@ def _version_():
 import nuke, nukescripts
 import os
 import pprint
-from kputl import joinPath, dprint, DEBUG_PRINT
+from kputl import joinPath
 from Qt import QtWidgets, QtGui, QtCore
 
 
