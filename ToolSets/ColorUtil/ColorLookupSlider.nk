@@ -1,0 +1,23 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+ColorLookup {
+ lut {master {curve L 0 x0 0 x1 1}
+   red {}
+   green {}
+   blue {}
+   alpha {}}
+ mix {{tcl}}
+ name ColorLookupSlider
+ selected true
+ xpos -1140
+ ypos -274
+ addUserKnob {20 User}
+ addUserKnob {12 a}
+ addUserKnob {7 o}
+ o 1
+ addUserKnob {12 b}
+ b {{a.x+o x774 0.27} 1}
+ addUserKnob {7 tcl}
+ tcl {{"\[animation lut.master y 1 \[value a.y]]\n\[animation lut.master x 1 \[value a.x]]\n\[animation lut.master y 2 \[value b.y]]\n\[animation lut.master x 2 \[value b.x]]\n1"}}
+ addUserKnob {41 lut_1 l "" +STARTLINE T SliderColorLookup.lut}
+}

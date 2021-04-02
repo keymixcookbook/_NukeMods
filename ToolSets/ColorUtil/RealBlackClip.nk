@@ -1,0 +1,47 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name RealBlackSoftClip
+ tile_color 0xcc804eff
+ note_font "Verdana Bold"
+ selected true
+ xpos -307
+ ypos 18
+ addUserKnob {20 tb_user l RealBlackSoftClip}
+ addUserKnob {41 pivot T _CORE_.pivot}
+ addUserKnob {41 lift T _CORE_.lift}
+ addUserKnob {41 soft T _CORE_.soft}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -370
+  ypos -58
+ }
+ Expression {
+  expr0 "(r<pivot.r)?r + (lift.r*(pow((1-(r/pivot.r)),((((pivot.r/lift.r)-1)*soft.r)+1)))):r"
+  expr1 "(g<pivot.g)?g + (lift.g*(pow((1-(g/pivot.g)),((((pivot.g/lift.g)-1)*soft.g)+1)))):g"
+  expr2 "(b<pivot.b)?b + (lift.b*(pow((1-(b/pivot.b)),((((pivot.b/lift.b)-1)*soft.b)+1)))):b"
+  name _CORE_
+  xpos -370
+  ypos -32
+  addUserKnob {20 tb_user l controls}
+  addUserKnob {18 pivot}
+  pivot {0.18}
+  addUserKnob {6 pivot_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 lift}
+  lift {0.003}
+  addUserKnob {6 lift_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 soft}
+  soft {1}
+  addUserKnob {6 soft_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_2_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Output {
+  name Output1
+  xpos -370
+  ypos -6
+ }
+end_group
