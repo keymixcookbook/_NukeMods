@@ -14,7 +14,8 @@ Add Color code to backdrops
 
 
 
-import nuke, nukescripts, math
+import nuke, nukescripts
+import random
 import platform
 from kputl import hsv2rgb, nukeColor
 from Qt import QtWidgets, QtGui, QtCore
@@ -95,8 +96,6 @@ HEADER_FONT_SIZE = {'h1': 200, 'h2': 96, 'h3': 48}
 
 
 
-
-
 # ------------------------------------------------------------------------------
 # Core Class
 # ------------------------------------------------------------------------------
@@ -120,6 +119,7 @@ class Core_ColorCode(QtWidgets.QWidget):
 		self.headers.setMaximumWidth(48)
 		self.center = QtWidgets.QCheckBox("Center Label")
 		self.label = QtWidgets.QLineEdit()
+		self.label.returnPressed.connect(self.setColorCode)
 		self.label.setPlaceholderText("Label for Backdrop")
 		self.btn_set = QtWidgets.QPushButton("ColorCode It")
 		self.btn_set.clicked.connect(self.setColorCode)
@@ -156,6 +156,10 @@ class Core_ColorCode(QtWidgets.QWidget):
 		self.layout_master.addLayout(self.layout_options)
 		self.layout_master.addWidget(self.label)
 		self.layout_master.addWidget(self.btn_set)
+
+		# Set Taborder
+		self.setTabOrder(self.colors, self.label)
+		self.setTabOrder(self.label, self.btn_set)
 
 		# self.setFixedWidth(150)
 		self.setWindowTitle(__TITLE__)
@@ -218,6 +222,8 @@ class Core_ColorCode(QtWidgets.QWidget):
 
 			self.show()
 			self.raise_()
+			self.colors.setFocus()
+			self.label.selectAll()
 			centerWindow(self)
 
 		else:
@@ -286,6 +292,7 @@ def create_backdrop(bounds, font_color, tile_color, font_size, nodes_sel):
 
 	zOrder = 0
 	selectedBackdropNodes = nuke.selectedNodes( "BackdropNode" )
+	nonSelectedBackdropNodes = []
 	#if there are backdropNodes selected put the new one immediately behind the farthest one
 	if len( selectedBackdropNodes ) :
 		zOrder = min( [node.knob( "z_order" ).value() for node in selectedBackdropNodes] ) - 1
