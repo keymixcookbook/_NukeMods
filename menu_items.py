@@ -46,6 +46,7 @@ addMenuItem('c', kuMu, 'QuickNode', "QuickNode", hotkey="alt+q", shortcutContext
 kuMu.addSeparator()
 addMenuItem('m', kuMu, 'Linked Postage Stamp/set',"LinkedStamp()", hotkey="f4")
 addMenuItem('m', kuMu, 'Linked Postage Stamp/reconnect',"LinkedStamp(mode='reconnect')", hotkey="meta+f4")
+addMenuItem('m', kuMu, 'Linked Postage Stamp/marking (manually)',"LinkedStamp(mode='marking')", hotkey="")
 # addMenuItem('f', kuMu, 'Set Operation', "mergeOp()", hotkey="alt+O")
 addMenuItem('m', kuMu, 'Branching', "Branching()", hotkey="j", shortcutContext=2)
 addMenuItem('m', kuMu, 'Cycling/regular', "Cycling(mode='regular')", hotkey="c", shortcutContext=2)

@@ -17,6 +17,7 @@ Connect to a node with hidden inputs to keep script logically clean
 import nuke, nukescripts 
 import platform
 import os
+from Qt import QtWidgets, QtGui, QtCore
 
 
 
@@ -28,7 +29,7 @@ import os
 
 
 
-__VERSION__='1.0'
+__VERSION__='3.4'
 __OS__=platform.system()
 __AUTHOR__="Tianlun Jiang"
 __WEBSITE__="jiangovfx.com"
@@ -42,6 +43,7 @@ def _version_():
 	version 3.4
 	- add deep data output check
 	- adding marking function
+	- add UI pop up when launch with no node selected
 	- use nuke built-in setName()
 	- disable knobChanged callback
 
@@ -104,78 +106,83 @@ def LinkedStamp(mode='set'):
 	mode='marking': marking a node for LinkedStamp to connect to
 	"""
 
-	node_parent = nuke.selectedNode()
-
 	if mode == 'set':
-		node_parent_nam = node_parent.name()
-		node_slave = None
+		
+		# Nothing is selected
+		if not nuke.selectedNode(): node_parent = FindMarker().run()
 
-		if isOutputDeep(node_parent):
-			node_slave = nuke.nodes.NoOp()
+		# User Cancels or Select A Marker
+		if node_parent == None: print("User Cancelled")
 		else:
-			node_slave = nuke.nodes.PostageStamp()
-			node_slave['postage_stamp'].setValue(True)
+			node_parent_nam = node_parent.name()
+			node_slave = None
 
-		stpMarking(node_parent)
-		node_slave.setInput(0, node_parent)
+			if isOutputDeep(node_parent):
+				node_slave = nuke.nodes.NoOp()
+			else:
+				node_slave = nuke.nodes.PostageStamp()
+				node_slave['postage_stamp'].setValue(True)
 
-		node_slave['hide_input'].setValue(1)
-		node_slave['label'].setValue('linked to: [value tx_nodename]')
-		node_slave['tile_color'].setValue(stpColor(node_parent))
-		node_slave.setName(BASE_NAME)
-		node_slave.setXYpos(node_parent.xpos()+75,node_parent.ypos()+25)
+			stpMarking(node_parent)
+			node_slave.setInput(0, node_parent)
 
-		node_slave['postage_stamp'].setValue(False) if node_parent.Class().startswith('Roto') else node_slave['postage_stamp'].setValue(True)
+			node_slave['hide_input'].setValue(1)
+			node_slave['label'].setValue('linked to: [value tx_nodename]')
+			node_slave['tile_color'].setValue(stpColor(node_parent))
+			node_slave.setName(BASE_NAME)
+			node_slave.setXYpos(node_parent.xpos()+75,node_parent.ypos()+25)
 
-		# Add User knobs
-		py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"
-		py_cmd_orig = "origNode = nuke.thisNode().input(0);\
-						origXpos = origNode.xpos();\
-						origYpos = origNode.ypos();\
-						nuke.zoom(2, [origXpos,origYpos]);\
-						nuke.thisNode()['selected'].setValue(False);\
-						origNode['selected'].setValue(True);\
-						nuke.show(origNode)"
+			node_slave['postage_stamp'].setValue(False) if node_parent.Class().startswith('Roto') else node_slave['postage_stamp'].setValue(True)
 
-		py_cmd_copy = "origNode = nuke.thisNode().input(0);\
-						filter(lambda n: n.setSelected(False), nuke.selectedNodes());\
-						nuke.thisNode().setSelected(True);\
-						nuke.nodeCopy('%clipboard%');\
-						new_node = nuke.nodePaste('%clipboard%');\
-						new_node.setInput(0, origNode);\
-						new_node.setXpos(nuke.thisNode().xpos()+120)"
+			# Add User knobs
+			py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"
+			py_cmd_orig = "origNode = nuke.thisNode().input(0);\
+							origXpos = origNode.xpos();\
+							origYpos = origNode.ypos();\
+							nuke.zoom(2, [origXpos,origYpos]);\
+							nuke.thisNode()['selected'].setValue(False);\
+							origNode['selected'].setValue(True);\
+							nuke.show(origNode)"
+
+			py_cmd_copy = "origNode = nuke.thisNode().input(0);\
+							filter(lambda n: n.setSelected(False), nuke.selectedNodes());\
+							nuke.thisNode().setSelected(True);\
+							nuke.nodeCopy('%clipboard%');\
+							new_node = nuke.nodePaste('%clipboard%');\
+							new_node.setInput(0, origNode);\
+							new_node.setXpos(nuke.thisNode().xpos()+120)"
 
 
-		k_tab = nuke.Tab_Knob("LinkedStamp")
-		k_text = nuke.String_Knob('tx_nodename', "Set Input to: ")
-		k_enable = nuke.Boolean_Knob('ck_enable', "Enable")
-		k_setInput = nuke.PyScript_Knob('link', "Set Input", py_cmd_restore)
-		k_showParent = nuke.PyScript_Knob('orig', "Show Parent Node", py_cmd_orig)
-		k_copy = nuke.PyScript_Knob('copy', "Copy this Node", py_cmd_copy)
-		k_connect = nuke.String_Knob('connect','toConnect',node_parent_nam)
+			k_tab = nuke.Tab_Knob("LinkedStamp")
+			k_text = nuke.String_Knob('tx_nodename', "Set Input to: ")
+			k_enable = nuke.Boolean_Knob('ck_enable', "Enable")
+			k_setInput = nuke.PyScript_Knob('link', "Set Input", py_cmd_restore)
+			k_showParent = nuke.PyScript_Knob('orig', "Show Parent Node", py_cmd_orig)
+			k_copy = nuke.PyScript_Knob('copy', "Copy this Node", py_cmd_copy)
+			k_connect = nuke.String_Knob('connect','toConnect',node_parent_nam)
 
-		k_setInput.setFlag(nuke.STARTLINE)
-		k_text.setEnabled(False)
-		k_enable.clearFlag(nuke.STARTLINE)
-		k_showParent.clearFlag(nuke.STARTLINE)
-		k_copy.clearFlag(nuke.STARTLINE)
-		k_connect.setFlag(nuke.INVISIBLE)
+			k_setInput.setFlag(nuke.STARTLINE)
+			k_text.setEnabled(False)
+			k_enable.clearFlag(nuke.STARTLINE)
+			k_showParent.clearFlag(nuke.STARTLINE)
+			k_copy.clearFlag(nuke.STARTLINE)
+			k_connect.setFlag(nuke.INVISIBLE)
 
-		node_slave.addKnob(k_tab)
-		node_slave.addKnob(k_text)
-		node_slave.addKnob(k_enable)
-		node_slave.addKnob(k_setInput)
-		node_slave.addKnob(k_showParent)
-		node_slave.addKnob(k_copy)
-		node_slave.addKnob(k_connect)
+			node_slave.addKnob(k_tab)
+			node_slave.addKnob(k_text)
+			node_slave.addKnob(k_enable)
+			node_slave.addKnob(k_setInput)
+			node_slave.addKnob(k_showParent)
+			node_slave.addKnob(k_copy)
+			node_slave.addKnob(k_connect)
 
-		k_text.setValue(node_slave['connect'].value())
-		k_setInput.setTooltip("Taking the node name from label and connect")
-		k_showParent.setTooltip("Show parent node in DAG")
-		k_copy.setTooltip("Copy this node with its inputs")
+			k_text.setValue(node_slave['connect'].value())
+			k_setInput.setTooltip("Taking the node name from label and connect")
+			k_showParent.setTooltip("Show parent node in DAG")
+			k_copy.setTooltip("Copy this node with its inputs")
 
-		node_slave['knobChanged'].setValue('k=nuke.thisKnob()\nif k.name()=="ck_enable":\n\tnuke.thisNode()["tx_nodename"].setEnabled(k.value())')
-		node_slave['autolabel'].setValue("('Disconnected from\\n' if len(nuke.thisNode().dependencies())<=0 else 'Linked to\\n')+nuke.thisNode()['tx_nodename'].value()")
+			node_slave['knobChanged'].setValue('k=nuke.thisKnob()\nif k.name()=="ck_enable":\n\tnuke.thisNode()["tx_nodename"].setEnabled(k.value())')
+			node_slave['autolabel'].setValue("('Disconnected from\\n' if len(nuke.thisNode().dependencies())<=0 else 'Linked to\\n')+nuke.thisNode()['tx_nodename'].value()")
 	
 	elif mode=='reconnect':
 		node_parents = nuke.selectedNodes()
@@ -246,7 +253,6 @@ def stpMarking(node_parent):
 	else:
 		print("New LinkedStamp from: %s" % node_parent.name())
 
-
 def isOutputDeep(node):
 	"""check if node is outputing deep data
 	@node: (obj) root node of the tree
@@ -257,6 +263,57 @@ def isOutputDeep(node):
 	except: outputdeep = False
 
 	return outputDeep
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# UI
+# ------------------------------------------------------------------------------
+
+
+
+
+class FindMarker(QtWidgets.QDialog):
+	"""UI popup to find and connect a LinkedStamp marked node
+	return: (obj) parent node to connect
+	"""
+	def __init__(self):
+		super(FindMarker, self).__init__()
+
+		self.parent_node=None
+		self.marker_node = [n.name() for n in nuke.allNodes() if n.knob(MARKER_NAME)]
+		
+		self.label = QtWidgets.QLabel("<b>Find LinkStamp Marker</b>")
+		self.box_comboBox = QtWidgets.QComboBox()
+		self.box_comboBox.addItems(self.marker_node)
+		self.box_comboBox.setEditable(True)
+		self.btn_confirm = QtWidgets.QPushButton('LINK')
+		self.btn_confirm.clicked.connect(onConfirm)
+
+		self.layout = QtWidgets.QVBoxLayout()
+		self.setLayout(self.layout)
+		self.layout.addWidget(self.label)
+		self.layout.addWidget(self.box_comboBox)
+		self.layout.addWidget(self.btn_confirm)
+		self.layout.setAlignment(QtCore.Qt.AlignCenter)
+
+		self.setWindowTitle("Set LinkedStamp")
+		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
+
+	def run():
+		self.move(QtGui.QCursor.pos()+QtCore.QPoint(self.frameGeometry().width()/-2,self.frameGeometry().height()/-2))
+		self.box_comboBox.setFocus()
+		self.show()
+
+		return self.parent_node
+
+	def onConfirm(self):
+		 self.parent_node = nuke.toNode(self.box_comboBox.currentText())
+		 self.close()
+
+
 
 # ------------------------------------------------------------------------------
 # Callbacks
