@@ -1,5 +1,49 @@
+"""
+
+Connect to a node with hidden inputs to keep script logically clean
+
+"""
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import nuke, nukescripts 
+import platform
+import os
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__='1.0'
+__OS__=platform.system()
+__AUTHOR__="Tianlun Jiang"
+__WEBSITE__="jiangovfx.com"
+__COPYRIGHT__="copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__=__name__.split('_')[1].split('.')[0]
+
 def _version_():
-	ver='''
+	ver="""
+
+	version 3.4
+	- add deep data output check
+	- adding marking function
+	- use nuke built-in setName()
+	- disable knobChanged callback
 
 	version 3.3
 	- added shortcut to reconnect
@@ -27,92 +71,61 @@ def _version_():
 
 	version 0
 	- Postage Stamp with hidden inputs
-	'''
+	"""
 	return ver
 
 
 
 
-import nuke, nukescripts
+# ------------------------------------------------------------------------------
+# Globale Variable
+# ------------------------------------------------------------------------------
 
 
 
 
-########## Supporting Function #########
+MARKER_NAME = 'tb_linkedstamp_marker'
+MARKED_LABEl = '\nLinkedStamp Marked'
+BASE_NAME = 'LinkedStamp'
 
 
 
-
-def stpRename(base_name):
-
-	all_stp = [n.name() for n in nuke.allNodes() if base_name in n.name()]
-
-	if len(all_stp) > 0:
-		stp_max = max(all_stp)
-	else:
-		stp_max = base_name + "1"
-
-	new_index = int(stp_max.strip(base_name))+1
-	new_name = base_name+str(new_index)
-
-	return new_name
-
-
-
-def stpColor(rNode):
-	'''Find topnode Class and set tile_color'''
-
-	node_top_name = nuke.tcl("full_name [topnode %s]" % rNode.name())
-	node_top_class = nuke.toNode(node_top_name).Class()
-	node_color = 0
-
-	if node_top_class.startswith('Roto'):
-		node_color = 1908830719 # system roto class color
-	elif node_top_class.startswith('Deep'):
-		node_color = 24831 # system deep class color
-	else:
-		node_color = 12040191 # pascal cyan
-
-	return node_color
-
-
-
-
-########## Main Function #########
+# ------------------------------------------------------------------------------
+# Main Functions
+# ------------------------------------------------------------------------------
 
 
 
 
 def LinkedStamp(mode='set'):
-	'''Main function
+	"""Main function
 	mode='set': creating link (default)
 	mode='reconnect': reconnect
-	'''
+	mode='marking': marking a node for LinkedStamp to connect to
+	"""
 
-	rNode = nuke.selectedNode()
+	node_parent = nuke.selectedNode()
 
 	if mode == 'set':
-		rNode_nam = rNode.name()
-		base_name = "LinkStamp"
-		stp = None
+		node_parent_nam = node_parent.name()
+		node_slave = None
 
-		if rNode.Class().startswith('Deep'):
-			stp = nuke.nodes.NoOp()
+		if isOutputDeep(node_parent):
+			node_slave = nuke.nodes.NoOp()
 		else:
-			stp = nuke.nodes.PostageStamp()
+			node_slave = nuke.nodes.PostageStamp()
+			node_slave['postage_stamp'].setValue(True)
 
-		stp.setInput(0, rNode)
-		stp['hide_input'].setValue(1)
-		try:
-			stp['postage_stamp'].setValue(True)
-		except:
-			print("Deep node")
-		#stp['label'].setValue(rNode_nam)
-		stp['tile_color'].setValue(stpColor(rNode))
-		stp.setName(stpRename(base_name))
-		stp.setXYpos(rNode.xpos()+75,rNode.ypos()+25)
+		stpMarking(node_parent)
+		node_slave.setInput(0, node_parent)
 
-		#stp['postage_stamp'].setValue(False) if rNode.Class().startswith('Roto') else stp['postage_stamp'].setValue(True)
+		node_slave['hide_input'].setValue(1)
+		node_slave['label'].setValue('linked to: [value tx_nodename]')
+		node_slave['tile_color'].setValue(stpColor(node_parent))
+		node_slave.setName(BASE_NAME)
+		node_slave.setXYpos(node_parent.xpos()+75,node_parent.ypos()+25)
+
+		node_slave['postage_stamp'].setValue(False) if node_parent.Class().startswith('Roto') else node_slave['postage_stamp'].setValue(True)
 
 		# Add User knobs
 		py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"
@@ -139,7 +152,7 @@ def LinkedStamp(mode='set'):
 		k_setInput = nuke.PyScript_Knob('link', "Set Input", py_cmd_restore)
 		k_showParent = nuke.PyScript_Knob('orig', "Show Parent Node", py_cmd_orig)
 		k_copy = nuke.PyScript_Knob('copy', "Copy this Node", py_cmd_copy)
-		k_connect = nuke.String_Knob('connect','toConnect',rNode_nam)
+		k_connect = nuke.String_Knob('connect','toConnect',node_parent_nam)
 
 		k_setInput.setFlag(nuke.STARTLINE)
 		k_text.setEnabled(False)
@@ -148,27 +161,108 @@ def LinkedStamp(mode='set'):
 		k_copy.clearFlag(nuke.STARTLINE)
 		k_connect.setFlag(nuke.INVISIBLE)
 
-		stp.addKnob(k_tab)
-		stp.addKnob(k_text)
-		stp.addKnob(k_enable)
-		stp.addKnob(k_setInput)
-		stp.addKnob(k_showParent)
-		stp.addKnob(k_copy)
-		stp.addKnob(k_connect)
+		node_slave.addKnob(k_tab)
+		node_slave.addKnob(k_text)
+		node_slave.addKnob(k_enable)
+		node_slave.addKnob(k_setInput)
+		node_slave.addKnob(k_showParent)
+		node_slave.addKnob(k_copy)
+		node_slave.addKnob(k_connect)
 
-
-		k_text.setValue(stp['connect'].value())
+		k_text.setValue(node_slave['connect'].value())
 		k_setInput.setTooltip("Taking the node name from label and connect")
 		k_showParent.setTooltip("Show parent node in DAG")
 		k_copy.setTooltip("Copy this node with its inputs")
 
-		stp['knobChanged'].setValue('k=nuke.thisKnob()\nif k.name()=="ck_enable":\n\tnuke.thisNode()["tx_nodename"].setEnabled(k.value())')
-		stp['autolabel'].setValue("('Disconnected from\\n' if len(nuke.thisNode().dependencies())<=0 else 'Linked to\\n')+nuke.thisNode()['tx_nodename'].value()")
+		node_slave['knobChanged'].setValue('k=nuke.thisKnob()\nif k.name()=="ck_enable":\n\tnuke.thisNode()["tx_nodename"].setEnabled(k.value())')
+		node_slave['autolabel'].setValue("('Disconnected from\\n' if len(nuke.thisNode().dependencies())<=0 else 'Linked to\\n')+nuke.thisNode()['tx_nodename'].value()")
+	
 	elif mode=='reconnect':
-		rNodes = nuke.selectedNodes()
-		for n in rNodes:
+		node_parents = nuke.selectedNodes()
+		for n in node_parents:
 			if n['LinkedStamp'].value():
 				n.setInput(0, nuke.toNode(n['connect'].value()))
+
+	elif mode =='marking':
+		for n in nuke.selectedNodes():
+			stpMarking(n)
+
+
+
+
+# ------------------------------------------------------------------------------
+# Supporting Functions
+# ------------------------------------------------------------------------------
+
+
+
+
+def stpRename(BASE_NAME):
+	"""Replaced with built-in node.setName()"""
+	"""Rename LinkedStamp to avoid conflict"""
+
+	all_stp = [n.name() for n in nuke.allNodes() if BASE_NAME in n.name()]
+
+	if len(all_stp) > 0:
+		stp_max = max(all_stp)
+	else:
+		stp_max = BASE_NAME + "1"
+
+	new_index = int(stp_max.strip(BASE_NAME))+1
+	new_name = BASE_NAME+str(new_index)
+
+	return new_name
+
+def stpColor(node_parent):
+	"""Find topnode Class and set tile_color"""
+
+	node_top_name = nuke.tcl("full_name [topnode %s]" % node_parent.name())
+	node_top_class = nuke.toNode(node_top_name).Class()
+	node_color = 0
+
+	if node_top_class.startswith('Roto'):
+		node_color = 1908830719 # system roto class color
+	elif node_top_class.startswith('Deep'):
+		node_color = 24831 # system deep class color
+	else:
+		node_color = 12040191 # pascal cyan
+
+	return node_color
+
+def stpMarking(node_parent):
+	"""mark node to be recongnized by LinkedStamp
+	(called everytime in set mode before connect)
+	@node: (obj) parent node that is initially selected
+	"""
+
+	if not node_parent.knob(MARKER_NAME):
+
+		k_mark = nuke.Tab_Knob(MARKER_NAME,'LinkedStamp Marker')
+		k_mark_label = nuke.Text_Knob('tx_linkedstamp_marker', "","This node is marked by LinkedStamp")
+		node_parent.addKnob(k_mark)
+		node_parent.addKnob(k_mark_label)
+		node_parent['label'].setValue(node_parent['label'].value())
+		print("%s LinkedStamp Marked" % node_parent.name())
+	else:
+		print("New LinkedStamp from: %s" % node_parent.name())
+
+
+def isOutputDeep(node):
+	"""check if node is outputing deep data
+	@node: (obj) root node of the tree
+	return: (bool) True if is deep, False otherwise
+	"""
+	outputdeep=None
+	try: node.deepSampleCount(0,0); outputdeep = True
+	except: outputdeep = False
+
+	return outputDeep
+
+# ------------------------------------------------------------------------------
+# Callbacks
+# ------------------------------------------------------------------------------
+
+
 
 
 def inputUpdate():
@@ -193,5 +287,5 @@ def inputUpdate():
 			n['connect'].setValue(k.value())
 
 
-nuke.addKnobChanged(inputUpdate, nodeClass='PostageStamp')
-nuke.addKnobChanged(inputUpdate, nodeClass='NoOp')
+# nuke.addKnobChanged(inputUpdate, nodeClass='PostageStamp')
+# nuke.addKnobChanged(inputUpdate, nodeClass='NoOp')
