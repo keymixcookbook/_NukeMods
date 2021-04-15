@@ -4,7 +4,59 @@ Based on QuckCreate by MADS HAGBARTH DAMSBO
 '''
 
 
-import nuke
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "ViewerShortcuts v%s" % __VERSION__
+
+
+
+def _version_():
+	ver='''
+
+	version 1.0
+    - List of convient viewer short cuts
+    - Minor edit to fit kupipeline
+
+	'''
+	return ver
+
+
+
+
+# ------------------------------------------------------------------------------
+# Main Functions
+# ------------------------------------------------------------------------------
+
+
+
 
 #Base Gridwarp Struct.
 #Dear Foundry... could setValue() support?

@@ -1,7 +1,49 @@
+'''
+
+A dockable pannel with buttons to set frames
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+import sys, time, os, json
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "TimelineMarker v%s" % __VERSION__
+
+
+
 def _version_():
 	ver='''
 
-	version 0.0
+	version 1.0
 	- Dockable nuke widget to set current frame
 	- left-click to set frame, right-click to remove button
 	- display current SHOW and SHOT (if ENV variable is set up)
@@ -12,98 +54,10 @@ def _version_():
 
 
 
-try:
-	import nuke, nukescripts
-except:
-	pass
-from Qt import QtWidgets, QtGui, QtCore
-import sys, time, os, json
 
-
-
-
-########## SUPPORTING FUNCTION/CLASS ##########
-
-
-
-
-
-def set_widget_margins_to_zero(widget_object):
-
-	if widget_object:
-		target_widgets = set()
-		target_widgets.add(widget_object.parentWidget().parentWidget())
-		target_widgets.add(widget_object.parentWidget().parentWidget().parentWidget().parentWidget())
-
-		for widget_layout in target_widgets:
-			try:
-				widget_layout.layout().setContentsMargins(0, 0, 0, 0)
-			except:
-				pass
-
-
-
-
-class MarkerButton(QtWidgets.QPushButton):
-	def __init__(self, id, frame, label):
-		super(MarkerButton, self).__init__()
-
-		self.id = id
-		self.frame = frame
-		self.label = label
-
-		# self.setFixedWidth(48)
-
-class MarkerAdd(QtWidgets.QDialog):
-	'''
-	GUI for adding markers
-	data to be stored:frame, tooltip, id(<SHOW>-<timestamp>, PHX-12345678)
-	'''
-	def __init__(self, layout_obj, frame):
-		super(MarkerAdd, self).__init__()
-
-		cur_frame = frame
-		self.thisLayout = layout_obj
-		self.m_title_frame = QtWidgets.QLabel('Frame: ')
-		self.m_title_label = QtWidgets.QLabel('Label: ')
-		self.m_frame = QtWidgets.QSpinBox()
-		self.m_frame.setMaximum(3000)
-		self.m_frame.setPrefix('x')
-		self.m_frame.setValue(cur_frame)
-		self.m_label = QtWidgets.QLineEdit()
-		self.m_label.setText('x%s' % cur_frame)
-		self.m_label.setPlaceholderText("Keep it short")
-		self.m_add = QtWidgets.QPushButton('Add Marker')
-		self.m_add.clicked.connect(self.confirm)
-
-		self.layout = QtWidgets.QGridLayout()
-		self.layout.addWidget(self.m_title_frame, 0,0, QtCore.Qt.AlignRight)
-		self.layout.addWidget(self.m_frame, 0,1)
-		self.layout.addWidget(self.m_title_label, 1,0, QtCore.Qt.AlignRight)
-		self.layout.addWidget(self.m_label, 1,1)
-		self.layout.addWidget(self.m_add,2,0,1,2)
-		# self.layout.setSpacing(0)
-		self.setLayout(self.layout)
-		self.setWindowTitle("Add Frame Marker")
-		# self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
-		self.m_label.setFocus()
-		self.m_label.selectAll()
-
-
-	def confirm(self):
-		'''add button'''
-		thisFrame = int(self.m_frame.text().replace('x', ''))
-		thisId = int(time.time())
-		thisLabel = self.m_label.text()
-		thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
-		self.thisLayout.addWidget(thisMarker)
-		self.close()
-
-
-
-
-########## MAIN FUNCTION/CLASS ##########
+#-------------------------------------------------------------------------------
+#-Core Class
+#-------------------------------------------------------------------------------
 
 
 
@@ -336,6 +290,104 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 				pass
 
 		return QtWidgets.QWidget.event(self, event)
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
+#-------------------------------------------------------------------------------
+
+
+
+
+class MarkerButton(QtWidgets.QPushButton):
+	def __init__(self, id, frame, label):
+		super(MarkerButton, self).__init__()
+
+		self.id = id
+		self.frame = frame
+		self.label = label
+
+		# self.setFixedWidth(48)
+
+class MarkerAdd(QtWidgets.QDialog):
+	'''
+	GUI for adding markers
+	data to be stored:frame, tooltip, id(<SHOW>-<timestamp>, PHX-12345678)
+	'''
+	def __init__(self, layout_obj, frame):
+		super(MarkerAdd, self).__init__()
+
+		cur_frame = frame
+		self.thisLayout = layout_obj
+		self.m_title_frame = QtWidgets.QLabel('Frame: ')
+		self.m_title_label = QtWidgets.QLabel('Label: ')
+		self.m_frame = QtWidgets.QSpinBox()
+		self.m_frame.setMaximum(3000)
+		self.m_frame.setPrefix('x')
+		self.m_frame.setValue(cur_frame)
+		self.m_label = QtWidgets.QLineEdit()
+		self.m_label.setText('x%s' % cur_frame)
+		self.m_label.setPlaceholderText("Keep it short")
+		self.m_add = QtWidgets.QPushButton('Add Marker')
+		self.m_add.clicked.connect(self.confirm)
+
+		self.layout = QtWidgets.QGridLayout()
+		self.layout.addWidget(self.m_title_frame, 0,0, QtCore.Qt.AlignRight)
+		self.layout.addWidget(self.m_frame, 0,1)
+		self.layout.addWidget(self.m_title_label, 1,0, QtCore.Qt.AlignRight)
+		self.layout.addWidget(self.m_label, 1,1)
+		self.layout.addWidget(self.m_add,2,0,1,2)
+		# self.layout.setSpacing(0)
+		self.setLayout(self.layout)
+		self.setWindowTitle("Add Frame Marker")
+		# self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+		self.m_label.setFocus()
+		self.m_label.selectAll()
+
+
+	def confirm(self):
+		'''add button'''
+		thisFrame = int(self.m_frame.text().replace('x', ''))
+		thisId = int(time.time())
+		thisLabel = self.m_label.text()
+		thisMarker = MarkerButton(thisId, thisFrame, thisLabel)
+		self.thisLayout.addWidget(thisMarker)
+		self.close()
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
+#-------------------------------------------------------------------------------
+
+
+
+
+def set_widget_margins_to_zero(widget_object):
+
+	if widget_object:
+		target_widgets = set()
+		target_widgets.add(widget_object.parentWidget().parentWidget())
+		target_widgets.add(widget_object.parentWidget().parentWidget().parentWidget().parentWidget())
+
+		for widget_layout in target_widgets:
+			try:
+				widget_layout.layout().setContentsMargins(0, 0, 0, 0)
+			except:
+				pass
+
+
+
+#-------------------------------------------------------------------------------
+#-Instancing and Register
+#-------------------------------------------------------------------------------
+
 
 
 

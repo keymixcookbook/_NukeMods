@@ -29,13 +29,14 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
-__VERSION__='3.4'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__WEBSITE__="jiangovfx.com"
-__COPYRIGHT__="copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+__VERSION__		= '3.4'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
 
-__TITLE__=__name__.split('_')[1].split('.')[0]
+__TITLE__		= "LinkedStamp v%s" % __VERSION__
+
 
 def _version_():
 	ver="""
@@ -92,6 +93,7 @@ BASE_NAME = 'LinkedStamp'
 
 
 
+
 # ------------------------------------------------------------------------------
 # Main Functions
 # ------------------------------------------------------------------------------
@@ -109,7 +111,8 @@ def LinkedStamp(mode='set'):
 	if mode == 'set':
 		
 		# Nothing is selected
-		if not nuke.selectedNode(): node_parent = FindMarker().run()
+		if not len(nuke.selectedNodes()): node_parent = FindMarker().run()
+		else: node_parent = nuke.selctedNode()
 
 		# User Cancels or Select A Marker
 		if node_parent == None: print("User Cancelled")
@@ -121,7 +124,7 @@ def LinkedStamp(mode='set'):
 				node_slave = nuke.nodes.NoOp()
 			else:
 				node_slave = nuke.nodes.PostageStamp()
-				node_slave['postage_stamp'].setValue(True)
+				node_slave['postage_stamp'].setValue(False) if node_parent.Class().startswith('Roto') else node_slave['postage_stamp'].setValue(True)
 
 			stpMarking(node_parent)
 			node_slave.setInput(0, node_parent)
@@ -132,7 +135,6 @@ def LinkedStamp(mode='set'):
 			node_slave.setName(BASE_NAME)
 			node_slave.setXYpos(node_parent.xpos()+75,node_parent.ypos()+25)
 
-			node_slave['postage_stamp'].setValue(False) if node_parent.Class().startswith('Roto') else node_slave['postage_stamp'].setValue(True)
 
 			# Add User knobs
 			py_cmd_restore= "n=nuke.thisNode()\nn.setInput(0, nuke.toNode(n['connect'].value()))"
@@ -248,7 +250,7 @@ def stpMarking(node_parent):
 		k_mark_label = nuke.Text_Knob('tx_linkedstamp_marker', "","This node is marked by LinkedStamp")
 		node_parent.addKnob(k_mark)
 		node_parent.addKnob(k_mark_label)
-		node_parent['label'].setValue(node_parent['label'].value())
+		node_parent['label'].setValue(node_parent['label'].value()+MARKER_NAME)
 		print("%s LinkedStamp Marked" % node_parent.name())
 	else:
 		print("New LinkedStamp from: %s" % node_parent.name())
@@ -262,7 +264,7 @@ def isOutputDeep(node):
 	try: node.deepSampleCount(0,0); outputdeep = True
 	except: outputdeep = False
 
-	return outputDeep
+	return outputdeep
 
 
 
@@ -288,9 +290,9 @@ class FindMarker(QtWidgets.QDialog):
 		self.label = QtWidgets.QLabel("<b>Find LinkStamp Marker</b>")
 		self.box_comboBox = QtWidgets.QComboBox()
 		self.box_comboBox.addItems(self.marker_node)
-		self.box_comboBox.setEditable(True)
+		# self.box_comboBox.setEditable(True)
 		self.btn_confirm = QtWidgets.QPushButton('LINK')
-		self.btn_confirm.clicked.connect(onConfirm)
+		self.btn_confirm.clicked.connect(self.onConfirm)
 
 		self.layout = QtWidgets.QVBoxLayout()
 		self.setLayout(self.layout)
@@ -305,7 +307,7 @@ class FindMarker(QtWidgets.QDialog):
 	def run():
 		self.move(QtGui.QCursor.pos()+QtCore.QPoint(self.frameGeometry().width()/-2,self.frameGeometry().height()/-2))
 		self.box_comboBox.setFocus()
-		self.show()
+		self.exec_()
 
 		return self.parent_node
 

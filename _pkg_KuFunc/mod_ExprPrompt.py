@@ -1,3 +1,45 @@
+'''
+
+UI for quick expression entries
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+import re
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.1'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "ExprPrompt v%s" % __VERSION__
+
+
+
 def _version_():
 	ver='''
 
@@ -5,7 +47,7 @@ def _version_():
 	- add preset buttons and input autocomplet presets
 	- add button to cycle channels
 
-	version 0.0
+	version 1.0
 	- Expression node with prompt options
 	- string replace keys ('$ly': layer, '$ch': channels)
 	- input field completer with layers
@@ -16,24 +58,8 @@ def _version_():
 
 
 
-
 #------------------------------------------------------------------------------
-#-imports
-#------------------------------------------------------------------------------
-
-
-
-
-import nuke, nukescripts
-
-from Qt import QtCore, QtGui, QtWidgets
-import re
-
-
-
-
-#------------------------------------------------------------------------------
-#-Variable
+#-Global Variables
 #------------------------------------------------------------------------------
 
 
@@ -83,7 +109,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.ls_layers = PRESET_LINE
 
 		# Left Widgets
-		self.title = QtWidgets.QLabel("<h3>%s</h3>" % TITLE)
+		self.title = QtWidgets.QLabel("<h3>%s</h3>" % __TITLE__)
 		self.st_expr = QtWidgets.QLineEdit()
 		self.st_expr.setPlaceholderText('$ly: layer (Id06), $ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
@@ -376,5 +402,3 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 
 ExprPrompt = Core_ExprPrompt()
-if 'upt_' in __file__:
-	ExprPrompt.run()

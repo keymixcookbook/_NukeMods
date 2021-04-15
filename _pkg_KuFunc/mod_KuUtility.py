@@ -409,5 +409,31 @@ def set_viewer(mode='restore'):
         for n in ls_restore:
             node_viewer.setInput(int(n[0])-1, nuke.toNode(n[1]))
             print("%s:%s" % (n[0], n[1]))
-            
 
+            
+def GUISwitch(mode='switch'):
+
+  	'''
+  	- mode='switch': add $gui if none, remove if do
+  	- mode='reverse': revserse $gui if !$gui, also add $gui if none
+  	'''
+
+  	nodes = nuke.selectedNodes()
+
+	def setGUI():
+		if knob.hasExpression() and "$gui" in knob.toScript():
+			knob.clearAnimated()
+			knob.setValue(False)
+		else:
+			knob.setExpression('$gui')
+
+	for n in nodes:
+		knob = n.knob('disable')
+
+	if mode=='switch':
+		setGUI()
+	if mode=='reverse':
+		if knob.hasExpression() and "!" in knob.toScript():
+			knob.setExpression('$gui')
+		else:
+			knob.setExpression('!$gui')

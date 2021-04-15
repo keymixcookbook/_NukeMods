@@ -5,15 +5,37 @@ Simple floating panel to create nodes
 '''
 
 
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import nuke, nukescripts
+from Qt import QtWidgets, QtGui, QtCore 
 import platform
 
 
-__VERSION__='1.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__COPYRIGHT__="copyright %s" % __AUTHOR__
 
-__TITLE__=__file__.split('_')[1].split('.')[0]
+
+#-------------------------------------------------------------------------------
+#-Header
+#-------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "QuickNode v%s" % __VERSION__
+
 
 
 def _version_():
@@ -27,21 +49,8 @@ def _version_():
 
 
 
-
-#------------------------------------------------------------------------------
-#-Module Import
-#------------------------------------------------------------------------------
-
-
-
-
-import nuke, nukescripts
-from Qt import QtWidgets, QtGui, QtCore 
-
-
-
 #-------------------------------------------------------------------------------
-#-DATA
+#-Global Variables
 #-------------------------------------------------------------------------------
 
 
@@ -59,8 +68,6 @@ NODES = {
 	'Premult': ['Premult','Premult', 'channels rgba']
 	}
 
-TITLE = "QuickNode v%s" % __VERSION__
-
 AUTOLABEL = "nuke.thisNode().name() + '\\n' +'('+nuke.thisNode()['%s'].value()+')'"
 
 
@@ -77,7 +84,7 @@ class Core_QuickNode(QtWidgets.QWidget):
 	def __init__(self):
 		super(Core_QuickNode, self).__init__()
 
-		self.title = QtWidgets.QLabel(TITLE)
+		self.title = QtWidgets.QLabel(__TITLE__)
 		
 		self.tab0 = QtWidgets.QTabWidget()
 		self.tab_layout = QtWidgets.QVBoxLayout()
@@ -97,7 +104,7 @@ class Core_QuickNode(QtWidgets.QWidget):
 			exec("self.bt_%s.clicked.connect(self.createNode)" % (k))
 			exec("self.tab_layout.addWidget(self.bt_%s)" % (k))
 
-		self.setWindowTitle(TITLE)
+		self.setWindowTitle(__TITLE__)
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefault()
@@ -135,12 +142,9 @@ class Core_QuickNode(QtWidgets.QWidget):
 
 
 
-
-
 #-------------------------------------------------------------------------------
 #-Instancing
 #-------------------------------------------------------------------------------
-
 
 
 

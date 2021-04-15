@@ -1,14 +1,22 @@
-def _version_():
-	ver='''
+'''
 
-	version 0.0
-	- Expression link Roto with Trackers
+Expression link to A Transform node or a Track node
 
-
-	'''
-	return ver
+'''
 
 
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
 import nuke, nukescripts
 import nuke.rotopaint as rp
 import _curvelib as cl
@@ -16,7 +24,66 @@ import _curvelib as cl
 
 
 
-########## Supporting Functions ##########
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "TrackedRoto v%s" % __VERSION__
+
+
+
+def _version_():
+	ver='''
+
+	version 1.0
+	- Expression link Roto with Transform nodes
+	- Rename of Transform nodes
+
+	'''
+	return ver
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Main Function
+#-------------------------------------------------------------------------------
+
+
+
+
+def TrackedRoto():
+	'''Roto with expression linked transform'''
+
+	sel = nuke.selectedNodes()
+
+	if len(sel)<=0:
+		nuke.message("Please select a Roto node or Transform node")
+	else:
+		elem = findElements(sel)
+		if elem['op'] == True:
+			print "Operation Cancelled"
+			pass
+		else:
+			linkRoto(elem['r'],elem['t'],elem['c'])
+			print "{}.{} linked to {}".format(elem['r'].name(),elem['c'].name,elem['t'].name())
+
+
+
+
+# ------------------------------------------------------------------------------
+# Supporting Functions
+# ------------------------------------------------------------------------------
 
 
 
@@ -162,29 +229,3 @@ def linkRoto(node_roto, node_trans, roto_curve):
 	transform_attr.setScaleAnimCurve(1, scale_curve)
 	#transform_attr.setPivotPointAnimCurve(0, center_curve_x)
 	#transform_attr.setPivotPointAnimCurve(1, center_curve_y)
-
-
-
-
-
-
-########## Main Functions ##########
-
-
-
-
-def TrackedRoto():
-	'''Roto with expression linked transform'''
-
-	sel = nuke.selectedNodes()
-
-	if len(sel)<=0:
-		nuke.message("Please select a Roto node or Transform node")
-	else:
-		elem = findElements(sel)
-		if elem['op'] == True:
-			print "Operation Cancelled"
-			pass
-		else:
-			linkRoto(elem['r'],elem['t'],elem['c'])
-			print "{}.{} linked to {}".format(elem['r'].name(),elem['c'].name,elem['t'].name())

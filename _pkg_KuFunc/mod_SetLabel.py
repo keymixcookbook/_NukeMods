@@ -23,13 +23,14 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
-__VERSION__='1.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__WEBSITE__="jiangovfx.com"
-__COPYRIGHT__="copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+__VERSION__		= '2.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
 
-__TITLE__=__name__.split('_')[1].split('.')[0]
+__TITLE__		= "SetLabel v%s" % __VERSION__
+
 
 
 def _version_():
@@ -39,13 +40,7 @@ def _version_():
 	- Add preset buttons for frames and knob values
 
 	version 1.0
-	- adding multiline support
-	- adding group node context
-
-	version 0:
 	- Basically working, when run(), prompt a frameless popup with line edit field
-
-	version 0.1:
 	- replace with Qt
 
 
@@ -157,7 +152,7 @@ class Core_SetLabel(QtWidgets.QDialog):
 			self.knoblist.addItems(knobs)
 		else:
 			self.lineInput.hide()
-			self.title.setText("<b>Errpr:<br>No Node Selected</b>")
+			self.title.setText("<b>Error:<br>No Node Selected</b>")
 
 	def run(self):
 		"""rerun instance"""

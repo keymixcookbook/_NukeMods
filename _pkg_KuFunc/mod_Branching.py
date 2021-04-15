@@ -1,27 +1,91 @@
-def _version_():
-    ver='''
+'''
 
-    version 0
-    - Merge or detach a branch with multiple nodes on the B pipe
+Merge a branch into the main pipe
 
-    verion 0.1
-    - fix bottom node not connecting
-    - fix `Dot` node alignment
-    - fix bottom node connect with wrong pipe
-
-    version 1.0
-    - Only need to select branches and trunk_top, will detect trunk_bottom base on xpos
-
-    '''
-    return ver
+'''
 
 
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
 import nuke, nukescripts
 
 
 
 
-########## Supporting Functions ##########
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '2.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "Branching v%s" % __VERSION__
+
+
+
+def _version_():
+    ver='''
+
+    version 2.0
+    - Only need to select branches and trunk_top, will detect trunk_bottom base on xpos
+
+    verion 1.1
+    - fix bottom node not connecting
+    - fix `Dot` node alignment
+    - fix bottom node connect with wrong pipe
+
+    version 1.0
+    - Merge or detach a branch with multiple nodes on the B pipe
+
+    '''
+    return ver
+
+
+
+#-------------------------------------------------------------------------------
+#-Main Function
+#-------------------------------------------------------------------------------
+
+
+
+
+def Branching():
+    '''main function'''
+
+    nodes = nuke.selectedNodes()
+    if len(nodes)<=0:
+        nuke.message("Select branches to merge")
+    else:
+        trunks, branches = nodeSplit(nodes)
+
+        ends = bonds(branches)
+        move(branches, trunks)
+        attach(trunks,ends)
+
+    return None
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
+#-------------------------------------------------------------------------------
 
 
 
@@ -53,7 +117,6 @@ def nodeSplit(nodes):
     return [trunks, branches]
 
 
-
 def move(branches, trunks):
     '''Move Branches nodes to trunks
     @branches: nodes to merge (list of obj)
@@ -70,7 +133,6 @@ def move(branches, trunks):
         b.setXpos(int(b.xpos()-cX_dif))
 
     return None
-
 
 
 def bonds(branches):
@@ -102,7 +164,6 @@ def bonds(branches):
     return ends
 
 
-
 def attach(trunks, ends):
     '''Attach branches to trunks
     @trunks: nodes to merge with (list of obj)
@@ -121,28 +182,5 @@ def attach(trunks, ends):
     branch_top.setInput(0, trunk_top)
     trunk_bottom.setInput(idx, branch_bottom)
 
-
-    return None
-
-
-
-
-########## Main Functions ##########
-
-
-
-
-def Branching():
-    '''main function'''
-
-    nodes = nuke.selectedNodes()
-    if len(nodes)<=0:
-        nuke.message("Select branches to merge")
-    else:
-        trunks, branches = nodeSplit(nodes)
-
-        ends = bonds(branches)
-        move(branches, trunks)
-        attach(trunks,ends)
 
     return None

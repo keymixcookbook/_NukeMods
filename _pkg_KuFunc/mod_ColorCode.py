@@ -30,13 +30,14 @@ from Qt import QtWidgets, QtGui, QtCore
 
 
 
-__VERSION__='3.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__WEBSITE__="jiangovfx.com"
-__COPYRIGHT__="copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+__VERSION__		= '3.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
 
-__TITLE__="ColorCode v%s" % __VERSION__
+__TITLE__		= "ColorCode v%s" % __VERSION__
+
 
 
 def _version_():
@@ -53,12 +54,12 @@ def _version_():
 	- more Color options (Random)
 	- Header Size options
 
-	version 1.0
+	version 1.1
 	- Fixing error when cancel nuke panel
 	- Fixing Default value of backdrop label
 	- Output -> Transform
 
-	version 0
+	version 1.0
 	- Inherit nukescripts.autobackdrop()
 	- Adding Color Scheme selection buttons for groups:
 	- Groups include: CG, Plate, Grade, Key, Despill, Output, 2D Elem, Ref, End Comp, Precomp

@@ -1,7 +1,47 @@
+'''
+
+Set markers and auto connect deeps
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "DeepCollect v%s" % __VERSION__
+
+
 def _version_():
 	ver='''
 
-	version 0.0
+	version 1.0
 	- sets a dot node as markers for all deepRecolor node
 	- creates DeepMerge node to connect with DeepMarker
 
@@ -9,59 +49,11 @@ def _version_():
 	return ver
 
 
-import nuke, nukescripts
 
 
-
-
-########## Supporting Functions ##########
-
-
-
-
-def setMarkers():
-	'''create dot node for selected DeepRecolor node'''
-	color = 24831
-	nodes = nuke.allNodes('DeepRecolor') if len(nuke.selectedNodes('DeepCollector'))<=0 else nuke.selectedNodes('DeepRecolor')
-	print '\n'
-	for n in nodes:
-		thisDeep = findTopNode(n)
-		thisPos = [n.xpos()+n.screenWidth()*2, n.ypos()+n.screenHeight()*2]
-		node_marker = nuke.nodes.Dot(tile_color=color)
-		k_tab = nuke.Tab_Knob('tb_deepMarker', 'DeepCollect_Marker')
-		k_text = nuke.Text_Knob('tx_deepRead', '<b>DeepRead: </b>', thisDeep)
-		node_marker.addKnob(k_tab)
-		node_marker.addKnob(k_text)
-		node_marker.setName('DeepMarker1')
-		node_marker.setXYpos(*thisPos)
-		node_marker.setInput(0, n)
-
-		print "set DeepMarker: %s -> %s" % (n.name(), node_marker.name())
-
-
-
-def getMarker():
-	'''finds all the deep markers in the script
-	return: markers (list of obj)
-	'''
-
-	markers = [n for n in nuke.allNodes('Dot') if 'tb_deepMarker' in n.knobs()]
-	for m in markers:
-		print "DeepMarker collected: %s - %s" % (m.name(),m['tx_deepRead'].value())
-	return markers
-
-
-
-def findTopNode(n):
-	'''Returns a name of the top node
-	return: topnode_name (str)
-	'''
-	topnode_name = nuke.tcl("full_name [topnode %s]" % n.name())
-	return topnode_name
-
-
-
-########## Main Functions ##########
+#-------------------------------------------------------------------------------
+#-Main Function
+#-------------------------------------------------------------------------------
 
 
 
@@ -92,3 +84,51 @@ def DeepCollect(mode='collect'):
 		print "Deep collected for %s" % node_collector.name()
 	elif mode=='markers':
 		setMarkers()
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
+#-------------------------------------------------------------------------------
+
+
+
+
+def setMarkers():
+	'''create dot node for selected DeepRecolor node'''
+	color = 24831
+	nodes = nuke.allNodes('DeepRecolor') if len(nuke.selectedNodes('DeepCollector'))<=0 else nuke.selectedNodes('DeepRecolor')
+	print '\n'
+	for n in nodes:
+		thisDeep = findTopNode(n)
+		thisPos = [n.xpos()+n.screenWidth()*2, n.ypos()+n.screenHeight()*2]
+		node_marker = nuke.nodes.Dot(tile_color=color)
+		k_tab = nuke.Tab_Knob('tb_deepMarker', 'DeepCollect_Marker')
+		k_text = nuke.Text_Knob('tx_deepRead', '<b>DeepRead: </b>', thisDeep)
+		node_marker.addKnob(k_tab)
+		node_marker.addKnob(k_text)
+		node_marker.setName('DeepMarker1')
+		node_marker.setXYpos(*thisPos)
+		node_marker.setInput(0, n)
+
+		print "set DeepMarker: %s -> %s" % (n.name(), node_marker.name())
+
+
+def getMarker():
+	'''finds all the deep markers in the script
+	return: markers (list of obj)
+	'''
+
+	markers = [n for n in nuke.allNodes('Dot') if 'tb_deepMarker' in n.knobs()]
+	for m in markers:
+		print "DeepMarker collected: %s - %s" % (m.name(),m['tx_deepRead'].value())
+	return markers
+
+
+def findTopNode(n):
+	'''Returns a name of the top node
+	return: topnode_name (str)
+	'''
+	topnode_name = nuke.tcl("full_name [topnode %s]" % n.name())
+	return topnode_name

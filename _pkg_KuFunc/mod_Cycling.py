@@ -1,19 +1,87 @@
+'''
+
+one hotkey cycling channels and merge operations
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "Cycling v%s" % __VERSION__
+
+
+
 def _version_():
 	ver='''
 
-	version 0.0
+	version 1.0
 	- one hotkey cycling channels and merge operations
 
 	'''
 	return ver
 
 
-import nuke, nukescripts
+
+
+#-------------------------------------------------------------------------------
+#-Main Function
+#-------------------------------------------------------------------------------
 
 
 
 
-########## Supporting Functions ##########
+def Cycling(mode='regular'):
+	'''main fucntion
+	@mode='regular': often used channels/operations in merge node
+	@mode='all': all channels/operations in last selected node
+	'''
+	n = nuke.selectedNode()
+	if n == None:
+		nuke.message('Please select a node')
+	else:
+		if n.Class()=='Merge2':
+			rgbOnly = ['plus', 'minus', 'multiply', 'hypot']
+			coreCycle('op',n,mode)
+			if n['operation'].value() in rgbOnly:
+				n['output'].setValue('rgb')
+			else:
+				n['output'].setValue('rgba')
+		else:
+			coreCycle('ch',n,mode)
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
+#-------------------------------------------------------------------------------
 
 
 
@@ -38,7 +106,6 @@ def setKnob(node, knob, ls_k):
 		print "%s set to %s" % (node.name(), k_new)
 	except:
 		print "knob %s not in %s" % (knob, node.name())
-
 
 
 def coreCycle(knob, node, mode):
@@ -72,29 +139,3 @@ def coreCycle(knob, node, mode):
 			ls_op = node['operation'].values()
 		setKnob(node, 'operation', ls_op)
 
-
-
-
-########## Main Functions ##########
-
-
-
-
-def Cycling(mode='regular'):
-	'''main fucntion
-	@mode='regular': often used channels/operations in merge node
-	@mode='all': all channels/operations in last selected node
-	'''
-	n = nuke.selectedNode()
-	if n == None:
-		nuke.message('Please select a node')
-	else:
-		if n.Class()=='Merge2':
-			rgbOnly = ['plus', 'minus', 'multiply', 'hypot']
-			coreCycle('op',n,mode)
-			if n['operation'].value() in rgbOnly:
-				n['output'].setValue('rgb')
-			else:
-				n['output'].setValue('rgba')
-		else:
-			coreCycle('ch',n,mode)

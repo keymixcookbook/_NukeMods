@@ -5,20 +5,6 @@ hover UI with one key press that shows knobs to change value
 '''
 
 
-__VERSION__=0.0
-
-
-def _version_():
-	ver='''
-
-	version 0.0
-	- hover UI with one key press that shows knobs to change value
-	- knobs procedurally generated based on the node class selected
-
-	'''
-	return ver
-
-
 
 
 #------------------------------------------------------------------------------
@@ -33,6 +19,36 @@ import os
 import pprint
 from kputl import joinPath
 from Qt import QtWidgets, QtGui, QtCore
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "HoverValue v%s" % __VERSION__
+
+
+
+def _version_():
+	ver='''
+
+	version 1.0
+	- hover UI with one key press that shows knobs to change value
+	- knobs procedurally generated based on the node class selected
+
+	'''
+	return ver
 
 
 

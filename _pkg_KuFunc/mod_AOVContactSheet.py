@@ -1,18 +1,43 @@
 '''
 
-- Filtering chanel layers with keywords
+Filtering chanel layers with keywords
 
 '''
 
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
 import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+import re
 
 
-__VERSION__='1.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__COPYRIGHT__="copyright %s" % __AUTHOR__
 
-__TITLE__=__file__.split('_')[1].split('.')[0]
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__     = '1.0'
+__OS__          = platform.system()
+__AUTHOR__      = "Tianlun Jiang"
+__WEBSITE__     = "jiangovfx.com"
+__COPYRIGHT__   = "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__       = "AOVContactSheet v%s" % __VERSION__
 
 
 def _version_():
@@ -28,14 +53,9 @@ def _version_():
 
 
 #------------------------------------------------------------------------------
-#-Module Import
+#-Main Functions
 #------------------------------------------------------------------------------
 
-
-
-
-import nuke, nukescripts
-import re
 
 
 
@@ -53,7 +73,6 @@ def AOVContactSheet():
             node.setInput(0, nuke.selectedNode())
             filtering(node)
 
-    
 
 def button_filter():
     '''filter with keywords with button pressed'''

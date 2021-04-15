@@ -5,27 +5,6 @@ Functions to call for VIEWER_INPUT
 '''
 
 
-import platform
-
-
-__VERSION__='1.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__COPYRIGHT__="copyright %s" % __AUTHOR__
-
-__TITLE__=__file__.split('_')[1].split('.')[0]
-
-
-def _version_():
-	ver='''
-
-	version 1.0
-    - adds preset buttons
-
-	'''
-	return ver
-
-
 
 
 #------------------------------------------------------------------------------
@@ -35,14 +14,74 @@ def _version_():
 
 
 
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
 import nuke, nukescripts
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "IP v%s" % __VERSION__
+
+
+
+def _version_():
+	ver='''
+
+	version 1.0
+    - Creating A IP node with preset buttons
+
+	'''
+	return ver
+
+
+
+#------------------------------------------------------------------------------
+#-Global Variables
+#------------------------------------------------------------------------------
+
+
+
+
 PRESET_STR = 'IPSet' 
 
 
 
 
 #-------------------------------------------------------------------------------
-#-FUNCTIONS
+#- Main Callable
+#-------------------------------------------------------------------------------
+
+
+
+
+def IP():
+    '''main callable function'''
+
+    if 'VIEWER_INPUT' not in [n.name() for n in nuke.allNodes('Group')]:
+        build_IP()
+    else:
+        nuke.message("VIEWER_INPUT already exist")
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Supporting Functions
 #-------------------------------------------------------------------------------
 
 
@@ -209,23 +248,3 @@ def remove_preset():
     if p.showModalDialog():
         knob_delete = node.knob(pk_knoblist.value().split(' | ')[0])
         node.removeKnob(knob_delete)
-
-
-
-
-
-
-#-------------------------------------------------------------------------------
-#- Main Callable=
-#-------------------------------------------------------------------------------
-
-
-
-
-def IP():
-    '''main callable function'''
-
-    if 'VIEWER_INPUT' not in [n.name() for n in nuke.allNodes('Group')]:
-        build_IP()
-    else:
-        nuke.message("VIEWER_INPUT already exist")

@@ -1,3 +1,20 @@
+'''
+
+nukescript panel for testing modules
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
 import os
 import sys
 import nukescripts
@@ -9,21 +26,41 @@ import re
 from kputl import joinPath
 
 
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '3.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "TestFlight v%s" % __VERSION__
+
+
+
 def _version_():
     ver = '''
 
-    version 0.0
-	- nukescript panel for testing modules
-
-    version 1.0
-    - save a log with recent test and auto load on start
-
-    version 2.0
+    version 3.0
     - change core function to compile()
     - adding option to call a function on execute
 
+    version 2.0
+    - save a log with recent test and auto load on start
+
+    version 1.0
+	- nukescript panel for testing modules
+
 	'''
     return ver
+
 
 
 
@@ -40,35 +77,9 @@ LOG_FILE = joinPath(USER_NUKE, 'TestFlight_log.json')
 
 
 
-#------------------------------------------------------------------------------
-#-Supporting Functions
-#------------------------------------------------------------------------------
-
-
-
-
-def findDraftDir():
-    '''finds the mod_Draft dir as for default path'''
-    slate = mod_StudioLoad.LoadSlate()
-    path_draft = os.path.join(os.getenv('KU_PKG_PATH'), '_pkg_KuFunc/').replace('\\', '/')
-
-    return path_draft
-
-
-def listFiles(dirpath):
-    '''list files in the given dir'''
-
-    path_draft = dirpath.replace('\\', '/')
-    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') or p.startswith('dft') and p.endswith('.py')]
-
-    return ls_files
-
-
-
-
-#------------------------------------------------------------------------------
-#-Main Functions
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-Core Class
+#-------------------------------------------------------------------------------
 
 
 
@@ -229,6 +240,42 @@ class Core_TestFlight(QtWidgets.QWidget):
             self.path
         self.raise_()
 
+
+
+
+#------------------------------------------------------------------------------
+#-Supporting Functions
+#------------------------------------------------------------------------------
+
+
+
+
+def findDraftDir():
+    '''finds the mod_Draft dir as for default path'''
+    slate = mod_StudioLoad.LoadSlate()
+    path_draft = os.path.join(os.getenv('KU_PKG_PATH'), '_pkg_KuFunc/').replace('\\', '/')
+
+    return path_draft
+
+
+def listFiles(dirpath):
+    '''list files in the given dir'''
+
+    path_draft = dirpath.replace('\\', '/')
+    ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') or p.startswith('dft') and p.endswith('.py')]
+
+    return ls_files
+
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Register
+#-------------------------------------------------------------------------------
 
 
 

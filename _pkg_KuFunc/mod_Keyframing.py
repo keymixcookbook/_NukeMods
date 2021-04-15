@@ -5,27 +5,6 @@ sets keyframes in one go for a knob
 '''
 
 
-import platform, os
-
-
-__VERSION__='1.0'
-__OS__=platform.system()
-__AUTHOR__="Tianlun Jiang"
-__COPYRIGHT__="copyright %s" % __AUTHOR__
-
-__TITLE__=os.path.basename(__file__).split('_')[1].split('.')[0]
-
-
-def _version_():
-	ver='''
-
-	version 1.0
-	- sets keyframes in one go for a knob
-
-	'''
-	return ver
-
-
 
 
 #------------------------------------------------------------------------------
@@ -37,6 +16,35 @@ def _version_():
 
 import nuke, nukescripts
 from Qt import QtWidgets, QtGui, QtCore
+import platform, os
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Header
+#-------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '1.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "Keyframing v%s" % __VERSION__
+
+
+def _version_():
+	ver='''
+
+	version 1.0
+	- sets keyframes in one go for a knob
+
+	'''
+	return ver
 
 
 

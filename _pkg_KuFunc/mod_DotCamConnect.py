@@ -1,3 +1,45 @@
+'''
+
+Dot node to connect a camera
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
+import platform
+import os
+from Qt import QtWidgets, QtGui, QtCore
+import nuke, nukescripts
+
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__VERSION__		= '2.0'
+__OS__			= platform.system()
+__AUTHOR__	 	= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+__TITLE__		= "DotCamConnect v%s" % __VERSION__
+
+
+
 def _version_():
 	ver='''
 
@@ -15,7 +57,10 @@ def _version_():
 
 
 
-import nuke, nukescripts
+
+#-------------------------------------------------------------------------------
+#-Main Functions
+#-------------------------------------------------------------------------------
 
 
 
