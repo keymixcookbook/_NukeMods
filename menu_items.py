@@ -1,3 +1,19 @@
+'''
+
+Master Menu items
+
+'''
+
+
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
 import nuke
 from _pkg_KuFunc import *
 from _pkg_Studios import *
@@ -7,7 +23,25 @@ from _pkg_KuFunc.mod_KuUtility import *
 
 
 
-########## AddMenuItem Func ##########
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__OS__			= platform.system()
+__AUTHOR__		= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Menu Item Functions for KuPipeline
+#-------------------------------------------------------------------------------
 
 
 
@@ -32,7 +66,9 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 
 
 
-########## KuFunc Menubar ##########
+#-------------------------------------------------------------------------------
+#-KuFunc Menubar
+#-------------------------------------------------------------------------------
 
 
 
@@ -58,8 +94,8 @@ addMenuItem('m', kuMu, 'Find Hidden Inputs', "RestoreHiddenInputs()")
 addMenuItem('m', kuMu, 'Scale DAG', "ScaleTree()")
 addMenuItem('m', kuMu, 'Create IP', "IP()", hotkey="")
 kuMu.addSeparator()
-addMenuItem('f', kuMu, '$GUI Switch/switch', "GUISwitch(mode='switch')", hotkey="shift+D")
-addMenuItem('f', kuMu, '$GUI Switch/reverse', "GUISwitch(mode='reverse')", hotkey="ctrl+shift+D")
+addMenuItem('f', kuMu, '$GUI Switch/switch', "guiSwitch(mode='switch')", hotkey="shift+D")
+addMenuItem('f', kuMu, '$GUI Switch/reverse', "guiSwitch(mode='reverse')", hotkey="ctrl+shift+D")
 addMenuItem('f', kuMu, 'Connect Mask Input', "mask()", hotkey="ctrl+Y")
 addMenuItem('f', kuMu, 'Group Connect A', "groupConnect()", hotkey="alt+ctrl+Y")
 addMenuItem('f', kuMu, 'SetVal/>', "setSize(0.25)", hotkey="alt+.", shortcutContext=2)
@@ -74,7 +110,9 @@ kuMu.addCommand('Shuffle', "nuke.createNode('Shuffle')", "h", shortcutContext=2)
 
 
 
-########## KuFunc Toolbar ##########
+#-------------------------------------------------------------------------------
+#-KuFunc Toolbar
+#-------------------------------------------------------------------------------
 
 
 
@@ -105,20 +143,22 @@ addMenuItem('f', tBar, 'Show IP', "showIPPanel()", icon="Viewer.png")
 
 
 
-
-########## Context Menus ###########
-
-
-
-
-nuke.menu('Viewer').addCommand('Viewer Restore', "mod_KuUtility.set_viewer(mode='restore')", "alt+v", index=0, shortcutContext=0)
-nuke.menu('Viewer').addCommand('Viewer Set', "mod_KuUtility.set_viewer(mode='set')", index=1, shortcutContext=0)
+#-------------------------------------------------------------------------------
+#-Context Menus
+#-------------------------------------------------------------------------------
 
 
 
 
+nuke.menu('Viewer').addCommand('Viewer Restore', "mod_KuUtility.setViewer(mode='restore')", "alt+v", index=0, shortcutContext=0)
+nuke.menu('Viewer').addCommand('Viewer Set', "mod_KuUtility.setViewer(mode='set')", index=1, shortcutContext=0)
 
-########## 3rd Party Menus ###########
+
+
+
+#-------------------------------------------------------------------------------
+#-Community Module Menus
+#-------------------------------------------------------------------------------
 
 
 

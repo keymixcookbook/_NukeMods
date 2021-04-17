@@ -1,3 +1,18 @@
+'''
+
+Sets the default values for nodes
+
+'''
+
+
+
+#-------------------------------------------------------------------------------
+#-Module Imports
+#-------------------------------------------------------------------------------
+
+
+
+
 import nuke
 from _pkg_KuFunc import *
 from _pkg_Studios import *
@@ -7,7 +22,10 @@ from _pkg_KuFunc.mod_KuUtility import *
 
 
 
-########## DEFAULT NODE VALUE ##########
+
+#-------------------------------------------------------------------------------
+#-Default Values
+#-------------------------------------------------------------------------------
 
 
 
@@ -51,14 +69,20 @@ nuke.knobDefault('Constant.channels', 'rgba')
 nuke.knobDefault('Constant.color', '0.18 0.18 0.18 1.0')
 nuke.knobDefault('Exposure.mode', 'Stops')
 
-### Viewer Node ###
+# Viewer Nodes
 nuke.knobDefault('Viewer.frame_increment', '8')
 nuke.knobDefault('Viewer.hide_input', 'True')
 
 
 
 
-########## Nuke OnStartUp ##########
+#-------------------------------------------------------------------------------
+#-Nuke Startup
+#-------------------------------------------------------------------------------
+
+
+
+
 # nuke.addOnUserCreate(function, nodeClass='Class')
 # nuke.addOnCreate(mod_StudioENV.StudioENV, nodeClass='Root')
 

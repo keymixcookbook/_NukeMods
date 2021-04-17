@@ -15,7 +15,7 @@ hover UI with one key press that shows knobs to change value
 
 
 import nuke, nukescripts
-import os
+import os, platform
 import pprint
 from kputl import joinPath
 from Qt import QtWidgets, QtGui, QtCore

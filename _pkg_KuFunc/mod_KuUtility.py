@@ -1,16 +1,38 @@
 '''
 
-mod_KuFunc.py for _NukeStudio & _NukeFreelance
-to used in both a VFX Studio and Freelance enviroment
-
-originally KuFunc.py
-
 Contain sets of 'Light Weight' Functions, shouldn't be longer than 50 lines
 
 '''
 
 
+
+
+#------------------------------------------------------------------------------
+#-Module Import
+#------------------------------------------------------------------------------
+
+
+
+
 import nuke, os, nukescripts, sys
+import platform
+
+
+
+
+#------------------------------------------------------------------------------
+#-Header
+#------------------------------------------------------------------------------
+
+
+
+
+__OS__			= platform.system()
+__AUTHOR__		= "Tianlun Jiang"
+__WEBSITE__		= "jiangovfx.com"
+__COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
+
+
 
 
 
@@ -19,24 +41,7 @@ import nuke, os, nukescripts, sys
 
 
 
-def ku_knobCh (node, knob, val):
-	node[knob].setValue(val)
 
-def ku_knobVal (node, knob):
-	return node[knob].value()
-
-def settingCh(knob, val):
-	nuke.root()[knob].setValue(val)
-	print "{knob} set to {value}".format(knob=knob, value=val)
-
-def nukeColor(r,g,b,a):
-	return int('%02x%02x%02x%02x' % (r * 255, g * 255, b * 255, a * 255), 16)
-
-def knobFlagClear(knob):
-	if knob.getFlag(nuke.STARTLINE) == True:
-		knob.clearFlag(nuke.STARTLINE)
-	else:
-		return knob
 
 
 
@@ -53,59 +58,7 @@ def mask():
 			n.setInput(mk, nuke.selectedNodes()[0])
 
 
-def reloadRead():
 
-	#Define Functions
-	def reload(node,node_list):
-		node['reload'].execute()
-		node_list.append("%s Reloaded" % (node.name()))
-
-	#Define Variables
-
-	read_sel = nuke.selectedNodes('Read')
-	reload_list = []
-
-	#Reloading
-
-	if len(read_sel)>0: #if there are Read node Selectred
-		for s in read_sel:
-			if s.Class() == "Read":
-				reload(s,reload_list)
-
-	elif len(nuke.allNodes('Read'))>0: #if there are Read Node Enabled
-		for e in nodes_read:
-			if e['disable'] == False:
-				reload(e,reload_list)
-
-	else:
-		nuke.message("No Read Nodes to Reload")
-
-	print '\n, '"="*25, '\n'
-	print "\n".join(reload_list)
-	print '\n, '"="*25, '\n'
-
-
-def showFileDir():
-
-	nodes = nuke.allNodes('Read')
-
-	print "========== FILES ==========", "\n\n"
-
-	for n in nodes:
-		print '------  ', n.name() , " -> ",n['file'].value(), "\n", "__________"
-
-	print "\n\n", "========== END FILES =========="
-
-
-def resetNodeCol():
-	aNode = []
-
-	for n in nuke.allNodes():
-		if n.Class() == "Grade" or n.Class() == "Merge2" or n.Class() == "Keymix":
-			n['tile_color'].setValue(0)
-			aNode.append(n.name())
-
-	nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
 
 
 def groupConnect():
@@ -197,17 +150,6 @@ def selectChildNodes():
 	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
 
 
-def selConnected():
-
-	for n in nuke.selectedNodes():
-		n_frist = n.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
-		n_second = n_first.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
-
-		n_first['selected'].setValue(True)
-		n_sec['selected'].setValue(True)
-
-		n['selected'].setValue(False)
-
 
 def quickChannel():
 	node = nuke.selectedNode()
@@ -230,31 +172,6 @@ def quickChannel():
 
 	else:
 		nuke.message("No Channel to Change")
-
-
-def holdAtFrame():
-	node = nuke.selectedNode()
-	node_label = node['label'].value()
-
-	nukescripts.node_copypaste()  # Duplicating the Node
-	print "\n\n", node.name()
-
-	node_held = nuke.selectedNode()  # Return the duplicated node
-
-	for name, k in node_held.knobs().items():
-		try:
-			if k.isAnimated():
-				k.clearAnimated()
-				print 'Deleting Animation on %s' % name
-		except:
-			print 'no animation to delete'
-
-		node_held['tile_color'].setValue(2147418367)  # Light Green Color
-
-		if node_label != "":  # for MPC Naming convnsion
-			node_held['label'].setValue(node_label + "\n" + "x" + str(nuke.frame()))
-		else:
-			node_held['label'].setValue("x" + str(nuke.frame()))
 
 
 def stackIBK():
@@ -329,21 +246,6 @@ def disable():
 
 
 
-def swapColorspace():
-	'''swap in and out OCIOcolorspace node'''
-	nodes = nuke.selectedNodes('OCIOColorSpace')
-
-	if nodes:
-		for n in nodes:
-			old_in = n['in_colorspace'].value()
-			old_out = n['out_colorspace'].value()
-
-			n['in_colorspace'].setValue(old_out)
-			n['out_colorspace'].setValue(old_in)
-	else:
-		nuke.message('Select OCIOColorSpace node')
-
-
 def showIPPanel(panelfloat=True):
 	'''Show viewer input control panel'''
 
@@ -369,7 +271,7 @@ def copyMasterNodeStyle():
 		d['note_font_color'].setValue(n['note_font_color'].value())
 
 
-def add_gizmo_copyright(n):
+def addGizmoCopyright(n):
     '''add gizmo copyright'''
 
     c_str = """
@@ -384,7 +286,7 @@ def add_gizmo_copyright(n):
     n.addKnob(k_copyright)
 
 
-def set_viewer(mode='restore'):
+def setViewer(mode='restore'):
     '''set and restore viewer input pipes
     mode='restore': restore set inputs
     mode='set': record exsisting inputs
@@ -411,11 +313,11 @@ def set_viewer(mode='restore'):
             print("%s:%s" % (n[0], n[1]))
 
             
-def GUISwitch(mode='switch'):
+def guiSwitch(mode='switch'):
 
   	'''
-  	- mode='switch': add $gui if none, remove if do
-  	- mode='reverse': revserse $gui if !$gui, also add $gui if none
+  	@mode='switch': add $gui if none, remove if do
+  	@mode='reverse': revserse $gui if !$gui, also add $gui if none
   	'''
 
   	nodes = nuke.selectedNodes()
@@ -437,3 +339,141 @@ def GUISwitch(mode='switch'):
 			knob.setExpression('$gui')
 		else:
 			knob.setExpression('!$gui')
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Obsolete Functions
+#-------------------------------------------------------------------------------
+
+
+
+
+"""
+
+
+def ku_knobCh (node, knob, val):
+	node[knob].setValue(val)
+
+def ku_knobVal (node, knob):
+	return node[knob].value()
+
+def settingCh(knob, val):
+	nuke.root()[knob].setValue(val)
+	print "{knob} set to {value}".format(knob=knob, value=val)
+
+def knobFlagClear(knob):
+	if knob.getFlag(nuke.STARTLINE) == True:
+		knob.clearFlag(nuke.STARTLINE)
+	else:
+		return knob
+
+def showFileDir():
+
+	nodes = nuke.allNodes('Read')
+
+	print "========== FILES ==========", "\n\n"
+
+	for n in nodes:
+		print '------  ', n.name() , " -> ",n['file'].value(), "\n", "__________"
+
+	print "\n\n", "========== END FILES =========="
+
+
+def resetNodeCol():
+	aNode = []
+
+	for n in nuke.allNodes():
+		if n.Class() == "Grade" or n.Class() == "Merge2" or n.Class() == "Keymix":
+			n['tile_color'].setValue(0)
+			aNode.append(n.name())
+
+	nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
+
+
+def reloadRead():
+
+	#Define Functions
+	def reload(node,node_list):
+		node['reload'].execute()
+		node_list.append("%s Reloaded" % (node.name()))
+
+	#Define Variables
+
+	read_sel = nuke.selectedNodes('Read')
+	reload_list = []
+
+	#Reloading
+
+	if len(read_sel)>0: #if there are Read node Selectred
+		for s in read_sel:
+			if s.Class() == "Read":
+				reload(s,reload_list)
+
+	elif len(nuke.allNodes('Read'))>0: #if there are Read Node Enabled
+		for e in nodes_read:
+			if e['disable'] == False:
+				reload(e,reload_list)
+
+	else:
+		nuke.message("No Read Nodes to Reload")
+
+	print '\n, '"="*25, '\n'
+	print "\n".join(reload_list)
+	print '\n, '"="*25, '\n'
+
+
+def selConnected():
+
+	for n in nuke.selectedNodes():
+		n_frist = n.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
+		n_second = n_first.dependent(nuke.INPUTS | nuke.HIDDEN_INPUTS)[0]
+
+		n_first['selected'].setValue(True)
+		n_sec['selected'].setValue(True)
+
+		n['selected'].setValue(False)
+
+
+def holdAtFrame():
+	node = nuke.selectedNode()
+	node_label = node['label'].value()
+
+	nukescripts.node_copypaste()  # Duplicating the Node
+	print "\n\n", node.name()
+
+	node_held = nuke.selectedNode()  # Return the duplicated node
+
+	for name, k in node_held.knobs().items():
+		try:
+			if k.isAnimated():
+				k.clearAnimated()
+				print 'Deleting Animation on %s' % name
+		except:
+			print 'no animation to delete'
+
+		node_held['tile_color'].setValue(2147418367)  # Light Green Color
+
+		if node_label != "":  # for MPC Naming convnsion
+			node_held['label'].setValue(node_label + "\n" + "x" + str(nuke.frame()))
+		else:
+			node_held['label'].setValue("x" + str(nuke.frame()))
+
+
+def swapColorspace():
+	'''swap in and out OCIOcolorspace node'''
+	nodes = nuke.selectedNodes('OCIOColorSpace')
+
+	if nodes:
+		for n in nodes:
+			old_in = n['in_colorspace'].value()
+			old_out = n['out_colorspace'].value()
+
+			n['in_colorspace'].setValue(old_out)
+			n['out_colorspace'].setValue(old_in)
+	else:
+		nuke.message('Select OCIOColorSpace node')
+"""

@@ -7,9 +7,24 @@ Function to use package-wise
 
 
 
+#-------------------------------------------------------------------------------
+#-Module Import
+#-------------------------------------------------------------------------------
+
+
+
+
 import os
 import inspect
 import math
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Functions
+#-------------------------------------------------------------------------------
+
 
 
 
@@ -24,9 +39,13 @@ def joinPath(*paths):
 
 def nukeColor(r,g,b):
 	'''convert rgb to nuke 16 bit value
+	@r,g,b: (float) float rgb values 0-1
 	return: 8-bit ints
 	'''
-	return int('%02x%02x%02x%02x' % (r,g,b,1), 16)
+	return int('%02x%02x%02x%02x' % (
+		r * 255, g * 255, b * 255, 0 * 255), 
+		16
+		)
 
 
 def hsv2rgb(h, s, v):

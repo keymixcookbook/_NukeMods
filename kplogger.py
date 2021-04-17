@@ -112,7 +112,7 @@ class col:
 
 
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('kplogger')
 
 loglevel = os.getenv('KPENV') 
 if loglevel: print('==========\nlogging level: %s\n==========' % LEVEL_TO_STR[int(loglevel)]) 
@@ -136,7 +136,7 @@ class KuFormatter(logging.Formatter):
 
 
 	FORMATS = {
-		logging.DEBUG		: ''.join([col.DEBUG, 	"%(levelname)s", col.LINENUM, "Ln:%(lineno)d", col.MSG, "%(message)s", col.ENDLN]),
+		logging.DEBUG		: ''.join([col.DEBUG, 	"%(levelname)s %(module)s", col.LINENUM, "Ln:%(lineno)d", col.MSG, "%(message)s", col.ENDLN]),
 		logging.INFO 		: ''.join([col.MSG, 		"%(message)s", col.ENDLN]),
 		logging.ERROR		: ''.join([col.ERROR, 	"%(levelname)s", col.LINENUM, "Ln:%(lineno)d", col.MSG, "%(message)s", col.ENDLN]),
 		logging.WARNING		: ''.join([col.WARNING, 	"%(levelname)s", col.LINENUM, "Ln:%(lineno)d", col.MSG, "%(message)s", col.ENDLN]),
