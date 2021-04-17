@@ -16,7 +16,7 @@ Sets the default values for nodes
 import nuke
 from _pkg_KuFunc import *
 from _pkg_Studios import *
-from _mod_Download import *
+from _mod_Community import *
 
 from _pkg_KuFunc.mod_KuUtility import *
 
