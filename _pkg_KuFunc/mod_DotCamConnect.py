@@ -18,6 +18,7 @@ import platform
 import os
 from Qt import QtWidgets, QtGui, QtCore
 import nuke, nukescripts
+import logging
 
 
 
@@ -30,7 +31,7 @@ import nuke, nukescripts
 
 
 
-__VERSION__		= '2.0'
+__VERSION__		= '2.1'
 __OS__			= platform.system()
 __AUTHOR__	 	= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -42,6 +43,10 @@ __TITLE__		= "DotCamConnect v%s" % __VERSION__
 
 def _version_():
 	ver='''
+	
+	version 2.1
+	- directly connect if only one camera in the script
+	- Redorder codes
 
 	version 2.0
 	- add button to open input node property panel
@@ -58,6 +63,33 @@ def _version_():
 
 
 
+# ------------------------------------------------------------------------------
+#-GLOBAL VARIABLE
+# ------------------------------------------------------------------------------
+
+
+
+
+CLASS_CAM = 'Camera2'
+COL_RED = int('%02x%02x%02x%02x' % (1*255,0*255,0*255,0*255),16)
+COL_WHITE = int('%02x%02x%02x%02x' % (1*255,1*255,1*255,1*255),16)
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# Logging
+# ------------------------------------------------------------------------------
+
+
+
+
+log = logging.getLogger('kplogger')
+
+
+
+
 #-------------------------------------------------------------------------------
 #-Main Functions
 #-------------------------------------------------------------------------------
@@ -67,92 +99,93 @@ def _version_():
 
 def DotCamConnect():
 
-	color_red = int('%02x%02x%02x%02x' % (1*255,0*255,0*255,0*255),16)
-	color_white = int('%02x%02x%02x%02x' % (1*255,1*255,1*255,1*255),16)
-
 	# Find All the Camera nodes
-	node_ls_cam = [n.name() for n in nuke.allNodes('Camera2')]
+	node_ls_cam = [n.name() for n in nuke.allNodes(CLASS_CAM)]
 	node_ls_cam.sort()
+	sel_node_dot = nuke.selectedNodes('Dot')
+	sel_cam_node = get_camera(node_ls_cam)
 
-	# Set Connect Function OR setting Dot Node Function
-	def setDotNode(d, node_sel_cam):
+	if sel_cam_node:
 
-		d['label'].setValue("\n%s" % (node_sel_cam))
-		d['note_font'].setValue('bold')
-		d['note_font_size'].setValue(24)
-		d['note_font_color'].setValue(color_white)
-		d['tile_color'].setValue(color_red)
-		d['hide_input'].setValue(True)
-		d.setInput(0, nuke.toNode(node_sel_cam))
+		# If a Dot node is selected
+		if sel_node_dot != [] and node_ls_cam != []:
+			for d in sel_node_dot:
+				set_node_dot(d, sel_cam_node)
+			return True 
 
-		# Add Show Panel Knob
-		cmd_ppanel = "n=nuke.thisNode()\ntry:\n\tn.input(0).showControlPanel(forceFloat=n.knob('isFloat').value())\nexcept:\n\tpass"
-		cmd_orig = "origNode = nuke.thisNode().input(0);\
-						origXpos = origNode.xpos();\
-						origYpos = origNode.ypos();\
-						nuke.zoom(2, [origXpos,origYpos]);\
-						nuke.thisNode()['selected'].setValue(False);\
-						origNode['selected'].setValue(True);\
-						nuke.show(origNode)"
-		t_tab = nuke.Tab_Knob('t_user', "DotCamConnect")
-		k_showPanel = nuke.PyScript_Knob('ppanel', "Show Input Property Panel", cmd_ppanel)
-		k_float = nuke.Boolean_Knob('isFloat', "Floating Panel", True)
-		k_showCam = nuke.PyScript_Knob('orig', "Show Camera Node", cmd_orig)
-
-		k_float.clearFlag(nuke.STARTLINE)
-		k_float.setFlag(nuke.STARTLINE)
-
-		d.addKnob(t_tab)
-		d.addKnob(k_showPanel)
-		d.addKnob(k_float)
-		d.addKnob(k_showCam)
-
-		print "%s -> %s" % (d.name(), node_sel_cam)
-
-	# If there is a camera selected
-	if len(nuke.selectedNodes('Camera2'))>0:
-
-
-		for c in nuke.selectedNodes('Camera2'):
-
-			nuke.selectedNode()['selected'].setValue(False)
+		# if nothing is selected
+		if nuke.selectedNodes() == []:
 			node_create_dot = nuke.createNode('Dot', inpanel=False)
-
-			node_create_dot['xpos'].setValue(c['xpos'].value()+100)
-			node_create_dot['ypos'].setValue(c['ypos'].value()+100)
-
-			setDotNode(node_create_dot, c.name())
-
-	# If there isn't a camera selected
-	else:
-
-		if len(node_ls_cam) > 1:
-			'''prompt to select which camera to connect'''
-
-			p = nuke.Panel('Select A Camera Node to Connect')
-			p.addEnumerationPulldown('Cam to Connect', ' '.join(node_ls_cam))
-			p.addButton('Cancel')
-			p.addButton('Connect!')
-
-			if p.show():
-
-				node_sel_cam = p.value('Cam to Connect')
-
-				# Detect if it's a selection or just create a Dot
-				if len(nuke.selectedNodes('Dot'))>0:
-					node_ls_dot = nuke.selectedNodes('Dot')
-
-					for d in node_ls_dot:
-						setDotNode(d,node_sel_cam)
-
-				else:
-					node_create_dot = nuke.createNode('Dot', inpanel=False)
-
-					setDotNode(node_create_dot, node_sel_cam)
+			set_node_dot(node_create_dot, sel_cam_node)
+			return True
 		
-		elif len(node_ls_cam) == 1:
-			'''connect the only camera in the script'''
 
-			node_create_dot = nuke.createNode('Dot', inpanel=False)
-			setDotNode(node_create_dot, node_ls_cam[0])
 
+
+# ------------------------------------------------------------------------------
+# Supporting Function
+# ------------------------------------------------------------------------------
+
+
+
+
+def set_node_dot(d, node_sel_cam):
+	"""Set Connect Function OR setting Dot Node Function"""
+
+	d['label'].setValue("\n%s" % (node_sel_cam))
+	d['note_font'].setValue('bold')
+	d['note_font_size'].setValue(24)
+	d['note_font_color'].setValue(COL_WHITE)
+	d['tile_color'].setValue(COL_RED)
+	d['hide_input'].setValue(True)
+	d.setInput(0, nuke.toNode(node_sel_cam))
+
+	# Add Show Panel Knob
+	cmd_ppanel = "n=nuke.thisNode()\ntry:\n\tn.input(0).showControlPanel(forceFloat=n.knob('isFloat').value())\nexcept:\n\tpass"
+	cmd_orig = "origNode = nuke.thisNode().input(0);\
+					origXpos = origNode.xpos();\
+					origYpos = origNode.ypos();\
+					nuke.zoom(2, [origXpos,origYpos]);\
+					nuke.thisNode()['selected'].setValue(False);\
+					origNode['selected'].setValue(True);\
+					nuke.show(origNode)"
+	t_tab = nuke.Tab_Knob('t_user', "DotCamConnect")
+	k_showPanel = nuke.PyScript_Knob('ppanel', "Show Input Property Panel", cmd_ppanel)
+	k_float = nuke.Boolean_Knob('isFloat', "Floating Panel", True)
+	k_showCam = nuke.PyScript_Knob('orig', "Show Camera Node", cmd_orig)
+
+	k_float.clearFlag(nuke.STARTLINE)
+	k_float.setFlag(nuke.STARTLINE)
+
+	d.addKnob(t_tab)
+	d.addKnob(k_showPanel)
+	d.addKnob(k_float)
+	d.addKnob(k_showCam)
+
+	print("%s -> %s" % (d.name(), node_sel_cam))
+
+
+def get_camera(node_ls_cam):
+	"""Prompt UI for camera selection
+	@node_ls_cam: (list of camera node)
+	return: (node) selected camera node, None if cancel or no camera in DAG
+	"""
+	
+	node_sel_cam = None
+
+	if len(node_ls_cam) > 1:
+
+		p = nuke.Panel('Select A Camera Node to Connect')
+		p.addEnumerationPulldown('Cam to Connect', ' '.join(node_ls_cam))
+		p.addButton('Cancel')
+		p.addButton('Connect!')
+
+		if p.show():
+			node_sel_cam = p.value('Cam to Connect')
+		else:
+			node_sel_cam = None
+
+	elif len(node_sel_cam) == 1:
+		node_sel_cam = node_ls_cam[0]	
+
+	return node_sel_cam
