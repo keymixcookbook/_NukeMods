@@ -1,6 +1,6 @@
 '''
 
-mod_KuFunc.py for _NukeStudio & _NukeFreelance
+mod_KuFunc.py for _NukeMods & _NukeFreelance
 to used in both a VFX Studio and Freelance enviroment
 
 originally KuFunc.py

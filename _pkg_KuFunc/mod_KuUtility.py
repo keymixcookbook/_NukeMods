@@ -35,18 +35,9 @@ __COPYRIGHT__	= "copyright (c) %s - %s" % (__AUTHOR__, __WEBSITE__)
 
 
 
-
-########## GLOBAL KU FUNCTIONS ##########
-
-
-
-
-
-
-
-
-
-########## NODE GRAPH FUNCTIONS ##########
+# ------------------------------------------------------------------------------
+# Functions
+# ------------------------------------------------------------------------------
 
 
 
@@ -56,9 +47,6 @@ def mask():
 		if n != 0:
 			mk = n.optionalInput()
 			n.setInput(mk, nuke.selectedNodes()[0])
-
-
-
 
 
 def groupConnect():
@@ -148,7 +136,6 @@ def selectChildNodes():
 	sel['selected'].setValue(False)
 
 	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
-
 
 
 def quickChannel():
@@ -341,7 +328,97 @@ def guiSwitch(mode='switch'):
 			knob.setExpression('!$gui')
 
 
+def fadeMultiply():
+	"""A Multiply node to use for fading or changing opacity
+	Input box value can be either Integer or String
+	
+	String type input takes the following:
+	"F": First frame 
+	"M": Middle frame 
+	"L": Last frame 
+	"R": Framerange 
+	"""
 
+	node = nuke.createNode('Multiply')
+	node.setName('KuFade')
+
+	# Create Knobs
+	tb_user = nuke.Tab_Knob('tb_user', 'KuFade')
+	k_in = nuke.String_Knob('xIn', "Frame In", '1001')
+	k_out = nuke.String_Knob('xOut', "Frame Out", '1009')
+	k_tdur = nuke.Int_Knob('tdur', "Length Transition", 3)
+	k_llen = nuke.String_Knob('llen', "Length Life", '3')
+
+	## Button Knobs
+	k_set_io = nuke.PyScript_Knob('set_io', "| in > x < out |")
+	k_set_io.setToolTip("Between In and Out Frames")
+	k_set_in = nuke.PyScript_Knob('set_in', "| in > life < |")
+	k_set_in.setToolTip("With set Starting Frame")
+	k_set_out = nuke.PyScript_Knob('set_out', "| > life < out |")
+	k_set_out.setToolTip("With set Ending Frame")
+
+	## Button Commands
+	cmd_set_a = """\
+	n = nuke.thisNode()\
+	k = n.knob('value')\
+	k.clearAnimation()\
+	i = int(n['xIn'].value())\
+	o = int(n['xOut'].value())\
+	d = int(n['tdur'].value())\
+	l = int(n['llen'].value())\
+	"""
+	cmd_set_b = """\
+	k.setAnimated()\
+	for key in [key_i, key_ii, key_oo, key_o]:\
+		k.setValueAt(*key)\
+	"""
+
+	k_set_io.setCommand("""\
+	{}
+	key_i = [0, i]\
+	key_ii = [1, i+d]\
+	key_oo = [1, o-d]\
+	key_o = [0, o]\
+	{}
+	""".format(cmd_set_a, cmd_set_b))
+
+	k_set_in.setCommand("""\
+	{}
+	key_i = [0, i]\
+	key_ii = [1, i+d]\
+	key_oo = [1, i+d+l]\
+	key_o = [0, i+d*2+l]\
+	{}
+	""".format(cmd_set_a, cmd_set_b))
+
+	k_set_out.setCommand("""\
+	{}
+	key_i = [0, o-d*2-l]\
+	key_ii = [1, o-d-l]\
+	key_oo = [1, o-d]\
+	key_o = [0, o]\
+	{}
+	""".format(cmd_set_a, cmd_set_b))
+
+	# Add Knobs
+	for knob in [tb_user, k_in, k_out, k_tdur, k_llen]:
+		knob.setFlag(nuke.STARTLINE)
+		node.addKnob(knob)
+
+	for knob in [k_set_io, k_set_in, k_set_out]:
+		knob.clearFlag(nuke.STARTLINE)
+		node.addKnob(knob)
+
+	# Knob Changed
+	node['KnobChanged'].setValue("""\
+	k = nuke.thisKnob()\
+	if k.name() in ['xIn', 'xOut']:\
+		if k.value() == 'F': k.setValue(str(nuke.FrameRange().first()));\
+		elif k.value() == 'L': k.setValue(str(nuke.FrameRange().last()));\
+		elif k.value() == 'M': k.setValue(str(nuke.FrameRange().first()+nuke.FrameRange().frames()/2));\
+	if k.name() == 'llen':\
+		if k.value() == 'R': k.setValue(str(nuke.FrameRange().frames()-nuke.thisNode()['tdur'].value()*2))\
+	""")
 
 
 
