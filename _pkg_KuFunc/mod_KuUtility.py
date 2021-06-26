@@ -135,7 +135,7 @@ def selectChildNodes():
 
 	sel['selected'].setValue(False)
 
-	print sel.name(), " is connected by ", "\n", ', '.join(childNodes)
+	print sel.name(), " is connected by ", "n", ', '.join(childNodes)
 
 
 def quickChannel():
@@ -155,7 +155,7 @@ def quickChannel():
 		if ch_sel:
 			node['channels'].setValue(ch_sel)
 
-		print "\n", node.name(), " --> ", ch_sel
+		print "n", node.name(), " --> ", ch_sel
 
 	else:
 		nuke.message("No Channel to Change")
@@ -287,13 +287,13 @@ def setViewer(mode='restore'):
         
         for i in range( num_inputs ):
             node_thisInput = node_viewer.input(i).name() if node_viewer.input(i) else None
-            label += "%s:%s\n" % (i+1, node_thisInput)
+            label += "%s:%sn" % (i+1, node_thisInput)
         node_viewer['label'].setValue(label)
         print( label )
 
     if mode == 'restore':
         label = node_viewer['label'].value()
-        ls_restore = [i.split(':') for i in label.split('\n')[:-1]]
+        ls_restore = [i.split(':') for i in label.split('n')[:-1]]
 
         for n in ls_restore:
             node_viewer.setInput(int(n[0])-1, nuke.toNode(n[1]))
@@ -351,73 +351,73 @@ def fadeMultiply():
 
 	## Button Knobs
 	k_set_io = nuke.PyScript_Knob('set_io', "| in > x < out |")
-	k_set_io.setToolTip("Between In and Out Frames")
+	k_set_io.setTooltip("Between In and Out Frames")
 	k_set_in = nuke.PyScript_Knob('set_in', "| in > life < |")
-	k_set_in.setToolTip("With set Starting Frame")
+	k_set_in.setTooltip("With set Starting Frame")
 	k_set_out = nuke.PyScript_Knob('set_out', "| > life < out |")
-	k_set_out.setToolTip("With set Ending Frame")
+	k_set_out.setTooltip("With set Ending Frame")
 
 	## Button Commands
-	cmd_set_a = """\
-	n = nuke.thisNode()\
-	k = n.knob('value')\
-	k.clearAnimation()\
-	i = int(n['xIn'].value())\
-	o = int(n['xOut'].value())\
-	d = int(n['tdur'].value())\
-	l = int(n['llen'].value())\
+	cmd_set_a = """
+n = nuke.thisNode()
+k = n.knob('value')
+k.clearAnimation()
+i = int(n['xIn'].value())
+o = int(n['xOut'].value())
+d = int(n['tdur'].value())
+l = int(n['llen'].value())
 	"""
-	cmd_set_b = """\
-	k.setAnimated()\
-	for key in [key_i, key_ii, key_oo, key_o]:\
-		k.setValueAt(*key)\
+	cmd_set_b = """
+k.setAnimated()
+for key in [key_i, key_ii, key_oo, key_o]:
+	k.setValueAt(*key)
 	"""
 
-	k_set_io.setCommand("""\
-	{}
-	key_i = [0, i]\
-	key_ii = [1, i+d]\
-	key_oo = [1, o-d]\
-	key_o = [0, o]\
-	{}
+	k_set_io.setCommand("""
+{}
+key_i = [0, i]
+key_ii = [1, i+d]
+key_oo = [1, o-d]
+key_o = [0, o]
+{}
 	""".format(cmd_set_a, cmd_set_b))
 
-	k_set_in.setCommand("""\
-	{}
-	key_i = [0, i]\
-	key_ii = [1, i+d]\
-	key_oo = [1, i+d+l]\
-	key_o = [0, i+d*2+l]\
-	{}
+	k_set_in.setCommand("""
+{}
+key_i = [0, i]
+key_ii = [1, i+d]
+key_oo = [1, i+d+l]
+key_o = [0, i+d*2+l]
+{}
 	""".format(cmd_set_a, cmd_set_b))
 
-	k_set_out.setCommand("""\
-	{}
-	key_i = [0, o-d*2-l]\
-	key_ii = [1, o-d-l]\
-	key_oo = [1, o-d]\
-	key_o = [0, o]\
-	{}
+	k_set_out.setCommand("""
+{}
+key_i = [0, o-d*2-l]
+key_ii = [1, o-d-l]
+key_oo = [1, o-d]
+key_o = [0, o]
+{}
 	""".format(cmd_set_a, cmd_set_b))
 
 	# Add Knobs
-	for knob in [tb_user, k_in, k_out, k_tdur, k_llen]:
+	for knob in [tb_user, k_in, k_out, k_tdur, k_llen, k_set_io]:
 		knob.setFlag(nuke.STARTLINE)
 		node.addKnob(knob)
 
-	for knob in [k_set_io, k_set_in, k_set_out]:
+	for knob in [k_set_in, k_set_out]:
 		knob.clearFlag(nuke.STARTLINE)
 		node.addKnob(knob)
 
 	# Knob Changed
-	node['KnobChanged'].setValue("""\
-	k = nuke.thisKnob()\
-	if k.name() in ['xIn', 'xOut']:\
-		if k.value() == 'F': k.setValue(str(nuke.FrameRange().first()));\
-		elif k.value() == 'L': k.setValue(str(nuke.FrameRange().last()));\
-		elif k.value() == 'M': k.setValue(str(nuke.FrameRange().first()+nuke.FrameRange().frames()/2));\
-	if k.name() == 'llen':\
-		if k.value() == 'R': k.setValue(str(nuke.FrameRange().frames()-nuke.thisNode()['tdur'].value()*2))\
+	node['KnobChanged'].setValue("""
+k = nuke.thisKnob()
+if k.name() in ['xIn', 'xOut']:
+	if k.value() == 'F': k.setValue(str(nuke.FrameRange().first()));
+	elif k.value() == 'L': k.setValue(str(nuke.FrameRange().last()));
+	elif k.value() == 'M': k.setValue(str(nuke.FrameRange().first()+nuke.FrameRange().frames()/2));
+if k.name() == 'llen':
+	if k.value() == 'R': k.setValue(str(nuke.FrameRange().frames()-nuke.thisNode()['tdur'].value()*2))
 	""")
 
 
@@ -452,12 +452,12 @@ def showFileDir():
 
 	nodes = nuke.allNodes('Read')
 
-	print "========== FILES ==========", "\n\n"
+	print "========== FILES ==========", "nn"
 
 	for n in nodes:
-		print '------  ', n.name() , " -> ",n['file'].value(), "\n", "__________"
+		print '------  ', n.name() , " -> ",n['file'].value(), "n", "__________"
 
-	print "\n\n", "========== END FILES =========="
+	print "nn", "========== END FILES =========="
 
 
 def resetNodeCol():
@@ -468,7 +468,7 @@ def resetNodeCol():
 			n['tile_color'].setValue(0)
 			aNode.append(n.name())
 
-	nuke.message('Reseted Color For: ' + '\n' + str(', '.join(aNode)))
+	nuke.message('Reseted Color For: ' + 'n' + str(', '.join(aNode)))
 
 
 def reloadRead():
@@ -498,9 +498,9 @@ def reloadRead():
 	else:
 		nuke.message("No Read Nodes to Reload")
 
-	print '\n, '"="*25, '\n'
-	print "\n".join(reload_list)
-	print '\n, '"="*25, '\n'
+	print 'n, '"="*25, 'n'
+	print "n".join(reload_list)
+	print 'n, '"="*25, 'n'
 
 
 def selConnected():
@@ -520,7 +520,7 @@ def holdAtFrame():
 	node_label = node['label'].value()
 
 	nukescripts.node_copypaste()  # Duplicating the Node
-	print "\n\n", node.name()
+	print "nn", node.name()
 
 	node_held = nuke.selectedNode()  # Return the duplicated node
 
@@ -535,7 +535,7 @@ def holdAtFrame():
 		node_held['tile_color'].setValue(2147418367)  # Light Green Color
 
 		if node_label != "":  # for MPC Naming convnsion
-			node_held['label'].setValue(node_label + "\n" + "x" + str(nuke.frame()))
+			node_held['label'].setValue(node_label + "n" + "x" + str(nuke.frame()))
 		else:
 			node_held['label'].setValue("x" + str(nuke.frame()))
 
