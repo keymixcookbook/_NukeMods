@@ -361,7 +361,7 @@ def fadeMultiply():
 	cmd_set_a = """
 n = nuke.thisNode()
 k = n.knob('value')
-k.clearAnimation()
+k.clearAnimated()
 i = int(n['xIn'].value())
 o = int(n['xOut'].value())
 d = int(n['tdur'].value())
@@ -370,6 +370,7 @@ l = int(n['llen'].value())
 	cmd_set_b = """
 k.setAnimated()
 for key in [key_i, key_ii, key_oo, key_o]:
+	print(key)
 	k.setValueAt(*key)
 	"""
 
@@ -413,11 +414,11 @@ key_o = [0, o]
 	node['KnobChanged'].setValue("""
 k = nuke.thisKnob()
 if k.name() in ['xIn', 'xOut']:
-	if k.value() == 'F': k.setValue(str(nuke.FrameRange().first()));
-	elif k.value() == 'L': k.setValue(str(nuke.FrameRange().last()));
-	elif k.value() == 'M': k.setValue(str(nuke.FrameRange().first()+nuke.FrameRange().frames()/2));
+	if k.value() == 'F': k.setValue( str(nuke.root()['first_frame'].value()) );
+	elif k.value() == 'L': k.setValue( str(nuke.root()['last_frame'].value()) );
+	elif k.value() == 'M': k.setValue( str(nuke.root()['first_frame'].value()+(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value())/2) );
 if k.name() == 'llen':
-	if k.value() == 'R': k.setValue(str(nuke.FrameRange().frames()-nuke.thisNode()['tdur'].value()*2))
+	if k.value() == 'R': k.setValue(str(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value()-nuke.thisNode()['tdur'].value()*2))
 	""")
 
 
