@@ -345,16 +345,20 @@ def fadeMultiply():
 	# Create Knobs
 	tb_user = nuke.Tab_Knob('tb_user', 'KuFade')
 	k_in = nuke.String_Knob('xIn', "Frame In", '1001')
+	k_in.setTooltip("'F': first frame\n'L': last frame\n'M': middle frame")
 	k_out = nuke.String_Knob('xOut', "Frame Out", '1009')
-	k_tdur = nuke.Int_Knob('tdur', "Length Transition", 3)
+	k_out.setTooltip("'F': first frame\n'L': last frame\n'M': middle frame")
+	k_tdur = nuke.Int_Knob('tdur', "Length Transition")
+	k_tdur.setValue(3)
 	k_llen = nuke.String_Knob('llen', "Length Life", '3')
+	k_llen.setTooltip("'R', frame range - both transition length")
 
 	## Button Knobs
-	k_set_io = nuke.PyScript_Knob('set_io', "| in > x < out |")
+	k_set_io = nuke.PyScript_Knob('set_io', "In and Out")
 	k_set_io.setTooltip("Between In and Out Frames")
-	k_set_in = nuke.PyScript_Knob('set_in', "| in > life < |")
+	k_set_in = nuke.PyScript_Knob('set_in', "In")
 	k_set_in.setTooltip("With set Starting Frame")
-	k_set_out = nuke.PyScript_Knob('set_out', "| > life < out |")
+	k_set_out = nuke.PyScript_Knob('set_out', "Out")
 	k_set_out.setTooltip("With set Ending Frame")
 
 	## Button Commands
@@ -411,14 +415,14 @@ key_o = [0, o]
 		node.addKnob(knob)
 
 	# Knob Changed
-	node['KnobChanged'].setValue("""
+	node['knobChanged'].setValue("""
 k = nuke.thisKnob()
 if k.name() in ['xIn', 'xOut']:
-	if k.value() == 'F': k.setValue( str(nuke.root()['first_frame'].value()) );
-	elif k.value() == 'L': k.setValue( str(nuke.root()['last_frame'].value()) );
-	elif k.value() == 'M': k.setValue( str(nuke.root()['first_frame'].value()+(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value())/2) );
+	if k.value() == 'F': k.setValue( str(int(nuke.root()['first_frame'].value())) );
+	elif k.value() == 'L': k.setValue( str(int(nuke.root()['last_frame'].value())) );
+	elif k.value() == 'M': k.setValue( str(int(nuke.root()['first_frame'].value()+(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value())/2)) );
 if k.name() == 'llen':
-	if k.value() == 'R': k.setValue(str(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value()-nuke.thisNode()['tdur'].value()*2))
+	if k.value() == 'R': k.setValue( str(int(nuke.root()['last_frame'].value()-nuke.root()['first_frame'].value()-nuke.thisNode()['tdur'].value()*2)))
 	""")
 
 
