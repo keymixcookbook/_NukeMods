@@ -1,2913 +1,2913 @@
 class AColor_Knob(Color_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class AnimationCurve(object):
 
-    def fixSlopes(self):
+	def fixSlopes(self):
 		pass
 
-    def constant(self):
+	def constant(self):
 		pass
 
-    def removeKey(self, keys):
+	def removeKey(self, keys):
 		pass
 
-    def size(self):
+	def size(self):
 		pass
 
-    def knobIndex(self):
+	def knobIndex(self):
 		pass
 
-    def inverse(self, y):
+	def inverse(self, y):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def selected(self):
+	def selected(self):
 		pass
 
-    def setKey(self):
+	def setKey(self):
 		pass
 
-    def addKey(self, keys):
+	def addKey(self, keys):
 		pass
 
-    def changeInterpolation(self):
+	def changeInterpolation(self):
 		pass
 
-    def toScript(self, selected):
+	def toScript(self, selected):
 		pass
 
-    def knob(self):
+	def knob(self):
 		pass
 
-    def keys(self):
+	def keys(self):
 		pass
 
-    def evaluate(self, t):
+	def evaluate(self, t):
 		pass
 
-    def integrate(self):
+	def integrate(self):
 		pass
 
-    def derivative(self):
+	def derivative(self):
 		pass
 
-    def setExpression(self, s):
+	def setExpression(self, s):
 		pass
 
-    def identity(self):
+	def identity(self):
 		pass
 
-    def clear(self):
+	def clear(self):
 		pass
 
-    def fromScript(self, s):
+	def fromScript(self, s):
 		pass
 
-    def knobAndFieldName(self):
+	def knobAndFieldName(self):
 		pass
 
-    def noExpression(self):
+	def noExpression(self):
 		pass
 
-    def expression(self):
+	def expression(self):
 		pass
 
-    def view(self):
+	def view(self):
 		pass
 
 
 class AnimationKey(object):
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Array_Knob(Knob):
 
-    def clearAnimated(self):
+	def clearAnimated(self):
 		pass
 
-    def removeKey(self):
+	def removeKey(self):
 		pass
 
-    def setValueAt(self):
+	def setValueAt(self):
 		pass
 
-    def frame(self):
+	def frame(self):
 		pass
 
-    def removeKeyAt(self):
+	def removeKeyAt(self):
 		pass
 
-    def height(self):
+	def height(self):
 		pass
 
-    def minimum(self):
+	def minimum(self):
 		pass
 
-    def unsplitView(self, view):
+	def unsplitView(self, view):
 		pass
 
-    def array(self):
+	def array(self):
 		pass
 
-    def getIntegral(self):
+	def getIntegral(self):
 		pass
 
-    def singleValue(self, view):
+	def singleValue(self, view):
 		pass
 
-    def isKeyAt(self):
+	def isKeyAt(self):
 		pass
 
-    def hasExpression(self, index):
+	def hasExpression(self, index):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setKeyAt(self):
+	def setKeyAt(self):
 		pass
 
-    def min(self):
+	def min(self):
 		pass
 
-    def defaultValue(self):
+	def defaultValue(self):
 		pass
 
-    def getKeyTime(self):
+	def getKeyTime(self):
 		pass
 
-    def deleteAnimation(self, curve):
+	def deleteAnimation(self, curve):
 		pass
 
-    def width(self):
+	def width(self):
 		pass
 
-    def getNumKeys(self):
+	def getNumKeys(self):
 		pass
 
-    def valueAt(self):
+	def valueAt(self):
 		pass
 
-    def arraySize(self):
+	def arraySize(self):
 		pass
 
-    def max(self):
+	def max(self):
 		pass
 
-    def setSingleValue(self):
+	def setSingleValue(self):
 		pass
 
-    def toScript(self):
+	def toScript(self):
 		pass
 
-    def notDefault(self):
+	def notDefault(self):
 		pass
 
-    def splitView(self, view):
+	def splitView(self, view):
 		pass
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def isAnimated(self):
+	def isAnimated(self):
 		pass
 
-    def copyAnimations(self):
+	def copyAnimations(self):
 		pass
 
-    def setDefaultValue(self, s):
+	def setDefaultValue(self, s):
 		pass
 
-    def dimensions(self):
+	def dimensions(self):
 		pass
 
-    def vect(self):
+	def vect(self):
 		pass
 
-    def animations(self, view):
+	def animations(self, view):
 		pass
 
-    def setAnimated(self):
+	def setAnimated(self):
 		pass
 
-    def getDerivative(self):
+	def getDerivative(self):
 		pass
 
-    def setExpression(self):
+	def setExpression(self):
 		pass
 
-    def animation(self):
+	def animation(self):
 		pass
 
-    def resize(self):
+	def resize(self):
 		pass
 
-    def setRange(self):
+	def setRange(self):
 		pass
 
-    def getValueAt(self):
+	def getValueAt(self):
 		pass
 
-    def getNthDerivative(self):
+	def getNthDerivative(self):
 		pass
 
-    def isKey(self):
+	def isKey(self):
 		pass
 
-    def fromScript(self, s):
+	def fromScript(self, s):
 		pass
 
-    def maximum(self):
+	def maximum(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def getValue(self):
+	def getValue(self):
 		pass
 
-    def getKeyIndex(self):
+	def getKeyIndex(self):
 		pass
 
-    def copyAnimation(self):
+	def copyAnimation(self):
 		pass
 
 
 class Axis_Knob(Knob):
 
-    def uniformScale(self):
+	def uniformScale(self):
 		pass
 
-    def rotate(self):
+	def rotate(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def skew(self):
+	def skew(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def scale(self):
+	def scale(self):
 		pass
 
-    def pivot(self):
+	def pivot(self):
 		pass
 
-    def translate(self):
+	def translate(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class BBox_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setT(self):
+	def setT(self):
 		pass
 
-    def fromDict(self, box):
+	def fromDict(self, box):
 		pass
 
-    def r(self):
+	def r(self):
 		pass
 
-    def names(self):
+	def names(self):
 		pass
 
-    def setR(self):
+	def setR(self):
 		pass
 
-    def toDict(self):
+	def toDict(self):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
-    def setX(self):
+	def setX(self):
 		pass
 
-    def setY(self):
+	def setY(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def t(self):
+	def t(self):
 		pass
 
 
 class BackdropNode(Node):
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def selectNodes(self):
+	def selectNodes(self):
 		pass
 
-    def getNodes(self):
+	def getNodes(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class BeginTabGroup_Knob(Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Bitmask_Knob(Enumeration_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Boolean_Knob(Array_Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self, b):
+	def setValue(self, b):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Box(object):
 
-    def set(self):
+	def set(self):
 		pass
 
-    def move(self):
+	def move(self):
 		pass
 
-    def isConstant(self):
+	def isConstant(self):
 		pass
 
-    def clampY(self, y):
+	def clampY(self, y):
 		pass
 
-    def clampX(self, x):
+	def clampX(self, x):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def pad(self):
+	def pad(self):
 		pass
 
-    def centerX(self):
+	def centerX(self):
 		pass
 
-    def centerY(self):
+	def centerY(self):
 		pass
 
-    def intersect(self):
+	def intersect(self):
 		pass
 
-    def setH(self, n):
+	def setH(self, n):
 		pass
 
-    def setT(self, n):
+	def setT(self, n):
 		pass
 
-    def setW(self, n):
+	def setW(self, n):
 		pass
 
-    def setR(self, n):
+	def setR(self, n):
 		pass
 
-    def setX(self, n):
+	def setX(self, n):
 		pass
 
-    def setY(self, n):
+	def setY(self, n):
 		pass
 
-    def h(self):
+	def h(self):
 		pass
 
-    def clear(self):
+	def clear(self):
 		pass
 
-    def merge(self):
+	def merge(self):
 		pass
 
-    def r(self):
+	def r(self):
 		pass
 
-    def t(self):
+	def t(self):
 		pass
 
-    def w(self):
+	def w(self):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
 
 class Box3_Knob(Array_Knob):
 
-    def setF(self, far):
+	def setF(self, far):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def f(self, ar):
+	def f(self, ar):
 		pass
 
-    def setN(self, near):
+	def setN(self, near):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def n(self, ear):
+	def n(self, ear):
 		pass
 
-    def setT(self, top):
+	def setT(self, top):
 		pass
 
-    def r(self, ight):
+	def r(self, ight):
 		pass
 
-    def names(self):
+	def names(self):
 		pass
 
-    def setR(self, right):
+	def setR(self, right):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
-    def setX(self):
+	def setX(self):
 		pass
 
-    def setY(self):
+	def setY(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def t(self, op):
+	def t(self, op):
 		pass
 
 
 class CancelledError(Exception):
-
+	pass
 
 class CascadingEnumeration_Knob(Enumeration_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class ChannelMask_Knob(Channel_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Channel_Knob(Knob):
 
-    def inputNumber(self):
+	def inputNumber(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def enableChannel(self):
+	def enableChannel(self):
 		pass
 
-    def layerSelector(self):
+	def layerSelector(self):
 		pass
 
-    def setEnable(self, name):
+	def setEnable(self, name):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def checkMarks(self):
+	def checkMarks(self):
 		pass
 
-    def channelSelector(self):
+	def channelSelector(self):
 		pass
 
-    def depth(self):
+	def depth(self):
 		pass
 
-    def setValue(self, name):
+	def setValue(self, name):
 		pass
 
-    def setInput(self, num):
+	def setInput(self, num):
 		pass
 
-    def inputKnob(self):
+	def inputKnob(self):
 		pass
 
-    def isChannelEnabled(self, name):
+	def isChannelEnabled(self, name):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class ColorChip_Knob(Unsigned_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Color_Knob(Array_Knob):
 
-    def inputNumber(self):
+	def inputNumber(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
 
 class ColorspaceLookupError(Exception):
-
+	pass
 
 class Disable_Knob(Boolean_Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self, b):
+	def setValue(self, b):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Double_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class EditableEnumeration_Knob(Enumeration_Knob):
 
-    def setValue(self, item):
+	def setValue(self, item):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def numValues(self):
+	def numValues(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def enumName(self, n):
+	def enumName(self, n):
 		pass
 
-    def values(self):
+	def values(self):
 		pass
 
-    def setValues(self, items):
+	def setValues(self, items):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class EndTabGroup_Knob(Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Enumeration_Knob(Unsigned_Knob):
 
-    def setValue(self, item):
+	def setValue(self, item):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def numValues(self):
+	def numValues(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def enumName(self, n):
+	def enumName(self, n):
 		pass
 
-    def values(self):
+	def values(self):
 		pass
 
-    def setValues(self, items):
+	def setValues(self, items):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class EvalString_Knob(String_Knob):
 
-    def evaluate(self):
+	def evaluate(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Eyedropper_Knob(AColor_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class File_Knob(EvalString_Knob):
 
-    def fromUserText(self, s):
+	def fromUserText(self, s):
 		pass
 
-    def setValue(self, s):
+	def setValue(self, s):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def fromScript(self, s):
+	def fromScript(self, s):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def getValue(self):
+	def getValue(self):
 		pass
 
-    def getEvaluatedValue(self, oc):
+	def getEvaluatedValue(self, oc):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class FnPySingleton(object):
 
-    def __new__(self, type):
+	def __new__(self, type):
 		pass
 
 
 class Font_Knob(Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Format(object):
 
-    def setPixelAspect(self, aspectRatio):
+	def setPixelAspect(self, aspectRatio):
 		pass
 
-    def height(self):
+	def height(self):
 		pass
 
-    def scaled(self):
+	def scaled(self):
 		pass
 
-    def setWidth(self, newWidth):
+	def setWidth(self, newWidth):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def width(self):
+	def width(self):
 		pass
 
-    def add(self, name):
+	def add(self, name):
 		pass
 
-    def setName(self, name):
+	def setName(self, name):
 		pass
 
-    def setT(self, newT):
+	def setT(self, newT):
 		pass
 
-    def setR(self, newR):
+	def setR(self, newR):
 		pass
 
-    def fromUV(self):
+	def fromUV(self):
 		pass
 
-    def setX(self, newX):
+	def setX(self, newX):
 		pass
 
-    def setY(self, newY):
+	def setY(self, newY):
 		pass
 
-    def setHeight(self, newHeight):
+	def setHeight(self, newHeight):
 		pass
 
-    def pixelAspect(self):
+	def pixelAspect(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def r(self):
+	def r(self):
 		pass
 
-    def t(self):
+	def t(self):
 		pass
 
-    def toUV(self):
+	def toUV(self):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
 
 class Format_Knob(Knob):
 
-    def setValue(self, format):
+	def setValue(self, format):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def fromScript(self, s):
+	def fromScript(self, s):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def actualValue(self):
+	def actualValue(self):
 		pass
 
-    def toScript(self):
+	def toScript(self):
 		pass
 
-    def notDefault(self):
+	def notDefault(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
 
 class FrameRange(object):
 
-    def minFrame(self):
+	def minFrame(self):
 		pass
 
-    def last(self):
+	def last(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setLast(self, n):
+	def setLast(self, n):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def getFrame(self, n):
+	def getFrame(self, n):
 		pass
 
-    def stepFrame(self):
+	def stepFrame(self):
 		pass
 
-    def setFirst(self, n):
+	def setFirst(self, n):
 		pass
 
-    def next(self):
+	def next(self):
 		pass
 
-    def isInRange(self, n):
+	def isInRange(self, n):
 		pass
 
-    def maxFrame(self):
+	def maxFrame(self):
 		pass
 
-    def __iter__(self):
+	def __iter__(self):
 		pass
 
-    def setIncrement(self, n):
+	def setIncrement(self, n):
 		pass
 
-    def increment(self):
+	def increment(self):
 		pass
 
-    def frames(self):
+	def frames(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def first(self):
+	def first(self):
 		pass
 
 
 class FrameRanges(object):
 
-    def compact(self):
+	def compact(self):
 		pass
 
-    def getRange(self):
+	def getRange(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def toFrameList(self):
+	def toFrameList(self):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def minFrame(self):
+	def minFrame(self):
 		pass
 
-    def add(self, r):
+	def add(self, r):
 		pass
 
-    def next(self):
+	def next(self):
 		pass
 
-    def maxFrame(self):
+	def maxFrame(self):
 		pass
 
-    def __iter__(self):
+	def __iter__(self):
 		pass
 
-    def clear(self):
+	def clear(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def size(self):
+	def size(self):
 		pass
 
 
 class FreeType_Knob(Knob):
 
-    def setValue(self, family, style):
+	def setValue(self, family, style):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def getValue(self):
+	def getValue(self):
 		pass
 
 
 class GeoSelect_Knob(Knob):
 
-    def __setattr__(self):
+	def __setattr__(self):
 		pass
 
-    def getSelection(self):
+	def getSelection(self):
 		pass
 
-    def __getattribute__(self, 'name'):
+	def __getattribute__(self, name):
 		pass
 
-    def getGeometry(self):
+	def getGeometry(self):
 		pass
 
-    def __delattr__(self, 'name'):
+	def __delattr__(self, name):
 		pass
 
 
 class Gizmo(Group):
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def filename(self):
+	def filename(self):
 		pass
 
-    def command(self):
+	def command(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def makeGroup(self):
+	def makeGroup(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class GlobalsEnvironment(object):
 
-    def __delitem__(self, y):
+	def __delitem__(self, y):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def __contains__(self):
+	def __contains__(self):
 		pass
 
-    def keys(self):
+	def keys(self):
 		pass
 
-    def items(self):
+	def items(self):
 		pass
 
-    def get(self):
+	def get(self):
 		pass
 
-    def __setitem__(self):
+	def __setitem__(self):
 		pass
 
-    def has_key(self):
+	def has_key(self):
 		pass
 
-    def values(self):
+	def values(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class Group(Node):
 
-    def node(self, s):
+	def node(self, s):
 		pass
 
-    def __exit__(self):
+	def __exit__(self):
 		pass
 
-    def begin(self):
+	def begin(self):
 		pass
 
-    def __enter__(self):
+	def __enter__(self):
 		pass
 
-    def run(self, callable):
+	def run(self, callable):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def numNodes(self):
+	def numNodes(self):
 		pass
 
-    def connectSelectedNodes(self):
+	def connectSelectedNodes(self):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def selectedNode(self):
+	def selectedNode(self):
 		pass
 
-    def selectedNodes(self):
+	def selectedNodes(self):
 		pass
 
-    def __reduce_ex__(self):
+	def __reduce_ex__(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def output(self):
+	def output(self):
 		pass
 
-    def expand(self):
+	def expand(self):
 		pass
 
-    def end(self):
+	def end(self):
 		pass
 
-    def nodes(self):
+	def nodes(self):
 		pass
 
-    def splaySelectedNodes(self):
+	def splaySelectedNodes(self):
 		pass
 
-    def subgraphLocked(self):
+	def subgraphLocked(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class Hash(object):
 
-    def reset(self):
+	def reset(self):
 		pass
 
-    def __ne__(self, y):
+	def __ne__(self, y):
 		pass
 
-    def __setattr__(self):
+	def __setattr__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setHash(self):
+	def setHash(self):
 		pass
 
-    def __getattribute__(self, 'name'):
+	def __getattribute__(self, name):
 		pass
 
-    def __delattr__(self, 'name'):
+	def __delattr__(self, name):
 		pass
 
-    def __le__(self, y):
+	def __le__(self, y):
 		pass
 
-    def append(self):
+	def append(self):
 		pass
 
-    def __gt__(self, y):
+	def __gt__(self, y):
 		pass
 
-    def __hash__(self):
+	def __hash__(self):
 		pass
 
-    def getHash(self):
+	def getHash(self):
 		pass
 
-    def __lt__(self, y):
+	def __lt__(self, y):
 		pass
 
-    def __eq__(self, y):
+	def __eq__(self, y):
 		pass
 
-    def __ge__(self, y):
+	def __ge__(self, y):
 		pass
 
 
 class Help_Knob(Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Histogram_Knob(Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class IArray_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def height(self):
+	def height(self):
 		pass
 
-    def width(self):
+	def width(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def dimensions(self):
+	def dimensions(self):
 		pass
 
 
 class Info(object):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def h(self):
+	def h(self):
 		pass
 
-    def w(self):
+	def w(self):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Int_Knob(Array_Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self, val):
+	def setValue(self, val):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Keyer_Knob(Array_Knob):
 
-    def highTol(self):
+	def highTol(self):
 		pass
 
-    def lowSoft(self):
+	def lowSoft(self):
 		pass
 
-    def lowTol(self):
+	def lowTol(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
-    def highSoft(self):
+	def highSoft(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Knob(object):
 
-    def clearAnimated(self):
+	def clearAnimated(self):
 		pass
 
-    def setLabel(self, s):
+	def setLabel(self, s):
 		pass
 
-    def setTooltip(self, s):
+	def setTooltip(self, s):
 		pass
 
-    def removeKey(self):
+	def removeKey(self):
 		pass
 
-    def getFlag(self, f):
+	def getFlag(self, f):
 		pass
 
-    def setEnabled(self, enabled):
+	def setEnabled(self, enabled):
 		pass
 
-    def removeKeyAt(self):
+	def removeKeyAt(self):
 		pass
 
-    def visible(self):
+	def visible(self):
 		pass
 
-    def warning(self, message):
+	def warning(self, message):
 		pass
 
-    def getIntegral(self):
+	def getIntegral(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def isKeyAt(self):
+	def isKeyAt(self):
 		pass
 
-    def hasExpression(self, index=-1):
+	def hasExpression(self, index=-1):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def getKeyTime(self):
+	def getKeyTime(self):
 		pass
 
-    def tooltip(self):
+	def tooltip(self):
 		pass
 
-    def label(self):
+	def label(self):
 		pass
 
-    def setFlag(self, f):
+	def setFlag(self, f):
 		pass
 
-    def getNumKeys(self):
+	def getNumKeys(self):
 		pass
 
-    def critical(self, message):
+	def critical(self, message):
 		pass
 
-    def toScript(self):
+	def toScript(self):
 		pass
 
-    def getKeyList(self):
+	def getKeyList(self):
 		pass
 
-    def clearFlag(self, f):
+	def clearFlag(self, f):
 		pass
 
-    def Class(self):
+	def Class(self):
 		pass
 
-    def node(self):
+	def node(self):
 		pass
 
-    def fullyQualifiedName(self, channel=-1):
+	def fullyQualifiedName(self, channel=-1):
 		pass
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def setName(self, s):
+	def setName(self, s):
 		pass
 
-    def isAnimated(self):
+	def isAnimated(self):
 		pass
 
-    def setAnimated(self):
+	def setAnimated(self):
 		pass
 
-    def getDerivative(self):
+	def getDerivative(self):
 		pass
 
-    def setExpression(self):
+	def setExpression(self):
 		pass
 
-    def setValueAt(self):
+	def setValueAt(self):
 		pass
 
-    def getNthDerivative(self):
+	def getNthDerivative(self):
 		pass
 
-    def getValueAt(self):
+	def getValueAt(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def isKey(self):
+	def isKey(self):
 		pass
 
-    def fromScript(self):
+	def fromScript(self):
 		pass
 
-    def enabled(self):
+	def enabled(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def getValue(self):
+	def getValue(self):
 		pass
 
-    def getKeyIndex(self):
+	def getKeyIndex(self):
 		pass
 
-    def error(self, message):
+	def error(self, message):
 		pass
 
-    def debug(self, message):
+	def debug(self, message):
 		pass
 
-    def setVisible(self, visible):
+	def setVisible(self, visible):
 		pass
 
 
 class KnobScripterPane(KnobScripter):
 
-    def hideEvent(self, self, the_event):
+	def hideEvent(self, the_event):
 		pass
 
-    def showEvent(self, self, the_event):
+	def showEvent(self, the_event):
 		pass
 
-    def __init__(self, self, node, knob):
+	def __init__(self, node, knob):
 		pass
 
 
 class KnobType(object):
-
+	pass
 
 class Layer(object):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setName(self, newName):
+	def setName(self, newName):
 		pass
 
-    def channels(self):
+	def channels(self):
 		pass
 
-    def visible(self):
+	def visible(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
 
 class Link_Knob(Knob):
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def getLinkedKnob(self):
+	def getLinkedKnob(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def revertOverride(self):
+	def revertOverride(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def getLink(self):
+	def getLink(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def setLink(self, s):
+	def setLink(self, s):
 		pass
 
-    def applyOverride(self):
+	def applyOverride(self):
 		pass
 
-    def makeLink(self):
+	def makeLink(self):
 		pass
 
 
 class LinkableKnobInfo(object):
 
-    def knob(self):
+	def knob(self):
 		pass
 
-    def __setattr__(self):
+	def __setattr__(self):
 		pass
 
-    def displayName(self):
+	def displayName(self):
 		pass
 
-    def enabled(self):
+	def enabled(self):
 		pass
 
-    def __getattribute__(self, 'name'):
+	def __getattribute__(self, name):
 		pass
 
-    def __delattr__(self, 'name'):
+	def __delattr__(self, name):
 		pass
 
-    def indices(self):
+	def indices(self):
 		pass
 
-    def absolute(self):
+	def absolute(self):
 		pass
 
 
 class LiveGroup(Precomp):
 
-    def applyOverrides(self):
+	def applyOverrides(self):
 		pass
 
-    def revertOverrides(self):
+	def revertOverrides(self):
 		pass
 
-    def isLocal(self):
+	def isLocal(self):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def makeEditable(self):
+	def makeEditable(self):
 		pass
 
-    def publish(self, file):
+	def publish(self, file):
 		pass
 
-    def anyOverrides(self):
+	def anyOverrides(self):
 		pass
 
-    def modified(self):
+	def modified(self):
 		pass
 
-    def makeLocal(self):
+	def makeLocal(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def published(self):
+	def published(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class LookupCurves_Knob(Knob):
 
-    def delCurve(self, curve):
+	def delCurve(self, curve):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def editCurve(self):
+	def editCurve(self):
 		pass
 
-    def addCurve(self):
+	def addCurve(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Lut(object):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def toByte(self, float):
+	def toByte(self, float):
 		pass
 
-    def fromByteSingle(self, float):
+	def fromByteSingle(self, float):
 		pass
 
-    def fromFloat(self):
+	def fromFloat(self):
 		pass
 
-    def toFloat(self):
+	def toFloat(self):
 		pass
 
-    def isLinear(self):
+	def isLinear(self):
 		pass
 
-    def toByteSingle(self, float):
+	def toByteSingle(self, float):
 		pass
 
-    def fromByte(self, float):
+	def fromByte(self, float):
 		pass
 
-    def isZero(self):
+	def isZero(self):
 		pass
 
 
 class Menu(MenuItem):
 
-    def addAction(self, action):
+	def addAction(self, action):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def addSeparator(self, **kwargs):
+	def addSeparator(self, **kwargs):
 		pass
 
-    def menu(self, name):
+	def menu(self, name):
 		pass
 
-    def addCommand(self):
+	def addCommand(self):
 		pass
 
-    def addMenu(self, **kwargs):
+	def addMenu(self, **kwargs):
 		pass
 
-    def removeItem(self, name):
+	def removeItem(self, name):
 		pass
 
-    def updateMenuItems(self):
+	def updateMenuItems(self):
 		pass
 
-    def items(self):
+	def items(self):
 		pass
 
-    def findItem(self, name):
+	def findItem(self, name):
 		pass
 
-    def clearMenu(self):
+	def clearMenu(self):
 		pass
 
 
 class MenuBar(object):
 
-    def addAction(self, action):
+	def addAction(self, action):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def addSeparator(self, **kwargs):
+	def addSeparator(self, **kwargs):
 		pass
 
-    def menu(self, name):
+	def menu(self, name):
 		pass
 
-    def addCommand(self):
+	def addCommand(self):
 		pass
 
-    def addMenu(self, **kwargs):
+	def addMenu(self, **kwargs):
 		pass
 
-    def removeItem(self, name):
+	def removeItem(self, name):
 		pass
 
-    def updateMenuItems(self):
+	def updateMenuItems(self):
 		pass
 
-    def items(self):
+	def items(self):
 		pass
 
-    def findItem(self, name):
+	def findItem(self, name):
 		pass
 
-    def clearMenu(self):
+	def clearMenu(self):
 		pass
 
 
 class MenuItem(object):
 
-    def setEnabled(self):
+	def setEnabled(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def invoke(self):
+	def invoke(self):
 		pass
 
-    def script(self):
+	def script(self):
 		pass
 
-    def setScript(self, script):
+	def setScript(self, script):
 		pass
 
-    def setIcon(self, icon):
+	def setIcon(self, icon):
 		pass
 
-    def setShortcut(self, keySequence):
+	def setShortcut(self, keySequence):
 		pass
 
-    def shortcut(self):
+	def shortcut(self):
 		pass
 
-    def action(self):
+	def action(self):
 		pass
 
-    def setVisible(self, visible):
+	def setVisible(self, visible):
 		pass
 
-    def icon(self):
+	def icon(self):
 		pass
 
 
 class MultiView_Knob(Knob):
 
-    def toScriptPrefix(self):
+	def toScriptPrefix(self):
 		pass
 
-    def setValue(self, s):
+	def setValue(self, s):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def fromScript(self, s):
+	def fromScript(self, s):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def toScriptPrefixUserKnob(self):
+	def toScriptPrefixUserKnob(self):
 		pass
 
-    def toScript(self):
+	def toScript(self):
 		pass
 
-    def notDefault(self):
+	def notDefault(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Multiline_Eval_String_Knob(EvalString_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Node(object):
 
-    def help(self):
+	def help(self):
 		pass
 
-    def lastFrame(self):
+	def lastFrame(self):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def maxOutputs(self):
+	def maxOutputs(self):
 		pass
 
-    def performanceInfo(self, category):
+	def performanceInfo(self, category):
 		pass
 
-    def minimumInputs(self):
+	def minimumInputs(self):
 		pass
 
-    def setXpos(self, x):
+	def setXpos(self, x):
 		pass
 
-    def resetKnobsToDefault(self):
+	def resetKnobsToDefault(self):
 		pass
 
-    def hideControlPanel(self):
+	def hideControlPanel(self):
 		pass
 
-    def setYpos(self, y):
+	def setYpos(self, y):
 		pass
 
-    def connectInput(self):
+	def connectInput(self):
 		pass
 
-    def input(self, i):
+	def input(self, i):
 		pass
 
-    def executePythonCallback(self, string):
+	def executePythonCallback(self, string):
 		pass
 
-    def treeHasError(self):
+	def treeHasError(self):
 		pass
 
-    def knob(self):
+	def knob(self):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def format(self):
+	def format(self):
 		pass
 
-    def dependent(self):
+	def dependent(self):
 		pass
 
-    def forceValidate(self):
+	def forceValidate(self):
 		pass
 
-    def bbox(self):
+	def bbox(self):
 		pass
 
-    def locked(self):
+	def locked(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def forceUpdateLocalization(self):
+	def forceUpdateLocalization(self):
 		pass
 
-    def screenHeight(self):
+	def screenHeight(self):
 		pass
 
-    def rootNode(self):
+	def rootNode(self):
 		pass
 
-    def redraw(self):
+	def redraw(self):
 		pass
 
-    def getNumKnobs(self):
+	def getNumKnobs(self):
 		pass
 
-    def writeKnobs(self, i):
+	def writeKnobs(self, i):
 		pass
 
-    def deepSample(self):
+	def deepSample(self):
 		pass
 
-    def fileDependencies(self):
+	def fileDependencies(self):
 		pass
 
-    def unlock(self):
+	def unlock(self):
 		pass
 
-    def maximumOutputs(self):
+	def maximumOutputs(self):
 		pass
 
-    def screenWidth(self):
+	def screenWidth(self):
 		pass
 
-    def shown(self):
+	def shown(self):
 		pass
 
-    def isLocalized(self):
+	def isLocalized(self):
 		pass
 
-    def isSelected(self):
+	def isSelected(self):
 		pass
 
-    def allKnobs(self):
+	def allKnobs(self):
 		pass
 
-    def deepSampleCount(self):
+	def deepSampleCount(self):
 		pass
 
-    def frameRange(self):
+	def frameRange(self):
 		pass
 
-    def Class(self):
+	def Class(self):
 		pass
 
-    def metadata(self):
+	def metadata(self):
 		pass
 
-    def parent(self):
+	def parent(self):
 		pass
 
-    def setXYpos(self):
+	def setXYpos(self):
 		pass
 
-    def ypos(self):
+	def ypos(self):
 		pass
 
-    def dependencies(self, what):
+	def dependencies(self, what):
 		pass
 
-    def proxy(self):
+	def proxy(self):
 		pass
 
-    def showInfo(self, s):
+	def showInfo(self, s):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def addCallback(self):
+	def addCallback(self):
 		pass
 
-    def setSelected(self, selected):
+	def setSelected(self, selected):
 		pass
 
-    def localizationProgress(self):
+	def localizationProgress(self):
 		pass
 
-    def upstreamFrameRange(self, i):
+	def upstreamFrameRange(self, i):
 		pass
 
-    def height(self):
+	def height(self):
 		pass
 
-    def channels(self):
+	def channels(self):
 		pass
 
-    def setInput(self):
+	def setInput(self):
 		pass
 
-    def canSetInput(self):
+	def canSetInput(self):
 		pass
 
-    def fullName(self):
+	def fullName(self):
 		pass
 
-    def firstFrame(self):
+	def firstFrame(self):
 		pass
 
-    def numKnobs(self):
+	def numKnobs(self):
 		pass
 
-    def width(self):
+	def width(self):
 		pass
 
-    def removeKnob(self, k):
+	def removeKnob(self, k):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
-    def hasError(self):
+	def hasError(self):
 		pass
 
-    def setName(self):
+	def setName(self):
 		pass
 
-    def clones(self):
+	def clones(self):
 		pass
 
-    def pixelAspect(self):
+	def pixelAspect(self):
 		pass
 
-    def selectOnly(self):
+	def selectOnly(self):
 		pass
 
-    def readKnobs(self, s):
+	def readKnobs(self, s):
 		pass
 
-    def autoplace(self):
+	def autoplace(self):
 		pass
 
-    def optionalInput(self):
+	def optionalInput(self):
 		pass
 
-    def clearCallbacks(self):
+	def clearCallbacks(self):
 		pass
 
-    def clearCustomIcon(self):
+	def clearCustomIcon(self):
 		pass
 
-    def error(self):
+	def error(self):
 		pass
 
-    def lock(self):
+	def lock(self):
 		pass
 
-    def maximumInputs(self):
+	def maximumInputs(self):
 		pass
 
-    def xpos(self):
+	def xpos(self):
 		pass
 
-    def sample(self):
+	def sample(self):
 		pass
 
-    def setCustomIcon(self):
+	def setCustomIcon(self):
 		pass
 
-    def __reduce_ex__(self):
+	def __reduce_ex__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def maxInputs(self):
+	def maxInputs(self):
 		pass
 
-    def opHashes(self):
+	def opHashes(self):
 		pass
 
-    def showControlPanel(self):
+	def showControlPanel(self):
 		pass
 
-    def knobs(self):
+	def knobs(self):
 		pass
 
-    def removeCallback(self, string):
+	def removeCallback(self, string):
 		pass
 
-    def inputs(self):
+	def inputs(self):
 		pass
 
-    def running(self):
+	def running(self):
 		pass
 
-    def linkableKnobs(self, knobType):
+	def linkableKnobs(self, knobType):
 		pass
 
-    def minInputs(self):
+	def minInputs(self):
 		pass
 
-    def addKnob(self, k):
+	def addKnob(self, k):
 		pass
 
-    def setTab(self, tabIndex):
+	def setTab(self, tabIndex):
 		pass
 
-    def isLocalizationOutdated(self):
+	def isLocalizationOutdated(self):
 		pass
 
 
 class NodeConstructor(object):
 
-    def __call__(self):
+	def __call__(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Nodes(object):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class Obsolete_Knob(Knob):
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class OneView_Knob(Enumeration_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
 
 class OutputContext(object):
 
-    def viewcount(self):
+	def viewcount(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def viewname(self, n):
+	def viewname(self, n):
 		pass
 
-    def setFrame(self, f):
+	def setFrame(self, f):
 		pass
 
-    def frame(self):
+	def frame(self):
 		pass
 
-    def viewFromName(self, name):
+	def viewFromName(self, name):
 		pass
 
-    def setView(self, n):
+	def setView(self, n):
 		pass
 
-    def viewshort(self, n):
+	def viewshort(self, n):
 		pass
 
-    def view(self):
+	def view(self):
 		pass
 
 
 class Panel(object):
 
-    def addEnumerationPulldown(self):
+	def addEnumerationPulldown(self):
 		pass
 
-    def show(self):
+	def show(self):
 		pass
 
-    def setTitle(self, val):
+	def setTitle(self, val):
 		pass
 
-    def addButton(self):
+	def addButton(self):
 		pass
 
-    def addPasswordInput(self):
+	def addPasswordInput(self):
 		pass
 
-    def value(self, name):
+	def value(self, name):
 		pass
 
-    def setWidth(self, val):
+	def setWidth(self, val):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def title(self):
+	def title(self):
 		pass
 
-    def addMultilineTextInput(self):
+	def addMultilineTextInput(self):
 		pass
 
-    def width(self):
+	def width(self):
 		pass
 
-    def addRGBColorChip(self):
+	def addRGBColorChip(self):
 		pass
 
-    def addClipnameSearch(self):
+	def addClipnameSearch(self):
 		pass
 
-    def addNotepad(self):
+	def addNotepad(self):
 		pass
 
-    def addScriptCommand(self):
+	def addScriptCommand(self):
 		pass
 
-    def addSingleLineInput(self):
+	def addSingleLineInput(self):
 		pass
 
-    def addTextFontPulldown(self):
+	def addTextFontPulldown(self):
 		pass
 
-    def execute(self, name):
+	def execute(self, name):
 		pass
 
-    def clear(self):
+	def clear(self):
 		pass
 
-    def addFilenameSearch(self):
+	def addFilenameSearch(self):
 		pass
 
-    def addBooleanCheckBox(self):
+	def addBooleanCheckBox(self):
 		pass
 
-    def addExpressionInput(self):
+	def addExpressionInput(self):
 		pass
 
 
 class PanelNode(object):
 
-    def writeKnobs(self, i):
+	def writeKnobs(self, i):
 		pass
 
-    def createWidget(self):
+	def createWidget(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def addKnob(self, k):
+	def addKnob(self, k):
 		pass
 
-    def removeKnob(self, k):
+	def removeKnob(self, k):
 		pass
 
-    def knobs(self):
+	def knobs(self):
 		pass
 
-    def readKnobs(self, s):
+	def readKnobs(self, s):
 		pass
 
 
 class Password_Knob(Knob):
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def getText(self):
+	def getText(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Precomp(Group):
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def reload(self):
+	def reload(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class ProgressTask(object):
 
-    def setProgress(self, i):
+	def setProgress(self, i):
 		pass
 
-    def isCancelled(self):
+	def isCancelled(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setMessage(self, s):
+	def setMessage(self, s):
 		pass
 
 
 class Pulldown_Knob(Enumeration_Knob):
 
-    def commands(self, n):
+	def commands(self, n):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def numValues(self):
+	def numValues(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValues(self, items):
+	def setValues(self, items):
 		pass
 
-    def itemName(self, n):
+	def itemName(self, n):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class PyCustom_Knob(Script_Knob):
 
-    def getObject(self):
+	def getObject(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class PyScript_Knob(Script_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class PythonCustomKnob(Script_Knob):
 
-    def getObject(self):
+	def getObject(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class PythonKnob(String_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Radio_Knob(Enumeration_Knob):
 
-    def setValue(self, item):
+	def setValue(self, item):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def numValues(self):
+	def numValues(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def enumName(self, n):
+	def enumName(self, n):
 		pass
 
-    def values(self):
+	def values(self):
 		pass
 
-    def setValues(self, items):
+	def setValues(self, items):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Range_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Root(Group):
 
-    def lastFrame(self):
+	def lastFrame(self):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def maximumInputs(self):
+	def maximumInputs(self):
 		pass
 
-    def modified(self):
+	def modified(self):
 		pass
 
-    def channels(self):
+	def channels(self):
 		pass
 
-    def setInput(self):
+	def setInput(self):
 		pass
 
-    def canSetInput(self):
+	def canSetInput(self):
 		pass
 
-    def maximumOutputs(self):
+	def maximumOutputs(self):
 		pass
 
-    def minimumInputs(self):
+	def minimumInputs(self):
 		pass
 
-    def firstFrame(self):
+	def firstFrame(self):
 		pass
 
-    def layers(self):
+	def layers(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def realFps(self):
+	def realFps(self):
 		pass
 
-    def connectInput(self):
+	def connectInput(self):
 		pass
 
-    def fps(self):
+	def fps(self):
 		pass
 
-    def setProxy(self, b):
+	def setProxy(self, b):
 		pass
 
-    def input(self):
+	def input(self):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
-    def addView(self):
+	def addView(self):
 		pass
 
-    def deleteView(self, s):
+	def deleteView(self, s):
 		pass
 
-    def inputs(self):
+	def inputs(self):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def mergeFrameRange(self):
+	def mergeFrameRange(self):
 		pass
 
-    def setModified(self, b):
+	def setModified(self, b):
 		pass
 
-    def getOCIOColorspaceFamily(self, colorspace):
+	def getOCIOColorspaceFamily(self, colorspace):
 		pass
 
-    def proxy(self):
+	def proxy(self):
 		pass
 
-    def clones(self):
+	def clones(self):
 		pass
 
-    def setView(self, s):
+	def setView(self, s):
 		pass
 
-    def setFrame(self, n):
+	def setFrame(self, n):
 		pass
 
-    def optionalInput(self):
+	def optionalInput(self):
 		pass
 
-    def getOCIOColorspaceFromViewTransform(self):
+	def getOCIOColorspaceFromViewTransform(self):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
 
 class RunInMainThread(object):
 
-    def request(self):
+	def request(self):
 		pass
 
-    def result(self):
+	def result(self):
 		pass
 
 
 class Scale_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
-    def y(self, oc):
+	def y(self, oc):
 		pass
 
-    def x(self, oc):
+	def x(self, oc):
 		pass
 
-    def z(self, oc):
+	def z(self, oc):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class SceneView_Knob(Unsigned_Knob):
 
-    def getHighlightedItem(self):
+	def getHighlightedItem(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setSelectedItems(self):
+	def setSelectedItems(self):
 		pass
 
-    def setImportedItems(self, items):
+	def setImportedItems(self, items):
 		pass
 
-    def setAllItems(self):
+	def setAllItems(self):
 		pass
 
-    def removeItems(self):
+	def removeItems(self):
 		pass
 
-    def getAllItems(self):
+	def getAllItems(self):
 		pass
 
-    def getImportedItems(self):
+	def getImportedItems(self):
 		pass
 
-    def getSelectedItems(self):
+	def getSelectedItems(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def addItems(self):
+	def addItems(self):
 		pass
 
 
 class Script_Knob(String_Knob):
 
-    def execute(self):
+	def execute(self):
 		pass
 
-    def setValue(self, cmd):
+	def setValue(self, cmd):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def command(self):
+	def command(self):
 		pass
 
-    def setCommand(self, cmd):
+	def setCommand(self, cmd):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class String_Knob(Knob):
 
-    def splitView(self, view):
+	def splitView(self, view):
 		pass
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def setText(self):
+	def setText(self):
 		pass
 
-    def getText(self, oc):
+	def getText(self, oc):
 		pass
 
-    def getValue(self, oc):
+	def getValue(self, oc):
 		pass
 
-    def value(self, oc):
+	def value(self, oc):
 		pass
 
-    def unsplitView(self, view):
+	def unsplitView(self, view):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Tab_Knob(Knob):
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
 
 class Text_Knob(Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self):
+	def setValue(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class ToolBar(object):
 
-    def addAction(self, action):
+	def addAction(self, action):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def addSeparator(self, **kwargs):
+	def addSeparator(self, **kwargs):
 		pass
 
-    def menu(self, name):
+	def menu(self, name):
 		pass
 
-    def addCommand(self):
+	def addCommand(self):
 		pass
 
-    def addMenu(self, **kwargs):
+	def addMenu(self, **kwargs):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def removeItem(self, name):
+	def removeItem(self, name):
 		pass
 
-    def updateMenuItems(self):
+	def updateMenuItems(self):
 		pass
 
-    def items(self):
+	def items(self):
 		pass
 
-    def findItem(self, name):
+	def findItem(self, name):
 		pass
 
-    def clearMenu(self):
+	def clearMenu(self):
 		pass
 
 
 class Transform2d_Knob(Knob):
 
-    def value(self, oc):
+	def value(self, oc):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class UV_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
 
 class Undo(object):
 
-    def disabled(self):
+	def disabled(self):
 		pass
 
-    def undoDescribe(self):
+	def undoDescribe(self):
 		pass
 
-    def cancel(self):
+	def cancel(self):
 		pass
 
-    def redo(self):
+	def redo(self):
 		pass
 
-    def undoSize(self):
+	def undoSize(self):
 		pass
 
-    def end(self):
+	def end(self):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def redoDescribe(self):
+	def redoDescribe(self):
 		pass
 
-    def __enter__(self):
+	def __enter__(self):
 		pass
 
-    def redoDescribeFully(self):
+	def redoDescribeFully(self):
 		pass
 
-    def new(self):
+	def new(self):
 		pass
 
-    def redoTruncate(self):
+	def redoTruncate(self):
 		pass
 
-    def undoTruncate(self):
+	def undoTruncate(self):
 		pass
 
-    def begin(self):
+	def begin(self):
 		pass
 
-    def enable(self):
+	def enable(self):
 		pass
 
-    def __exit__(self):
+	def __exit__(self):
 		pass
 
-    def undo(self):
+	def undo(self):
 		pass
 
-    def disable(self):
+	def disable(self):
 		pass
 
-    def redoSize(self):
+	def redoSize(self):
 		pass
 
-    def name(self):
+	def name(self):
 		pass
 
-    def undoDescribeFully(self):
+	def undoDescribeFully(self):
 		pass
 
 
 class Unsigned_Knob(Array_Knob):
 
-    def value(self):
+	def value(self):
 		pass
 
-    def setValue(self, val):
+	def setValue(self, val):
 		pass
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class View(object):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
-    def string(self):
+	def string(self):
 		pass
 
 
 class ViewView_Knob(Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class Viewer(Node):
 
-    def roi(self):
+	def roi(self):
 		pass
 
-    def frameCached(self, f):
+	def frameCached(self, f):
 		pass
 
-    def sendMouseEvent(self):
+	def sendMouseEvent(self):
 		pass
 
-    def setRoi(self, box):
+	def setRoi(self, box):
 		pass
 
-    def isPlayingOrRecording(self):
+	def isPlayingOrRecording(self):
 		pass
 
-    def __getitem__(self, y):
+	def __getitem__(self, y):
 		pass
 
-    def playbackRange(self):
+	def playbackRange(self):
 		pass
 
-    def __str__(self):
+	def __str__(self):
 		pass
 
-    def recordMouse(self):
+	def recordMouse(self):
 		pass
 
-    def toggleWaitOnReplayEvents(self):
+	def toggleWaitOnReplayEvents(self):
 		pass
 
-    def recordMouseStop(self):
+	def recordMouseStop(self):
 		pass
 
-    def toggleMouseTrails(self):
+	def toggleMouseTrails(self):
 		pass
 
-    def capture(self, file):
+	def capture(self, file):
 		pass
 
-    def replayMouseSync(self, xmlRecordingFilename):
+	def replayMouseSync(self, xmlRecordingFilename):
 		pass
 
-    def __repr__(self):
+	def __repr__(self):
 		pass
 
-    def roiEnabled(self):
+	def roiEnabled(self):
 		pass
 
-    def replayMouseAsync(self, xmlRecordingFilename):
+	def replayMouseAsync(self, xmlRecordingFilename):
 		pass
 
-    def __len__(self):
+	def __len__(self):
 		pass
 
 
 class ViewerProcess(object):
 
-    def unregister(self, name):
+	def unregister(self, name):
 		pass
 
-    def node(self):
+	def node(self):
 		pass
 
-    def register(self):
+	def register(self):
 		pass
 
-    def registeredNames(self):
+	def registeredNames(self):
 		pass
 
 
 class ViewerWindow(object):
 
-    def node(self):
+	def node(self):
 		pass
 
-    def activeInput(self, secondary=False):
+	def activeInput(self, secondary=False):
 		pass
 
-    def play(self):
+	def play(self):
 		pass
 
-    def previousView(self):
+	def previousView(self):
 		pass
 
-    def nextView(self):
+	def nextView(self):
 		pass
 
-    def getGLCameraMatrix(self):
+	def getGLCameraMatrix(self):
 		pass
 
-    def getGeometryNodes(self):
+	def getGeometryNodes(self):
 		pass
 
-    def stop(self):
+	def stop(self):
 		pass
 
-    def activateInput(self):
+	def activateInput(self):
 		pass
 
-    def setView(self, s):
+	def setView(self, s):
 		pass
 
-    def frameControl(self, i):
+	def frameControl(self, i):
 		pass
 
-    def view(self):
+	def view(self):
 		pass
 
 
 class WH_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def y_at(self):
+	def y_at(self):
 		pass
 
-    def names(self):
+	def names(self):
 		pass
 
-    def y(self):
+	def y(self):
 		pass
 
-    def x(self):
+	def x(self):
 		pass
 
-    def x_at(self):
+	def x_at(self):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class XYZ_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def parent(self):
+	def parent(self):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
-    def y(self, oc):
+	def y(self, oc):
 		pass
 
-    def x(self, oc):
+	def x(self, oc):
 		pass
 
-    def z(self, oc):
+	def z(self, oc):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
 class XY_Knob(Array_Knob):
 
-    def __new__(self, S, ):
+	def __new__(self, S, ):
 		pass
 
-    def value(self):
+	def value(self):
 		pass
 
-    def names(self, n):
+	def names(self, n):
 		pass
 
-    def y(self, oc):
+	def y(self, oc):
 		pass
 
-    def x(self, oc):
+	def x(self, oc):
 		pass
 
-    def __init__(self):
+	def __init__(self):
 		pass
 
 
@@ -2920,15 +2920,15 @@ def activeViewer():
 
 
 def addAfterBackgroundFrameRender(call, args, kwargs):
-		pass
+	pass
 
-  def foo(context):
+	def foo(context):
 		pass
 
 def addAfterBackgroundRender(call,args,kwargs):
-		pass
+	pass
 
-  def foo(context):
+	def foo(context):
 		pass
 
 def addAfterFrameRender(call,args,kwargs,nodeClass):
@@ -2956,9 +2956,9 @@ def addAutolabel(call,args,kwargs,nodeClass):
 		pass
 
 def addBeforeBackgroundRender(call,args,kwargs):
-		pass
+	pass
 
-  def foo(context):
+	def foo(context):
 		pass
 
 def addBeforeFrameRender(call,args,kwargs,nodeClass):

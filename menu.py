@@ -1,6 +1,6 @@
 '''
 
-menu.py for _NukeStudio
+menu.py for _NukeMods
 to used in a VFX Studio enviroment
 
 *for importing modules only

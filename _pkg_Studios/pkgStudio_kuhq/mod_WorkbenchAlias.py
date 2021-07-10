@@ -3,7 +3,7 @@
 alias file for importing Workbench Manger Package
 for nuke environment use
 
-url: D:/Dropbox/REPOSITORIES/_systemtools/pkgMod_WorkbenchManager/
+url: D:/Dropbox/REPOSITORIES/_kptools/pkgMod_WorkbenchManager/
 
 '''
 
@@ -28,7 +28,7 @@ import nuke, nukescripts
 
 
 
-nuke.pluginAddPath(r'D:/Dropbox/REPOSITORIES/_systemtools/')
+nuke.pluginAddPath(r'D:/Dropbox/REPOSITORIES/_kptools/')
 os.environ['KP_GUI'] = 'nuke'
 from pkgMod_WorkbenchManager import mod_PanelSave
 

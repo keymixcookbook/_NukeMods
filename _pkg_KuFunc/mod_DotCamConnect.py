@@ -185,7 +185,7 @@ def get_camera(node_ls_cam):
 		else:
 			node_sel_cam = None
 
-	elif len(node_sel_cam) == 1:
+	elif len(node_ls_cam) == 1:
 		node_sel_cam = node_ls_cam[0]	
 
 	return node_sel_cam

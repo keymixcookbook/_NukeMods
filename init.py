@@ -1,6 +1,6 @@
 '''
 
-init.py for _NukeStudio
+init.py for _NukeMods
 to used in a VFX Studio enviroment
 
 '''
@@ -28,6 +28,7 @@ from kplogger import log, col
 
 
 log.info("\033[036m\nfile: %s\033[0m" % os.path.relpath(__file__, os.getenv('KU_PKG_PATH')))
+
 
 STUDIO = os.environ['KU_STUDIO_ENV']
 
