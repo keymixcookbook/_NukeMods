@@ -1,7 +1,7 @@
 # Python modules to use in a VFX Studio environment
 A General scripting format and structure guide
 
-[Tool Documentation Page](https://github.com/tianlunjiang/_NukeStudio/wiki)
+[Tool Documentation Page](https://github.com/tianlunjiang/_NukeMods/wiki)
 
 ### Main Components
   - `./_pkg_KuFunc`
@@ -20,10 +20,10 @@ A General scripting format and structure guide
   - `Qt.py`
 
 ### Installation
-  - Download this entire folder `/_NukeStudio`
+  - Download this entire folder `/_NukeMods`
   - Copy `init.edit.py` and `menu.edit.py` to `~/$HOME/.nuke`
   - In `init.edit.py`
-    - `os.environ['KU_PKG_PATH'] = "Where /_NukeStudio is in abs path"`
+    - `os.environ['KU_PKG_PATH'] = "Where /_NukeMods is in abs path"`
     - `os.environ['KU_STUDIO_ENV'] = "Studio Name"`
 
 ### Version Control
