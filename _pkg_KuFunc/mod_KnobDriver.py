@@ -188,6 +188,8 @@ def set_driven(driver_name):
 
 	with nuke.root():
 		nodes_driven = nuke.selectedNodes()
+		if node_driver in nodes_driven:
+			nodes_driven.remove(node_driver)
 	
 	if nodes_driven == []:
 		nuke.message("Select A Node in DAG")
