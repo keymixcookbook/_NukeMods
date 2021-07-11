@@ -78,7 +78,7 @@ DIR_TYPES = {
 	'XY': 'XY_Knob',
 	'XYZ': 'XYZ_Knob',
 	'INT': 'Int_Knob',
-	'BOOL': 'Bool_Knob'
+	'BOOL': 'Boolean_Knob'
 }
 
 RE_D = re.compile('\d+')
