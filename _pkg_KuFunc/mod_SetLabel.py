@@ -38,6 +38,7 @@ def _version_():
 
 	version 2.0
 	- Add preset buttons for frames and knob values
+	- Add Node Context support
 
 	version 1.0
 	- Basically working, when run(), prompt a frameless popup with line edit field
@@ -114,12 +115,12 @@ class Core_SetLabel(QtWidgets.QDialog):
 		self.setWindowTitle("Set Label")
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
-		self.setDefault()
+		# self.setDefault()
 
 	def onPressed(self):
 		"""change label with enter-key is pressed"""
 		newLabel = self.lineInput.text()
-		for n in nuke.selectedNodes():
+		for n in self.sel_nodes:
 			n['label'].setValue(newLabel)
 		self.close()
 
@@ -128,24 +129,27 @@ class Core_SetLabel(QtWidgets.QDialog):
 		_sender = self.sender()
 
 		if _sender is self.btn_frame:
-			for n in nuke.selectedNodes():
+			for n in self.sel_nodes:
 				n['label'].setValue('x%s' % nuke.frame())
 		elif _sender is self.btn_knob:
 			sel_knob = self.knoblist.currentText()
-			n = nuke.selectedNode()
+			n = self.sel_nodes[0]
 			n['label'].setValue('[value %s]' % sel_knob)
 
 		self.close()
 
 	def setDefault(self):
 		"""get the existing label of selected nodes"""
-		sel_nodes = nuke.selectedNodes()
-		if sel_nodes:
+		context = get_dag()
+		with context:
+			self.sel_nodes = nuke.selectedNodes()
+
+		if self.sel_nodes != []:
 			self.lineInput.show()
 			self.title.setText("<b>Set Label</b>")
-			self.lineInput.setText(sel_nodes[0]['label'].value())
+			self.lineInput.setText(self.sel_nodes[0]['label'].value())
 
-			n = sel_nodes[0]
+			n = self.sel_nodes[0]
 			knobs = filterKnobs(n.knobs())
 
 			self.knoblist.clear()
@@ -188,6 +192,20 @@ def filterKnobs(knobs):
 		if count == len(KNOB_IGNORE_KEYWORDS): ls_filtered.append(k)
 
 	return sorted(ls_filtered)
+
+
+def get_dag():
+	"""For DAG context when selecting nodes"""
+
+	app = QtWidgets.QApplication
+	pos = QtGui.QCursor.pos()
+	widget = app.widgetAt(pos)
+
+	#print dir(widget)
+	context = widget.parent().windowTitle().split('Node Graph')[0].strip()
+	print(context)
+
+	return nuke.root() if context == '' else nuke.toNode(context)
 
 
 
