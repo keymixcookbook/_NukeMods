@@ -88,7 +88,7 @@ CLASS_EQ = {
 	'XY_Knob': ['XY_Knob'],
 	'XYZ_Knob': ['XYZ_Knob'],
 	'Int_Knob': ['Int_Knob'],
-	'Bool_Knob': ['Bool_Knob']
+	'Boolean_Knob': ['Boolean_Knob']
 }
 
 
