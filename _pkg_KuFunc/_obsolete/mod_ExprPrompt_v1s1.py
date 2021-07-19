@@ -30,7 +30,7 @@ import re
 
 
 
-__VERSION__		= '1.2'
+__VERSION__		= '1.1'
 __OS__			= platform.system()
 __AUTHOR__	 	= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -42,9 +42,6 @@ __TITLE__		= "ExprPrompt v%s" % __VERSION__
 
 def _version_():
 	ver='''
-
-	version 1.2
-	- create off branch
 
 	version 1.1
 	- add preset buttons and input autocomplet presets
@@ -70,10 +67,8 @@ def _version_():
 
 PRESET_LINE = [
 	'rgb', 'rgba', 'alpha', 'max(r,g,b)', 'min(r,g,b)', 'a>0',
-	'r', 'g', 'b',
 	'r/g', 'r/b', 'g/r', 'g/b', 'b/r', 'b/g',
 	'isinf($ch)?$ch(x+1,y):$ch','isnan($ch)?$ch(x-1,y):$ch',
-	'$ly.red', '$ly.green', '$ly.blue'
 ]
 
 PRESET_BTN = {
@@ -91,9 +86,11 @@ PRESET_BTN = {
 		],
 	'Depth Normalize': [
 		('channel0', 'depth'),
-		('expr0', 'depth.Z==0?0:1/depth.Z')
+		('expr0', 'z==0?0:1/z')
 		]
 }
+
+TITLE = "ExprPrompt"
 
 
 
@@ -180,34 +177,10 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.setMaximumWidth(400)
 		self.mu_layers.setMaximumWidth(70)
 
-		self.setWindowTitle(__TITLE__)
+		self.setWindowTitle(TITLE)
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
 
 		self.setDefault()
-
-	def onPressed(self):
-		'''when enter-key is pressed on expression line edit'''
-		self.setExpr(self.node, self.getSelected())
-		self.close()
-
-	def onTextChanged(self):
-		'''if string key are in line edit, enable combobox'''
-		if '$ly' in self.st_expr.text():
-			self.mu_layers.setEnabled(True)
-		else:
-			self.mu_layers.setEnabled(False)
-
-	def run(self):
-		'''run the instance'''
-
-		self.setDefault()
-		node_expr, node_sel = self.getNode()
-		ls_layers = self.setLayers(node_expr, node_sel)
-		self.extendCompleter(ls_layers)
-		self.setPrevExpr(node_expr, node_sel)
-		self.st_expr.selectAll()
-		self.move(QtGui.QCursor.pos())
-		self.show()
 
 	def setDefault(self):
 		'''set default value when instansing'''
@@ -217,41 +190,13 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.ck_ch_a.setChecked(True)
 		self.st_expr.setFocus()
 		self.mu_layers.setEditable(False)
-		
-	def getNode(self):
-		'''
-		find out the node_sel and node_expr
-		return: [node_expr, node_sel] (list of objs)
 
-		nothing selected: node_sel = None, node_expr = New Expression
-		one non-Expression selected: node_sel = selected node, node_expr = New Expression
-		one Expression selected: node_sel = None, node_expr = selected expression
-		'''
-
-		sel = nuke.selectedNodes()
-		node_sel, node_expr = None, None
-
-		if len(sel)<=0:
-			node_sel = None
-			node_expr = nuke.nodes.Expression()
-			
-		elif len(sel) == 1:
-			if sel[0].Class() != 'Expression':
-				node_sel = sel[0]
-				node_expr = nuke.nodes.Expression()
-			elif sel[0].Class() == 'Expression':
-				node_sel = None # Expression node doesn't return any layer channels
-				node_expr = sel[0]
-		
-		node_expr.setInput(0, node_sel)
-		node_expr['label'].setValue('a::[value expr3]')
-
-		node_pos = node_under_cursor()
-		node_pos = (node_pos[0]-node_expr.screenWidth()/2, node_pos[1]-node_expr.screenHeight()/2)
-		node_expr.setXYpos(*node_pos)
-		self.node = node_expr
-
-		return [node_expr, node_sel]
+	def onTextChanged(self):
+		'''if string key are in line edit, enable combobox'''
+		if '$ly' in self.st_expr.text():
+			self.mu_layers.setEnabled(True)
+		else:
+			self.mu_layers.setEnabled(False)
 
 	def extendCompleter(self, sel_layer):
 		'''extend the completer with layers'''
@@ -270,15 +215,10 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		one non-Expression selected: node_sel = selected node, node_expr = New Expression
 		one Expression selected: node_sel = None, node_expr = selected expression
 		'''
-
-		self.prevExpr = None
-		
-		try:
-			if nuke.selectedNode():
-				if node_sel == None and nuke.selectedNodes()[0] == node_expr:
-					self.prevExpr = node_expr['expr3'].value()
-		except:
-			pass
+		if node_sel == None and nuke.selectedNodes()[0] == node_expr:
+			self.prevExpr = node_expr['expr3'].value()
+		else:
+			self.prevExpr = None
 
 		self.st_expr.setText(self.prevExpr)
 		# print self.prevExpr
@@ -338,6 +278,11 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			expr_out = expr_out.replace(key_layer,sel_layer)
 			node[k].setValue(expr_out.replace(key_channel,knob_to_ch[k]))
 
+	def onPressed(self):
+		'''when enter-key is pressed on expression line edit'''
+		self.setExpr(self.node, self.getSelected())
+		self.close()
+
 	def setChannels(self):
 		'''when set channel button is pressed, cycle all, rgba, alpha'''
 		btn = self.sender()
@@ -367,10 +312,38 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		return: ls_layers (list of str)
 		'''
 		self.mu_layers.clear()
-		self.ls_layers = self.ls_layers if node_sel == None else nuke.layers(node_sel)
+		self.ls_layers if node_sel == None else self.ls_layers.extend(nuke.layers(node_sel))
 		self.mu_layers.addItems(self.ls_layers)
 
 		return self.ls_layers # ['rgba', 'Id06']
+
+	def getNode(self):
+		'''
+		find out the node_sel and node_expr
+		return: [node_expr, node_sel] (list of objs)
+
+		nothing selected: node_sel = None, node_expr = New Expression
+		one non-Expression selected: node_sel = selected node, node_expr = New Expression
+		one Expression selected: node_sel = None, node_expr = selected expression
+		'''
+
+		sel = nuke.selectedNodes()
+		node_sel, node_expr = None, None
+
+		if len(sel)<=0:
+			node_sel = None
+			node_expr = nuke.createNode('Expression')
+		elif len(sel) == 1:
+			if sel[0].Class() != 'Expression':
+				node_sel = sel[0]
+				node_expr = nuke.createNode('Expression')
+			elif sel[0].Class() == 'Expression':
+				node_sel = None # Expression node doesn't return any layer channels
+				node_expr = sel[0]
+
+		self.node = node_expr
+		return [node_expr, node_sel]
+
 
 	def setPreset(self):
 		'''Called when preset button is pressed'''
@@ -406,34 +379,17 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.close()
 
 
+	def run(self):
+		'''run the instance'''
 
-
-#-------------------------------------------------------------------------------
-#-Supporting Functions
-#-------------------------------------------------------------------------------
-
-
-
-
-def node_under_cursor():
-	dag_widget = get_DAG_widget()
-	dag_center = QtCore.QPoint(*nuke.center())
-	cursor_pos = QtGui.QCursor().pos()
-	dag_widget_center = QtCore.QPoint((dag_widget.size().width()/ 2), (dag_widget.size().height()/2) )
-	cursor_pos_in_dag = dag_widget.mapFromGlobal(cursor_pos)
-
-	new_node_pos = ((cursor_pos_in_dag - dag_widget_center) / nuke.zoom() + dag_center)
-
-	return list(new_node_pos.toTuple())
-
-def get_DAG_widget():
-	stack = QtWidgets.QApplication.topLevelWidgets()
-	while stack:
-		widget = stack.pop()
-		for c in widget.children():
-			if c.objectName() == 'DAG.1':
-				return c
-		stack.extend(c for c in widget.children() if c.isWidgetType())
+		self.setDefault()
+		node_expr, node_sel = self.getNode()
+		ls_layers = self.setLayers(node_expr, node_sel)
+		self.extendCompleter(ls_layers)
+		self.setPrevExpr(node_expr, node_sel)
+		self.st_expr.selectAll()
+		self.move(QtGui.QCursor.pos())
+		self.show()
 
 
 
