@@ -6,3 +6,24 @@ chans1 = 'deep'
 rgba.alpha = 'rgba.alpha*[value falloff]'
 deep.front = 'deep.front - [values soft_front]'
 deep.back = 'deep.back + [value soft_back]'
+
+
+==================
+
+
+RealBlackSoftClip
+# supposely mathmatically correct blacklevels
+
+knobs: pivot(rgba), lift(rgba), soft(rgba)
+
+node: Expression
+expr0 = (r<piviot.r)?r + (lift.r*(pow((1-(r/pivot.r)),((((pivot.r/lift.r)-1)*soft.r)+1)))):r
+expr1 = (g<piviot.g)?g + (lift.g*(pow((1-(g/pivot.g)),((((pivot.g/lift.g)-1)*soft.g)+1)))):g
+expr2 = (b<piviot.b)?b + (lift.b*(pow((1-(b/pivot.b)),((((pivot.b/lift.b)-1)*soft.b)+1)))):b
+
+
+================
+
+
+
+

@@ -1,0 +1,87 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name wip_Fresnel
+ selected true
+ xpos 236
+ ypos -29
+ addUserKnob {20 User}
+ addUserKnob {41 in l normal T _N_.in}
+ addUserKnob {41 in_1 l position T _P_.in}
+}
+ Input {
+  inputs 0
+  name camera
+  xpos 399
+  ypos 123
+  number 1
+  addUserKnob {20 User}
+  addUserKnob {13 camPos}
+  camPos {{"\[topnode parent.Input1].world_matrix.3"} {"\[topnode parent.Input1].world_matrix.7"} {"\[topnode parent.Input1].world_matrix.11"}}
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 179
+  ypos 142
+ }
+set N2c2511f0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 56
+  ypos 242
+ }
+set N2f780bb0 [stack 0]
+ Shuffle {
+  name _N_
+  xpos 25
+  ypos 324
+ }
+push $N2f780bb0
+ Shuffle {
+  name _P_
+  xpos 123
+  ypos 242
+ }
+push $N2c2511f0
+ MergeExpression {
+  inputs 2
+  temp_name0 Cx
+  temp_expr0 "camPosition.x - Ar"
+  temp_name1 Cy
+  temp_expr1 "camPosition.y - Ag"
+  temp_name2 Cz
+  temp_expr2 "camPosition.z - Ab"
+  temp_name3 CMag
+  temp_expr3 "sqrt((Cx*Cx) + (Cy*Cy) + (Cz*Cz))"
+  expr0 Cx/CMag
+  expr1 Cy/CMag
+  expr2 Cz/CMag
+  name MergeExpression1
+  xpos 268
+  ypos 242
+  addUserKnob {20 User}
+  addUserKnob {13 camPosition}
+  camPosition {{camera.camPos.x} {camera.camPos.y} {camera.camPos.z}}
+ }
+ MergeExpression {
+  inputs 2
+  expr3 "clamp((Br*Ar) + (Bg*Ag) + (Bb*Ab))"
+  name MergeExpression2
+  xpos 268
+  ypos 324
+ }
+push $N2c2511f0
+ MergeExpression {
+  inputs 2
+  expr3 Ar
+  name MergeExpression3
+  xpos 461
+  ypos 324
+ }
+ Output {
+  name Output1
+  xpos 461
+  ypos 424
+ }
+end_group

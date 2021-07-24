@@ -9,7 +9,7 @@ Group {
  xpos -378
  ypos -25
  addUserKnob {20 Main l "Main - StickIt"}
- addUserKnob {26 Headline l "" +STARTLINE T "<img src=\"D:/Dropbox/REPOSITORIES/_NukeStudio/_mod_Download/_icons/StickIt_icons/h_stickitUI.png\">"}
+ addUserKnob {26 Headline l "" +STARTLINE T "<img src=\"D:/Dropbox/REPOSITORIES/_NukeMods/_mod_Community/_icons/StickIt_icons/h_stickitUI.png\">"}
  addUserKnob {26 range_devider l "<b><font color=#977DB7>INPUT</font><b>"}
  addUserKnob {3 RefrenceFrameInput l "Reference Frame" t "This is the frame that you want to be the origin of your animation. That is, the frame where the input is exactly the same as the output. (This frame must be within the Range defined below!)"}
  RefrenceFrameInput 126
