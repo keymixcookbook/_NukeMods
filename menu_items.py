@@ -75,7 +75,7 @@ def addMenuItem(type, mu, name, mod, hotkey="", icon="", shortcutContext=1):
 
 kuMu = nuke.menu('Nuke').addMenu('KU')
 
-addMenuItem('c', kuMu, 'Change label',"SetLabel", hotkey="shift+N")
+addMenuItem('c', kuMu, 'Change label',"SetLabel", hotkey="shift+N", shortcutContext=2)
 addMenuItem('c', kuMu, 'Expression', "ExprPrompt", hotkey="e", shortcutContext=2)
 addMenuItem('c', kuMu, 'HoverValue', "HoverValue", hotkey="alt+v", shortcutContext=0)
 addMenuItem('c', kuMu, 'QuickNode', "QuickNode", hotkey="alt+q", shortcutContext=2)
