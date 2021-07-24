@@ -30,7 +30,7 @@ import re
 
 
 
-__VERSION__		= '1.0'
+__VERSION__		= '1.1'
 __OS__			= platform.system()
 __AUTHOR__		= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -41,6 +41,9 @@ __TITLE__		= "KnobDriver v%s" % __VERSION__
 
 def _version_():
 	ver='''
+
+	version 1.1
+	- fixing driver knob numbering increasing issue
 
 	version 1.0
     - beta version
@@ -150,8 +153,9 @@ def add_driver(knobtype):
 	@knobtype: (str) Nuke Knob Type
 	"""
 	try:	
-		dr_no = int(max([find_digit(k.name()) for k in nuke.thisNode().knobs() if k.name().startswith('dr')]) + 1)
-	except:
+		dr_no = int(max([find_digit(k) for k in nuke.thisNode().knobs() if k.startswith('dr')]) + 1)
+	except Exception as e:
+		print(e)
 		dr_no = 0
 
 	label = nuke.getInput('Label this Driver')	
@@ -252,28 +256,29 @@ def append_driven_knob(knob_driver, node_driven, knob_driven):
 
 
 
-def build_driver_types(driver, node, newline=False):
+def build_driver_types(driver_type, node, newline=False):
 	"""Build Driver buttons
-	@driver: (str) driver type of this node
+	@driver_type: (str) driver type of this node
 	@node: (node) the node to add knob
 	@newline=False: (bool) if the node create on a newline
 	"""
 
-	k_this = nuke.PyScript_Knob('driver_%s' % driver, STR_PLUS.format(driver))
-	k_this.setCommand(STR_CMD_SETUP.format("add_driver('%s')" % DIR_TYPES[driver]))
-	k_this.setTooltip(DIR_TYPES[driver])
+	k_this = nuke.PyScript_Knob('dt_%s' % driver_type, STR_PLUS.format(driver_type))
+	k_this.setCommand(STR_CMD_SETUP.format("add_driver('%s')" % DIR_TYPES[driver_type]))
+	k_this.setTooltip(DIR_TYPES[driver_type])
 	if not newline: k_this.clearFlag(nuke.STARTLINE)
 	else: k_this.setFlag(nuke.STARTLINE)
 	node.addKnob(k_this)
+	print("+%s" % k_this.name())
 
 
-def find_digit(knobname):
+def find_digit(k):
 	"""return interger from knob name
-	@knobname: (str) Driven Knob Name with digit
+	@k: (str) Driven Knob Name with digit
 	return: (int) Integer from Knob name
 	"""
 
-	return int(RE_D.search(k.name()).group())
+	return int(RE_D.search(k).group())
 
 
 def filter_knobs(ls_knobs):
