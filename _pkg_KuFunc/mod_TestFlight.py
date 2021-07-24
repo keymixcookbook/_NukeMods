@@ -50,6 +50,7 @@ def _version_():
 
 	version 3.1
 	- add reload button
+	- filter out `.pyc` files
 
 	version 3.0
 	- change core function to compile()
@@ -285,7 +286,8 @@ def listFiles(dirpath):
 	'''list files in the given dir'''
 
 	path_draft = dirpath.replace('\\', '/')
-	ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') or p.startswith('dft') and p.endswith('.py')]
+	ls_files = [p for p in os.listdir(path_draft) if p.startswith('upt_') or p.startswith('mod_') or p.startswith('dft_')]
+	ls_files = [f for f in ls_files if f.endswith('.py')]
 
 	return ls_files
 
