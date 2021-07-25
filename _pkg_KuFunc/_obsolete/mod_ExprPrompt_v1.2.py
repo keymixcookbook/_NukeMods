@@ -30,7 +30,7 @@ import re
 
 
 
-__VERSION__		= '1.3'
+__VERSION__		= '1.2'
 __OS__			= platform.system()
 __AUTHOR__	 	= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -42,12 +42,6 @@ __TITLE__		= "ExprPrompt v%s" % __VERSION__
 
 def _version_():
 	ver='''
-	
-	version 1.3
-	- Restructure code
-	- fix connection prob when edit the node
-	- add AOV Mask preset
-	- '$ly' sub when getting previous expression
 
 	version 1.2
 	- create off branch
@@ -75,7 +69,7 @@ def _version_():
 
 
 PRESET_LINE = [
-	'max(r,g,b)', 'min(r,g,b)', 'a>0',
+	'rgb', 'rgba', 'alpha', 'max(r,g,b)', 'min(r,g,b)', 'a>0',
 	'r', 'g', 'b',
 	'r/g', 'r/b', 'g/r', 'g/b', 'b/r', 'b/g',
 	'isinf($ch)?$ch(x+1,y):$ch','isnan($ch)?$ch(x-1,y):$ch',
@@ -87,8 +81,8 @@ PRESET_BTN = {
 		('expr0','(x+0.5)/width'),
 		('expr1','(y+0.5)/height')
 		],
-	'AOV Mask': [
-		('expr3', '<layer>.<channel>'),
+	'Unpremult Alpha': [
+		('expr3', 'Ba/Aa'),
 		],
 	'Raw Lighting': [
 		('expr0', 'rgba.red/<albeto>.red'),
@@ -101,11 +95,6 @@ PRESET_BTN = {
 		]
 }
 
-COL = {
-	'red': 2130706687,
-	'green': 679411967,
-	'blue': 4816895
-}
 
 
 
@@ -127,29 +116,26 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.st_expr = QtWidgets.QLineEdit()
 		self.st_expr.setPlaceholderText('$ly: layer (Id06), $ch: channel (red)')
 		self.st_expr.returnPressed.connect(self.onPressed)
+		self.st_expr.setCompleter(QtWidgets.QCompleter(self.ls_layers))
 		self.st_expr.textChanged.connect(self.onTextChanged)
-		self.layer_box = QtWidgets.QComboBox()
-		self.layer_box.setEnabled(False)
+		self.mu_layers = QtWidgets.QComboBox()
+		self.mu_layers.setEnabled(False)
 		self.ck_ch_r = QtWidgets.QCheckBox('r')
 		self.ck_ch_g = QtWidgets.QCheckBox('g')
 		self.ck_ch_b = QtWidgets.QCheckBox('b')
 		self.ck_ch_a = QtWidgets.QCheckBox('alpha')
 		self.bt_ch_all = QtWidgets.QPushButton('all')
-		self.bt_ch_all.clicked.connect(self.set_channels)
+		self.bt_ch_all.clicked.connect(self.setChannels)
 		self.ck_clamp = QtWidgets.QCheckBox('clamp')
 		self.ck_invert = QtWidgets.QCheckBox('invert')
 		self.bt_set = QtWidgets.QPushButton('Set!')
 		self.bt_set.clicked.connect(self.onPressed)
 
-		# Completer
-		self.completer = QtWidgets.QCompleter(self.ls_layers)
-		self.completer.setCompletionMode(self.completer.PopupCompletion)
-		self.st_expr.setCompleter(self.completer)
-
 		# Right Widgets
 		for idx, p in enumerate(PRESET_BTN.keys()):
 			exec("self.presetBtn%s=QtWidgets.QPushButton('%s')" % (idx, p))
-			exec("self.presetBtn%s.clicked.connect(self.set_preset)" % (idx))
+			exec("self.presetBtn%s.clicked.connect(self.setPreset)" % (idx))
+
 
 		self.ls_ch_layer = [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b, self.ck_ch_a]
 		self.ls_wrapper = [self.ck_clamp, self.ck_invert]
@@ -166,7 +152,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.layout_wrappers.setAlignment(QtCore.Qt.AlignLeft)
 
 		# add widgets and set layouts
-		for m in [self.st_expr, self.layer_box]:
+		for m in [self.st_expr, self.mu_layers]:
 			self.layout_expr.addWidget(m)
 		for c in [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b,self.ck_ch_a, self.bt_ch_all]:
 			self.layout_channels.addWidget(c)
@@ -192,7 +178,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		self.setLayout(self.layout_master)
 
 		self.setMaximumWidth(400)
-		self.layer_box.setMaximumWidth(70)
+		self.mu_layers.setMaximumWidth(70)
 
 		self.setWindowTitle(__TITLE__)
 		self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.Popup)
@@ -201,41 +187,38 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 	def onPressed(self):
 		'''when enter-key is pressed on expression line edit'''
-		self.set_expr(self.node, self.get_selectedValues())
+		self.setExpr(self.node, self.getSelected())
 		self.close()
 
 	def onTextChanged(self):
 		'''if string key are in line edit, enable combobox'''
 		if '$ly' in self.st_expr.text():
-			self.layer_box.setEnabled(True)
+			self.mu_layers.setEnabled(True)
 		else:
-			self.layer_box.setEnabled(False)
+			self.mu_layers.setEnabled(False)
 
 	def run(self):
 		'''run the instance'''
 
 		self.setDefault()
-
-		node_expr, node_sel = self.get_node()
-		self.set_layer_box(node_expr, node_sel)
-		ls = PRESET_LINE + self.ls_layers
-		self.completer.model().setStringList(ls)
-		self.set_prevExpr(node_expr, node_sel)
-
+		node_expr, node_sel = self.getNode()
+		ls_layers = self.setLayers(node_expr, node_sel)
+		self.extendCompleter(ls_layers)
+		self.setPrevExpr(node_expr, node_sel)
 		self.st_expr.selectAll()
 		self.move(QtGui.QCursor.pos())
 		self.show()
 
 	def setDefault(self):
 		'''set default value when instansing'''
-		self.layer_box.clear()
+		self.mu_layers.addItems(self.ls_layers)
 		for k in [self.ck_ch_r, self.ck_ch_g, self.ck_ch_b, self.ck_clamp, self.ck_invert]:
 			k.setChecked(False)
 		self.ck_ch_a.setChecked(True)
 		self.st_expr.setFocus()
-		self.layer_box.setEditable(False)
+		self.mu_layers.setEditable(False)
 		
-	def get_node(self):
+	def getNode(self):
 		'''
 		find out the node_sel and node_expr
 		return: [node_expr, node_sel] (list of objs)
@@ -260,19 +243,24 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 				node_sel = None # Expression node doesn't return any layer channels
 				node_expr = sel[0]
 		
+		node_expr.setInput(0, node_sel)
+		node_expr['label'].setValue('a::[value expr3]')
+
 		node_pos = node_under_cursor()
 		node_pos = (node_pos[0]-node_expr.screenWidth()/2, node_pos[1]-node_expr.screenHeight()/2)
-
-		if node_sel or len(sel)==0:
-			node_expr.setInput(0, node_sel)
-			node_expr.setXYpos(*node_pos)
-
-		node_expr['label'].setValue('a::[value expr3]')
+		node_expr.setXYpos(*node_pos)
 		self.node = node_expr
 
 		return [node_expr, node_sel]
 
-	def set_prevExpr(self, node_expr, node_sel):
+	def extendCompleter(self, sel_layer):
+		'''extend the completer with layers'''
+		layer_extended = sel_layer
+		thisCompleter = QtWidgets.QCompleter(layer_extended)
+		thisCompleter.setCompletionMode(QtWidgets.QCompleter.InlineCompletion)
+		self.st_expr.setCompleter(thisCompleter)
+
+	def setPrevExpr(self, node_expr, node_sel):
 		'''previously expression, none if nothing selected
 		@node_expr: expressions to add (str)
 		@node_sel: nodes selected (list of obj)
@@ -292,16 +280,16 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		except:
 			pass
 
-		self.st_expr.setText( re.sub('\w+\.', '$ly.', self.prevExpr) )
+		self.st_expr.setText(self.prevExpr)
 		# print self.prevExpr
 
 		return self.prevExpr
 
-	def get_selectedValues(self):
+	def getSelected(self):
 		'''get values for the checkboxs and comboboxs
 		return: [sel_layer, sel_channel, sel_wrapper] (list of lists)
 		'''
-		sel_layer = self.layer_box.currentText() # 'Id06'
+		sel_layer = self.mu_layers.currentText() # 'Id06'
 
 		sel_channel, sel_wrapper = [],[]
 
@@ -314,7 +302,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 		return [sel_layer, sel_channel, sel_wrapper]
 
-	def set_expr(self, node, sel):
+	def setExpr(self, node, sel):
 		'''get string from expression line edit
 		@node: node to set expression (obj)
 		@sel: values to set expressions with (list of lists)
@@ -349,10 +337,8 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		for k in sel_channel:
 			expr_out = expr_out.replace(key_layer,sel_layer)
 			node[k].setValue(expr_out.replace(key_channel,knob_to_ch[k]))
-		
-		node['tile_color'].setValue(0)
 
-	def set_channels(self):
+	def setChannels(self):
 		'''when set channel button is pressed, cycle all, rgba, alpha'''
 		btn = self.sender()
 		ls_state = ['all', 'rgb', 'alpha']
@@ -364,10 +350,10 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 
 		cur_state = btn.text()
 		idx = ls_state.index(cur_state)
-
-		if idx < 2: idx += 1
-		else: idx = 0
-
+		if idx < 2:
+			idx += 1
+		else:
+			idx = 0
 		btn.setText(ls_state[idx])
 
 		for k in self.ls_ch_layer:
@@ -376,28 +362,34 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			else:
 				k.setChecked(False)
 
-	def set_layer_box(self,node_expr,node_sel):
-		'''get layers from root or selected node
+	def setLayers(self,node_expr,node_sel):
+		'''get layers from root
 		return: ls_layers (list of str)
 		'''
-		if node_sel:
-			self.ls_layers = nuke.layers(node_sel)
-		elif node_expr.dependencies() != []:
-			self.ls_layers = nuke.layers(node_expr)
-		else:
-			self.ls_layers = nuke.layers()
-
-		self.layer_box.clear()
-		self.layer_box.addItems(self.ls_layers)
+		self.mu_layers.clear()
+		self.ls_layers = self.ls_layers if node_sel == None else nuke.layers(node_sel)
+		self.mu_layers.addItems(self.ls_layers)
 
 		return self.ls_layers # ['rgba', 'Id06']
 
-	def set_preset(self):
+	def setPreset(self):
 		'''Called when preset button is pressed'''
 		thisBtn=self.sender().text()
 		thisPreset=PRESET_BTN[thisBtn]
 		thisNode=self.node
 
+		def setKnobValue(kvPaire, *strSub):
+			'''set knob value
+			@kvPaire: (<knob>, <value>)
+			@*strSub: string to replace if any, (replaceThis, withThis)
+			'''
+			pKnob, pValue = kvPaire
+			if len(strSub)>0 and len(strSub)==2:
+				pValue=re.sub(strSub[0], strSub[1], pValue)
+			else:
+				pValue
+
+			self.node[pKnob].setValue(pValue)
 
 		if thisBtn=='Raw Lighting':
 			p=nuke.Panel('Select the albeto pass')
@@ -405,41 +397,20 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 			if p.show():
 				albeto=p.value('aov')
 				for k in thisPreset:
-					self.set_knobValue(k, '<albeto>', albeto)
-		elif thisBtn == 'AOV Mask':
-			p=AOVMaskBox()
-			_mask = p.run(self.ls_layers)
-			if _mask:
-				self.node['expr3'].setValue('%s.%s' % (_mask[0], _mask[1]))
-				self.node['tile_color'].setValue(COL[_mask[1]])
-				self.node['label'].setValue('matte::[value expr3]')
+					setKnobValue(k, '<albeto>', albeto)
 		else:
 			for k in thisPreset:
-				self.set_knobValue(k)
+				setKnobValue(k)
 
-		# self.node['label'].setValue(thisBtn)
+		self.node['label'].setValue(thisBtn)
 		self.close()
 
-	def set_knobValue(kvPaire, *strSub):
-		'''set knob value
-		@kvPaire: (<knob>, <value>)
-		@*strSub: string to replace if any, (replaceThis, withThis)
-		'''
-		pKnob, pValue = kvPaire
-		if len(strSub)>0 and len(strSub)==2:
-			pValue=re.sub(strSub[0], strSub[1], pValue)
-		else:
-			pValue
-
-		self.node[pKnob].setValue(pValue)
 
 
 
 #-------------------------------------------------------------------------------
 #-Supporting Functions
 #-------------------------------------------------------------------------------
-
-
 
 
 
@@ -455,7 +426,6 @@ def node_under_cursor():
 
 	return list(new_node_pos.toTuple())
 
-
 def get_DAG_widget():
 	stack = QtWidgets.QApplication.topLevelWidgets()
 	while stack:
@@ -464,61 +434,6 @@ def get_DAG_widget():
 			if c.objectName() == 'DAG.1':
 				return c
 		stack.extend(c for c in widget.children() if c.isWidgetType())
-
-
-
-
-#-------------------------------------------------------------------------------
-#-Widgets
-#-------------------------------------------------------------------------------
-
-
-
-
-class AOVMaskBox(QtWidgets.QDialog):
-	"""Popup box for selecting AOV mask"""
-
-	def __init__(self):
-		super(AOVMaskBox, self).__init__()
-		self.mask = None
-
-		self.label = QtWidgets.QLabel("Select AOV for mask")
-		self.layer_combobox = QtWidgets.QComboBox()
-		self.layer_combobox.setEditable(True)
-		self.channel_combobox = QtWidgets.QComboBox()
-		self.channel_combobox.addItems(['red','green','blue'])
-		self.btn_set = QtWidgets.QPushButton("Set Mask")
-		self.btn_set.clicked.connect(self.onConfirm)
-
-		self.layout_master = QtWidgets.QVBoxLayout()
-		self.setLayout(self.layout_master)
-		self.layout_mask = QtWidgets.QHBoxLayout()
-		self.layout_mask.setContentsMargins(0,0,0,0)
-
-		self.layout_master.addWidget(self.label)
-		self.layout_master.addLayout(self.layout_mask)
-		self.layout_master.addWidget(self.btn_set)
-
-		self.layout_mask.addWidget(self.layer_combobox)
-		self.layout_mask.addWidget(self.channel_combobox)
-
-		self.setWindowTitle("AOV Mask Select")
-		self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowStaysOnTopHint)
-	
-	def onConfirm(self):
-		"""When button is clicked"""
-
-		self.mask = [self.layer_combobox.currentText(), self.channel_combobox.currentText()]
-		self.close()
-
-	def run(self, ls_layers):
-		"""Run and execute"""
-
-		self.layer_combobox.clear()
-		self.layer_combobox.addItems(ls_layers)
-		self.exec_()
-
-		return self.mask
 
 
 
