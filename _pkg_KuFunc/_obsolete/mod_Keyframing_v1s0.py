@@ -28,7 +28,7 @@ import platform, os
 
 
 
-__VERSION__		= '1.1'
+__VERSION__		= '1.0'
 __OS__			= platform.system()
 __AUTHOR__	 	= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -39,13 +39,9 @@ __TITLE__		= "Keyframing v%s" % __VERSION__
 
 def _version_():
 	ver='''
-	
-	version 1.1
-	- maintaince bug fix
 
 	version 1.0
 	- sets keyframes in one go for a knob
-	- Auto remove empty cells when confirm
 
 	'''
 	return ver
@@ -103,8 +99,7 @@ class Core_Keyframing(QtWidgets.QWidget):
 		self.layout_master.addWidget(self.btn_set)
 
 		# Widget attributes
-		self.setWindowTitle(__TITLE__)
-		self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+		self.setWindowTitle(__TITLE__+' v'+__VERSION__)
 
 		self.setDefault()
 
@@ -112,7 +107,7 @@ class Core_Keyframing(QtWidgets.QWidget):
 		'''set default value when instancing'''
 
 		self.keylist.setColumnCount(2)
-		self.keylist.verticalHeader().hide()
+		self.keylist.setHorizontalHeaderLabels(['frame', 'values'])
 		self.keylist.setRowCount(4)
 		self.keylist.horizontalHeader().setStretchLastSection(True)
 		self.keylist.setAlternatingRowColors(True)
@@ -133,6 +128,24 @@ class Core_Keyframing(QtWidgets.QWidget):
 			centerWindow(self)
 			self.show()
 			self.raise_()
+	
+	def get_keylist(self):
+		'''get the frame/value pair
+		return: (dict) {frame: value}
+		'''
+
+		_keyframes = {}
+		_table = self.keylist
+		_row = _table.rowCount()
+
+		for r in range(_row):
+			if _table.item(r, 0):
+				_curFrame = _table.item(r, 0).text()
+				_curValue = _table.item(r, 1).text()
+				_keyframes[_curFrame]=_curValue
+
+		print(_keyframes)
+		return _keyframes
 
 	def get_existingKeys(self):
 		'''get the exist keyframes and sets keylist on run
@@ -161,6 +174,7 @@ class Core_Keyframing(QtWidgets.QWidget):
 		node = nuke.toNode(self.node_name.text())
 		knob = node.knob(self.knob_pick.currentText())
 
+
 		print("set keyframes for %s.%s" % (node.name(), knob.name()))
 
 		_keyframes = self.get_keylist()
@@ -182,23 +196,6 @@ class Core_Keyframing(QtWidgets.QWidget):
 		elif _sender is self.keylist_btn.remove:
 			_table.setRowCount(_table.rowCount()-1)
 	
-	def get_keylist(self):
-		'''get the frame/value pair
-		return: (dict) {frame: value}
-		'''
-
-		_keyframes = {}
-		_table = self.keylist
-		_row = _table.rowCount()
-
-		for r in range(_row):
-			if _table.item(r, 0):
-				_curFrame = _table.item(r, 0).text()
-				_curValue = _table.item(r, 1).text()
-				_keyframes[_curFrame]=_curValue
-
-		print(_keyframes)
-		return _keyframes
 
 
 
