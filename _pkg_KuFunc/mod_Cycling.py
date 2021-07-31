@@ -100,11 +100,11 @@ def setKnob(node, knob, ls_k):
 			if k_count==len(ls_k)-1:
 				k_new_idx = 0
 			elif k_count < 0:
-				k_new_index = len(ls_k)
+				k_new_idx = len(ls_k)
 			elif mode == 'regular':
-				k_new_index = k_count+1
+				k_new_idx = k_count+1
 			elif mode == 'prev'
-				k_new_index = k_count-1
+				k_new_idx = k_count-1
 			k_new = ls_k[int(k_new_idx)]
 		else:
 			k_new = ls_k[0]
