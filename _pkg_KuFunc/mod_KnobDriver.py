@@ -74,7 +74,7 @@ STR_PLUS = '<b style="color: lightgreen">+</b> {}'
 STR_SETDRIVEN = '<b>-&lt;-'
 STR_LISTDRIVEN = '<b>&#8801;'
 STR_SYNC = '<p>&#8634;'
-STR_CMD_SETUP = "import mod_KnobDriver\nreload(mod_KnobDriver)\nmod_KnobDriver.{}" 
+STR_CMD_SETUP = "reload(mod_KnobDriver)\nmod_KnobDriver.{}" 
 DIR_TYPES = {
 	'SLIDER': 'Double_Knob',
 	'RGBA': 'AColor_Knob',
