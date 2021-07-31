@@ -292,8 +292,7 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		except:
 			pass
 
-		self.st_expr.setText( re.sub('\w+\.', '$ly.', self.prevExpr) )
-		# print self.prevExpr
+		if self.prevExpr: self.st_expr.setText( re.sub('\w+\.', '$ly.', self.prevExpr) )
 
 		return self.prevExpr
 
