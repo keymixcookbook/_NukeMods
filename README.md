@@ -15,7 +15,7 @@ A General scripting format and structure guide
   - `menu.py`
   - `menu_items.py`
   - `menu_defaults.py`
-  - `kputil.py`
+  - `kputl.py`
   - `init.py`
   - `Qt.py`
 
@@ -28,11 +28,21 @@ A General scripting format and structure guide
 
 ### Version Control
   - **Update Board** linked with [Trello](https://trello.com/b/4FR8ZOcZ)
-  - **Newly Started File** goes to `/_mod_Draft` with prefix `dft_`
-  - **New Versions** of exsisting modules:
-    - Duplicate the module and **rename**: `Upd_mod_ThisMod.v#s#.py`
-    - Create a **Trello Card** with same name
-    - must indicate version number, and what's new
+    - Trello board are sectioned into:
+      - `Drafts - Current`: Currently working drafts
+      - `Updates`: modules needs update
+      - `Debug`: modules is finishing update and currently debuging
+      - `Release`: module is updated and debugged
+      - `Drafts - OnHold`: Drafts onhold, code not yet working
+      - `Obsolete`: discarded or replaced modules
+  - Files are prefixed with the following with a basename:
+    - `dft`: draft version
+    - `upt`: version updates
+    - `mod`: debug or releases
+    - `obs`: obsoleted versions. (also suffix with the version in `v#s#` form, ie `obs_ThisModule_v#s#.py`)
+  - Git commenting using the following format
+    - ThisModBasename: what's changed
+    - ModBasename-bugfix-Ln888: what bug is fixed
 
 ### IDE
   - VSCode desktop
