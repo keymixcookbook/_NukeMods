@@ -19,7 +19,7 @@ from Qt import QtWidgets, QtGui, QtCore
 import platform
 import os
 import re
-
+import logging
 
 
 
@@ -44,6 +44,7 @@ def _version_():
 
 	version 1.1
 	- fixing driver knob numbering increasing issue
+	- add invert button
 
 	version 1.0
     - beta version
@@ -59,6 +60,18 @@ def _version_():
 
 	'''
 	return ver
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Logger
+#-------------------------------------------------------------------------------
+
+
+
+
+LOG = logging.getLogger('kplogger')
 
 
 
@@ -131,7 +144,7 @@ def get_master_driver():
 		node.addKnob(nuke.Text_Knob('',''))
 	
 	node['note_font'].setValue('bold')
-	node['note_font_size'].setValue(24)
+	node['note_font_size'].setValue(100)
 	node['tile_color'].setValue(2047999)
 	node['hide_input'].setValue(True)
 
@@ -201,16 +214,24 @@ def set_driven(driver_name):
 		for n in nodes_driven:
 			ls_knobs = [k for k in n.knobs() if n.knob(k).Class() in CLASS_EQ[driver_type]]
 			ls_knobs = filter_knobs(ls_knobs)
-			print(ls_knobs)
+			LOG.info(ls_knobs)
+
+			# UI
 			panel = nuke.Panel(n.name())
 			panel.addEnumerationPulldown('knob to drive: ', ' '.join(ls_knobs))
+			panel.addBooleanCheckBox('Invert', False)
 			if panel.show():
 				k_sel = panel.value('knob to drive: ')
+				k_inv = panel.value('Invert')
 				if k_sel:
-					n.knob(k_sel).setValue(node_driver[knob_driver].value())
+					# Expression string
 					str_expr = '%s.%s' % (node_driver.name(), knob_driver)
+					str_expr = '1-(%s)' % (str_expr) if k_inv else str_expr
+					# set Value
+					n.knob(k_sel).setValue(node_driver[knob_driver].value())
+					# Add Expression
 					n.knob(k_sel).setExpression(str_expr)
-					print('%s > %s' % (k_sel, str_expr))
+					LOG.info('%s > %s' % (k_sel, str_expr))
 
 					append_driven_knob(node_driver.knob(knob_driver), n.name(), k_sel)
 
@@ -254,8 +275,6 @@ def append_driven_knob(knob_driver, node_driven, knob_driven):
 	knob_driver.setTooltip('\n'.join(ls))
 	
 
-
-
 def build_driver_types(driver_type, node, newline=False):
 	"""Build Driver buttons
 	@driver_type: (str) driver type of this node
@@ -296,3 +315,15 @@ def filter_knobs(ls_knobs):
 # 	@driver: (knob) Driver Knob
 # 	return: (knob) knob driven
 # 	"""
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Wrapping
+#-------------------------------------------------------------------------------
+
+
+
+
+def KnobDriver(): get_master_driver()
