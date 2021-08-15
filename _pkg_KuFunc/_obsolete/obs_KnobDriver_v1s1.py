@@ -30,7 +30,7 @@ import logging
 
 
 
-__VERSION__		= '1.2'
+__VERSION__		= '1.1'
 __OS__			= platform.system()
 __AUTHOR__		= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -41,10 +41,6 @@ __TITLE__		= "KnobDriver v%s" % __VERSION__
 
 def _version_():
 	ver='''
-
-	version 1.2
-	- fixing knob EQ key error
-	- add sync function
 
 	version 1.1
 	- fixing driver knob numbering increasing issue
@@ -64,6 +60,18 @@ def _version_():
 
 	'''
 	return ver
+
+
+
+
+#-------------------------------------------------------------------------------
+#-Logger
+#-------------------------------------------------------------------------------
+
+
+
+
+LOG = logging.getLogger('kplogger')
 
 
 
@@ -161,7 +169,7 @@ def add_driver(knobtype):
 	try:	
 		dr_no = int(max([find_digit(k) for k in nuke.thisNode().knobs() if k.startswith('dr')]) + 1)
 	except Exception as e:
-		nuke.warning(e)
+		print(e)
 		dr_no = 0
 
 	label = nuke.getInput('Label this Driver')	
@@ -207,7 +215,7 @@ def set_driven(driver_name):
 		for n in nodes_driven:
 			ls_knobs = [k for k in n.knobs() if n.knob(k).Class() in CLASS_EQ[driver_type]]
 			ls_knobs = filter_knobs(ls_knobs)
-			print(ls_knobs)
+			LOG.info(ls_knobs)
 
 			# UI
 			panel = nuke.Panel(n.name())
@@ -224,11 +232,7 @@ def set_driven(driver_name):
 					n.knob(k_sel).setValue(node_driver[knob_driver].value())
 					# Add Expression
 					n.knob(k_sel).setExpression(str_expr)
-					# Visual Labelling
-					n.knob('label').setValue(node_driver.knob(driver_name).label())
-					n.knob('note_font').setValue('Bold')
-
-					print('%s > %s' % (k_sel, str_expr))
+					LOG.info('%s > %s' % (k_sel, str_expr))
 
 					append_driven_knob(node_driver.knob(knob_driver), n.name(), k_sel)
 
@@ -236,29 +240,11 @@ def set_driven(driver_name):
 def show_list_driven(driver_name):
 	"""show the list of driven node.knob
 	@driver_name: (str) Name of the driver knob to set expression with
-	return: (list of knobs) list of node.knob that this driver knob is driving
 	"""
-	this_node = nuke.thisNode()
-	driver_knob = this_node.knob(driver_name)
 
-	# Finall nodes expression linked to Master_Driver
-	ls_dep_nodes = this_node.dependent(nuke.EXPRESSIONS)
-	ls_dep_knobs = []
-	
-	for n in ls_dep_nodes:
-		# Find all knobs that has expression
-		_ls_knob_hasExpr = [k for k in n.knobs() if n.knob(k).hasExpression()]
-		# Filter knobs that have driver_name in expression
-		for k in filter_knobs(_ls_knob_hasExpr):
-			_thisExpr = n.knob(k).animation(0).expression()
-			if driver_name in _thisExpr: ls_dep_knobs.append('%s.%s' % (n.name(), k))
-
-	driver_knob.setTooltip('\n'.join(ls_dep_knobs))	
-	print("%s is driving %s" % (driver_name, ls_dep_knobs))
-
-	KNOB_LIST_WIDGET.run(driver_knob, ls_dep_knobs)
-
-	return ls_dep_knobs
+	ls_driven = nuke.thisNode().knob(driver_name).tooltip().split('\n')
+	for d in ls_driven:
+		print(d.split('.'))
 
 
 def sync_list_driven():
@@ -324,6 +310,7 @@ def filter_knobs(ls_knobs):
 	return [l for l in ls_knobs if l not in f]
 		
 
+
 # def get_driven_knob(driver):
 # 	"""nuke panel to get knob to drive with driver
 # 	@driver: (knob) Driver Knob
@@ -331,65 +318,6 @@ def filter_knobs(ls_knobs):
 # 	"""
 
 
-
-
-#-------------------------------------------------------------------------------
-#-UI
-#-------------------------------------------------------------------------------
-
-
-
-
-class DrivenKnobListWidget(QtWidgets.QWidget):
-	"""A list widget to display knobs that are driven by given driver knob
-	Double-clicked on the item to focus"""
-	def __init__(self):
-		super(DrivenKnobListWidget,self).__init__()
-		self.label = QtWidgets.QLabel()
-		self.list_widget = QtWidgets.QListWidget()
-		self.list_widget.itemDoubleClicked.connect(self.focus_node)
-		self.list_widget.itemEntered.connect(self.open_panel)
-		self.list_widget.setToolTip("Double-Click to Focus node in DAG")
-		self.tile_color = QtWidgets.QPushButton("Pick Colour")
-		# self.tile_color.clicked.connect(self.pick_color)
-
-		self.layout = QtWidgets.QVBoxLayout()
-		self.setLayout(self.layout)
-		self.layout.addWidget(self.label)
-		self.layout.addWidget(self.list_widget)
-
-		self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.WindowCloseButtonHint)
-		self.setWindowTitle("Driven Knob List")
-	
-	def run(self, k_driver, ls_dep_knobs):
-		"""Run and Display
-		@k_driver: (knob obj) driver knob
-		@ls_dep_knobs: (list of str) list of driven knobs in node.knob format
-		"""
-
-		self.label.setText(k_driver.label())
-		self.list_widget.addItems(ls_dep_knobs)
-		self.show()
-
-	def focus_node(self, item):
-		"""focus the node in dag"""
-		node, knob = item.text().split('.')
-		centre = (nuke.toNode(node).xpos(), nuke.toNode(node).ypos())
-		nuke.zoom(2.0, centre)
-
-	def open_panel(self, item):
-		"""Opens the property panel of this item"""
-		node, knob = item.text().split('.')
-		nuke.toNode(node).showControlPanel()
-	
-	# def pick_color(self):
-	# 	"""open nuke colour picker to color nodes"""
-	# 	col = nuke.getColor()
-	# 	ls_nodes = self.list_widget.items()
-
-
-
-KNOB_LIST_WIDGET = DrivenKnobListWidget()
 
 
 #-------------------------------------------------------------------------------
