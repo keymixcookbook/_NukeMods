@@ -397,7 +397,6 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		thisPreset=PRESET_BTN[thisBtn]
 		thisNode=self.node
 
-
 		if thisBtn=='Raw Lighting':
 			p=nuke.Panel('Select the albeto pass')
 			p.addEnumerationPulldown('aov', ' '.join(nuke.layers()))
@@ -419,11 +418,12 @@ class Core_ExprPrompt(QtWidgets.QWidget):
 		# self.node['label'].setValue(thisBtn)
 		self.close()
 
-	def set_knobValue(kvPaire, *strSub):
+	def set_knobValue(self, kvPaire, *strSub):
 		'''set knob value
 		@kvPaire: (<knob>, <value>)
 		@*strSub: string to replace if any, (replaceThis, withThis)
 		'''
+		print(kvPaire)
 		pKnob, pValue = kvPaire
 		if len(strSub)>0 and len(strSub)==2:
 			pValue=re.sub(strSub[0], strSub[1], pValue)
