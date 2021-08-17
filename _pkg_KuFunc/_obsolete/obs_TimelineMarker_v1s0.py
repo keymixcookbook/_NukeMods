@@ -30,7 +30,7 @@ import sys, time, os, json
 
 
 
-__VERSION__		= '2.0'
+__VERSION__		= '1.0'
 __OS__			= platform.system()
 __AUTHOR__	 	= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -42,9 +42,6 @@ __TITLE__		= "TimelineMarker v%s" % __VERSION__
 
 def _version_():
 	ver='''
-
-	version 2.0
-	- add button context menu
 
 	version 1.0
 	- Dockable nuke widget to set current frame
@@ -183,11 +180,11 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 
 		label_button = marker_obj.label if len(marker_obj.label)<=8 else marker_obj.label[:8]+'...'
 		marker_obj.setText(label_button)
-		marker_obj.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (marker_obj.frame, marker_obj.label, marker_obj.id) )
+		marker_obj.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)<br><br><i>Right-Click to Remove</i>" % (marker_obj.frame, marker_obj.label, marker_obj.id) )
 
 		marker_obj.clicked.connect(self.setFrame)
-		# marker_obj.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-		# marker_obj.customContextMenuRequested.connect(self.removeMarker_RClicked)
+		marker_obj.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+		marker_obj.customContextMenuRequested.connect(self.removeMarker_RClicked)
 
 
 	def addMarker(self):
@@ -222,7 +219,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			self.layout_markers.removeWidget(thisWidget)
 			thisWidget.deleteLater()
 		except:
-			print("no markers to be removed")
+			print "no markers to be removed"
 
 
 	def reloadMarkers(self):
@@ -230,7 +227,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 		thisFile = self.data_file
 
 		if not os.path.exists(thisFile):
-			print("No TMDataset.json file found")
+			print "No TMDataset.json file found"
 			self.tx_shot.setText("NO ENV SET")
 		else:
 			# Clear Widgets
@@ -239,13 +236,13 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			for w in all_widgets:
 				self.layout_markers.removeWidget(w)
 				w.deleteLater()
-				print("Markers Removed: %s" % w.label)
+				print "Markers Removed: %s" % w.label
 
 			# Find data
 			thisData = []
 			with open(self.data_file, 'r') as f:
 				thisData = json.load(f)
-			print("loaded: %s" % thisFile)
+			print "loaded: %s" % thisFile
 			# Rebuild Widgets
 			for w in thisData:
 				thisFrame = w['frame']
@@ -260,7 +257,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			jsonfile_shot = os.path.basename(self.data_file).split('_TMDataset.json')[0]
 
 			self.tx_shot.setText('%s: <b>%s</b>' % (jsonfile_show, jsonfile_shot))
-			print("Markers added: %s" % self.layout_markers.count())
+			print "Markers added: %s" % self.layout_markers.count()
 
 
 	def loadFromFile(self):
@@ -270,7 +267,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			self.data_file = sel_json
 			self.reloadMarkers()
 		else:
-			print("Inviald file path")
+			print "Inviald file path"
 
 
 	def setFrame(self):
@@ -280,7 +277,7 @@ class Core_TimelineMarker(QtWidgets.QWidget):
 			nuke.frame(thisSender.frame)
 		except:
 			pass
-		print("%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label))
+		print "%s | %s | %s" % (thisSender.id, thisSender.frame, thisSender.label)
 
 
 	def event(self, event):
@@ -312,33 +309,7 @@ class MarkerButton(QtWidgets.QPushButton):
 		self.frame = frame
 		self.label = label
 
-		# Context Menu
-		self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-		self.customContextMenuRequested.connect(self.on_context_menu)
-
-		self.menu = QtWidgets.QMenu()
-		self.action_edit = QtWidgets.QAction('Edit', self)
-		self.action_edit.triggered.connect(self.menu_edit)
-		self.action_remove = QtWidgets.QAction('Remove', self)
-		self.action_remove.triggered.connect(self.menu_remove)
-		self.menu.addAction(self.action_edit)
-		self.menu.addAction(self.action_remove)
-
-		self.setFixedWidth(150)
-
-	def on_context_menu(self, point):
-		self.menu.exec_(self.mapToGlobal(point))
-	
-	def menu_edit(self):
-		self.frame, self.label = MarkerEdit(self).run()
-		self.setText(self.label)
-		self.setToolTip( "<b>x%s:</b><br>%s<br>(id: %s)" % (self.frame, self.label, self.id) )
-		print("Marker Edited: %s | %s" % (self.frame, self.label))
-
-	def menu_remove(self):
-		print("Remove Marker: %s | %s | %s" % (self.id, self.frame, self.label))
-		self.deleteLater()
-
+		# self.setFixedWidth(48)
 
 class MarkerAdd(QtWidgets.QDialog):
 	'''
@@ -376,6 +347,7 @@ class MarkerAdd(QtWidgets.QDialog):
 		self.m_label.setFocus()
 		self.m_label.selectAll()
 
+
 	def confirm(self):
 		'''add button'''
 		thisFrame = int(self.m_frame.text().replace('x', ''))
@@ -386,53 +358,6 @@ class MarkerAdd(QtWidgets.QDialog):
 		self.close()
 
 
-class MarkerEdit(QtWidgets.QDialog):
-	'''
-	GUI for adding markers
-	data to be stored:frame, tooltip, id(<SHOW>-<timestamp>, PHX-12345678)
-	'''
-	def __init__(self, MarkerObj):
-		super(MarkerEdit, self).__init__()
-
-		self.marker_obj = MarkerObj
-		self.this_frame = MarkerObj.frame
-		self.this_label = MarkerObj.label
-
-		self.m_title_frame = QtWidgets.QLabel('Frame: ')
-		self.m_title_label = QtWidgets.QLabel('Label: ')
-		self.m_frame = QtWidgets.QSpinBox()
-		self.m_frame.setMaximum(3000)
-		self.m_frame.setPrefix('x')
-		self.m_frame.setValue(self.this_frame)
-		self.m_label = QtWidgets.QLineEdit()
-		self.m_label.setText('x%s' % self.this_frame)
-		self.m_label.setPlaceholderText("Keep it short")
-		self.m_add = QtWidgets.QPushButton('Confirm Edit')
-		self.m_add.clicked.connect(self.confirm)
-
-		self.layout = QtWidgets.QGridLayout()
-		self.layout.addWidget(self.m_title_frame, 0,0, QtCore.Qt.AlignRight)
-		self.layout.addWidget(self.m_frame, 0,1)
-		self.layout.addWidget(self.m_title_label, 1,0, QtCore.Qt.AlignRight)
-		self.layout.addWidget(self.m_label, 1,1)
-		self.layout.addWidget(self.m_add,2,0,1,2)
-		# self.layout.setSpacing(0)
-		self.setLayout(self.layout)
-		self.setWindowTitle("Edit Marker")
-		# self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
-		self.m_label.setFocus()
-		self.m_label.selectAll()
-
-	def run(self):
-		self.exec_()
-		return self.this_frame, self.this_label
-
-	def confirm(self):
-		'''add button'''
-		self.this_frame = int(self.m_frame.text().replace('x', ''))
-		self.this_label = self.m_label.text()
-		self.close()
 
 
 
@@ -466,5 +391,16 @@ def set_widget_margins_to_zero(widget_object):
 
 
 
-nukescripts.registerWidgetAsPanel('mod_TimelineMarker.Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
-TimelineMarker = Core_TimelineMarker()
+try:
+	nukescripts.registerWidgetAsPanel('mod_TimelineMarker.Core_TimelineMarker', 'TimelineMarker','uk.co.thefoundry.TimelineMarker')
+except:
+	try:
+		app = QtWidgets.QApplication(sys.argv)
+		p = Core_TimelineMarker()
+		p.show()
+		p.raise_()
+		app.exec_()
+	except:
+		p = Core_TimelineMarker()
+		p.show()
+		p.raise_()
