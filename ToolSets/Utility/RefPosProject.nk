@@ -1,0 +1,540 @@
+set cut_paste_input [stack 0]
+version 11.3 v6
+push $cut_paste_input
+add_layer {Pref Pref.red Pref.green Pref.blue}
+add_layer {P P.X P.Y P.Z P.red P.green P.blue P.alpha P.x P.y P.z}
+Group {
+ name RefPosProject
+ selected true
+ xpos 257
+ ypos -199
+ addUserKnob {20 User}
+ addUserKnob {41 Referencepoint l "rest position" T Shuffle21.in}
+ addUserKnob {6 Pref_Unpremult l unpremult -STARTLINE}
+ addUserKnob {41 in l "world position" T Shuffle16.in}
+ addUserKnob {6 P_Unpremult l unpremult -STARTLINE}
+ addUserKnob {3 referenceframe}
+ referenceframe 1001
+ addUserKnob {22 curFrame l "set to current frame" -STARTLINE T "#variables\nn = nuke.toNode(\"MatchGradePos\")\ncropPos = nuke.toNode(\"posCrop\")\ncropPref = nuke.toNode(\"prefCrop\")\ncenterPoint = nuke.toNode('Center').knob('Center').getValue()\nPosGrade = nuke.toNode('PosGrade')   \nPrefGrade = nuke.toNode('PrefGrade')\nrefFrame = nuke.frame()\n\n#sample Pref and Pos\n\ncropPref.knob('disable').setValue(False)\n\nPosR = cropPos.sample('red', centerPoint\[0], centerPoint\[1])\nPosG = cropPos.sample('green', centerPoint\[0], centerPoint\[1])\nPosB = cropPos.sample('blue', centerPoint\[0], centerPoint\[1])\n\nPrefR = cropPref.sample('red', centerPoint\[0], centerPoint\[1])\nPrefG = cropPref.sample('green', centerPoint\[0], centerPoint\[1])\nPrefB = cropPref.sample('blue', centerPoint\[0], centerPoint\[1])\n\n#offsets in grade\nPosGrade.knob('add').setValue(\[PosR, PosG, PosB, 1])\nPrefGrade.knob('add').setValue(\[PrefR, PrefG, PrefB, 1])\n\n\n#match grade analyze\nk = n.knob(\"sourceRefFrames\")\nk.clearAnimated()\nk.setAnimated()\nk.setValueAt( int(refFrame), int(refFrame) )\nn.knob(\"analyzeRefFrames\").execute()\n\ncropPref.knob('disable').setValue(True)\n\n#display ref frame\nf = nuke.thisNode()\nf.knob(\"referenceframe\").setValue(int(nuke.frame()))\n    "}
+ addUserKnob {6 FustrumClipping l "cam fustrum clip" +STARTLINE}
+ FustrumClipping true
+ addUserKnob {6 useimageaspect l "use image aspect" -STARTLINE}
+ useimageaspect true
+ addUserKnob {6 outputUV l "output UV" -STARTLINE}
+ addUserKnob {6 unpremultMask l "unpremult mask" -STARTLINE}
+ unpremultMask true
+ addUserKnob {26 ""}
+ addUserKnob {41 box l "search area" T prefCrop.box}
+ addUserKnob {7 UVBlur l "uv blur" R 0 4}
+ UVBlur 2
+ addUserKnob {26 ""}
+ addUserKnob {41 filter T STMap17.filter}
+ addUserKnob {6 Log l "operations in log" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 INFO l "" +STARTLINE T "v1.01 (c) Riley Gray 2020 - Thanks Michael Garret for \"CameraUVs\" algorithm "}
+ addUserKnob {26 DummyCam l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>\n<span style=\"color:#666\"><br/><b>C44Kernel v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018</span>"}
+ addUserKnob {20 infoTab l Info}
+ addUserKnob {26 instructions l "" +STARTLINE T "This node will attempt to transform the rest position\npass into the world position pass so a true camera projection\ncan be done on the rest position (will stick to animation). \nBelow are the instructions to get it up and running: NUKEX REQUIRED!!!\n\n1. Connect the \"pos\" input into the render you wish to project on\n2. Connect the \"cam\" input to the camera that rendered the cg\n3. (optional) connect the \"img\" input to the texture you wish to use\n    (UV's can be output)\n4. (optional) if artifacts occur, masking to a specific area of the render\n     using cryptomattes or other passes may help\n5. Pick the correct rest position and world position passes from the dropdowns\n6. Scrub to a frame which you wish to analyze and use the search area box\n     to select an area which you want to match. Generally this is to select a single\n     object on the rest position if there are multiple objects in one render. Make\n     sure the middle of the crop is over the object.\n7. The 'set to current frame\" button will set the reference frame to the current\n     frame and analyze the frame using an internal matchgrade node. This will\n     store a lookup table of the transform data from rest position to world position. if\n     the node is copied and pasted into another script the data will be carried with it.\n     this can be a fairly large value so be careful (by default there is no data stored \n     on the node so the size is small)\n8. that should do it! if artifacts occur try playing around with the unpremult and blur"}
+}
+ Input {
+  inputs 0
+  name img
+  xpos -1107
+  ypos -1182
+ }
+ Dot {
+  name Dot1
+  xpos -1073
+  ypos -450
+ }
+set N116df250 [stack 0]
+ Dot {
+  name Dot2
+  xpos -925
+  ypos -450
+ }
+ NoOp {
+  name imageAspect
+  xpos -959
+  ypos -382
+  addUserKnob {20 User}
+  addUserKnob {7 AspectRatio}
+  AspectRatio {{width/height}}
+  addUserKnob {7 xoverscan}
+  xoverscan {{"(0-bbox.x)/width +1"}}
+  addUserKnob {7 yoverscan}
+  yoverscan {{"(0-bbox.y)/height +1"}}
+  addUserKnob {7 roverscan}
+  roverscan {{bbox.r/width}}
+  addUserKnob {7 toverscan}
+  toverscan {{bbox.t/height}}
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -293
+  ypos -1180
+  number 3
+ }
+ Expression {
+  expr3 "a<=0? a: a/a"
+  name unpremultAlpha
+  xpos -293
+  ypos -900
+  disable {{1-parent.unpremultMask}}
+ }
+ Dot {
+  name Dot9
+  xpos -259
+  ypos -857
+ }
+ Dot {
+  name Dot10
+  xpos -439
+  ypos -857
+ }
+set N116f4f90 [stack 0]
+ Input {
+  inputs 0
+  name pos
+  xpos -773
+  ypos -1184
+  number 1
+ }
+ Dot {
+  name Dot5
+  xpos -739
+  ypos -1080
+ }
+set N116e2b00 [stack 0]
+ Dot {
+  name Dot8
+  xpos -616
+  ypos -1080
+ }
+set N1170ed90 [stack 0]
+ Dot {
+  name Dot6
+  xpos -616
+  ypos -941
+ }
+set N116a0f70 [stack 0]
+push $N1170ed90
+ Dot {
+  name Dot7
+  xpos -498
+  ypos -1080
+ }
+ Shuffle {
+  in P
+  name Shuffle16
+  label "\[value in]"
+  xpos -532
+  ypos -1019
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -532
+  ypos -950
+  disable {{1-parent.P_Unpremult}}
+ }
+ Unpremult {
+  name Unpremult2
+  xpos -532
+  ypos -903
+  disable {{1-parent.P_Unpremult}}
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge1
+  xpos -532
+  ypos -817
+  disable {{"\[exists parent.input3] ? 0 : 1"}}
+ }
+ Crop {
+  box {{parent.prefCrop.box.x} {parent.prefCrop.box.y} {parent.prefCrop.box.r} {parent.prefCrop.box.t}}
+  name posCrop
+  xpos -532
+  ypos -768
+ }
+ Dot {
+  name Dot132
+  xpos -498
+  ypos -632
+ }
+push $N116f4f90
+ Dot {
+  name Dot11
+  xpos -681
+  ypos -857
+ }
+push $N116a0f70
+push $N116e2b00
+ Shuffle {
+  in Pref
+  name Shuffle21
+  label "\[value in]"
+  xpos -773
+  ypos -1018
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -773
+  ypos -950
+  disable {{1-parent.Pref_Unpremult}}
+ }
+ Unpremult {
+  name Unpremult1
+  xpos -773
+  ypos -905
+  disable {{1-parent.Pref_Unpremult}}
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge2
+  xpos -773
+  ypos -822
+  disable {{"\[exists parent.input3] ? 0 : 1"}}
+ }
+ Crop {
+  box {108 -5 1645 1271}
+  name prefCrop
+  xpos -773
+  ypos -769
+  disable true
+ }
+set N1178d9b0 [stack 0]
+ Grade {
+  add {0 0 0 1}
+  reverse true
+  black_clamp false
+  name PrefGrade
+  xpos -773
+  ypos -726
+ }
+ Grade {
+  add {0 0 0 1}
+  black_clamp false
+  name PosGrade
+  xpos -773
+  ypos -702
+ }
+ MatchGrade {
+  inputs 2
+  serializeKnob "0 0 0 0 0 0 1 1 1 0 18446744073709551615 18446744073709551615"
+  sourceRefFrames 1001
+  prelut Linear
+  lutres 64
+  name MatchGradePos
+  xpos -773
+  ypos -641
+ }
+ Group {
+  name C44Kernel
+  help "C44Kernel v1.0 by Adrian Pueyo\n\nMultiply the rgb or rgba colors by an arbitrary 4x4 Matrix. Useful for transforming a Position pass.\n\nYou can plug in an Axis or Camera node into the axis input, to also apply its transformations.\n\nadrianpueyo.com, 2017"
+  tile_color 0xe88543ff
+  selected true
+  xpos -773
+  ypos -445
+  lock_connections true
+  addUserKnob {20 C44Kernel}
+  addUserKnob {41 channels T MergeIn.Achannels}
+  addUserKnob {41 matrix T Axis1.matrix}
+  addUserKnob {6 invert -STARTLINE}
+  invert true
+  addUserKnob {6 alpha_masking l "alpha masking" t "Apply only where rgba.alpha>0" +STARTLINE}
+  addUserKnob {20 advanced l Advanced n 1}
+  advanced 0
+  addUserKnob {6 transpose +STARTLINE}
+  addUserKnob {6 w_divide +STARTLINE}
+  addUserKnob {6 rgba_mode l "apply on Vector4" t "Usually you'll want to apply the matrix on the RGB only, which uses a white alpha. Enable this to use the full Vector4 (RGBA)." +STARTLINE}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {41 mix T MergeOut.mix}
+  addUserKnob {26 version_author l "" t "C44Kernel v1.0\n23 June, 2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>C44Kernel v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018</span>"}
+  addUserKnob {20 GPU_Settings l "GPU Settings"}
+  addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T C44MatrixKernel.maxGPUMemory}
+  addUserKnob {41 maxTileLines l "Percentage of image height per tile" T C44MatrixKernel.maxTileLines}
+ }
+  Input {
+   inputs 0
+   name Inputaxis
+   xpos 133
+   ypos -181
+   number 1
+  }
+  Axis2 {
+   useMatrix true
+   matrix {
+       {{parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)}}
+       {{parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)}}
+       {{parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)}}
+       {{parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)} {parent.parent.DummyCamInt.world_matrix(referenceframe)}}
+     }
+   name Axis1
+   xpos 143
+   ypos -133
+  }
+  Input {
+   inputs 0
+   name Inputimg
+   xpos -110
+   ypos -192
+  }
+set N117f3470 [stack 0]
+  Dot {
+   name Dot1
+   xpos -76
+   ypos -161
+  }
+set N117f8090 [stack 0]
+  Expression {
+   expr3 a>0
+   name ExpressionA
+   xpos -220
+   ypos -164
+  }
+  Switch {
+   which {{!parent.alpha_masking}}
+   name SwitchMasking
+   xpos -220
+   ypos -112
+  }
+push $N117f8090
+push $N117f3470
+  Remove {
+   name RemoveAll
+   xpos 34
+   ypos -196
+  }
+  Merge2 {
+   inputs 2
+   operation copy
+   Bchannels none
+   name MergeIn
+   xpos 34
+   ypos -164
+  }
+  Shuffle {
+   alpha white
+   name ShuffleWhiteA
+   xpos 34
+   ypos -140
+   disable {{parent.rgba_mode}}
+  }
+  BlinkScript {
+   recompileCount 147
+   ProgramGroup 1
+   KernelDescription "2 \"C44MatrixKernel\" iterate pixelWise 10f1841ce0aee43165aca4445fb9ce0126826eedd71da6339f12b8f8de8e52eb 2 \"src\" Read Point \"dst\" Write Point 4 \"m\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"invert\" Int 1 AAAAAA== \"transpose\" Int 1 AAAAAA== \"w_divide\" Int 1 AAAAAA== 4 \"m\" 16 1 \"invert\" 1 1 \"transpose\" 1 1 \"w_divide\" 1 1 0"
+   kernelSource "kernel C44MatrixKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite> dst;\n\n  param:\n    float4x4 m;\n    int invert;\n    int transpose;\n    int w_divide;\n\n  void process(int2 pos) \{\n    SampleType(src) p = src();\n    float4 result = 1.0f;\n    float4x4 mi = m;\n    mi = invert?mi.invert():mi;\n    mi = transpose?mi.transpose():mi;\n    for(int c = 0; c<dst.kComps; c++)\{\n      result\[c] = mi\[c]\[0]*p.x + mi\[c]\[1]*p.y + mi\[c]\[2]*p.z + mi\[c]\[3]*p.w;\n    \}\n    dst() = w_divide?result/result.w:result;\n  \}\n\};\n"
+   rebuild ""
+   C44MatrixKernel_m {
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+     }
+   C44MatrixKernel_invert {{parent.invert}}
+   C44MatrixKernel_transpose {{parent.transpose}}
+   C44MatrixKernel_w_divide {{parent.w_divide}}
+   rebuild_finalise ""
+   name C44MatrixKernel
+   xpos 34
+   ypos -116
+  }
+push $N117f8090
+  Merge2 {
+   inputs 2+1
+   operation copy
+   Bchannels {{{parent.MergeIn.Achannels}}}
+   output {{{parent.MergeIn.Achannels}}}
+   name MergeOut
+   xpos -110
+   ypos -112
+  }
+  Output {
+   name Output1
+   xpos -110
+   ypos -88
+  }
+ end_group
+ Expression {
+  expr2 b/-1<0?0:b/-1
+  name Expression1
+  label "clip Z behind cam"
+  xpos -773
+  ypos -390
+ }
+ Expression {
+  temp_name0 h_tan
+  temp_expr0 "(h_apert /2) / focal"
+  temp_name1 v_tan
+  temp_expr1 "(v_apert /2)  / focal"
+  expr0 "0.5 + 0.5 * r / h_tan / b"
+  expr1 "0.5 + 0.5 * g / v_tan / b"
+  expr2 0
+  channel3 {none none none -rgba.alpha}
+  name Expression16
+  label CameraUVs
+  xpos -773
+  ypos -323
+  addUserKnob {20 "" l User}
+  addUserKnob {26 "" l "camera settings"}
+  addUserKnob {7 focal l "focal length" t "Link to projecting camera's focal length" R 0 100}
+  focal {{parent.DummyCamInt.focal(referenceframe)}}
+  addUserKnob {7 h_apert l "horiz aperture" t "Link to projecting camera's horizontal aperture" R 0 50}
+  h_apert {{parent.DummyCamInt.haperture(referenceframe)}}
+  addUserKnob {7 v_apert l "vert aperture" t "Link to projecting camera's vertical aperture" R 0 50}
+  v_apert {{"useimageaspect == 0? parent.DummyCamInt.vaperture(referenceframe): h_apert/imageAspect.AspectRatio"}}
+ }
+ Expression {
+  expr3 "(r<xO || r>rO || g<yO || g>tO)?0:a"
+  name Expression17
+  label "clamp projection to cam frustum"
+  xpos -773
+  ypos -259
+  disable {{1-FustrumClipping x1304 1}}
+  addUserKnob {20 User}
+  addUserKnob {7 xO}
+  xO {{1-parent.imageAspect.xoverscan}}
+  addUserKnob {7 yO}
+  yO {{1-parent.imageAspect.yoverscan}}
+  addUserKnob {7 rO}
+  rO {{parent.imageAspect.roverscan}}
+  addUserKnob {7 tO}
+  tO {{parent.imageAspect.toverscan}}
+ }
+ Blur {
+  size {{parent.UVBlur}}
+  name Blur1
+  xpos -773
+  ypos -183
+ }
+ Dot {
+  name Dot4
+  xpos -739
+  ypos -95
+ }
+set N118a23f0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -739
+  ypos -13
+ }
+push $N118a23f0
+push $N116df250
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+0.5)/height
+  expr2 0
+  name STmap
+  xpos -1107
+  ypos -386
+  disable {{1-outputUV}}
+ }
+ Colorspace {
+  colorspace_out AlexaV3LogC
+  name Colorspace1
+  xpos -1107
+  ypos -141
+  disable {{1-Log}}
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap17
+  xpos -1107
+  ypos -104
+ }
+ Colorspace {
+  colorspace_in AlexaV3LogC
+  name Colorspace2
+  xpos -1107
+  ypos -63
+  disable {{1-Log}}
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value {{1-FustrumClipping}}
+  invert_mask true
+  name Multiply22
+  xpos -1107
+  ypos -16
+ }
+ Output {
+  name Output1
+  xpos -1107
+  ypos 105
+ }
+push $N1178d9b0
+ NoOp {
+  name Center
+  xpos -902
+  ypos -769
+  addUserKnob {20 User}
+  addUserKnob {12 Center}
+  Center {{"(parent.prefCrop.box.r-parent.prefCrop.box.x)/2 +  parent.prefCrop.box.x"} {"(parent.prefCrop.box.t-parent.prefCrop.box.y)/2 +  parent.prefCrop.box.y"}}
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos -275
+  ypos -548
+  number 2
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCamInt
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  xpos -265
+  ypos -466
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+end_group
+
