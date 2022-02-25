@@ -1,0 +1,238 @@
+Group {
+ name mtPrefStick
+ tile_color 0xffbf00ff
+ note_font "Verdana Bold"
+ note_font_size 14
+ selected true
+ addUserKnob {20 tab l prefStick}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T BlinkScript1.vectorize}
+ addUserKnob {26 ""}
+ addUserKnob {22 getCam l "Get Camera" T "thisPrefStick = nuke.thisNode()\n\nx = nuke.Root()\nx.begin()\n\nif nuke.selectedNode().Class() == \"Camera2\" or nuke.selectedNode().Class() == \"Camera3\":\n    targetCam = nuke.selectedNode()\n    print (targetCam)\n    haperture = targetCam.knob('haperture').value()\n    vaperture = targetCam.knob('vaperture').value()\n    thisPrefStick.knob('uv').setValue(haperture, 0)\n    thisPrefStick.knob('uv').setValue(vaperture, 1)\n\nelse:\n    nuke.message('select a camera!')\nx.end()" +STARTLINE}
+ addUserKnob {30 uv -STARTLINE}
+ uv {10 10}
+ addUserKnob {26 space1 l "  " T "  "}
+ addUserKnob {41 in l "Pref Layer" T ShufflePref.in}
+ addUserKnob {6 show l "Show Pref" -STARTLINE}
+ addUserKnob {26 space2 l "  " T "  "}
+ addUserKnob {41 "mtAdditiveKernel_Pref Pick" l "Pref Pick" T "BlinkScript1.mtAdditiveKernel_Pref Pick"}
+ addUserKnob {4 directionPull l Direction M {XY XZ YZ "" ""}}
+ addUserKnob {41 mtAdditiveKernel_invertx l "Invert U" -STARTLINE T BlinkScript1.mtAdditiveKernel_invertx}
+ addUserKnob {41 mtAdditiveKernel_inverty l "Invert V" -STARTLINE T BlinkScript1.mtAdditiveKernel_inverty}
+ addUserKnob {6 checkChecker l "Check UVs" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 mtAdditiveKernel_scale l scale T BlinkScript1.mtAdditiveKernel_scale}
+ addUserKnob {7 oX l "Offset X" R -1 1}
+ addUserKnob {7 oY l "Offset Y" R -1 1}
+ addUserKnob {20 group l "scale offsets" n 1}
+ group 0
+ addUserKnob {7 soffX l "Scale Offset X" R 0.01 4}
+ soffX 1
+ addUserKnob {7 soffY l "Scale Offset Y" R 0.01 4}
+ soffY 1
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 group_1 l "Pref Mask" n 1}
+ group_1 0
+ addUserKnob {41 mtAdditiveKernel_PrefMatteMask l PrefMatteMask T BlinkScript1.mtAdditiveKernel_PrefMatteMask}
+ addUserKnob {4 prefMatteForm l Shape -STARTLINE M {Sphere Cube "" "" "" "" ""}}
+ addUserKnob {41 mtAdditiveKernel_PrefPickmatte l "matte Pick" T BlinkScript1.mtAdditiveKernel_PrefPickmatte}
+ addUserKnob {13 position_3d l Scale}
+ position_3d {5 5 5}
+ addUserKnob {13 position_3d_1 l Pivot}
+ addUserKnob {41 mtAdditiveKernel_pmatteHardness l Hardness T BlinkScript1.mtAdditiveKernel_pmatteHardness}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 tab_1 l info}
+ addUserKnob {26 text l " " T "PrefStick v1.1\nMiguel Torija\nwww.migueltorija.com"}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_1 l "How to use it:" T "1 Select a camera and push \"Get Camera\". You can tipe the values manually.\n\n2 Use the picker to select a point of your pref. Check \"show pref\" to show it \nand make it easier.\n\n3 Select tha two vector you want to use (x=r, y=g, z=b)\n\n4 You can scale and translate to better place the image.\n\n5 You have two ways of masking, using the input that the node provides you or \nuse \"pref matte\", which uses an alpha based on your pref selection.\n\n"}
+}
+ Constant {
+  inputs 0
+  color {1 1 1 1}
+  name Constant1
+  xpos 97
+  ypos 33
+ }
+ Input {
+  inputs 0
+  name CG
+  xpos 270
+  ypos -147
+ }
+ Shuffle {
+  in Pref
+  name ShufflePref
+  note_font "Verdana Bold"
+  note_font_size 14
+  xpos 270
+  ypos -81
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input0]"}}
+  name Switch3
+  xpos 270
+  ypos 56
+ }
+ Dot {
+  name Dot9
+  label CG
+  xpos 304
+  ypos 146
+ }
+ Dot {
+  name Dot4
+  xpos 304
+  ypos 200
+ }
+set N2528f800 [stack 0]
+ Dot {
+  name Dot5
+  xpos 304
+  ypos 278
+ }
+set N2528f400 [stack 0]
+ Dot {
+  name Dot1
+  xpos 304
+  ypos 521
+ }
+ Shuffle {
+  inputs 0
+  red white
+  green white
+  blue white
+  alpha white
+  name ShuffleMask
+  note_font "Verdana Bold"
+  note_font_size 14
+  xpos 665
+  ypos 57
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name Mask
+  xpos 475
+  ypos -149
+  number 2
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input2]"}}
+  name Switch2
+  xpos 475
+  ypos 58
+ }
+ Dot {
+  name Dot10
+  label Mask
+  xpos 509
+  ypos 164
+ }
+ ColorBars {
+  inputs 0
+  name ColorBars1
+  xpos -313
+  ypos 162
+ }
+ CheckerBoard2 {
+  inputs 0
+  name CheckerBoard1
+  xpos -434
+  ypos 165
+ }
+ Merge2 {
+  inputs 2
+  operation average
+  mix 0.75
+  name Merge1
+  xpos -368
+  ypos 265
+ }
+ Input {
+  inputs 0
+  name Texture
+  xpos -110
+  ypos 114
+  number 1
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]||checkChecker==1?1:0"}}
+  name Switch4
+  xpos -110
+  ypos 265
+ }
+ Dot {
+  name Dot11
+  label Texture
+  xpos -76
+  ypos 364
+ }
+push $N2528f400
+ Dot {
+  name Dot6
+  xpos 380
+  ypos 278
+ }
+push $N2528f800
+ Dot {
+  name Dot2
+  xpos 379
+  ypos 200
+ }
+ BlinkScript {
+  inputs 4
+  recompileCount 73
+  ProgramGroup 1
+  KernelDescription "2 \"mtAdditiveKernel\" iterate pixelWise 68ed48a3f13eb2af76bc40565c42066a76307df29d7a8da571eb2d2f45f7debf 5 \"CG\" Read Point \"src\" Read Random \"texture\" Read Random \"mask\" Read Point \"dst\" Write Point 19 \"apertureX\" Float 1 AAAAAA== \"apertureY\" Float 1 AAAAAA== \"Pref Pick\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"PrefPickmatte\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"checkXY\" Bool 1 AA== \"checkXZ\" Bool 1 AA== \"checkYZ\" Bool 1 AA== \"invertx\" Bool 1 AA== \"inverty\" Bool 1 AA== \"scale\" Float 1 AABAPw== \"scaleOffset\" Float 2 AACAPwAAgD8= \"offset Y\" Float 1 AAAAAA== \"offset X\" Float 1 AAAAAA== \"pmatteScale\" Float 4 AAAAPwAAAD8AAAA/AAAAPw== \"pmattePivot\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"pmatteHardness\" Float 1 AAAAAA== \"PrefMatteMask\" Bool 1 AA== \"PrefMatteSPHERE\" Bool 1 AA== \"PrefMatteSquare\" Bool 1 AA== 19 \"apertureX\" 1 1 \"apertureY\" 1 1 \"PrefPick\" 4 1 \"PrefPickmatte\" 4 1 \"checkXY\" 1 1 \"checkXZ\" 1 1 \"checkYZ\" 1 1 \"invertx\" 1 1 \"inverty\" 1 1 \"scaleST\" 1 1 \"scale2ST\" 2 1 \"transformYst\" 1 1 \"transformXst\" 1 1 \"pmatteScale\" 4 1 \"pmattePivot\" 4 1 \"pmatteHardness\" 1 1 \"PrefMatteMask\" 1 1 \"PrefMatteSPHERE\" 1 1 \"PrefMatteSquare\" 1 1 13 \"srcconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"textureconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"prefNormalized\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"prefNormalizedmatte\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"PrefstMap\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"transformedSTmap\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"output\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"stMap\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"UV\" Float 2 1 AAAAAAAAAAA= \"resolution\" Int 2 1 AAAAAAAAAAA= \"maskAlpha\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"pmateValues\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"pmatteMask\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "\nkernel mtAdditiveKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> CG;\n  Image<eRead, eAccessRandom, eEdgeConstant> src; // the input image\n  Image<eRead, eAccessRandom, eEdgeConstant> texture;\n  Image<eRead, eAccessPoint, eEdgeClamped> mask;\n  Image<eWrite> dst; // the output image\n\n  param:\n    // This parameter is made available to the user.\n\n    float apertureX;\n    float apertureY;\n\n    float4 PrefPick;\n    float4 PrefPickmatte;\n    bool checkXY;\n    bool checkXZ;\n    bool checkYZ;\n    bool invertx;\n    bool inverty;\n    float scaleST;\n    float2 scale2ST;\n    float transformYst;\n    float transformXst;\n\n    float4 pmatteScale;\n    float4 pmattePivot;\n    float pmatteHardness;\n    bool PrefMatteMask;\n    bool PrefMatteSPHERE;\n    bool PrefMatteSquare;\n\n  local:\n    // This local variable is not exposed to the user.\n    float4 prefNormalized;\n    float4 prefNormalizedmatte;\n    float4 PrefstMap;\n    float4 transformedSTmap;\n    float4 output;\n    float4 stMap;\n    float2 UV;\n    int2 resolution;\n    float4 maskAlpha;\n\n    float4 pmateValues;\n    float4 pmatteMask;\n\n  // In define(), parameters can be given labels and default values.\n  void define() \{\n    defineParam(scale2ST, \"scaleOffset\", float2(1.00f));\n    defineParam(scaleST, \"scale\", 0.75f);\n    defineParam(transformYst, \"offset Y\", 0.0f);\n    defineParam(transformXst, \"offset X\", 0.0f);    \n    defineParam(PrefPick, \"Pref Pick\", float4(0.0f));\n    defineParam(pmatteScale, \"pmatteScale\", float4(0.5f));\n\n  \}\n\n  // The init() function is run before any calls to process().\n  // Local variables can be initialized here.\n  void init() \{\n\n    resolution.x = CG.bounds.width();\n    resolution.y = CG.bounds.height();    \n\n  \}\n\n  void process() \{\n\n\n\n    prefNormalized = CG()-(PrefPick);\n    prefNormalizedmatte = CG()-(PrefPickmatte);\n\n    pmateValues.x = (prefNormalizedmatte.x/pmatteScale.x)+pmattePivot.x;\n    pmateValues.y = (prefNormalizedmatte.y/pmatteScale.y)+pmattePivot.y;\n    pmateValues.z = (prefNormalizedmatte.z/pmatteScale.z)+pmattePivot.z;\n\n    // Sphere\n    if(PrefMatteSPHERE == 1)\{\n      pmatteMask = 1-(sqrt((pmateValues.x*pmateValues.x)+(pmateValues.y*pmateValues.y)+(pmateValues.z*pmateValues.z)));\n    \}\n    // Cube\n    if(PrefMatteSquare == 1)\{\n      pmatteMask = (max(fabs(pmateValues.x),fabs(pmateValues.y)));\n      pmatteMask = 1-(max(fabs(pmatteMask.x),fabs(pmateValues.z)));\n    \}\n\n    pmatteMask = pmatteMask/pmatteHardness;\n    pmatteMask = clamp(pmatteMask, float4(0.0f), float4(1.0f));\n\n    if(checkXY == 1)\{\n      PrefstMap.x = ((prefNormalized.x*apertureX)/resolution.x);\n      PrefstMap.y = ((prefNormalized.y*apertureY)/resolution.y);\n      PrefstMap.z = 0.0f;\n    \}\n\n    if(checkXZ == 1)\{\n\n      PrefstMap.x = ((prefNormalized.x*apertureX)/resolution.x);\n      PrefstMap.y = ((prefNormalized.z*apertureY)/resolution.y);\n      PrefstMap.z = 0.0f;\n    \}\n\n    if(checkYZ == 1)\{\n\n      PrefstMap.x = ((prefNormalized.z*apertureX)/resolution.x);\n      PrefstMap.y = ((prefNormalized.y*apertureY)/resolution.y);\n      PrefstMap.z = 0.0f;\n    \}\n\n\n    transformedSTmap.x = ((PrefstMap.x/scaleST)/scale2ST.x)+transformXst;\n    transformedSTmap.y = ((PrefstMap.y/scaleST)/scale2ST.y)+transformYst;\n    \n    if(invertx == 1)\{\n    transformedSTmap.x = transformedSTmap.x*-1.0f;\n    \}\n\n    if(inverty == 1)\{\n    transformedSTmap.y = transformedSTmap.y*-1.0f;\n    \}    \n\n    stMap.x = transformedSTmap.x + 0.5f;\n    stMap.y = transformedSTmap.y + 0.5f;\n\n\n\n    UV.x = stMap.x*resolution.x-.5f;\n    UV.y = stMap.y*resolution.y-.5f;\n    output = bilinear(texture, UV.x, UV.y);\n    maskAlpha = mask().w;\n\n    if(PrefMatteMask == 1)\{\n    output = output * pmatteMask;;\n    \}  \n\n    output = output * maskAlpha;\n    // Write the result to the output image\n    dst() = output;\n  \}\n\};\n\n"
+  rebuild ""
+  mtAdditiveKernel_apertureX {{uv.u}}
+  mtAdditiveKernel_apertureY {{uv.v}}
+  "mtAdditiveKernel_Pref Pick" {0 0 0 0}
+  mtAdditiveKernel_PrefPickmatte {0 0 0 0}
+  mtAdditiveKernel_checkXY {{directionPull==0?1:0}}
+  mtAdditiveKernel_checkXZ {{directionPull==1?1:0}}
+  mtAdditiveKernel_checkYZ {{directionPull==2?1:0}}
+  mtAdditiveKernel_scaleOffset {{soffX} {soffY}}
+  "mtAdditiveKernel_offset Y" {{oY x1002 0}}
+  "mtAdditiveKernel_offset X" {{oX x1002 0}}
+  mtAdditiveKernel_pmatteScale {{position_3d.x} {position_3d.y} {position_3d.z} 0}
+  mtAdditiveKernel_pmattePivot {{parent.position_3d_1.x} {position_3d_1.y} {position_3d_1.z} 0}
+  mtAdditiveKernel_pmatteHardness 0.5
+  mtAdditiveKernel_PrefMatteSPHERE {{prefMatteForm==0?1:0}}
+  mtAdditiveKernel_PrefMatteSquare {{prefMatteForm==1?1:0}}
+  rebuild_finalise ""
+  name BlinkScript1
+  selected true
+  xpos 475
+  ypos 354
+ }
+ Dot {
+  name Dot12
+  label Out
+  xpos 509
+  ypos 405
+ }
+ Clamp {
+  maximum 1000
+  name Clamp1
+  xpos 475
+  ypos 453
+ }
+ Switch {
+  inputs 2
+  which {{show}}
+  name Switch1
+  xpos 475
+  ypos 517
+ }
+ Output {
+  name Output1
+  xpos 475
+  ypos 571
+ }
+end_group
