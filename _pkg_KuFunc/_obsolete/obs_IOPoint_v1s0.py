@@ -46,7 +46,7 @@ LOG.propagate = False # Turn off nuke logger (https://community.foundry.com/disc
 
 
 
-__VERSION__		= '1.1'
+__VERSION__		= '1.0'
 __OS__			= platform.system()
 __AUTHOR__		= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -69,12 +69,6 @@ def _version_():
 	- zooming timeline based on in and out point 
 	- landing frame set to user defined, else set to In point
 
-	version 1.1
-	- add landing frame; 
-		- landing frame outside the range, set to in or out point, otherwise current frame
-		- custom landing frame with a space and a input
-	- crawl current frame range when prompt UI
-
 	'''
 	return ver
 
@@ -93,7 +87,6 @@ RE_FD = re.compile("\d+\+\d+") 	# Frame + Duration
 RE_SF = re.compile("-\d+") 		# Start to Frame
 RE_FE = re.compile("\d+-") 		# Frame to End
 RE_RS = re.compile("-") 		# Reset
-RE_LF = re.compile(".+ \d")		# Range & landing Frame
 
 class CompRangeClass:
 	def __init__(self):
@@ -126,12 +119,12 @@ def IOPoint():
 	CompRange.last = nuke.root().lastFrame()
 	LOG.debug("Comp Range: %s" % CompRange)
 
-	str_in = nuke.getInput("Set In/Out Point", nuke.activeViewer().node()['frame_range'].value())
+	str_in = nuke.getInput("Set In/Out Point")
 
 	if str_in:
-		io_range, frame_land = validate(str_in, CompRange)
+		io_range = validate(str_in, CompRange)
 		LOG.debug("Validated range: %s" % io_range)
-		timeline_zoom(io_range, CompRange, frame_land)
+		timeline_zoom(io_range, CompRange)
 		LOG.info("Timeline set to %s-%s" % (io_range[0], io_range[1]))	
 
 
@@ -152,13 +145,7 @@ def validate(str_in, CompRange):
 	"""
 	
 	io_range = None 
-	if RE_LF.match(str_in):
-		LOG.debug("Landing Frame detected")
-		str_in, frame_land = str_in.split(' ')
-	else:
-		str_in = str_in.replace(' ', '')
-		frame_land = None
-
+	str_in = str_in.replace(' ', '')
 	ls_frames = [f for f in re.split("\D|\W", str_in)]
 
 	if RE_FF.match(str_in):
@@ -186,33 +173,22 @@ def validate(str_in, CompRange):
 	else:
 		io_range = "%s-%s" % (CompRange.first, CompRange.last) 
 	
-	return io_range, frame_land
+	return io_range
 
 
-def timeline_zoom(io_range, CompRange, frame_land=None):
+def timeline_zoom(io_range, CompRange):
 	"""zooms the timeline to in and out point
 	resets if in and out is full range.
 	@io_range: (list of ints) user defined in and out point
 	@CompRange: (obj) comp frame range for this session
-	@frame_land: (str) landing frame, optional input
 	"""
 
 	node_viewer = nuke.activeViewer().node()
-	frame_cur = nuke.frame()
 	lock_activate = True if io_range != CompRange.getRange() else False
 	node_viewer['frame_range'].setValue(io_range)
 	node_viewer['frame_range_lock'].setValue(lock_activate)
+	nuke.frame(int(io_range.split('-')[0]))
 
-	# Finds the landing frame
-	if not frame_land:
-		ls_io_range = io_range.split('-')
-		if frame_cur < ls_io_range[0]: frame_land = ls_io_range[0]
-		elif frame_cur > ls_io_range[1]: frame_land = ls_io_range[1]
-		else: frame_land = frame_cur
-	
-	nuke.frame(int(frame_land))
-
-	# Zooming
 	app = QtWidgets.QApplication
 	slider_widget = None
 	for n in app.allWidgets():
