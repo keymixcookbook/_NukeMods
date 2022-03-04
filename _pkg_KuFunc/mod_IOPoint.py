@@ -205,7 +205,7 @@ def timeline_zoom(io_range, CompRange, frame_land=None):
 
 	# Finds the landing frame
 	if not frame_land:
-		ls_io_range = io_range.split('-')
+		ls_io_range = [int(f) for f in io_range.split('-')]
 		if frame_cur < ls_io_range[0]: frame_land = ls_io_range[0]
 		elif frame_cur > ls_io_range[1]: frame_land = ls_io_range[1]
 		else: frame_land = frame_cur
