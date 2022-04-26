@@ -92,3 +92,32 @@ def viewerSetting():
         n['hide_input'].setValue(True)
 
 nuke.addOnCreate(viewerSetting, nodeClass='Root')
+
+
+def autolabel_Roto():
+    n = nuke.thisNode()
+    len_max = 3
+    name = n.name()
+    label = n['label'].value()
+    c = n['curves']
+    frame_format = ['all', '-{}', '{}', '{}-', '{}-{}']
+
+    elem = [s for s in c.rootLayer]
+    ls_elem_out = []
+
+    for curve in elem:
+        name = curve.name
+        attr = curve.getAttributes()
+        mode = int(attr.getValue(0, 'ltt'))
+        fRange = [str(int(attr.getValue(0, 'ltn'))), str(int(attr.getValue(0, 'ltm')))]
+        frames = frame_format[mode].format(*fRange)
+        ls_elem_out.append('%s %s' % (name, frames))
+    elem_out = '\n'.join(ls_elem_out[:len_max])
+    if len(ls_elem_out) > len_max: elem_out += '\n...'
+
+    if label == '' or elem_out != "":
+        return name+'\n'+elem_out
+    else:
+        return None
+
+nuke.addAutolabel(autolabel_Roto, nodeClass='Roto')
