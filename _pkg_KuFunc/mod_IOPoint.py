@@ -46,7 +46,7 @@ LOG.propagate = False # Turn off nuke logger (https://community.foundry.com/disc
 
 
 
-__VERSION__		= '1.1'
+__VERSION__		= '1.2'
 __OS__			= platform.system()
 __AUTHOR__		= "Tianlun Jiang"
 __WEBSITE__		= "jiangovfx.com"
@@ -94,6 +94,8 @@ RE_SF = re.compile("-\d+") 		# Start to Frame
 RE_FE = re.compile("\d+-") 		# Frame to End
 RE_RS = re.compile("-") 		# Reset
 RE_LF = re.compile(".+ \d")		# Range & landing Frame
+RE_F  = re.compile("\d+")		# Single Frame, Go to Frame
+
 
 class CompRangeClass:
 	def __init__(self):
@@ -178,6 +180,11 @@ def validate(str_in, CompRange):
 	elif RE_FE.match(str_in):
 		LOG.debug("%s: Frame to End" % str_in)
 		io_range = "%s-%s" % (ls_frames[0], CompRange.last)
+
+	elif RE_F.match(str_in):
+		LOG.debug("%s: Go to Frame" % str_in)
+		io_range = "%s-%s" % (CompRange.first, CompRange.last) 
+		frame_land = str_in
 
 	elif RE_RS.match(str_in):
 		LOG.debug("%s: Reset" % str_in)
